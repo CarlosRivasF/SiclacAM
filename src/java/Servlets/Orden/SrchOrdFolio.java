@@ -27,7 +27,16 @@ public class SrchOrdFolio extends HttpServlet {
         PrintWriter out = response.getWriter();
         Orden_DAO O = new Orden_DAO();
         Orden_DTO dto;
-        int Folio = Integer.parseInt(request.getParameter("Folio").trim());
+        int Folio = 0;
+        String codeBar = request.getParameter("Folio").trim();
+        if (codeBar.contains("-")) {
+            String[] bar = codeBar.split("-");
+
+            Folio = Integer.parseInt(bar[0]);
+        } else {
+            Folio = Integer.parseInt(request.getParameter("Folio").trim());
+        }
+
         String part = request.getParameter("mode").trim();
         switch (part) {
             case "ord":

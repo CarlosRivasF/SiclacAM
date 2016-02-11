@@ -72,9 +72,7 @@ public class PrintL2 extends HttpServlet {
                 String cadena = request.getParameter("idPrac");
                 String relativePath = getServletContext().getRealPath("/") + "/";//ruta real del proyecto
                 String path = relativePath + "M/templ.pdf";//Am_LabsWM
-
-                String ca = "Formato-" + cadena + "";
-                response.setHeader("Content-disposition", "inline; filename=\"filenameLabel.pdf\"");
+                   
                 //PROPIEDADES INICIO
                 PdfReader reader = new PdfReader(path);
 
@@ -93,16 +91,16 @@ public class PrintL2 extends HttpServlet {
 
                 Period edad = f.getEdad(Orden.getPaciente().getFecha_Nac().trim());
                 ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(Orden.getPaciente().getNombre().toLowerCase() + " " + Orden.getPaciente().getAp_Paterno().toLowerCase() + " " + Orden.getPaciente().getAp_Materno().toLowerCase(), Content_Font), 12, 65, 0);
-                ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(edad.getYears() + " años", Content_Font), 136, 65, 0);
-                ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(Orden.getPaciente().getSexo(), Content_Font), 172, 65, 0);
-                ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(Orden.getDet_Orden().get(IxDtOrd).getEstudio().getNombre_Estudio(), Content_Font2), 40, 50, 0);
+                ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(edad.getYears() + " años", Content_Font), 150, 65, 0);
+                ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(Orden.getPaciente().getSexo(), Content_Font), 185, 65, 0);
+                ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(Orden.getDet_Orden().get(IxDtOrd).getEstudio().getNombre_Estudio(), Content_Font2), 30, 50, 0);
                 ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(Orden.getFecha(), Content_Font), 15, 36, 0);
                 ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(Orden.getDet_Orden().get(IxDtOrd).getEstudio().getMts().get(IxDtOrdMt).getClave(), Content_Font), 15, 25, 0);
                 ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Datos adicionales en etiqueta", Content_Font), 15, 13, 0);
                 Image barras1;
                 JBarcodeBean barcode = new JBarcodeBean();
                 barcode.setCodeType(new Code39());
-                barcode.setCode(1 + "-2");
+                barcode.setCode(Orden.getFolio_Unidad() + "-"+Orden.getUnidad().getId_Unidad());
                 barcode.setCheckDigit(true);
                 barcode.setShowText(true);
                 BufferedImage bi = barcode.draw(new BufferedImage(100, 15, BufferedImage.TYPE_INT_RGB));
