@@ -46,8 +46,8 @@ public class FinalOrd extends HttpServlet {
         System.out.println("ÓRDEN RECUPERADA");
         Orden.setFecha(f.getFechaActual());
         Orden.setHora(f.getHoraActual());
-        Orden.setEstado("Pendiente");
-        
+        Orden.setEstado("Pendiente");      
+        Orden.setFolio_Unidad(O.getNoOrdenByUnidad(Orden.getUnidad().getId_Unidad())+1);
         Orden.setId_Orden(O.registrarOrden(Orden));
         try {
             String CodeCot = Orden.getPaciente().getCodPac().substring(0, 4) + "-" + Orden.getId_Orden();
@@ -81,7 +81,7 @@ public class FinalOrd extends HttpServlet {
             System.out.println("UNIDAD " + Orden.getUnidad().getNombre_Unidad().toUpperCase());
             cb.showText("UNIDAD " + Orden.getUnidad().getNombre_Unidad().toUpperCase());
             cb.endText();
-            barras1.setAbsolutePosition(350, 732);//x,y
+            barras1.setAbsolutePosition(300, 732);//x,y
             ////////////////////////// DATOS PACIENTE
             cb.beginText();
             cb.setFontAndSize(bf, 10);

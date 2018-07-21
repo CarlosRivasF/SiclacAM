@@ -43,6 +43,9 @@ public class SearchEst extends HttpServlet {
                 case "Cotizacion":
                     function = "AddEstCot";
                     break;
+                case "Prom":
+                    function = "AddEstProm";
+                    break;
             }
 
             out.println("<div style='color: white' class='table-responsive'>"

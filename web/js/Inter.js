@@ -1848,3 +1848,59 @@ function PrintCoti() {
     window.open('PrintCont');
     window.location.href = 'http://ejemplo.com';
 }
+
+function AddEstProm(x, mode) {
+    if (mode === "code") {
+        document.getElementById("codeEst").value = "";
+        document.getElementById("codeEst").focus();
+    } else {
+        var s = false;
+        var ds = document.getElementById("desc" + x).value;
+        var Desc = " &Desc=" + ds;
+        var Tprec;
+        if (document.getElementById("PreN" + x).checked) {
+            Tprec = " &Tprec=Normal";
+            s = true;
+        } else if (document.getElementById("PreU" + x).checked) {
+            Tprec = " &Tprec=Urgente";
+            s = true;
+        } else {
+            alert("Seleccione un tipo de precio");
+            s = false;
+        }
+        var p = Desc + Tprec;
+        if (s) {
+            buscarComentario();
+            xhr.open("POST", "AddEstProm", true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    document.getElementById("EstsAdded").innerHTML = xhr.responseText;
+                }
+            };
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.send("estudio=" + x + " &mode=" + mode + p);
+        }
+    }
+}
+
+function saveProm(e) {
+    e.disabled = true;
+    var titulo = document.getElementById("nameProm").value;
+    var Desc = document.getElementById("descProm").value;
+    var FecI = document.getElementById("fechaI").value;
+    var FecF = document.getElementById("fechaF").value;
+    if (titulo.trim() === "" || Desc.trim() === "" || FecI.trim() === "" || FecF.trim() === "") {
+        alert("Todos los campos deben de estar llenos..");
+        e.disabled=false;
+    }
+    buscarComentario();
+    xhr.open("POST", "ProcesaProm", true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            document.getElementById("Interaccion").innerHTML = xhr.responseText;
+        }
+    };
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send("titulo=" + titulo + " &Desc=" + Desc+ " &FecI=" + FecI+ " &FecF=" + FecF);
+}
+;

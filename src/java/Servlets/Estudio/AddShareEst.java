@@ -49,7 +49,7 @@ public class AddShareEst extends HttpServlet {
         Estudio_DAO EO = new Estudio_DAO();
         int index = Integer.parseInt(request.getParameter("index").trim());
         Estudio_DTO est = enu.get(index);
-
+        est.setId_Est_Uni(EO.registrarEst_Uni(est.getId_Estudio(), id_unidad));
         Material_DAO M = new Material_DAO();
         Empresa_DTO empresa = (Empresa_DTO) sesion.getAttribute("empresa");
         List<Material_DTO> matsE;
@@ -127,13 +127,11 @@ public class AddShareEst extends HttpServlet {
             }
         }
         Est_Mat_DAO emd = new Est_Mat_DAO();
-        if (mesE.isEmpty() && mesF.isEmpty()) {
-            est.setId_Est_Uni(EO.registrarEst_Uni(est.getId_Estudio(), id_unidad));
+        if (mesE.isEmpty() && mesF.isEmpty()) {            
             Precio_DAO PO = new Precio_DAO();
             PO.registrarPrecio(est.getId_Est_Uni(), est.getPrecio());
             request.getRequestDispatcher("ShareEst").forward(request, response);
-        } else {
-            est.setId_Est_Uni(EO.registrarEst_Uni(est.getId_Estudio(), id_unidad));            
+        } else {                     
             Precio_DAO PO = new Precio_DAO();
             PO.registrarPrecio(est.getId_Est_Uni(), est.getPrecio());            
             mesE.stream().map((dto) -> {

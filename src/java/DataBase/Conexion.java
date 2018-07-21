@@ -12,11 +12,11 @@ import org.apache.commons.dbcp.BasicDataSource;
  */
 public class Conexion {
 
-    public static DataSource dataSource = null;
-    private static final String DB = "siclacok";  //node73713-amlab.whelastic.net:11010
-    private static final String URL = "jdbc:mysql://node73713-amlab.whelastic.net/" + DB + "?useSSL=true&useServerPrepStmts=true&autoReconnect=true";
+    public static DataSource dataSource = null;//siclac2
+    private static final String DB = "siclac2";  //node74321-amlab.whelastic.net
+    private static final String URL = "jdbc:mysql://localhost" + DB + "?useServerPrepStmts=true&autoReconnect=true";
     private static final String USER = "root";
-    private static final String PASS = "PNGavr91118";//PNGavr91118    
+    private static final String PASS = "";//NAVngv51153  
 
     public Conexion() {
         inicializaDataSource();
@@ -64,13 +64,14 @@ public class Conexion {
                 }                
             }
         } catch (SQLException ex) {            
+            System.out.println(ex.getCause());
             System.out.println(ex.getMessage());
             return null;
         }
     } 
     
     public static void main(String[]args){
-    System.out.print(Conexion.conectar());
+    System.out.print(Conexion.getCon());
     }
 
 }

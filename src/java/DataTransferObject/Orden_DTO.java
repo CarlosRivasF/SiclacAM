@@ -21,6 +21,8 @@ public class Orden_DTO {
     protected List<Pago_DTO> pagos;
     protected String estado;
     protected String convenio;
+    protected int Folio_Unidad;
+    
 
     public int getId_Orden() {
         return id_Orden;
@@ -124,5 +126,13 @@ public class Orden_DTO {
 
     public void setConvenio(String convenio) {
         this.convenio = convenio;
+    }
+
+    public int getFolio_Unidad() {
+        return Folio_Unidad;
+    }
+
+    public void setFolio_Unidad(int Folio_Unidad) {
+        this.Folio_Unidad = Folio_Unidad;
     }
 }

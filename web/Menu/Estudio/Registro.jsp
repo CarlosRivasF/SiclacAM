@@ -19,7 +19,7 @@
 %>
 <div class="nav-scroller bg-white box-shadow">
     <nav class="nav nav-underline">        
-        <a class="nav-link active" href="#" style="color: blue"><ins>Nueva Estudio</ins></a>
+        <a class="nav-link active" href="#" style="color: blue"><ins>Nuevo Estudio</ins></a>
         <a class="nav-link" href="#/" onclick='mostrarForm("${pageContext.request.contextPath}/ShowEst");'>Lista de Estudios</a>                               
     </nav>
 </div>   
@@ -52,10 +52,24 @@
         </div>   
         <div class="row">
             <div class="col-md-6 mb-3">
-                <label class="sr-only" >Preparación</label>
-                <textarea class="form-control" name="preparacion" id="preparacion"  placeholder="Preparación" required></textarea>
-                <div class="invalid-feedback">
-                    Escriba una preparación.
+                <div>
+                    <label class="sr-only" >Preparación</label>
+                    <textarea class="form-control" name="preparacion" id="preparacion"  placeholder="Preparación" required></textarea>
+                    <div class="invalid-feedback">
+                        Escriba una preparación.
+                    </div>
+                </div>
+                <div>
+                    qwerty
+                    <label for="Tipo_Estudio" class="sr-only">Control de Estudio</label><br>
+                    <select class="custom-select d-block w-100 form-control-sm" id="ctrl_est" name="ctrl_est" required>
+                        <option value="">Control de Estudio</option>   
+                        <option value="Interno">Interno</option>   
+                        <option value="Referenciado">Referenciado</option>   
+                    </select>
+                    <div class="invalid-feedback" style="width: 100%;">
+                        Por favor seleccione un Tipo de Control.
+                    </div>
                 </div>
             </div>
             <div class="col-md-6 mb-3">
