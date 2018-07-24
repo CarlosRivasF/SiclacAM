@@ -1891,7 +1891,7 @@ function saveProm(e) {
     var FecF = document.getElementById("fechaF").value;
     if (titulo.trim() === "" || Desc.trim() === "" || FecI.trim() === "" || FecF.trim() === "") {
         alert("Todos los campos deben de estar llenos..");
-        e.disabled=false;
+        e.disabled = false;
     }
     buscarComentario();
     xhr.open("POST", "ProcesaProm", true);
@@ -1901,6 +1901,19 @@ function saveProm(e) {
         }
     };
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.send("titulo=" + titulo + " &Desc=" + Desc+ " &FecI=" + FecI+ " &FecF=" + FecF);
+    xhr.send("titulo=" + titulo + " &Desc=" + Desc + " &FecI=" + FecI + " &FecF=" + FecF);
 }
 ;
+
+function verifyEst() {
+    var te = document.getElementById("ctrl_est").value;
+    if (te === "Referenciado") {
+        document.getElementById("porcEst").innerHTML = "<br><label class='sr-only' >Porcentaje</label>" +
+                "<input style='text-align: center' type='number' class='form-control form-control-sm' name='porc' id='porc' placeholder=' % ' required >" +
+                "<div class='invalid-feedback'>" +
+                "Porcentaje obligatorio." +
+                "</div>";
+    } else {
+        document.getElementById("porcEst").innerHTML = "";
+    }
+}

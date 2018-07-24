@@ -18,6 +18,8 @@ public class Estudio_DTO extends Tipo_Estudio_DTO {
     protected Precio_DTO precio;
     protected List<Configuracion_DTO> Cnfs;
     protected List<Est_Mat_DTO> mts;
+    protected String ctrl_est;
+    protected int PorcEst;
 
     public int getId_Estudio() {
         return id_Estudio;
@@ -97,5 +99,21 @@ public class Estudio_DTO extends Tipo_Estudio_DTO {
 
     public void setMts(List<Est_Mat_DTO> mts) {
         this.mts = mts;
+    }
+
+    public String getCtrl_est() {
+        return ctrl_est;
+    }
+
+    public void setCtrl_est(String ctrl_est) {
+        this.ctrl_est = ctrl_est;
+    }
+
+    public int getPorcEst() {
+        return PorcEst;
+    }
+
+    public void setPorcEst(int PorcEst) {
+        this.PorcEst = PorcEst;
     }
 }

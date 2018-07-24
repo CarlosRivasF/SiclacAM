@@ -14,9 +14,9 @@ public class Conexion {
 
     public static DataSource dataSource = null;//siclac2
     private static final String DB = "siclac2";  //node74321-amlab.whelastic.net
-    private static final String URL = "jdbc:mysql://localhost" + DB + "?useServerPrepStmts=true&autoReconnect=true";
+    private static final String URL = "jdbc:mysql://localhost/" + DB + "?useServerPrepStmts=true&autoReconnect=true";
     private static final String USER = "root";
-    private static final String PASS = "";//NAVngv51153  
+    private static final String PASS = "";//NAVngv51153
 
     public Conexion() {
         inicializaDataSource();
@@ -70,8 +70,4 @@ public class Conexion {
         }
     } 
     
-    public static void main(String[]args){
-    System.out.print(Conexion.getCon());
-    }
-
 }

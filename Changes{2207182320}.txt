@@ -1,0 +1,4 @@
+alter table estudio add controlEst varchar(20);
+alter table estudio add porcRef int;
+
+

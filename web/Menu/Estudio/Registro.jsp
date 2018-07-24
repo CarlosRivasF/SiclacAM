@@ -15,14 +15,13 @@
         } else {
             mats = M.getMaterialesByUnidad(id_unidad);
             sesion.setAttribute("matsU", mats);
-        }
-%>
+        }%>
 <div class="nav-scroller bg-white box-shadow">
     <nav class="nav nav-underline">        
         <a class="nav-link active" href="#" style="color: blue"><ins>Nuevo Estudio</ins></a>
         <a class="nav-link" href="#/" onclick='mostrarForm("${pageContext.request.contextPath}/ShowEst");'>Lista de Estudios</a>                               
     </nav>
-</div>   
+</div>
 <div class="container-fluid" style="color: white"><br>
     <form class="needs-validation" novalidate name="fors" method="POST" action="ProcesaEst">
         <h6 style="text-align: center">Datos del Estudio</h6>
@@ -59,10 +58,9 @@
                         Escriba una preparación.
                     </div>
                 </div>
-                <div>
-                    qwerty
-                    <label for="Tipo_Estudio" class="sr-only">Control de Estudio</label><br>
-                    <select class="custom-select d-block w-100 form-control-sm" id="ctrl_est" name="ctrl_est" required>
+                <div>                    
+                    <label for="ctrl_est" class="sr-only">Control de Estudio</label><br>
+                    <select onchange="verifyEst();" class="custom-select d-block w-100 form-control-sm" id="ctrl_est" name="ctrl_est" required>
                         <option value="">Control de Estudio</option>   
                         <option value="Interno">Interno</option>   
                         <option value="Referenciado">Referenciado</option>   
@@ -75,7 +73,7 @@
             <div class="col-md-6 mb-3">
                 <div>
                     <label class="sr-only" >Utilidad</label>
-                    <input style="text-align: center" type="text" class="form-control form-control-sm" name="utilidad" id="utilidad" placeholder="Utilidad" required>
+                    <input style="text-align: center" type="text" class="form-control form-control" name="utilidad" id="utilidad" placeholder="Utilidad" required>
                     <div class="invalid-feedback">
                         Utlidad obligatoria.
                     </div>
@@ -92,7 +90,8 @@
                         Por favor seleccione un Tipo de Estudio.
                     </div>
                 </div>
-            </div>
+                <div id="porcEst"></div>
+            </div>            
         </div>
         <h6 style="text-align: center">Datos de Entrega</h6>
         <hr class="mb-4">

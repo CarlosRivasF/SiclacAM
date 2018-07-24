@@ -68,6 +68,13 @@ public class InsEst extends HttpServlet {
                     precio.setT_Entrega_U(Integer.parseInt(request.getParameter("dias_u").trim()));
                     precio.setPrecio_U(Float.parseFloat(request.getParameter("precio_u")));
                 }
+                
+                String ctrl_est =request.getParameter("ctrl_est");
+                estudio.setCtrl_est(ctrl_est.trim());
+                if("Referenciado".equals(estudio.getCtrl_est())){                
+                int p=Integer.parseInt(request.getParameter("porc").trim());
+                estudio.setPorcEst(p);
+                }   
 
                 if (sesion.getAttribute("nconf") != null) {
                     conf.setDescripcion(request.getParameter("desc"));

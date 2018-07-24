@@ -33,7 +33,7 @@ public class Estudio_DAO {
             if (id_Estudio != 0) {
                 return id_Estudio;
             } else {
-                sql = "INSERT INTO estudio (id_Estudio,id_Tipo_Estudio,Nombre_Estudio,Clave_Estudio, Preparacion,Utilidad,metodo) VALUES(null," + dto.getId_Tipo_Estudio() + ",'" + dto.getNombre_Estudio() + "','" + dto.getClave_Estudio() + "','" + dto.getPreparacion() + "','" + dto.getUtilidad() + "','" + dto.getMetodo() + "')";                
+                sql = "INSERT INTO estudio (id_Estudio,id_Tipo_Estudio,Nombre_Estudio,Clave_Estudio, Preparacion,Utilidad,metodo,controlEst,porcRef) VALUES(null," + dto.getId_Tipo_Estudio() + ",'" + dto.getNombre_Estudio() + "','" + dto.getClave_Estudio() + "','" + dto.getPreparacion() + "','" + dto.getUtilidad() + "','" + dto.getMetodo() + "','" + dto.getCtrl_est()+ "'," + dto.getPorcEst()+ ")";                
                 try (PreparedStatement pstm = con.prepareStatement(sql);) {
                     if (pstm.executeUpdate() == 1) {
                         pstm.close();
