@@ -23,7 +23,8 @@ public class Det_Orden_DAO {
     public int registrarDetor(int id_Orden, Det_Orden_DTO detor) {
         int id_Det_Orden = 0;
         try (Connection con = Conexion.getCon();) {
-            String sql = "INSERT INTO orden VALUES(null,"
+            System.out.println("REGISTRANDO DETALLES DE ORDEN");
+            String sql = "INSERT INTO det_orden VALUES(null,"
                     + "" + id_Orden + ","
                     + "" + detor.getEstudio().getId_Est_Uni() + ","
                     + "" + detor.getDescuento() + ","
@@ -34,7 +35,7 @@ public class Det_Orden_DAO {
             try (PreparedStatement pstm = con.prepareStatement(sql);) {
                 pstm.executeUpdate();
             }
-            sql = "select id_Det_Orden from Det_Orden where id_Orden=" + id_Orden + " and id_Est_Uni=" + detor.getEstudio().getId_Est_Uni() + ""
+            sql = "select id_Det_Orden from det_orden where id_Orden=" + id_Orden + " and id_Est_Uni=" + detor.getEstudio().getId_Est_Uni() + ""
                     + " and Descuento=" + detor.getDescuento() + " and Fecha_Entrega='" + detor.getFecha_Entrega() + "'"
                     + " and Tipo_Entrega='" + detor.getT_Entrega() + "'  and montoRe='" + detor.getSubtotal() + "'";
             System.out.println(sql);

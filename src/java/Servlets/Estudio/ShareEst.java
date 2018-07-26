@@ -39,7 +39,7 @@ public class ShareEst extends HttpServlet {
                 }
             }
         } catch (Exception e) {
-
+out.println("<br>'ShareEst'<br><h1 style='color: white'>" + e.getMessage() + "...<br>Por favor capture una imagen del error y comuniquelo de inmediato a ZionSystems</h1>");
         }
         if (request.getParameter("busq") != null) {
                         

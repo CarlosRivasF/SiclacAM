@@ -1,0 +1,88 @@
+delete from banner;
+delete from comida;
+delete from conf_est;
+delete from configuracion;
+delete from cotizacion;
+delete from det_cot;
+delete from det_orden;
+delete from det_prom;
+delete from dias_trab;
+delete from direccion;
+delete from empleado;
+delete from empr_mat;
+delete from empresa;
+delete from entrada;
+delete from envio_informacion;
+delete from est_uni;
+delete from estudio;
+delete from galeria;
+delete from mat_est;
+delete from material;
+delete from medico;
+delete from nomina;
+delete from orden;
+delete from paciente;
+delete from pago;
+delete from persona;
+delete from precio;
+delete from promocion;
+delete from regreso;
+delete from resultado;
+delete from salida;
+delete from sancion;
+delete from unid_mat;
+delete from unidad;
+delete from use_per;
+delete from usuario;
+
+alter table banner AUTO_INCREMENT = 1;
+alter table comida AUTO_INCREMENT = 1;
+alter table conf_est AUTO_INCREMENT = 1;
+alter table configuracion  AUTO_INCREMENT = 1;
+alter table cotizacion AUTO_INCREMENT = 1;
+alter table det_cot  AUTO_INCREMENT = 1;
+alter table det_orden  AUTO_INCREMENT = 1;
+alter table det_prom AUTO_INCREMENT = 1;
+alter table dias_trab  AUTO_INCREMENT = 1;
+alter table direccion  AUTO_INCREMENT = 1;
+alter table empleado AUTO_INCREMENT = 1;
+alter table empr_mat AUTO_INCREMENT = 1;
+alter table empresa  AUTO_INCREMENT = 1;
+alter table entrada  AUTO_INCREMENT = 1;
+alter table envio_informacion  AUTO_INCREMENT = 1;
+alter table est_uni  AUTO_INCREMENT = 1;
+alter table estudio  AUTO_INCREMENT = 1;
+alter table galeria  AUTO_INCREMENT = 1;
+alter table mat_est  AUTO_INCREMENT = 1;
+alter table material AUTO_INCREMENT = 1;
+alter table medico AUTO_INCREMENT = 1;
+alter table nomina AUTO_INCREMENT = 1;
+alter table orden  AUTO_INCREMENT = 1;
+alter table paciente AUTO_INCREMENT = 1;
+alter table pago AUTO_INCREMENT = 1;
+alter table persona  AUTO_INCREMENT = 1;
+alter table precio AUTO_INCREMENT = 1;
+alter table promocion  AUTO_INCREMENT = 1;
+alter table regreso  AUTO_INCREMENT = 1;
+alter table resultado  AUTO_INCREMENT = 1;
+alter table salida AUTO_INCREMENT = 1;
+alter table sancion  AUTO_INCREMENT = 1;
+alter table unid_mat AUTO_INCREMENT = 1;
+alter table unidad AUTO_INCREMENT = 1;
+alter table use_per  AUTO_INCREMENT = 1;
+alter table usuario  AUTO_INCREMENT = 1;
+
+INSERT INTO empresa  VALUES
+(null,'Grupo-AmLabs',null),
+(null,'AmLabs',null),
+(null,'ZionS',null);
+
+INSERT INTO usuario VALUES
+(null,1,null,'GpoAm','123456',1,1),
+(null,2,null,'AmLab','123456',1,1),
+(null,3,null,'ZionS','123root',1,1);
+
+INSERT INTO Use_Per  VALUES
+(1,1),
+(2,1),
+(3,1);

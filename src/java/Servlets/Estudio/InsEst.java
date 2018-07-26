@@ -9,6 +9,7 @@ import DataTransferObject.Est_Mat_DTO;
 import DataTransferObject.Estudio_DTO;
 import DataTransferObject.Precio_DTO;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -27,6 +28,7 @@ public class InsEst extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        PrintWriter out = response.getWriter();
         HttpSession sesion = request.getSession();
         if (sesion.getAttribute("user") != null && sesion.getAttribute("unidad") != null) {
             Estudio_DAO E = new Estudio_DAO();
@@ -68,13 +70,13 @@ public class InsEst extends HttpServlet {
                     precio.setT_Entrega_U(Integer.parseInt(request.getParameter("dias_u").trim()));
                     precio.setPrecio_U(Float.parseFloat(request.getParameter("precio_u")));
                 }
-                
-                String ctrl_est =request.getParameter("ctrl_est");
+
+                String ctrl_est = request.getParameter("ctrl_est");
                 estudio.setCtrl_est(ctrl_est.trim());
-                if("Referenciado".equals(estudio.getCtrl_est())){                
-                int p=Integer.parseInt(request.getParameter("porc").trim());
-                estudio.setPorcEst(p);
-                }   
+                if ("Referenciado".equals(estudio.getCtrl_est())) {
+                    int p = Integer.parseInt(request.getParameter("porc").trim());
+                    estudio.setPorcEst(p);
+                }
 
                 if (sesion.getAttribute("nconf") != null) {
                     conf.setDescripcion(request.getParameter("desc"));
@@ -128,57 +130,56 @@ public class InsEst extends HttpServlet {
                     mt.setCantidadE(Integer.parseInt(request.getParameter("cant").trim()));
                     mt.setT_Muestra(request.getParameter("muestra"));
                 }
+            } catch (Exception e) {
+                out.println("<br>'InsEst'<br><h1 style='color: white'>" + e.getMessage() + "...<br>Por favor capture una imagen del error y comuniquelo de inmediato a ZionSystems</h1>");
+            }
 
-                try {
-                    estudio.setId_Estudio(E.registrarEstudio(estudio));
-                    if (estudio.getId_Estudio() != 0) {
-                        estudio.setId_Est_Uni(E.registrarEst_Uni(estudio.getId_Estudio(), id_unidad));
-                        if (estudio.getId_Est_Uni() != 0) {
-                            precio.setId_Precio(P.registrarPrecio(estudio.getId_Est_Uni(), precio));
-                            if (precio.getId_Precio() != 0) {
-                                estudio.setPrecio(precio);
-                                if (!cnfs.isEmpty()) {
-                                    cnfs.forEach((dto) -> {
-                                        dto.setId_Configuración(CN.registrarConfiguracion(dto));
-                                        CN.registrarConf_Est(estudio.getId_Estudio(), dto.getId_Configuración());
+            try {
+                estudio.setId_Estudio(E.registrarEstudio(estudio));
+                if (estudio.getId_Estudio() != 0) {
+                    estudio.setId_Est_Uni(E.registrarEst_Uni(estudio.getId_Estudio(), id_unidad));
+                    if (estudio.getId_Est_Uni() != 0) {
+                        precio.setId_Precio(P.registrarPrecio(estudio.getId_Est_Uni(), precio));
+                        if (precio.getId_Precio() != 0) {
+                            estudio.setPrecio(precio);
+                            if (!cnfs.isEmpty()) {
+                                cnfs.forEach((dto) -> {
+                                    dto.setId_Configuración(CN.registrarConfiguracion(dto));
+                                    CN.registrarConf_Est(estudio.getId_Estudio(), dto.getId_Configuración());
+                                });
+                                estudio.setCnfs(cnfs);
+                            } else {
+                                conf.setId_Configuración(CN.registrarConfiguracion(conf));
+                                CN.registrarConf_Est(estudio.getId_Estudio(), conf.getId_Configuración());
+                                cnfs.add(conf);
+                                estudio.setCnfs(cnfs);
+                            }
+                            if (cnfs.get(0).getId_Configuración() != 0) {
+                                if (!mts.isEmpty()) {
+                                    mts.forEach((dto) -> {
+                                        M.registrarMat_Est(estudio.getId_Est_Uni(), dto);
                                     });
-                                    estudio.setCnfs(cnfs);
+                                    estudio.setMts(mts);
                                 } else {
-                                    conf.setId_Configuración(CN.registrarConfiguracion(conf));
-                                    CN.registrarConf_Est(estudio.getId_Estudio(), conf.getId_Configuración());
-                                    cnfs.add(conf);
-                                    estudio.setCnfs(cnfs);
+                                    M.registrarMat_Est(estudio.getId_Est_Uni(), mt);
+                                    mts.add(mt);
+                                    estudio.setMts(mts);
                                 }
-                                if (cnfs.get(0).getId_Configuración() != 0) {
-                                    if (!mts.isEmpty()) {
-                                        mts.forEach((dto) -> {
-                                            M.registrarMat_Est(estudio.getId_Est_Uni(), dto);
-                                        });
-                                        estudio.setMts(mts);
-                                    } else {
-                                        M.registrarMat_Est(estudio.getId_Est_Uni(), mt);
-                                        mts.add(mt);
-                                        estudio.setMts(mts);
-                                    }
-                                    String msg = "Estudio " + estudio.getNombre_Estudio() + " registrado correctamente";
-                                    sesion.setAttribute("msg", msg);
-                                    ests.add(estudio);
-                                    response.sendRedirect("Estudios.jsp");
-                                }
+                                String msg = "Estudio " + estudio.getNombre_Estudio() + " registrado correctamente";
+                                sesion.setAttribute("msg", msg);
+                                ests.add(estudio);
+                                response.sendRedirect("Estudios.jsp");
                             }
                         }
                     }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
                 }
-            } catch (NumberFormatException e) {
-                throw new RuntimeException(e);
+            } catch (Exception e) {
+                out.println("<br>'InsEst'<br><h1 style='color: white'>" + e.getMessage() + "...<br>Por favor capture una imagen del error y comuniquelo de inmediato a ZionSystems</h1>");
             }
         } else {
             response.sendRedirect("" + request.getContextPath() + "");
         }
     }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

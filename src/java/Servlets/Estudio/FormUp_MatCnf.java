@@ -35,6 +35,8 @@ public class FormUp_MatCnf extends HttpServlet {
         int ixC = Integer.parseInt(part);
 
         if ("upd".equals(acc)) {
+            
+            
             out.println("<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
                     + "<tr class='table-info' style='color: black'>"
                     + "<th >Desc</th>"
@@ -77,6 +79,9 @@ public class FormUp_MatCnf extends HttpServlet {
                     l++;
                 }
             }
+            out.println("<tr>"
+                    + "<td colspan='7'><div id='addcnf'><button href=# class='btn btn-success btn-block' onclick=FormAddNWConf(" + index + ")>Agregar nueva configuración</button></div></td>"
+                    + "</tr>");
             request.getRequestDispatcher("ShDetEst#configs");
             out.println("</table>");
         } else {

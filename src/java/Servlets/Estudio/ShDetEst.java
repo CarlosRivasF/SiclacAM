@@ -111,6 +111,9 @@ public class ShDetEst extends HttpServlet {
                     + "</tr>");
             l++;
         }
+        out.println("<tr>"
+                + "<td colspan='7'><div id='addcnf'><button href=# class='btn btn-success btn-block' onclick=FormAddNWConf(" + index + ")>Agregar nueva configuración</button></div></td>"
+                + "</tr>");
         out.println("</table>");
         out.println("</div>");
 

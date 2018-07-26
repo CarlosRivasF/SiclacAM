@@ -128,7 +128,8 @@ function validarFormulario(e) {
                 e.disabled = false;
                 break;
             }
-            if (formulario[i].name === "min" || formulario[i].name === "max" || formulario[i].name === "unidades") {
+            if (formulario[i].name === "min" || formulario[i].name === "max" || formulario[i].name === "unidades" || formulario[i].name === "telefono" || formulario[i].name === "celular"
+                    || formulario[i].name === "c_p" || formulario[i].name === "calle" || formulario[i].name === "no_int" || formulario[i].name === "no_ext") {
             } else if (formulario[i].name.substring(0, 3) === "min" || formulario[i].name.substring(0, 3) === "max" || formulario[i].name.substring(0, 8) === "unidades") {
             } else if (formulario[i].value.trim() === "") {
                 alert('El campo debe contener un valor completo');
@@ -1903,7 +1904,6 @@ function saveProm(e) {
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.send("titulo=" + titulo + " &Desc=" + Desc + " &FecI=" + FecI + " &FecF=" + FecF);
 }
-;
 
 function verifyEst() {
     var te = document.getElementById("ctrl_est").value;
@@ -1915,5 +1915,39 @@ function verifyEst() {
                 "</div>";
     } else {
         document.getElementById("porcEst").innerHTML = "";
+    }
+}
+
+function FormAddNWConf(x) {
+    buscarComentario();
+    xhr.open("POST", "FormAddNWConf", true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            document.getElementById("addcnf").innerHTML = xhr.responseText;
+        }
+    };
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send("index=" + x);
+}
+
+function AddNWConf(x) {
+    var desc, sexo, v1, v2, us;
+    desc = document.getElementById("desc").value;
+    sexo = document.getElementById("sexo").value;
+    v1 = document.getElementById("min").value;
+    v2 = document.getElementById("max").value;
+    us = document.getElementById("unidades").value;
+    if (desc.trim() === "" || sexo.trim() === "") {
+        alert("Ingrese descripción y sexo para una nueva configuración");
+    } else {
+        buscarComentario();
+        xhr.open("POST", "AddNWConf", true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                document.getElementById("configs").innerHTML = xhr.responseText;
+            }
+        };
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send("desc=" + desc + " &sexo=" + sexo + " &min=" + v1 + " &max=" + v2 + " &unidades=" + us + " &index=" + x);
     }
 }

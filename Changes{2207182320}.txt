@@ -1,4 +1,5 @@
-alter table estudio add controlEst varchar(20);
-alter table estudio add porcRef int;
-
-
+-- alter table estudio add controlEst varchar(20);
+-- alter table estudio add porcRef int;
+alter table estudio modify Nombre_Estudio varchar(80);
+alter table estudio modify Clave_Estudio varchar(40);
+alter table estudio modify Preparacion varchar(150); 

@@ -52,7 +52,10 @@ public class InsPac extends HttpServlet {
                 pacs = Pa.getPacientesByUnidad(Id_Unidad);
             }
             //////////////////////////////////////////////////////////////////
-            dir.setId_Colonia(Integer.parseInt(request.getParameter("colonia").trim()));
+            if (!"".equals(request.getParameter("colonia").trim())) {
+                int co = Integer.parseInt(request.getParameter("colonia").trim());
+                dir.setId_Colonia(co);
+            }
             dir.setCalle(request.getParameter("calle"));
             dir.setNo_Int(request.getParameter("no_int"));
             dir.setNo_Ext(request.getParameter("no_ext"));

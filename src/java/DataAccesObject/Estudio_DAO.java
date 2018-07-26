@@ -1,4 +1,4 @@
-package DataAccesObject;
+  package DataAccesObject;
 
 import DataBase.Conexion;
 import DataTransferObject.Configuracion_DTO;
@@ -11,8 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -33,7 +31,7 @@ public class Estudio_DAO {
             if (id_Estudio != 0) {
                 return id_Estudio;
             } else {
-                sql = "INSERT INTO estudio (id_Estudio,id_Tipo_Estudio,Nombre_Estudio,Clave_Estudio, Preparacion,Utilidad,metodo,controlEst,porcRef) VALUES(null," + dto.getId_Tipo_Estudio() + ",'" + dto.getNombre_Estudio() + "','" + dto.getClave_Estudio() + "','" + dto.getPreparacion() + "','" + dto.getUtilidad() + "','" + dto.getMetodo() + "','" + dto.getCtrl_est()+ "'," + dto.getPorcEst()+ ")";                
+                sql = "INSERT INTO estudio (id_Estudio,id_Tipo_Estudio,Nombre_Estudio,Clave_Estudio, Preparacion,Utilidad,metodo,controlEst,porcRef) VALUES(null," + dto.getId_Tipo_Estudio() + ",'" + dto.getNombre_Estudio() + "','" + dto.getClave_Estudio() + "','" + dto.getPreparacion() + "','" + dto.getUtilidad() + "','" + dto.getMetodo() + "','" + dto.getCtrl_est() + "'," + dto.getPorcEst() + ")";
                 try (PreparedStatement pstm = con.prepareStatement(sql);) {
                     if (pstm.executeUpdate() == 1) {
                         pstm.close();
@@ -49,10 +47,10 @@ public class Estudio_DAO {
                 return id_Estudio;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Configuracion_DAO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException(ex);
         }
-        return id_Estudio;
     }
+
     public int registrarEst_Uni(int Est, int Unid) {
         int id_Est_Uni = 0;
         try (Connection con = Conexion.getCon();) {
@@ -69,10 +67,11 @@ public class Estudio_DAO {
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Configuracion_DAO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException(ex);
         }
         return id_Est_Uni;
     }
+
     public List<Estudio_DTO> getEstudios() {
         List<Estudio_DTO> ests = new ArrayList<>();
         try (Connection con = Conexion.getCon()) {
@@ -191,6 +190,7 @@ public class Estudio_DAO {
         }
         return ests;
     }
+
     public List<Estudio_DTO> getEstudiosNotRegUnidad(int id_Unidad) {
         List<Estudio_DTO> ests = new ArrayList<>();
         try (Connection con = Conexion.getCon()) {
@@ -317,6 +317,7 @@ public class Estudio_DAO {
         }
         return ests;
     }
+
     public List<Estudio_DTO> getEstudiosByUnidad(int id_Unidad) {
         List<Estudio_DTO> ests = new ArrayList<>();
         try (Connection con = Conexion.getCon()) {
@@ -443,6 +444,7 @@ public class Estudio_DAO {
         }
         return ests;
     }
+
     public Estudio_DTO getEst_Uni(int id_Est_Uni) {
         Estudio_DTO est = new Estudio_DTO();
         try (Connection con = Conexion.getCon()) {
@@ -551,7 +553,7 @@ public class Estudio_DAO {
         }
         return est;
     }
-    
+
     public int ActualizarMet(int id, int id_Tipo_Estudio, String metodo) {
         int rp = 0;
         try (Connection con = Conexion.getCon();) {
@@ -562,10 +564,8 @@ public class Estudio_DAO {
             }
             return rp;
         } catch (SQLException ex) {
-            Logger.getLogger(Material_DAO.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
-        return rp;
+            throw new RuntimeException(ex.getLocalizedMessage(),ex);
+        }        
     }
 
     public int ActualizarPrep(String prep, int id_Estudio) {
@@ -577,10 +577,8 @@ public class Estudio_DAO {
             }
             return rp;
         } catch (SQLException ex) {
-            Logger.getLogger(Material_DAO.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException(ex.getLocalizedMessage(),ex);
         }
-        return rp;
     }
 
     public int ActualizarUtilidad(int id, String util) {
@@ -592,10 +590,8 @@ public class Estudio_DAO {
             }
             return rp;
         } catch (SQLException ex) {
-            Logger.getLogger(Material_DAO.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
-        return rp;
+            throw new RuntimeException(ex);
+        }        
     }
 
     public int ActualizarPrec(int id_Precio, int id_Est_Uni, Float Pn, int En, Float Pu, int Eu) {
@@ -608,10 +604,8 @@ public class Estudio_DAO {
             }
             return rp;
         } catch (SQLException ex) {
-            Logger.getLogger(Material_DAO.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
-        return rp;
+            throw new RuntimeException(ex);
+        }        
     }
 
     public int ActualizarConfig(Configuracion_DTO dto) {
@@ -624,10 +618,8 @@ public class Estudio_DAO {
             }
             return rp;
         } catch (SQLException ex) {
-            Logger.getLogger(Material_DAO.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
-        return rp;
+            throw new RuntimeException(ex);
+        }        
     }
 
     public int ActualizarMat_Est(int id_Est_Uni, int id_Unid_Mat, Est_Mat_DTO dto) {
@@ -640,10 +632,8 @@ public class Estudio_DAO {
             }
             return rp;
         } catch (SQLException ex) {
-            Logger.getLogger(Material_DAO.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
-        return rp;
+            throw new RuntimeException(ex);
+        }        
     }
 
     public int EliminarEst(Estudio_DTO dto) {
@@ -656,10 +646,8 @@ public class Estudio_DAO {
             }
             return rp;
         } catch (SQLException ex) {
-            Logger.getLogger(Material_DAO.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
-        return rp;
+            throw new RuntimeException(ex);
+        }        
     }
 
     public int EliminarEst_Conf(int id_Estudio, int id_Configuracion) {
@@ -672,10 +660,8 @@ public class Estudio_DAO {
             }
             return rp;
         } catch (SQLException ex) {
-            Logger.getLogger(Material_DAO.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
-        return rp;
+            throw new RuntimeException(ex);
+        }        
     }
 
     public int EliminarEst_Mat(int id_Est_Uni, int id_Unid_Mat) {
@@ -688,10 +674,8 @@ public class Estudio_DAO {
             }
             return rp;
         } catch (SQLException ex) {
-            Logger.getLogger(Material_DAO.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
-        return rp;
+throw new RuntimeException(ex);            
+        }        
     }
 
     public static void main(String[] args) {

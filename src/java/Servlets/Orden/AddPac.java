@@ -4,11 +4,11 @@ import DataAccesObject.Paciente_DAO;
 import DataAccesObject.Persona_DAO;
 import DataAccesObject.Unidad_DAO;
 import DataBase.Fecha;
-import DataTransferObject.Empleado_DTO;
 import DataTransferObject.Orden_DTO;
 import DataTransferObject.Paciente_DTO;
 import DataTransferObject.Persona_DTO;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -29,6 +29,7 @@ public class AddPac extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
+        PrintWriter out = response.getWriter();
         Date fac = new Date();
         Fecha f = new Fecha();
         f.setHora(fac);
@@ -62,22 +63,23 @@ public class AddPac extends HttpServlet {
                                 sesion.setAttribute("Orden", Orden);
                                 request.getRequestDispatcher("Menu/Orden/AddEsts.jsp").forward(request, response);
                             } catch (ServletException | IOException ex) {
+                                out.println("<br>'ShowMats'<br><h1 style='color: white'>" + ex.getMessage() + "...<br>Por favor capture una imagen del error y comuniquelo de inmediato a ZionSystems</h1>");
                             }
                         });
-            } else {                
-                    request.getRequestDispatcher("Menu/Orden/Registro.jsp").forward(request, response);
+            } else {
+                request.getRequestDispatcher("Menu/Orden/Registro.jsp").forward(request, response);
             }
         } else {
-            int index = Integer.parseInt(mode);            
+            int index = Integer.parseInt(mode);
             Paciente_DTO pac = pacs.get(index);
             System.out.println(pac.getNombre());
             try {
-                Orden.setPaciente(pacs.get(index));                
+                Orden.setPaciente(pacs.get(index));
                 sesion.setAttribute("Orden", Orden);
                 request.getRequestDispatcher("Menu/Orden/AddEsts.jsp").forward(request, response);
             } catch (ServletException | IOException ex) {
                 //si existe una excepcion es porque faltan datos del  paciente.
-                request.getRequestDispatcher("ShDetPac?index=" + index+" &modeP=rellenar").forward(request, response);
+                request.getRequestDispatcher("ShDetPac?index=" + index + " &modeP=rellenar").forward(request, response);
             }
         }
     }

@@ -9,6 +9,7 @@ import DataTransferObject.Est_Mat_DTO;
 import DataTransferObject.Estudio_DTO;
 import DataTransferObject.Material_DTO;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -27,9 +28,10 @@ public class AddShareEst extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        PrintWriter out = response.getWriter();
         response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
-        int id_unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());        
+        int id_unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
         Estudio_DAO E = new Estudio_DAO();
         List<Estudio_DTO> eu = E.getEstudiosByUnidad(id_unidad);
         List<Estudio_DTO> enu = E.getEstudiosNotRegUnidad(id_unidad);
@@ -43,9 +45,9 @@ public class AddShareEst extends HttpServlet {
                 }
             }
         } catch (Exception e) {
-
+            out.println("<br>'AddShareEst'<br><h1 style='color: white'>" + e.getMessage() + "...<br>Por favor capture una imagen del error y comuniquelo de inmediato a ZionSystems</h1>");
         }
-        
+
         Estudio_DAO EO = new Estudio_DAO();
         int index = Integer.parseInt(request.getParameter("index").trim());
         Estudio_DTO est = enu.get(index);
@@ -76,7 +78,7 @@ public class AddShareEst extends HttpServlet {
                 }
             }
         } catch (Exception e) {
-
+            out.println("<br>'AddShareEst'<br><h1 style='color: white'>" + e.getMessage() + "...<br>Por favor capture una imagen del error y comuniquelo de inmediato a ZionSystems</h1>");
         }
         matsE.forEach((_item) -> {
             for (int I = 0; I < matsE.size(); I++) {
@@ -127,16 +129,16 @@ public class AddShareEst extends HttpServlet {
             }
         }
         Est_Mat_DAO emd = new Est_Mat_DAO();
-        if (mesE.isEmpty() && mesF.isEmpty()) {            
+        if (mesE.isEmpty() && mesF.isEmpty()) {
             Precio_DAO PO = new Precio_DAO();
             PO.registrarPrecio(est.getId_Est_Uni(), est.getPrecio());
             request.getRequestDispatcher("ShareEst").forward(request, response);
-        } else {                     
+        } else {
             Precio_DAO PO = new Precio_DAO();
-            PO.registrarPrecio(est.getId_Est_Uni(), est.getPrecio());            
+            PO.registrarPrecio(est.getId_Est_Uni(), est.getPrecio());
             mesE.stream().map((dto) -> {
                 dto.setCantidad(100);
-                return dto;                
+                return dto;
             }).map((dto) -> {
                 M.addMaterialByU(id_unidad, dto);
                 return dto;
@@ -154,7 +156,7 @@ public class AddShareEst extends HttpServlet {
                 return dto;
             }).map((dto) -> {
                 dto.setPrecio(dto.getPrecio());
-                return dto;                
+                return dto;
             }).map((dto) -> {
                 M.addMaterial(id_unidad, dto);
                 return dto;
@@ -167,7 +169,7 @@ public class AddShareEst extends HttpServlet {
             }).forEachOrdered((dto) -> {
                 matsU.add(dto);
             });
-            
+
             request.getRequestDispatcher("ShareEst").forward(request, response);
         }
     }

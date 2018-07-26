@@ -57,7 +57,7 @@
             </div>
             <div class="col mb-3">
                 <label class="sr-only" >Celular</label>
-                <input style="text-align: center" type="number" class="form-control" name="celular" id="celular" placeholder="Celular" required>
+                <input style="text-align: center" type="number" class="form-control" name="celular" id="celular" placeholder="Celular">
                 <div class="invalid-feedback">
                     Numero de celular obligatorio.
                 </div>
@@ -68,14 +68,14 @@
         <div class="form-row">       
             <div class="col mb-3">
                 <label class="sr-only" >Código Postal</label>
-                <input style="text-align: center" type="number" onchange="llenaColonia();" class="form-control" name="c_p" id="c_p" placeholder="Código Postal" required>
+                <input style="text-align: center" type="number" onchange="llenaColonia();" class="form-control" name="c_p" id="c_p" placeholder="Código Postal">
                 <div class="invalid-feedback" style="width: 100%;">
                     Código Postal Obligatorio.
                 </div>
             </div>
             <div id="dir" class="col mb-3">
                 <label for="colonia" class="sr-only">Colonia</label>
-                <select class="custom-select d-block w-100" id="colonia" name="colonia" required>
+                <select class="custom-select d-block w-100" id="colonia" name="colonia">
                     <option value="">Colonia</option>                    
                 </select>
                 <div class="invalid-feedback" style="width: 100%;">
@@ -84,21 +84,21 @@
             </div>
             <div class="col-md-5 mb-3">
                 <label class="sr-only" >Calle</label>
-                <input style="text-align: center" type="text" class="form-control" name="calle" id="calle" placeholder="Calle" required>
+                <input style="text-align: center" type="text" class="form-control" name="calle" id="calle" placeholder="Calle">
                 <div class="invalid-feedback">
                     Se requiere un calle valida.
                 </div>
             </div>
             <div class="col mb-3">
                 <label class="sr-only" >No Int</label>
-                <input style="text-align: center" type="text" class="form-control" name="no_int" id="no_int" placeholder="No Int" required>
+                <input style="text-align: center" type="text" class="form-control" name="no_int" id="no_int" placeholder="No Int">
                 <div class="invalid-feedback" style="width: 100%;">
                     Se requiere un No Int.
                 </div>
             </div>
             <div class="col mb-3">
                 <label class="sr-only" >No Ext</label>
-                <input style="text-align: center" type="text" class="form-control" name="no_ext" id="no_ext" placeholder="No Ext" required>
+                <input style="text-align: center" type="text" class="form-control" name="no_ext" id="no_ext" placeholder="No Ext">
                 <div class="invalid-feedback" style="width: 100%;">
                     Se requiere un No Ext.
                 </div>
@@ -114,7 +114,7 @@
         <div id="n-dir_8"><input type="hidden" name="ndir" id="ndir" value="8"></div>
         <div id="n-dir_9"><input type="hidden" name="ndir" id="ndir" value="9"></div>
         <div id="n-dir_10"><input type="hidden" name="ndir" id="ndir" value="10"></div>
-        <input type="button" class="btn btn-success col-md-12" onclick="MostrarDir('Menu/Medico/addDir.jsp');" value="Agregar otra Dirección">        
+        <!-- <input type="button" class="btn btn-success col-md-12" onclick="MostrarDir('Menu/Medico/addDir.jsp');" value="Agregar otra Dirección">  -->
         <hr class="mb-4">
         <h6 style="text-align: center">Datos de Referencia</h6>
         <hr class="mb-4">

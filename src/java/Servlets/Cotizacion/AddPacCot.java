@@ -5,10 +5,10 @@ import DataAccesObject.Persona_DAO;
 import DataAccesObject.Unidad_DAO;
 import DataBase.Fecha;
 import DataTransferObject.Cotizacion_DTO;
-import DataTransferObject.Empleado_DTO;
 import DataTransferObject.Paciente_DTO;
 import DataTransferObject.Persona_DTO;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -27,6 +27,7 @@ public class AddPacCot extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        PrintWriter out = response.getWriter();
         response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
         Date fac = new Date();
@@ -80,7 +81,8 @@ public class AddPacCot extends HttpServlet {
                 sesion.setAttribute("pacs", pacs);
                 sesion.setAttribute("Cotizacion", Cotizacion);
                 request.getRequestDispatcher("Menu/Cotizacion/AddEsts.jsp").forward(request, response);
-            } catch (ServletException | IOException ex) {
+            } catch (Exception ex) {
+                out.println("<br>'AddPacCot'<br><h1 style='color: white'>" + ex.getMessage() + "...<br>Por favor capture una imagen del error y comuniquelo de inmediato a ZionSystems</h1>");
             }
         } else {
             int index = Integer.parseInt(mode);
@@ -91,7 +93,8 @@ public class AddPacCot extends HttpServlet {
                 Cotizacion.setFecha_Exp(f.SumarDias(30));
                 sesion.setAttribute("Cotizacion", Cotizacion);
                 request.getRequestDispatcher("Menu/Cotizacion/AddEsts.jsp").forward(request, response);
-            } catch (ServletException | IOException ex) {
+            } catch (Exception ex) {
+                out.println("<br>'AddPacCot'<br><h1 style='color: white'>" + ex.getMessage() + "...<br>Por favor capture una imagen del error y comuniquelo de inmediato a ZionSystems</h1>");
             }
         }
 

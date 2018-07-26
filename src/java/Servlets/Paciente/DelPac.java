@@ -22,11 +22,10 @@ public class DelPac extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        PrintWriter out;
+        PrintWriter out = response.getWriter();
         try {
             response.setContentType("text/html;charset=UTF-8");
-            HttpSession sesion = request.getSession();
-            out = response.getWriter();
+            HttpSession sesion = request.getSession();            
             List<Paciente_DTO> pacs = (List<Paciente_DTO>) sesion.getAttribute("pacs");
             String i = request.getParameter("index");
             int index = Integer.parseInt(i.trim());
@@ -55,8 +54,7 @@ public class DelPac extends HttpServlet {
                 request.getRequestDispatcher("ShowPac#pac-" + i);
             }
         } catch (IOException ex) {
-            request.setAttribute("Exception", ex);
-            request.getRequestDispatcher("Error.jsp").forward(request, response);
+            out.println("<br>'DelPac'<br><h1 style='color: white'>" + ex.getMessage() + "...<br>Por favor capture una imagen del error y comuniquelo de inmediato a ZionSystems</h1>");
         }
     }
 }

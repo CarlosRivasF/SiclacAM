@@ -1,7 +1,6 @@
 package DataAccesObject;
 
 import DataBase.Conexion;
-import DataTransferObject.Medico_DTO;
 import DataTransferObject.Paciente_DTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

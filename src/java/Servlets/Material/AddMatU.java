@@ -79,7 +79,7 @@ public class AddMatU extends HttpServlet {
                 }
             }
         } catch (Exception e) {
-
+out.println("<br>'AddMatU'<br><h1 style='color: white'>" + e.getMessage() + "...<br>Por favor capture una imagen del error y comuniquelo de inmediato a ZionSystems</h1>");
         }
         matsE.forEach((_item) -> {
             for (int I = 0; I < matsE.size(); I++) {
