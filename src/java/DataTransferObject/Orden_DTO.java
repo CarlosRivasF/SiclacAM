@@ -22,6 +22,7 @@ public class Orden_DTO {
     private String estado;
     private String convenio;
     private int Folio_Unidad;
+    
 
     /**
      * @return the id_Orden

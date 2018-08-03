@@ -1,4 +1,4 @@
-  package DataAccesObject;
+package DataAccesObject;
 
 import DataBase.Conexion;
 import DataTransferObject.Configuracion_DTO;
@@ -564,8 +564,8 @@ public class Estudio_DAO {
             }
             return rp;
         } catch (SQLException ex) {
-            throw new RuntimeException(ex.getLocalizedMessage(),ex);
-        }        
+            throw new RuntimeException(ex.getLocalizedMessage(), ex);
+        }
     }
 
     public int ActualizarPrep(String prep, int id_Estudio) {
@@ -577,7 +577,7 @@ public class Estudio_DAO {
             }
             return rp;
         } catch (SQLException ex) {
-            throw new RuntimeException(ex.getLocalizedMessage(),ex);
+            throw new RuntimeException(ex.getLocalizedMessage(), ex);
         }
     }
 
@@ -591,7 +591,7 @@ public class Estudio_DAO {
             return rp;
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
-        }        
+        }
     }
 
     public int ActualizarPrec(int id_Precio, int id_Est_Uni, Float Pn, int En, Float Pu, int Eu) {
@@ -605,7 +605,7 @@ public class Estudio_DAO {
             return rp;
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
-        }        
+        }
     }
 
     public int ActualizarConfig(Configuracion_DTO dto) {
@@ -613,13 +613,15 @@ public class Estudio_DAO {
         try (Connection con = Conexion.getCon();) {
             String sql = "UPDATE configuracion SET Descripcion='" + dto.getDescripcion() + "',Valor_min='" + dto.getValor_min() + "',Valor_MAX='" + dto.getValor_MAX() + "'"
                     + ",Unidades='" + dto.getUniddes() + "',sexo='" + dto.getSexo() + "' WHERE id_Configuracion=" + dto.getId_Configuración() + "";
+            System.out.println(sql);
             try (PreparedStatement pstm = con.prepareStatement(sql);) {
                 rp = pstm.executeUpdate();
             }
             return rp;
         } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
             throw new RuntimeException(ex);
-        }        
+        }
     }
 
     public int ActualizarMat_Est(int id_Est_Uni, int id_Unid_Mat, Est_Mat_DTO dto) {
@@ -633,7 +635,7 @@ public class Estudio_DAO {
             return rp;
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
-        }        
+        }
     }
 
     public int EliminarEst(Estudio_DTO dto) {
@@ -647,7 +649,7 @@ public class Estudio_DAO {
             return rp;
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
-        }        
+        }
     }
 
     public int EliminarEst_Conf(int id_Estudio, int id_Configuracion) {
@@ -661,7 +663,7 @@ public class Estudio_DAO {
             return rp;
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
-        }        
+        }
     }
 
     public int EliminarEst_Mat(int id_Est_Uni, int id_Unid_Mat) {
@@ -674,8 +676,8 @@ public class Estudio_DAO {
             }
             return rp;
         } catch (SQLException ex) {
-throw new RuntimeException(ex);            
-        }        
+            throw new RuntimeException(ex);
+        }
     }
 
     public static void main(String[] args) {
@@ -702,4 +704,33 @@ throw new RuntimeException(ex);
             });
         });
     }
+
+    public void copy(Estudio_DTO estudio, int id_Unidad) {
+        Precio_DAO P = new Precio_DAO();
+        Configuracion_DAO CN = new Configuracion_DAO();
+        Est_Mat_DAO M = new Est_Mat_DAO();
+        estudio.setId_Estudio(registrarEstudio(estudio));
+        if (estudio.getId_Estudio() != 0) {
+            estudio.setId_Est_Uni(registrarEst_Uni(estudio.getId_Estudio(), id_Unidad));
+            if (estudio.getId_Est_Uni() != 0) {
+                estudio.getPrecio().setId_Precio(P.registrarPrecio(estudio.getId_Est_Uni(), estudio.getPrecio()));
+                if (estudio.getPrecio().getId_Precio() != 0) {
+                    if (!estudio.getCnfs().isEmpty()) {
+                        estudio.getCnfs().forEach((dto) -> {
+                            dto.setId_Configuración(CN.registrarConfiguracion(dto));
+                            CN.registrarConf_Est(estudio.getId_Estudio(), dto.getId_Configuración());
+                        });
+                    }
+                    if (estudio.getCnfs().get(0).getId_Configuración() != 0) {
+                        if (!estudio.getMts().isEmpty()) {
+                            estudio.getMts().forEach((dto) -> {
+                                M.registrarMat_Est(estudio.getId_Est_Uni(), dto);
+                            });
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }

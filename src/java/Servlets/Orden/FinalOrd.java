@@ -35,41 +35,49 @@ public class FinalOrd extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+
         HttpSession sesion = request.getSession();
-        Date fac = new Date();
-        Fecha f = new Fecha();
-        f.setHora(fac);
-        System.out.println("SESION RECUPERADA");
         Orden_DAO O = new Orden_DAO();
+        Boolean r = true;
+        if (request.getParameter("LsIxOrd") != null) {
+            int Id_Orden = Integer.parseInt(request.getParameter("LsIxOrd").trim());
+            sesion.setAttribute("Orden", O.getOrden(Id_Orden));
+            r = false;
+        }
         Orden_DTO Orden = (Orden_DTO) sesion.getAttribute("Orden");
-        System.out.println("ÓRDEN RECUPERADA");
-        Orden.setFecha(f.getFechaActual());
-        Orden.setHora(f.getHoraActual());
-        Orden.setEstado("Pendiente");      
-        Orden.setFolio_Unidad(O.getNoOrdenByUnidad(Orden.getUnidad().getId_Unidad())+1);
-        Orden.setId_Orden(O.registrarOrden(Orden));
+        if (r) {
+            Date fac = new Date();
+            Fecha f = new Fecha();
+            f.setHora(fac);
+            System.out.println("SESION RECUPERADA");
+            System.out.println("ÓRDEN RECUPERADA");
+            Orden.setFecha(f.getFechaActual());
+            Orden.setHora(f.getHoraActual());
+            Orden.setEstado("Pendiente");
+            Orden.setFolio_Unidad(O.getNoOrdenByUnidad(Orden.getUnidad().getId_Unidad()) + 1);
+            Orden.setId_Orden(O.registrarOrden(Orden));            
+        }
         try {
-            String CodeCot = Orden.getPaciente().getCodPac().substring(0, 4) + "-" + Orden.getId_Orden();
-            System.out.println("Órden: " + CodeCot);
+            String CodeOrd = Orden.getPaciente().getCodPac().substring(0, 4) + "-" + Orden.getId_Orden();
+            System.out.println("Órden: " + CodeOrd);
             response.setContentType("application/pdf");
-            response.setHeader("Content-disposition", "inline; filename=\"Cot_" + CodeCot + ".pdf\"");
+            response.setHeader("Content-disposition", "inline; filename=\"Órd_" + CodeOrd + ".pdf\"");
             String relativePath = getServletContext().getRealPath("/");
             String Source = relativePath + "M/MembrOrden.pdf";
             Image barras1;
             JBarcodeBean barcode = new JBarcodeBean();
             System.out.println("******************JBarcodeBean*******************");
             barcode.setCodeType(new Code39());
-            barcode.setCode(CodeCot);
+            barcode.setCode(CodeOrd);
             barcode.setCheckDigit(true);
-            barcode.setShowText(false);
+            barcode.setShowText(true);
             BufferedImage bi = barcode.draw(new BufferedImage(155, 20, BufferedImage.TYPE_INT_RGB));
             barras1 = Image.getInstance(Toolkit.getDefaultToolkit().createImage(bi.getSource()), null);
             PdfReader reader = new PdfReader(Source);
             Rectangle pagesize = reader.getPageSize(1);
             PdfStamper stamper = new PdfStamper(reader, response.getOutputStream());
             System.out.println("******************PdfStamper*******************");
-            PdfContentByte cb = stamper.getUnderContent(1);
+            PdfContentByte cb = stamper.getOverContent(1);
 
             BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
             BaseFont bf0 = BaseFont.createFont(BaseFont.TIMES_BOLD, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
@@ -77,11 +85,23 @@ public class FinalOrd extends HttpServlet {
             ////////////////////////// DATOS UNIDAD
             cb.beginText();
             cb.setFontAndSize(bf0, 10);
-            cb.setTextMatrix(330, 760);
+            cb.setTextMatrix(290, 760);
             System.out.println("UNIDAD " + Orden.getUnidad().getNombre_Unidad().toUpperCase());
             cb.showText("UNIDAD " + Orden.getUnidad().getNombre_Unidad().toUpperCase());
             cb.endText();
-            barras1.setAbsolutePosition(300, 732);//x,y
+            cb.beginText();
+
+            cb.setFontAndSize(bf0, 10);
+            cb.setTextMatrix(443, 740);
+            cb.showText("Folio de Unidad: " + Orden.getFolio_Unidad());
+            cb.endText();
+
+            barras1.setAbsolutePosition(260, 732);//x,y
+            cb.beginText();
+            cb.setFontAndSize(bf1, 9);
+            cb.setTextMatrix(310, 722);
+            cb.showText(CodeOrd);
+            cb.endText();
             ////////////////////////// DATOS PACIENTE
             cb.beginText();
             cb.setFontAndSize(bf, 10);
@@ -97,7 +117,7 @@ public class FinalOrd extends HttpServlet {
             cb.beginText();
             cb.setFontAndSize(bf, 10);
             cb.setTextMatrix(395, 697);
-            cb.showText("Fecha de Emisión:");
+            cb.showText("Fecha de Órden:");
             cb.endText();
             cb.beginText();
             cb.setFontAndSize(bf1, 10);
@@ -120,12 +140,12 @@ public class FinalOrd extends HttpServlet {
             cb.beginText();
             cb.setFontAndSize(bf, 10);
             cb.setTextMatrix(395, 678);
-            cb.showText("Fecha que Expira:");
+            cb.showText("Atendió:");
             cb.endText();
             cb.beginText();
             cb.setFontAndSize(bf1, 10);
-            cb.setTextMatrix(485, 678);
-            cb.showText("fecha orden");
+            cb.setTextMatrix(455, 678);
+            cb.showText(Orden.getEmpleado().getNombre() + " " + Orden.getEmpleado().getAp_Paterno());
             cb.endText();
             ///////////////////////despedida
             cb.beginText();
@@ -134,12 +154,12 @@ public class FinalOrd extends HttpServlet {
             cb.showText("Dirección: " + Orden.getUnidad().getEncargado().getCalle() + " No Ext." + Orden.getUnidad().getEncargado().getNo_Ext() + ","
                     + " Col. " + Orden.getUnidad().getEncargado().getNombre_Colonia() + ", " + Orden.getUnidad().getEncargado().getNombre_Municipio() + "     Tel 1.:" + Orden.getUnidad().getEncargado().getTelefono1() + "     Mail.:" + Orden.getUnidad().getEncargado().getMail() + "");
             cb.endText();
-System.out.println("Direccion");
+            System.out.println("Direccion");
             cb.addImage(barras1, false);
 
             PdfPTable table = new PdfPTable(2);
             table.addCell("Nombre de Estudio");
-            table.addCell("Precio");  
+            table.addCell("Precio");
             table.setHeaderRows(1);
             table.setWidths(new int[]{7, 3});
             Orden.getDet_Orden().stream().map((dto) -> {
@@ -148,7 +168,41 @@ System.out.println("Direccion");
             }).forEachOrdered((dto) -> {
                 table.addCell(dto.getSubtotal().toString());
             });
-System.out.println("tabla de estudios");
+            System.out.println("tabla de estudios");
+
+            cb.beginText();
+            cb.setFontAndSize(bf, 12);
+            cb.setTextMatrix(452, 567);
+            cb.showText("A/C:");
+            cb.endText();
+            cb.beginText();
+            cb.setFontAndSize(bf, 12);
+            cb.setTextMatrix(500, 567);
+            cb.showText((Orden.getRestante()) + "");
+            cb.endText();
+
+            cb.beginText();
+            cb.setFontAndSize(bf, 12);
+            cb.setTextMatrix(452, 553);
+            cb.showText("Saldo: ");
+            cb.endText();
+            cb.beginText();
+            cb.setFontAndSize(bf, 12);
+            cb.setTextMatrix(500, 553);
+            cb.showText((Orden.getTotal()) + "");
+            cb.endText();
+
+            cb.beginText();
+            cb.setFontAndSize(bf, 12);
+            cb.setTextMatrix(452, 539);
+            cb.showText("TOTAL: ");
+            cb.endText();
+            cb.beginText();
+            cb.setFontAndSize(bf, 12);
+            cb.setTextMatrix(500, 539);
+            cb.showText((Orden.getTotal() + Orden.getRestante()) + "");
+            cb.endText();
+
             ColumnText column = new ColumnText(stamper.getOverContent(1));
             Rectangle rectPage1 = new Rectangle(-10, 40, 480, 663);//izq,esp-inf,ancho,alto
             column.setSimpleColumn(rectPage1);
@@ -164,6 +218,7 @@ System.out.println("tabla de estudios");
             stamper.close();
             reader.close();
         } catch (IOException | DocumentException ex) {
+            response.setContentType("text/html;charset=UTF-8");
             try (PrintWriter out = response.getWriter()) {
                 out.println("<!DOCTYPE html>");
                 out.println("<html>");

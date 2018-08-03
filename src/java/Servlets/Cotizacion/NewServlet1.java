@@ -122,6 +122,39 @@ public class NewServlet1 extends HttpServlet {
 
             cb.addImage(barras1, false);
 
+            cb.beginText();
+            cb.setFontAndSize(bf, 12);
+            cb.setTextMatrix(452, 567);
+            cb.showText("A/C:");
+            cb.endText();
+            cb.beginText();
+            cb.setFontAndSize(bf, 12);
+            cb.setTextMatrix(500, 567);
+            cb.showText("300.50");
+            cb.endText();
+            
+            cb.beginText();
+            cb.setFontAndSize(bf, 12);
+            cb.setTextMatrix(452, 553);
+            cb.showText("Saldo: ");
+            cb.endText();
+            cb.beginText();
+            cb.setFontAndSize(bf, 12);
+            cb.setTextMatrix(500, 553);
+            cb.showText("272.30");
+            cb.endText();
+            
+            cb.beginText();
+            cb.setFontAndSize(bf, 12);
+            cb.setTextMatrix(452, 539);
+            cb.showText("TOTAL: ");
+            cb.endText();
+            cb.beginText();
+            cb.setFontAndSize(bf, 12);
+            cb.setTextMatrix(500, 539);
+            cb.showText("572.80");
+            cb.endText();
+            
             PdfPTable table = new PdfPTable(2);
             table.addCell("Nombre de Estudio");
             table.addCell("Precio");  

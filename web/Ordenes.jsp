@@ -74,7 +74,7 @@
                     <nav class="nav nav-underline">        
                         <a class="nav-link" href="#"onclick="mostrarForm('Menu/Orden/Registro.jsp');">Nueva Órden</a>        
                         <a class="nav-link" href="#" onclick="mostrarForm('Menu/Cotizacion/Registro.jsp');">Nueva Cotización</a>        
-                        <a class="nav-link" href="#" onclick='mostrarForm("${pageContext.request.contextPath}/ShowMats");'>Ver Órdenes</a> 
+                        <a class="nav-link" href="#" onclick='mostrarForm("${pageContext.request.contextPath}/ShowOrds");'>Órdenes Pendientes</a>                         
                     </nav>
                 </div>
                 <div><br>

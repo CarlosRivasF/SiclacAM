@@ -1,12 +1,13 @@
 package DataTransferObject;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  *
  * @author Carlos Rivas
  */
-public class Usuario_DTO implements Serializable{
+public class Usuario_DTO implements Serializable {
 
     protected int id_Usuario;
     protected int id_Unidad;
@@ -15,6 +16,7 @@ public class Usuario_DTO implements Serializable{
     protected String Contraseña;
     protected String Rol;
     protected String Estado;
+    protected List<String> lst;
 
     public int getId_Usuario() {
         return id_Usuario;
@@ -70,5 +72,13 @@ public class Usuario_DTO implements Serializable{
 
     public void setEstado(String Estado) {
         this.Estado = Estado;
+    }
+
+    public List<String> getLst() {
+        return lst;
+    }
+
+    public void setLst(List<String> lst) {
+        this.lst = lst;
     }
 }

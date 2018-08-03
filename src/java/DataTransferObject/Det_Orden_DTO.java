@@ -1,7 +1,5 @@
 package DataTransferObject;
 
-import java.util.List;
-
 /**
  *
  * @author ZionSystems
@@ -15,7 +13,7 @@ public class Det_Orden_DTO {
     protected String Fecha_Entrega;
     protected String T_Entrega;
     protected Float Subtotal;
-    
+
     public int getId_det_orden() {
         return id_det_orden;
     }

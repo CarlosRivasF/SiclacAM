@@ -47,6 +47,23 @@ public class Permiso_DAO {
         }
     }
 
+    public List<String> getPermisoString(int id_Usuario) {
+        List<String> lst = new ArrayList<>();
+        try (Connection con = Conexion.getCon()) {
+            String sql = "SELECT id_Permiso FROM  use_per WHERE id_Usuario=" + id_Usuario + " order by id_Permiso";
+            System.out.println(sql);
+            try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery()) {
+                while (rs.next()) {
+                    System.out.println(rs.getString("id_Permiso"));
+                    lst.add(rs.getString("id_Permiso"));
+                }
+            }
+            return lst;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public List<Permiso_DTO> getPermisos(int id_Usuario) {
         int[] permisos = null;
         List<Permiso_DTO> lst;
@@ -87,7 +104,7 @@ public class Permiso_DAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }   
+    }
 
     public List<Permiso_DTO> getPermisos() {
         List<Permiso_DTO> pms = new ArrayList<>();

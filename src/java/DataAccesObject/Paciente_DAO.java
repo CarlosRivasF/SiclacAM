@@ -258,6 +258,7 @@ public class Paciente_DAO {
                 PreparedStatement pstm = con.prepareStatement(sql);
                 ResultSet rs = pstm.executeQuery();
                 while (rs.next()) {
+                    dto.setId_Paciente(rs.getInt("id_Paciente"));
                     dto.setId_Unidad(rs.getInt("id_Unidad"));
                     dto.setId_Persona(rs.getInt("id_Persona"));
                     dto.setCodPac(rs.getString("CodPac"));

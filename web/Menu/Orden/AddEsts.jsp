@@ -17,7 +17,7 @@
 <div class="nav-scroller bg-white box-shadow">
     <nav class="nav nav-underline">        
         <a class="nav-link" href="#/" onclick="mostrarForm('Menu/Orden/Registro.jsp');">Nueva Órden</a>
-        <a class="nav-link" href="#" onclick='mostrarForm("${pageContext.request.contextPath}/ShowMats");'>Ver Órdenes</a> 
+        <a class="nav-link" href="#" onclick='mostrarForm("${pageContext.request.contextPath}/ShowOrds");'>Ver Órdenes</a> 
     </nav>
 </div>
 <div class="container-fluid" style="color: white"><hr>

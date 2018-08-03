@@ -1,15 +1,15 @@
 <%
     HttpSession sesion = request.getSession();
     if (sesion.getAttribute("user") != null && sesion.getAttribute("unidad") != null) {
-        if(sesion.getAttribute("Orden")!=null){
-        sesion.removeAttribute("Orden");
+        if (sesion.getAttribute("Orden") != null) {
+            sesion.removeAttribute("Orden");
         }
 %>
 <div class="nav-scroller bg-white box-shadow">
     <nav class="nav nav-underline">        
-        <a class="nav-link active" href="#" style="color:#007bff" onclick="mostrarForm('Menu/Orden/Registro.jsp');"><ins>Nueva Órden</ins></a>        
-        <a class="nav-link" href="#" onclick="mostrarForm('Menu/Cotizacion/Registro.jsp');">Nueva Cotización</a>
-        <a class="nav-link" href="#" onclick='mostrarForm("${pageContext.request.contextPath}/ShowMats");'>Ver Órdenes</a> 
+        <a class="nav-link" href="#"onclick="mostrarForm('Menu/Orden/Registro.jsp');">Nueva Órden</a>        
+        <a class="nav-link" href="#" onclick="mostrarForm('Menu/Cotizacion/Registro.jsp');">Nueva Cotización</a>        
+        <a class="nav-link" href="#" onclick='mostrarForm("${pageContext.request.contextPath}/ShowOrds");'>Órdenes Pendientes</a>         
     </nav>
 </div>
 <div class="container-fluid" style="color: white"><br>
@@ -114,7 +114,7 @@
                 </div>
                 <div class="col mb-3">
                     <label class="sr-only" >Celular</label>
-                    <input style="text-align: center" type="number" class="form-control" name="celular" id="celular" placeholder="Celular" required>
+                    <input style="text-align: center" type="number" class="form-control" name="celular" id="celular" placeholder="Celular" >
                     <div class="invalid-feedback">
                         Numero de celular obligatorio.
                     </div>
@@ -125,14 +125,14 @@
             <div class="form-row">       
                 <div class="col mb-3">
                     <label class="sr-only" >Código Postal</label>
-                    <input style="text-align: center" type="number" onchange="llenaColonia();" class="form-control" name="c_p" id="c_p" placeholder="Código Postal" required>
+                    <input style="text-align: center" type="number" onchange="llenaColonia();" class="form-control" name="c_p" id="c_p" placeholder="Código Postal" >
                     <div class="invalid-feedback" style="width: 100%;">
                         Código Postal Obligatorio.
                     </div>
                 </div>
                 <div id="dir" class="col mb-3">
                     <label for="colonia" class="sr-only">Colonia</label>
-                    <select class="custom-select d-block w-100" id="colonia" name="colonia" required>
+                    <select class="custom-select d-block w-100" id="colonia" name="colonia" >
                         <option value="">Colonia</option>                    
                     </select>
                     <div class="invalid-feedback" style="width: 100%;">
@@ -141,21 +141,21 @@
                 </div>
                 <div class="col-md-5 mb-3">
                     <label class="sr-only" >Calle</label>
-                    <input style="text-align: center" type="text" class="form-control" name="calle" id="calle" placeholder="Calle" required>
+                    <input style="text-align: center" type="text" class="form-control" name="calle" id="calle" placeholder="Calle" >
                     <div class="invalid-feedback">
                         Se requiere un calle valida.
                     </div>
                 </div>
                 <div class="col mb-3">
                     <label class="sr-only" >No Int</label>
-                    <input style="text-align: center" type="text" class="form-control" name="no_int" id="no_int" placeholder="No Int" required>
+                    <input style="text-align: center" type="text" class="form-control" name="no_int" id="no_int" placeholder="No Int" >
                     <div class="invalid-feedback" style="width: 100%;">
                         Se requiere un No Int.
                     </div>
                 </div>
                 <div class="col mb-3">
                     <label class="sr-only" >No Ext</label>
-                    <input style="text-align: center" type="text" class="form-control" name="no_ext" id="no_ext" placeholder="No Ext" required>
+                    <input style="text-align: center" type="text" class="form-control" name="no_ext" id="no_ext" placeholder="No Ext" >
                     <div class="invalid-feedback" style="width: 100%;">
                         Se requiere un No Ext.
                     </div>                    

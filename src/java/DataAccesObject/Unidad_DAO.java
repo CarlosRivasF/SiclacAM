@@ -1,6 +1,8 @@
 package DataAccesObject;
 
 import DataBase.Conexion;
+import DataTransferObject.Direccion_DTO;
+import DataTransferObject.Permiso_DTO;
 import DataTransferObject.Persona_DTO;
 import DataTransferObject.Unidad_DTO;
 import DataTransferObject.Usuario_DTO;
@@ -293,6 +295,35 @@ public class Unidad_DAO {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }        
+
+    public void copy(Unidad_DTO unidad) {
+        Persona_DAO P = new Persona_DAO();
+        Direccion_DAO D = new Direccion_DAO();
+        Unidad_DAO U = new Unidad_DAO();
+        Usuario_DAO Us = new Usuario_DAO();
+        Direccion_DTO dir = new Direccion_DTO();
+        dir.setId_Colonia(unidad.getEncargado().getId_Colonia());
+        dir.setCalle(unidad.getEncargado().getCalle());
+        dir.setNo_Int(unidad.getEncargado().getNo_Int());
+        dir.setNo_Ext(unidad.getEncargado().getNo_Ext());
+
+        dir.setId_Direccion(D.RegistrarDirección(dir));
+        if (dir.getId_Direccion() != 0) {
+            unidad.getEncargado().setId_Direccion(dir.getId_Direccion());
+            unidad.getEncargado().setId_Persona(P.RegistrarPersona(unidad.getEncargado()));
+            if (unidad.getEncargado().getId_Persona() != 0) {
+                unidad.setId_Unidad(U.RegistrarUnidad(unidad));
+                unidad.getUsuario().setId_Unidad(unidad.getId_Unidad());
+                unidad.getUsuario().setId_Persona(unidad.getEncargado().getId_Persona());
+                unidad.getUsuario().setId_Usuario(Us.RegistrarUsuario(unidad.getUsuario()));
+                if (unidad.getUsuario().getId_Usuario() != 0) {
+                    Permiso_DAO Pr = new Permiso_DAO();
+                    Pr.registrarPermisos(unidad.getUsuario().getId_Usuario(), unidad.getUsuario().getLst()); 
+                }
+            }
+        }
+
     }
 
 }

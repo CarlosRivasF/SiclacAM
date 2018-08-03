@@ -58,7 +58,7 @@ public class Resultado extends HttpServlet {
         barcode.setCodeType(new Code39());
         barcode.setCode("SALA700731-914-3");
         barcode.setCheckDigit(true);
-        barcode.setShowText(false);
+        barcode.setShowText(true);
         BufferedImage bi = barcode.draw(new BufferedImage(156, 12, BufferedImage.TYPE_INT_RGB));
         barras1 = Image.getInstance(Toolkit.getDefaultToolkit().createImage(bi.getSource()), null);
 
@@ -161,7 +161,7 @@ public class Resultado extends HttpServlet {
             }
         }        
         ColumnText column = new ColumnText(stamper.getOverContent(1));
-        Rectangle rectPage1 = new Rectangle(-27, 40, 640, 690);//0,esp-inf,ancho,alto
+        Rectangle rectPage1 = new Rectangle(-27, 120, 640, 690);//0,esp-inf,ancho,alto
         column.setSimpleColumn(rectPage1);
         column.addElement(table);
 

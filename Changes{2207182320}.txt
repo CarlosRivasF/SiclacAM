@@ -3,3 +3,12 @@
 alter table estudio modify Nombre_Estudio varchar(80);
 alter table estudio modify Clave_Estudio varchar(40);
 alter table estudio modify Preparacion varchar(150); 
+drop table resultado;
+create table resultado(
+id_resultado int primary key auto_increment,
+id_Det_Orden INT,FOREIGN KEY(id_Det_Orden) REFERENCES det_orden(id_Det_Orden) ON UPDATE CASCADE,
+id_Configuracion INT, FOREIGN KEY(id_Configuracion) REFERENCES Configuracion(id_Configuracion) ON UPDATE CASCADE,
+Valor_Obtenido varchar(9000) 
+);
+
+SHOW VARIABLES LIKE "max_connections";

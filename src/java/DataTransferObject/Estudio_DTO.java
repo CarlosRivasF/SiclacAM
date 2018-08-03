@@ -7,6 +7,10 @@ import java.util.List;
  * @author ZionSystems
  */
 public class Estudio_DTO extends Tipo_Estudio_DTO {
+    
+    public Estudio_DTO(){
+    addRes=false;
+    }
 
     protected int id_Estudio;
     protected int id_Est_Uni;
@@ -20,6 +24,7 @@ public class Estudio_DTO extends Tipo_Estudio_DTO {
     protected List<Est_Mat_DTO> mts;
     protected String ctrl_est;
     protected int PorcEst;
+    protected Boolean addRes;
 
     public int getId_Estudio() {
         return id_Estudio;
@@ -115,5 +120,13 @@ public class Estudio_DTO extends Tipo_Estudio_DTO {
 
     public void setPorcEst(int PorcEst) {
         this.PorcEst = PorcEst;
+    }
+
+    public Boolean getAddRes() {
+        return addRes;
+    }
+
+    public void setAddRes(Boolean addRes) {
+        this.addRes = addRes;
     }
 }

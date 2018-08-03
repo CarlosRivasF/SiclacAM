@@ -896,9 +896,11 @@ function FormUpCn(index, part, acc) {
         }
     };
     var p = "index=" + index + " &part=" + part + " &acc=" + acc + dta;
+    alert(p);
     Ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     Ajax.send(p);
 }
+
 function FormUpEstMat(index, part, acc) {
     var dta = " &f=f";
     divRes = document.getElementById("matis");
@@ -1949,5 +1951,83 @@ function AddNWConf(x) {
         };
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.send("desc=" + desc + " &sexo=" + sexo + " &min=" + v1 + " &max=" + v2 + " &unidades=" + us + " &index=" + x);
+    }
+}
+
+function SrchOrd(e, mode) {
+    var busq = e.value;
+    if (busq.length === 0) {
+        Ajax = buscarComentario();
+        Ajax.open('POST', "SrchOrd", true);
+        Ajax.onreadystatechange = function () {
+            if (Ajax.readyState === 4) {
+                document.getElementById("SerchOrd").innerHTML = Ajax.responseText;
+            }
+        };
+        Ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        var p = "mode=" + mode;
+        Ajax.send(p);
+    } else {
+        Ajax = buscarComentario();
+        Ajax.open('POST', "SrchOrd", true);
+        Ajax.onreadystatechange = function () {
+            if (Ajax.readyState === 4) {
+                document.getElementById("SerchOrd").innerHTML = Ajax.responseText;
+            }
+        };
+        Ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        var p = "busq=" + busq + " &mode=" + mode;
+        Ajax.send(p);
+    }
+}
+function ShDetOrden(index) {
+    buscarComentario();
+    xhr.open("POST", "ShDetOrd", true);
+    xhr.onreadystatechange = PrShDetOrd;
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send("index=" + index);
+}//FormResDet
+
+function ShDetOrdenRS(index) {
+    buscarComentario();
+    xhr.open("POST", "ShowDetOrdRs", true);
+    xhr.onreadystatechange = PrShDetOrd;
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send("index=" + index);
+}
+function PrShDetOrd() {
+    if (xhr.readyState === 4) {
+        document.getElementById("Interaccion").innerHTML = xhr.responseText;
+    }
+}
+
+function FormResDet(index) {
+    buscarComentario();
+    xhr.open("POST", "FormResDet", true);
+    xhr.onreadystatechange = PrResDet;
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send("index=" + index);
+}
+function PrResDet() {
+    if (xhr.readyState === 4) {
+        document.getElementById("fill_detor").innerHTML = xhr.responseText;
+    }
+}
+
+function SaveResDet(index,size) {    
+    var Res="";
+    for(var i=0;i<size;i++){        
+        Res=Res+"valRes-"+i+"="+document.getElementById("valRes-"+i).value+" &";
+    }   
+    document.getElementById("fill_detor").innerHTML = "";    
+    buscarComentario();
+    xhr.open("POST", "UplResults", true);
+    xhr.onreadystatechange = PrSavResDet;
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send(Res+"index="+index);
+}
+function PrSavResDet() {
+    if (xhr.readyState === 4) {
+        document.getElementById("detors").innerHTML = xhr.responseText;
     }
 }

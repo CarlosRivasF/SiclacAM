@@ -70,8 +70,8 @@
             <div id="Interaccion">
                 <div class="nav-scroller bg-white box-shadow">
                     <nav class="nav nav-underline">
-                        <a class="nav-link" href="#/" onclick="mostrarForm('Menu/Unidad/Registro.jsp');">Reporte 1</a>
-                        <a class="nav-link" href="#/" onclick='mostrarForm("${pageContext.request.contextPath}/ShowUnidad");'>Reporte 2</a>              
+                        <a class="nav-link" href="#/" onclick="mostrarForm('Menu/Unidad/Registro.jsp');">Reportes de Estudios</a>
+                        <a class="nav-link" href="#/" onclick='mostrarForm("${pageContext.request.contextPath}/ShowUnidad");'>Reportes de órdenes </a>              
                     </nav>
                 </div>
                 <div><br>

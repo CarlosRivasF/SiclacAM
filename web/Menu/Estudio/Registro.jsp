@@ -160,10 +160,10 @@
                     <option value="A-Femenino">Adulto Femenino</option>                       
                     <option value="A-Masculino">Adulto Masculino</option>                       
                     <option value="A-Ambos">Adulto Ambos</option>                       
-                    <option value="N-Masculino">Niño Femenino</option>                       
+                    <option value="N-Femenino">Niño Femenino</option>                       
                     <option value="N-Masculino">Niño Masculino</option>                       
                     <option value="N-Ambos">Niño Ambos</option>                       
-                    <option value="RN-Masculino">Rec Nac Femenino</option>                       
+                    <option value="RN-Femenino">Rec Nac Femenino</option>                       
                     <option value="RN-Masculino">Rec Nac Masculino</option>                       
                     <option value="RN-Ambos">Rec Nac Ambos</option>                       
                 </select>

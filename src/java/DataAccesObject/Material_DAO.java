@@ -70,7 +70,7 @@ public class Material_DAO {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
+    }    
     public Material_DTO addMaterialByU(int unidad, Material_DTO dto) {
         Unidad_DAO U = new Unidad_DAO();
         int id_Empresa = U.getIdEmpresa(unidad);
@@ -347,4 +347,61 @@ public class Material_DAO {
             throw new RuntimeException(e);
         }
     }
+    
+    public int Copy(int unidad, Material_DTO dto) {
+        Unidad_DAO U = new Unidad_DAO();
+        int rp;
+        String sql = "INSERT INTO material VALUES(NULL,'" + dto.getClave() + "','" + dto.getNombre_Material() + "')";
+        try (Connection con = Conexion.getCon();) {
+            try (PreparedStatement pstm = con.prepareStatement(sql);) {
+                rp = pstm.executeUpdate();
+                pstm.close();
+            }
+            if (rp == 1) {
+                sql = "SELECT id_Material from material WHERE Nombre_Material='" + dto.getNombre_Material() + "' and Clave_Mat='" + dto.getClave() + "'";
+                try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery();) {
+                    while (rs.next()) {
+                        dto.setId_Material(rs.getInt("id_Material"));
+                    }
+                    rs.close();
+                    pstm.close();
+                }
+                sql = "INSERT INTO empr_mat VALUES(NULL," + U.getIdEmpresa(unidad) + "," + dto.getId_Material() + ",'" + dto.getPrecio() + "')";
+                try (PreparedStatement pstm = con.prepareStatement(sql);) {
+                    rp = pstm.executeUpdate();
+                    pstm.close();
+                }
+                if (rp == 1) {
+                    sql = "SELECT id_Empr_Mat from empr_mat WHERE id_Material=" + dto.getId_Material() + "";
+                    try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery();) {
+                        while (rs.next()) {
+                            dto.setId_Empr_Mat(rs.getInt("id_Empr_Mat"));
+                        }
+                        rs.close();
+                        pstm.close();
+                    }
+                    sql = "INSERT INTO unid_mat VALUES(NULL," + unidad + "," + dto.getId_Empr_Mat() + "," + dto.getCantidad() + ")";
+                    try (PreparedStatement pstm = con.prepareStatement(sql);) {
+                        rp = pstm.executeUpdate();
+                        pstm.close();
+                    }
+                    if (rp == 1) {
+                        sql = "SELECT id_Unid_Mat from unid_mat WHERE id_Empr_Mat=" + dto.getId_Empr_Mat() + "";
+                        try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery();) {
+                            while (rs.next()) {
+                                dto.setId_Unid_Mat(rs.getInt("id_Unid_Mat"));
+                            }
+                            rs.close();
+                            pstm.close();
+                        }
+                    }
+                }
+            }
+            con.close();
+            return dto.getId_Unid_Mat();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
 }

@@ -35,8 +35,6 @@ public class FormUp_MatCnf extends HttpServlet {
         int ixC = Integer.parseInt(part);
 
         if ("upd".equals(acc)) {
-            
-            
             out.println("<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
                     + "<tr class='table-info' style='color: black'>"
                     + "<th >Desc</th>"
@@ -50,6 +48,10 @@ public class FormUp_MatCnf extends HttpServlet {
             int l = 0;
             for (Configuracion_DTO cnf : est.getCnfs()) {
                 if (l == ixC) {
+                    System.out.println("Desc:" + request.getParameter("descrip"));
+                    System.out.println("Sex:" + request.getParameter("sexo"));
+                    System.out.println("ValMin:" + request.getParameter("valMin"));
+                    System.out.println("ValMax:" + request.getParameter("valMax"));
                     cnf.setDescripcion(request.getParameter("descrip"));
                     cnf.setSexo(request.getParameter("sexo"));
                     cnf.setValor_min(request.getParameter("valMin"));
@@ -111,10 +113,10 @@ public class FormUp_MatCnf extends HttpServlet {
                             + "<option value='A-Femenino'>Adulto Femenino</option>"
                             + "<option value='A-Masculino'>Adulto Masculino</option>"
                             + "<option value='A-Ambos'>Adulto Ambos</option>"
-                            + "<option value='N-Masculino'>Niño Femenino</option>"
+                            + "<option value='N-Femenino'>Niño Femenino</option>"
                             + "<option value='N-Masculino'>Niño Masculino</option>"
                             + "<option value='N-Ambos'>Niño Ambos</option>"
-                            + "<option value='RN-Masculino'>Rec Nac Femenino</option>"
+                            + "<option value='RN-Femenino'>Rec Nac Femenino</option>"
                             + "<option value='RN-Masculino'>Rec Nac Masculino</option>"
                             + "<option value='RN-Ambos'>Rec Nac Ambos</option>");
                     out.print("</select></td>"

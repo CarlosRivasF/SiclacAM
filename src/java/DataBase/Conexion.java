@@ -14,7 +14,7 @@ public class Conexion {
 
     public static DataSource dataSource = null;//siclac2
     private static final String DB = "siclac2";  //node74321-amlab.whelastic.net
-    private static final String URL = "jdbc:mysql://localhost/" + DB + "?useServerPrepStmts=true&autoReconnect=true";
+    private static final String URL = "jdbc:mysql://localhost/" + DB + "?useServerPrepStmts=true&autoReconnect=true&useSSL=false";
     private static final String USER = "root";
     private static final String PASS = "";//NAVngv51153
 
@@ -31,10 +31,10 @@ public class Conexion {
         basicDataSource.setMaxActive(-1);
         basicDataSource.setMinIdle(50);
         basicDataSource.setMaxIdle(100);        
-        basicDataSource.setTimeBetweenEvictionRunsMillis(4500);
-        basicDataSource.setMinEvictableIdleTimeMillis(3000);
-        basicDataSource.setNumTestsPerEvictionRun(10);
-        basicDataSource.setMaxWait(5000);
+        basicDataSource.setTimeBetweenEvictionRunsMillis(3000);
+        basicDataSource.setMinEvictableIdleTimeMillis(2500);
+        basicDataSource.setNumTestsPerEvictionRun(100);
+        basicDataSource.setMaxWait(3500);
         dataSource = basicDataSource;
     }
 
@@ -63,11 +63,11 @@ public class Conexion {
                     return Conexion.dataSource.getConnection();
                 }                
             }
-        } catch (SQLException ex) {            
-            System.out.println(ex.getCause());
+        } catch (SQLException ex) {                        
             System.out.println(ex.getMessage());
             return null;
         }
     } 
+    
     
 }

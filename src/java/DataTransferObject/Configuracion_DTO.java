@@ -11,7 +11,8 @@ public class Configuracion_DTO {
     protected String Valor_min;
     protected String Valor_MAX;
     protected String Uniddes;
-    protected String sexo;
+    protected String sexo;      
+    protected Resultado_DTO res;
 
     public int getId_Configuración() {
         return id_Configuración;
@@ -59,5 +60,13 @@ public class Configuracion_DTO {
 
     public void setSexo(String sexo) {
         this.sexo = sexo;
+    }
+
+    public Resultado_DTO getRes() {
+        return res;
+    }
+
+    public void setRes(Resultado_DTO res) {
+        this.res = res;
     }
 }

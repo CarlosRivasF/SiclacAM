@@ -1,0 +1,57 @@
+
+
+
+
+   Pacie35949 MARIA LUISA   Sexo:    Eda:     Tip        ID    1
+        ORDOÑEZ                                 sang:      mues:   MuestSuero               NHM.:              Zon:       N 
+                                                            cama:   Remit                   Env                PrioriN                                                      do
+                            des:   Caracter:
+   Diagnó:
+
+   Test     Nombre completo    ConcentraUnidad ResultaO                                                        dbservaR                                                               ceferencia
+
+   Glucosa  Glucosa GOD-POD     101     mg/dL Normal        60-110
+   Ox   Urea UV  Urea UV             203.7   mg/dL ^      RFH   15.0-45.0
+   Ac. UricoÁcido Urico         9.13    mg/dL Normal
+   CreatininaCreatinina-Jaffe    6.62    mg/dL ^      RFH   0.60-1.40
+   ColesterolColesterol Total    119.8   mg/dL v      RFL   120.0-240.0
+   HDLc     Colesterol          17.0    mg/dL v      RFL   35.0-60.0
+             HDL-Directo   Prot.    Proteínas totales   5.75    g/dL  v      RFL   6.60-8.30
+   Tot.   TriglicériTriglicéridos       323.8   mg/dL ^      RFH   35.0-165.0
+   Albúmina Albúmina            3.73    g/dL  Normal        3.50-5.00
+   GPT-ALAT Alanino             83.6    U/L   ^      RFH   <=40.0
+             aminotransferasa   GOT-ASAT Aspartato           150.3   U/L   ^      RFH   <=38.0
+             aminotransferasa   GGT      Gamaglutamiltransfera182     U/L   ^      RFH   7-50
+   Fosf.    Fosfatasa alcalina  403     U/L   ^      RFH   98-279
+   alcalina   Fósforo                       5.0     mg/dL Normal        2.5-7.0
+   Mg       Magnesio Xilidil    1.3     mg/dL v      RFL   1.6-2.5
+   Xilidil   Calcio-A-ICalcio arsenazo III 10.7    mg/dL Normal
+   B.T.     Bilirrubina Total   13.64   mg/dL ^      RFH   <=1.10
+   B.D.     Bilirrubina Directa 4.42    mg/dL ^      RFH   <=0.25
+   LDH      Lactato             532     U/L   ^      RFH   230-460
+             dehidrogenasa   Lipasa   Lipasa              24.4    U/L   Normal        <=200.0
+   Amilasa  Amilasa             48.0    U/L   Normal        <=90.0
+   CK-NAC   Creatin-cinasa      430     U/L   ^      RFH   36-236
+   Hierro   Hierro              26.0    ug/dL v      RFL   40.0-175.0
+   Cloro    Cloro               94.8    mmol/Lv      RFL   95.0-115.0
+   BI       BILIRRUBINA         9.22    mg/dL Normal
+             INDIRECTA   GLOB     GLOBULINA           2.02    g/dL  Normal
+   A/G      RELACION A/G        1.85    g/dL  Normal
+   BUN      NITROGENO UREICO    95.2    mg/dL Normal
+   VLDL     LIPOPROTEINA DE MUY 64.8    g/mL  Normal
+             BAJA DENSI   LDL      LIPOPROTEINAS DE    38.0    mg/dL Normal
+             BAJA DENSIDAD   IA       INDICE ATEROGENICO  7.0     g/mL  Normal
+   BUN/CREA RELACION            14            Normal
+             BUN/CREATININA   LIP TOT  LIPIDOS TOTALES     703     mol/L Normal
+   Sodio    Sodio               142     mmol/LNormal
+   Potasio  Potasio             5.4     mmol/LNormal
+
+
+
+
+
+
+                                              Analista:   Fech    01/08/2018 
+   test:   10:56:49 a.m.   Fech    01/08/2018                        Revis 
+   enví:   10:56:49 a.m.                     por:   Fech    01/08/2018                        Los resultados son sólo de esta 
+   impr:   12:32:07 p.m.                     muestra

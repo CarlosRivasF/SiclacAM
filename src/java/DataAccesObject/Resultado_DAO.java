@@ -2,7 +2,6 @@ package DataAccesObject;
 
 import DataBase.Conexion;
 import DataBase.Fecha;
-import DataTransferObject.Pago_DTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,36 +10,36 @@ import java.util.Date;
 
 /**
  *
- * @author ZionSystems id_Pago id_Det_Orden T_Pago monto fecha hora
+ * @author ZionSystem id_resultado id_Det_Orden id_Configuracion Valor_Obtenido
  */
-public class Pago_DAO {
+public class Resultado_DAO {
 
-    public int registrarPago(int id_Orden, Pago_DTO pago) {
-        int id_Pago = 0;
+    public int RegistrarResultado(int id_Det_Ord, int id_Configuracion, String Valor_Obtenido) {
+        int id_resultado = 0;
         Date fac = new Date();
         Fecha f = new Fecha();
         f.setHora(fac);
-        String sql = "INSERT INTO pago VALUES(null,"
-                + "" + id_Orden + ","
-                + "'" + pago.getT_Pago() + "',"
-                + "'" + pago.getMonto() + "',"
-                + "'" + pago.getFecha() + "',"
-                + "'" + pago.getHora() + "')";
+        String sql = "INSERT INTO resultado VALUES(null,"
+                + "" + id_Det_Ord + ","
+                + "" + id_Configuracion + ","
+                + "'" + Valor_Obtenido + "')";
         System.out.println(sql);
         try (Connection con = Conexion.getCon();) {
             try (PreparedStatement pstm = con.prepareStatement(sql);) {
                 pstm.executeUpdate();
             }
-            sql = "SELECT id_Pago from pago WHERE id_Orden=" + id_Orden + " and T_Pago='" + pago.getT_Pago() + "' AND monto='" + pago.getMonto() + "' AND fecha='" + pago.getFecha() + "' AND hora='" + pago.getHora() + "'";
+            sql = "SELECT id_resultado from resultado WHERE id_Det_Orden=" + id_Det_Ord + " and id_Configuracion=" + id_Configuracion + " AND Valor_Obtenido='" + Valor_Obtenido + "' ";
             System.out.println(sql);
             try (PreparedStatement pstm1 = con.prepareStatement(sql);
                     ResultSet rs = pstm1.executeQuery();) {
                 while (rs.next()) {
-                    id_Pago = rs.getInt("id_Pago");
+                    id_resultado = rs.getInt("id_resultado");
                 }
             }
         } catch (SQLException ex) {
+            
         }
-        return id_Pago;
+        return id_resultado;
     }
+
 }
