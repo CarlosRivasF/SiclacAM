@@ -103,10 +103,31 @@ public class Fecha {
         Period ed = Period.between(fn, ah);
         return ed;
     }
-    
-    public static void main(String[]args){
-    Fecha f=new Fecha();
-    Period ed=f.getEdad("1996-09-22");
-    System.out.print(ed.getYears()+" "+ ed.getMonths()+" "+ed.getDays());
+
+    public Boolean IsValid(String FechaExp) {
+        Boolean r = false;
+        try {
+            Date date1, date2;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            date1 = sdf.parse(getFechaActual());
+            date2 = sdf.parse(FechaExp);
+            if (date2.equals(date1)) {
+                r = date2.equals(date1);
+            } else {
+                r = date2.after(date1);
+            }
+
+        } catch (ParseException ex) {
+            throw new RuntimeException(ex);
+        }
+        return r;
+    }
+
+    public static void main(String[] args) {
+        Date fac = new Date();
+        Fecha f = new Fecha();
+        f.setHora(fac);
+        System.out.println(f.IsValid("2018-08-17"));
+
     }
 }

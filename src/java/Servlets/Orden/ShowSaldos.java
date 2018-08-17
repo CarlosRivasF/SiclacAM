@@ -16,8 +16,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author ZionSystem
  */
-@WebServlet(name = "ShowOrds", urlPatterns = {"/ShowOrds"})
-public class ShowOrds extends HttpServlet {
+@WebServlet(name = "ShowSaldos", urlPatterns = {"/ShowSaldos"})
+public class ShowSaldos extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -26,19 +26,19 @@ public class ShowOrds extends HttpServlet {
         int id_unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
         PrintWriter out = response.getWriter();
         Orden_DAO O = new Orden_DAO();
-        List<Orden_DTO> ords = O.getOrdenes(id_unidad);
+        List<Orden_DTO> ords = O.getOrdenesSaldo(id_unidad);
 
         out.print("<div class='nav-scroller bg-white box-shadow'>"
                 + "    <nav class='nav nav-underline'>"
                 + "        <a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Orden/Registro.jsp');>Nueva Órden</a>"
-                + "        <a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds');  style=\"color: blue\"><ins>Pendientes</ins></a>"
-                + "        <a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowSaldos'); >Saldos</a>"
+                + "        <a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds'); >Pendientes</a>"
+                + "        <a class='nav-link active' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowSaldos');  style=\"color: blue\"><ins>Saldos</ins></a>"
                 + "    </nav>"
                 + "</div><br>");
         out.print("<div class='form-row'>"
                 + "<div class='offset-2 col-8 col-sm-8 col-md-8 mb-3'>"
                 + "<label class='sr-only' >Codigo de Estudio</label>"
-                + "<input style='text-align: center' type='text' class='form-control' name='medi' onkeyup=SrchOrd(this,'pac','ord'); id='medi' placeholder='Nombre de paciente' autofocus required>"
+                + "<input style='text-align: center' type='text' class='form-control' name='medi' onkeyup=SrchOrd(this,'pac','sald'); id='medi' placeholder='Nombre de paciente' autofocus required>"
                 + "</div>"
                 + "</div>"
                 + "<div id='SerchOrd' style='color: white' class='table-responsive'>");
@@ -47,16 +47,16 @@ public class ShowOrds extends HttpServlet {
                 + "<tr class='table-active'>"
                 + "<th >Clave</th>"
                 + "<th >Paciente</th>"
-                + "<th >Detalles</th>"
-                + "<th >Llenar</th>"
+                + "<th >Saldo</th>"
+                + "<th >Pagar</th>"
                 + "</tr>");
         ords.forEach((dto) -> {
             String CodeCot = dto.getPaciente().getCodPac().substring(0, 4) + "-" + dto.getId_Orden();
             out.println("<tr>"
                     + "<td >" + CodeCot + "</td>"
                     + "<td >" + dto.getPaciente().getNombre() + " " + dto.getPaciente().getAp_Paterno() + " " + dto.getPaciente().getAp_Materno() + "</td>"
-                    + "<td><button href=# class='btn btn-default' onclick=ShDetOrden(" + ords.indexOf(dto) + ") ><span><img src='images/details.png'></span></button></td>"
-                    + "<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=ShDetOrdenRS(" + ords.indexOf(dto) + ") ><span><img src='images/fill.png'></span></button></div></td>"
+                    + "<td>" + dto.getMontoRestante()+ "</td>"
+                    + "<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-success' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Pago/formAddPay.jsp?id_Orden=" + dto.getId_Orden() + "');><span><img src='images/pay.png'></span></button></div></td>"
                     + "</tr>");
         });
         out.println("</table>");

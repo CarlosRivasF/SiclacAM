@@ -1,3 +1,4 @@
+<%@page import="DataTransferObject.Det_Orden_DTO"%>
 <%@page import="java.time.Period"%>
 <%@page import="DataTransferObject.Orden_DTO"%>
 <%@page import="DataBase.Fecha"%>
@@ -28,8 +29,8 @@
                 <label><strong>Nombre: </strong><%=pac.getNombre() + " " + pac.getAp_Paterno() + " " + pac.getAp_Materno()%></label>
             </div>
             <div class=" col-4 col-sm-3 col-md-3">
-                <%Period edad=f.getEdad(pac.getFecha_Nac().trim());%>
-                <label><strong>Edad: </strong><%=edad.getYears() %> años , <%=edad.getMonths()%> meses y <%=edad.getDays()%> días</label>
+                <%Period edad = f.getEdad(pac.getFecha_Nac().trim());%>
+                <label><strong>Edad: </strong><%=edad.getYears()%> años , <%=edad.getMonths()%> meses y <%=edad.getDays()%> días</label>
             </div>
             <div class="col-6 col-sm-2 col-md-2">
                 <label><strong>Sexo: </strong><%=pac.getSexo()%></label>
@@ -43,11 +44,20 @@
     <div  id="DtsMed">
         <h6 style="text-align: center">Elegir Medico</h6><br> 
         <div class="form-row">     
+            <%if(Orden.getMedico()==null){%>
             <div class="col col-sm-4 col-md-3">
                 <input style="text-align: center" type="text" onkeyup="SrchMed(this, 'est');" class="form-control" name="BMed" id="BMed" placeholder="Medico" required>
                 <br><button class="btn btn-danger btn-block" onclick="AddMed('form');" id="sendForm"  name="sendForm"><strong>Médico No Registrado</strong></button>
             </div><br>                        
             <div id="srchMed" class="col-sm-8 col-md-9"></div>
+            <%}else{%>
+            <div class="col-8 col-sm-5 col-md-4">
+                <label><strong>Nombre: </strong><%=Orden.getMedico().getNombre() + " " + Orden.getMedico().getAp_Paterno() + " " + Orden.getMedico().getAp_Materno()%></label>
+            </div>            
+            <div class="col-6 col-sm-2 col-md-2">
+                <label><strong>Teléfono: </strong><%=Orden.getMedico().getTelefono1()%></label>
+            </div>
+            <%}%>
         </div>    
     </div>
     <hr>        
@@ -55,7 +65,11 @@
     <div class="form-row">
         <div class=" offset-3 col-6 mb-3" id="Gconvenvio">
             <label class="sr-only" >Convenio</label>
-            <input style="text-align: center" onchange="SaveConv(this.value,'ord')" type="text" class="form-control" name="Convenio" id="Convenio" placeholder="Convenio" required>          
+            <%if (Orden.getConvenio() != null) {%>
+            <input style="text-align: center" type="text"  value="<%=Orden.getConvenio()%>"class="form-control" name="Convenio" id="Convenio" placeholder="Convenio" required>          
+            <%} else {%>
+            <input style="text-align: center" onchange="SaveConv(this.value, 'ord')" type="text" class="form-control" name="Convenio" id="Convenio" placeholder="Convenio" required>          
+            <%}%>            
         </div> 
         <div class="offset-1 col-7 col-sm-6 col-md-3 mb-3"> 
             <div class="col-2 col-sm-2 col-md-2 mb-3 custom-control custom-radio custom-control-inline">
@@ -90,7 +104,7 @@
             </div>
             <div class="col-7 col-sm-7 col-md-7 mb-3">
                 <label class="sr-only" >Buscar...</label>
-                <input style="text-align: center" type="text" class="form-control" onkeyup="test22(this,'Orden');" name="clave_mat" id="clave_mat" placeholder="Buscar..." required>
+                <input style="text-align: center" type="text" class="form-control" onkeyup="test22(this, 'Orden');" name="clave_mat" id="clave_mat" placeholder="Buscar..." required>
                 <div class="invalid-feedback">
                     Ingresa un criterio de busqueda.
                 </div>
@@ -99,6 +113,52 @@
     </form>
     <div id="EstsAdded">
         <div id="BEst"></div>
+        <%if (!Orden.getDet_Orden().isEmpty()) {%>
+        <div style="color: white" class="table-responsive">
+            <table style=" text-align: center" class="table table-bordered table-hover table-sm">
+                <tbody>
+                    <tr class="bg-warning" style="color: black">
+                        <th>Nombre de Estudio</th>
+                        <th>Entrega</th>
+                        <th>Precio</th>
+                        <th>Descuento</th>
+                        <th>Espera</th>
+                        <th>Quitar</th>
+                    </tr>
+                    <%
+                        Float total = Float.parseFloat("0");
+                        for (Det_Orden_DTO dto : Orden.getDet_Orden()) {
+                            Float p = Float.parseFloat("0");
+                            int e = 0;
+                            if (dto.getT_Entrega().equals("Normal")) {
+                                p = dto.getEstudio().getPrecio().getPrecio_N();
+                                e = dto.getEstudio().getPrecio().getT_Entrega_N();
+                            } else if (dto.getT_Entrega().equals("Urgente")) {
+                                p = dto.getEstudio().getPrecio().getPrecio_U();
+                                e = dto.getEstudio().getPrecio().getT_Entrega_U();
+                            }
+                            Float pd = ((dto.getDescuento() * p) / 100);
+                    %>
+                    <tr>
+                        <td><%=dto.getEstudio().getNombre_Estudio()%></td>
+                        <td><%=dto.getT_Entrega()%></td>
+                        <td><%=p%></td>
+                        <td>$<%=pd%></td>
+                        <td><%=e%> días</td>
+                        <td><div id="mat-<%=Orden.getDet_Orden()%>"><button href="#" class="btn btn-danger" onclick="DelEst(<%=Orden.getDet_Orden()%>)"><span><img src="images/trash.png"></span></button></div></td>
+                    </tr>
+                    <%
+                            total = total + dto.getSubtotal();
+                        }
+                        Orden.setMontoRestante(total);
+                        sesion.setAttribute("Orden", Orden);
+                    %>
+                </tbody>
+            </table>
+        </div>
+        <p class="offset-8 col-3 col-sm-3 col-md-3"><strong>Pagar <%=Orden.getMontoRestante()%> pesos</strong></p>
+        <button class="btn btn-success btn-lg btn-block" id="ConPay" onclick="contOr('ord');" name="ConPay">Continuar</button>
+        <%}%>
     </div>                
 </div>
 <hr>

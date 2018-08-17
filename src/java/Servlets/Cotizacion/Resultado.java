@@ -125,8 +125,14 @@ public class Resultado extends HttpServlet {
 
         cb.beginText();
         cb.setFontAndSize(bf0, 12);
-        cb.setTextMatrix(280, 20);
-        cb.showText("QFB. MARIA DE LOURDES GONZALEZ   CED. PROF. 1204923");
+        cb.setTextMatrix(280, 70);
+        cb.showText("QFB. MARIA DE LOURDES GONZALEZ");
+        cb.endText();
+
+        cb.beginText();
+        cb.setFontAndSize(bf0, 12);
+        cb.setTextMatrix(450, 55);
+        cb.showText("CED. PROF. 1204923");
         cb.endText();
 
         cb.addImage(barras1, false);
@@ -139,7 +145,7 @@ public class Resultado extends HttpServlet {
             PdfPCell est = new PdfPCell(new Paragraph("NUEVO ESTUDIO " + l + ""));
             est.setHorizontalAlignment(Element.ALIGN_LEFT);
             est.setColspan(4);
-            est.setBorder(0);            
+            est.setBorder(0);
             table.addCell(est);
             PdfPCell des = new PdfPCell(new Paragraph("Descripcion"));
             des.setBorderColor(BaseColor.RED);
@@ -159,7 +165,7 @@ public class Resultado extends HttpServlet {
                 table.addCell("20.00");
                 table.addCell("32.12");
             }
-        }        
+        }
         ColumnText column = new ColumnText(stamper.getOverContent(1));
         Rectangle rectPage1 = new Rectangle(-27, 120, 640, 690);//0,esp-inf,ancho,alto
         column.setSimpleColumn(rectPage1);
@@ -250,9 +256,15 @@ public class Resultado extends HttpServlet {
             ///////////////////////despedida
 
             canvas.beginText();
-            canvas.setFontAndSize(bf0, 11);
-            canvas.setTextMatrix(280, 20);
-            canvas.showText("QFB. MARIA DE LOURDES GONZALEZ   CED. PROF. 1204923");
+            canvas.setFontAndSize(bf0, 12);
+            canvas.setTextMatrix(280, 50);
+            canvas.showText("-QFB. MARIA DE LOURDES GONZALEZ");
+            canvas.endText();
+
+            canvas.beginText();
+            canvas.setFontAndSize(bf0, 12);
+            canvas.setTextMatrix(450, 20);
+            canvas.showText("-CED. PROF. 1204923");
             canvas.endText();
 
             canvas.addImage(barras1, false);

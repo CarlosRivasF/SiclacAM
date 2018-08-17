@@ -31,14 +31,14 @@ public class AddEst extends HttpServlet {
         int id_unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
         PrintWriter out = response.getWriter();
         Estudio_DAO E = new Estudio_DAO();
-        List<Estudio_DTO> ests;        
+        List<Estudio_DTO> ests;
         if (sesion.getAttribute("ests") != null) {
             ests = (List<Estudio_DTO>) sesion.getAttribute("ests");
         } else {
             ests = E.getEstudiosByUnidad(id_unidad);
             sesion.setAttribute("ests", ests);
         }
-        
+
         Orden_DTO Orden;
         List<Det_Orden_DTO> Det_Orden;
         Orden = (Orden_DTO) sesion.getAttribute("Orden");
@@ -47,7 +47,7 @@ public class AddEst extends HttpServlet {
         } else {
             Det_Orden = Orden.getDet_Orden();
         }
-        
+
         Date fac = new Date();
         Fecha f = new Fecha();
         f.setHora(fac);
@@ -77,7 +77,7 @@ public class AddEst extends HttpServlet {
                 } else if (detor.getT_Entrega().equals("Urgente")) {
                     detor.setFecha_Entrega(f.SumarDias(detor.getEstudio().getPrecio().getT_Entrega_U()));
                     p = estudio.getPrecio().getPrecio_U();
-                }                                
+                }
                 detor.setSubtotal(p - ((detor.getDescuento() * p) / 100));
                 Det_Orden.add(detor);
                 Orden.setDet_Orden(Det_Orden);
@@ -94,7 +94,7 @@ public class AddEst extends HttpServlet {
                 + "<th >Entrega</th>"
                 + "<th >Precio</th>"
                 + "<th >Descuento</th>"
-                + "<th >Espera</th>"                
+                + "<th >Espera</th>"
                 + "<th >Quitar</th>"
                 + "</tr>");
         Float total = Float.parseFloat("0");
@@ -114,16 +114,16 @@ public class AddEst extends HttpServlet {
                     + "<td >" + dto.getT_Entrega() + "</td>"
                     + "<td >" + p + "</td>"
                     + "<td >$" + pd + "</td>"
-                    + "<td >" + e + " días</td>"                    
-                    + "<td><div id='mat-" + Det_Orden.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEst(" + Det_Orden.indexOf(dto) + ",'show') ><span><img src='images/trash.png'></span></button></div></td>"
+                    + "<td >" + e + " días</td>"
+                    + "<td><div id='mat-" + Det_Orden.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEst(" + Det_Orden.indexOf(dto) + ") ><span><img src='images/trash.png'></span></button></div></td>"
                     + "</tr>");
             total = total + dto.getSubtotal();
-            Orden.setTotal(total);            
+            Orden.setMontoRestante(total);
         }
         sesion.setAttribute("Orden", Orden);
         out.println("</table>");
         out.println("</div>");
-        out.println("<p class='offset-8 col-3 col-sm-3 col-md-3'><strong>Pagar " + total + " pesos</strong></p>"
+        out.println("<p class='offset-8 col-3 col-sm-3 col-md-3'><strong>Pagar " + Orden.getMontoRestante() + " pesos</strong></p>"
                 + "<button class='btn btn-success btn-lg btn-block' id='ConPay' onclick=contOr('ord'); name='ConPay'>Continuar</button>");
     }
 

@@ -2,6 +2,7 @@ package DataAccesObject;
 
 import DataBase.Conexion;
 import DataBase.Fecha;
+import DataTransferObject.Resultado_DTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -37,9 +38,21 @@ public class Resultado_DAO {
                 }
             }
         } catch (SQLException ex) {
-            
+
         }
         return id_resultado;
+    }
+
+    public void updateRes(Resultado_DTO res) {
+        String sql = "UPDATE resultado SET"
+                + " Valor_Obtenido='" + res.getValor_Obtenido() + "' WHERE "
+                + "id_resultado=" + res.getId_resultado() + "";        
+       try (Connection con = Conexion.getCon();) {
+            try (PreparedStatement pstm = con.prepareStatement(sql);) {
+                pstm.executeUpdate();
+            }
+        } catch (SQLException ex) {
+        }
     }
 
 }

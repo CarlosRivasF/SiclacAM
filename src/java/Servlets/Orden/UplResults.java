@@ -22,7 +22,7 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "UplResults", urlPatterns = {"/UplResults"})
 public class UplResults extends HttpServlet {
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -32,16 +32,20 @@ public class UplResults extends HttpServlet {
         Det_Orden_DTO det = Orden.getDet_Orden().get(index);
         Resultado_DAO R = new Resultado_DAO();
         det.getEstudio().getCnfs().forEach((cnf) -> {
-            Resultado_DTO res = new Resultado_DTO();
-            res.setValor_Obtenido(request.getParameter("valRes-" + det.getEstudio().getCnfs().indexOf(cnf)));
-            res.setId_resultado(R.RegistrarResultado(det.getId_det_orden(), cnf.getId_Configuración(), res.getValor_Obtenido()));            
-            cnf.setRes(res);
+            if (cnf.getRes() == null) {
+                if (request.getParameter("valRes-" + det.getEstudio().getCnfs().indexOf(cnf)) != null) {
+                    Resultado_DTO res = new Resultado_DTO();
+                    res.setValor_Obtenido(request.getParameter("valRes-" + det.getEstudio().getCnfs().indexOf(cnf)));
+                    res.setId_resultado(R.RegistrarResultado(det.getId_det_orden(), cnf.getId_Configuración(), res.getValor_Obtenido()));
+                    cnf.setRes(res);
+                }
+            }
         });
         det.getEstudio().setAddRes(true);
-        
+
         Orden.getDet_Orden().set(index, det);
         sesion.setAttribute("OrdenSh", Orden);
-        
+
         try (PrintWriter out = response.getWriter()) {
             out.println("<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
                     + "<tr class='table-info' style='color: black'>"
@@ -51,19 +55,20 @@ public class UplResults extends HttpServlet {
                     + "<th>Llenar</th>"
                     + "</tr>");
             Orden.getDet_Orden().forEach((detor) -> {
-                
+
                 out.println("<tr>"
                         + "<td >" + detor.getEstudio().getNombre_Estudio() + "</td>"
                         + "<td >" + detor.getSubtotal() + "</td>"
                         + "<td >" + detor.getEstudio().getMetodo() + "</td>");
-                if(detor.getEstudio().getAddRes()){
-                out.println("<td><div id='estCn-" + Orden.getDet_Orden().indexOf(detor) + "'><button href=# class='btn btn-danger btn-sm' ><span><img src='images/eye.png'></span></button></div></td>");
-                }else{
-                out.println("<td><div id='estCn-" + Orden.getDet_Orden().indexOf(detor) + "'><button href=# class='btn btn-danger btn-sm' onclick=FormResDet(" + Orden.getDet_Orden().indexOf(detor) + ") ><span><img src='images/fill.png'></span></button></div></td>");
-                }                
+                if (detor.getEstudio().getAddRes()) {
+                    out.println("<td><div id='estCn-" + Orden.getDet_Orden().indexOf(detor) + "'><button href=# class='btn btn-danger btn-sm' onclick=FormResDet(" + Orden.getDet_Orden().indexOf(detor) + ") ><span><img src='images/eye.png'></span></button></div></td>");
+                } else {
+                    out.println("<td><div id='estCn-" + Orden.getDet_Orden().indexOf(detor) + "'><button href=# class='btn btn-danger btn-sm' onclick=FormResDet(" + Orden.getDet_Orden().indexOf(detor) + ") ><span><img src='images/fill.png'></span></button></div></td>");
+                }
                 out.println("</tr>");
             });
-            out.println("</table>");
+            out.println("</table>"
+                + "<a class='btn btn-success btn-lg btn-block' href='PrintCot' >Imprimir Resultados</a><br>");
         }
     }
 

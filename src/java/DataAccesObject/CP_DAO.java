@@ -11,8 +11,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CP_DAO {
+
     public CP_DTO getDatosMex(String c_p) {
         try {
             CP_DTO cp;
@@ -51,6 +54,7 @@ public class CP_DAO {
             throw new RuntimeException(e);
         }
     }
+
     public List<Estado_DTO> getEdosMex() {
         List<Estado_DTO> edos = new ArrayList<>();
         try (Connection con = Conexion.getCon()) {
@@ -69,6 +73,7 @@ public class CP_DAO {
             throw new RuntimeException(e);
         }
     }
+
     public List<Municipio_DTO> getMposByEdo(int edo) {
         List<Municipio_DTO> mpos = new ArrayList<>();
         try (Connection con = Conexion.getCon()) {
@@ -87,6 +92,7 @@ public class CP_DAO {
             throw new RuntimeException(e);
         }
     }
+
     public List<CP_DTO> getCpsByMpo(int mpo) {
         List<CP_DTO> cps = new ArrayList<>();
         try (Connection con = Conexion.getCon()) {
@@ -105,6 +111,7 @@ public class CP_DAO {
             throw new RuntimeException(e);
         }
     }
+
     public List<Colonia_DTO> getColsByCp(int cp) {
         List<Colonia_DTO> cols = new ArrayList<>();
         try (Connection con = Conexion.getCon()) {
@@ -121,7 +128,8 @@ public class CP_DAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }    
+    }
+
     public int getIdCP(String cp) {
         String sql = "SELECT id_CP FROM cp where c_p=" + cp + "";
         try (Connection con = Conexion.getCon();
@@ -134,6 +142,57 @@ public class CP_DAO {
             return Idc_p;
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public static void main(String[] args) {
+        for (int a = 1; a < 11; a++) {
+            try (Connection cona = Conexion.getCon()) {
+                System.out.println("A*" + a);
+                for (int b = 1; b < 11; b++) {
+                    try (Connection conb = Conexion.getCon()) {
+                        System.out.println("B**" + b);
+                        for (int c = 1; c < 11; c++) {
+                            try (Connection conc = Conexion.getCon()) {
+                                System.out.println("C***" + c);
+                                for (int d = 1; d < 11; d++) {
+                                    try (Connection cond = Conexion.getCon()) {
+                                        System.out.println("D****" + d);
+                                        for (int e = 1; e < 11; e++) {
+                                            try (Connection cone = Conexion.getCon()) {
+                                                System.out.println("E*****" + e);
+                                                for (int f = 1; f < 11; f++) {
+                                                    try (Connection conf = Conexion.getCon()) {
+                                                        System.out.println("F******" + f);
+                                                        for (int g = 1; g < 11; g++) {
+                                                            try (Connection cong = Conexion.getCon()) {
+                                                                System.out.println("G*******" + g);
+                                                                for (int h = 1; h < 11; h++) {
+                                                                    try (Connection conh = Conexion.getCon()) {
+                                                                        System.out.println("H********" + h);
+                                                                    } catch (SQLException ex) {
+                                                                    }
+                                                                }
+                                                            } catch (SQLException ex) {
+                                                            }
+                                                        }
+                                                    } catch (SQLException ex) {
+                                                    }
+                                                }
+                                            } catch (SQLException ex) {
+                                            }
+                                        }
+                                    } catch (SQLException ex) {
+                                    }
+                                }
+                            } catch (SQLException ex) {
+                            }
+                        }
+                    } catch (SQLException ex) {
+                    }
+                }
+            } catch (SQLException ex) {
+            }
         }
     }
 }

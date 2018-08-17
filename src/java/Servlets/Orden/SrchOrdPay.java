@@ -16,8 +16,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author ZionSystem
  */
-@WebServlet(name = "SrchOrd", urlPatterns = {"/SrchOrd"})
-public class SrchOrd extends HttpServlet {
+@WebServlet(name = "SrchOrdPay", urlPatterns = {"/SrchOrdPay"})
+public class SrchOrdPay extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -26,8 +26,8 @@ public class SrchOrd extends HttpServlet {
         int id_unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
         PrintWriter out = response.getWriter();
         Orden_DAO O = new Orden_DAO();
-        List<Orden_DTO> ords = O.getOrdenes(id_unidad);
-        
+        List<Orden_DTO> ords = O.getOrdenesSaldo(id_unidad);
+
         if (request.getParameter("mode") != null) {
             String part = request.getParameter("part").trim();
             String mode = request.getParameter("mode").trim();
@@ -77,8 +77,8 @@ public class SrchOrd extends HttpServlet {
                                                             + "<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=ShDetOrdenRS(" + ords.indexOf(dto) + ") ><span><img src='images/fill.png'></span></button></div></td>");
                                                     break;
                                                 case "sald":
-                                                    out.println("<td >" + dto.getMontoRestante()+ "</td>");
-                                                    out.print("<td><button href=# class='btn btn-default' onclick=ShDetOrden(" + ords.indexOf(dto) + ") ><span><img src='images/pay.png'></span></button></td>");
+                                                    out.println("<td >" + dto.getMontoRestante() + "</td>");
+                                                    out.print("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-success' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Pago/formAddPay.jsp?id_Orden=" + dto.getId_Orden() + "');><span><img src='images/pay.png'></span></button></div></td>");
                                                     break;
                                             }
                                             out.print("</tr>");
@@ -99,7 +99,7 @@ public class SrchOrd extends HttpServlet {
                                                     break;
                                                 case "sald":
                                                     out.println("<td >" + dto.getMontoRestante() + "</td>");
-                                                    out.print("<td><button href=# class='btn btn-default' onclick=ShDetOrden(" + ords.indexOf(dto) + ") ><span><img src='images/pay.png'></span></button></td>");
+                                                    out.print("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-success' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Pago/formAddPay.jsp?id_Orden=" + dto.getId_Orden() + "');><span><img src='images/pay.png'></span></button></div></td>");
                                                     break;
                                             }
                                             out.print("</tr>");
@@ -119,7 +119,7 @@ public class SrchOrd extends HttpServlet {
                                                 break;
                                             case "sald":
                                                 out.println("<td >" + dto.getMontoRestante() + "</td>");
-                                                out.print("<td><button href=# class='btn btn-default' onclick=ShDetOrden(" + ords.indexOf(dto) + ") ><span><img src='images/pay.png'></span></button></td>");
+                                                out.print("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-success' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Pago/formAddPay.jsp?id_Orden=" + dto.getId_Orden() + "');><span><img src='images/pay.png'></span></button></div></td>");
                                                 break;
                                         }
                                         out.print("</tr>");
@@ -139,7 +139,7 @@ public class SrchOrd extends HttpServlet {
                                         break;
                                     case "sald":
                                         out.println("<td >" + dto.getMontoRestante() + "</td>");
-                                        out.print("<td><button href=# class='btn btn-default' onclick=ShDetOrden(" + ords.indexOf(dto) + ") ><span><img src='images/pay.png'></span></button></td>");
+                                        out.print("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-success' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Pago/formAddPay.jsp?id_Orden=" + dto.getId_Orden() + "');><span><img src='images/pay.png'></span></button></div></td>");
                                         break;
                                 }
                                 out.print("</tr>");
@@ -160,7 +160,7 @@ public class SrchOrd extends HttpServlet {
                                     break;
                                 case "sald":
                                     out.println("<td >" + dto.getMontoRestante() + "</td>");
-                                    out.print("<td><button href=# class='btn btn-default' onclick=ShDetOrden(" + ords.indexOf(dto) + ") ><span><img src='images/pay.png'></span></button></td>");
+                                    out.print("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-success' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Pago/formAddPay.jsp?id_Orden=" + dto.getId_Orden() + "');><span><img src='images/pay.png'></span></button></div></td>");
                                     break;
                             }
                             out.print("</tr>");

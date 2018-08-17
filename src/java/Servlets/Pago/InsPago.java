@@ -45,10 +45,12 @@ public class InsPago extends HttpServlet {
         pago.setMonto(Float.parseFloat(request.getParameter("monto").trim()));
         pago.setFecha(f.getFechaActual());
         pago.setHora(f.getHoraActual());
-        Float res = Orden.getRestante();
-        Float Tot = Orden.getTotal();
-        Orden.setRestante(res + pago.getMonto());
-        Orden.setTotal(Tot - pago.getMonto());
+
+        Float MontoPagado = Orden.getMontoPagado();
+        Float MontoRestante = Orden.getMontoRestante();
+
+        Orden.setMontoPagado(MontoPagado + pago.getMonto());
+        Orden.setMontoRestante(MontoRestante - pago.getMonto());
         Pagos.add(pago);
         Orden.setPagos(Pagos);
         try (PrintWriter out = response.getWriter()) {
@@ -66,28 +68,26 @@ public class InsPago extends HttpServlet {
                         + "<td >" + dto.getSubtotal() + "</td>"
                         + "</tr>");
             });
-            out.println("</table>"
-                    //+ "<p class='offset-4 col-3 col-sm-3 col-md-3'><strong>A/C. " + Orden.getRestante()+ " pesos</strong></p>"
-                    //+ "<p class='offset-8 col-3 col-sm-3 col-md-3'><strong>Por Pagar " + Orden.getTotal() + " pesos</strong></p>"
-                    + "</div>");
+            out.println("</table></div>");
+            
             out.print("<div class='offset-7 col'>"
                     + "<table>"
                     + "<tr>"
                     + "<td>Total : </td>"
-                    + "<td>" + (Orden.getRestante() + Orden.getTotal()) + "</td>"
+                    + "<td>" + (Orden.getMontoRestante() + Orden.getMontoPagado()) + "</td>"
                     + "</tr>"
                     + "<tr>"
                     + "<td>A/C : </td>"
-                    + "<td>" + Orden.getRestante() + "</td>"
+                    + "<td>" + Orden.getMontoPagado() + "</td>"
                     + "</tr>"
                     + "<tr>"
                     + "<td>Por Pagar : </td>"
-                    + "<td>" + Orden.getTotal() + "</td>"
+                    + "<td>" + Orden.getMontoRestante() + "</td>"
                     + "</tr>"
                     + "</table>"
                     + "</div>");
             out.print("<div id='pago'>"
-                    +"<button class='btn btn-success btn-lg btn-block' id='ConPay' onclick='FormPago();' name='ConPay'>Realizar Pago<span><img src='images/pay.png'></span></button>"                    
+                    + "<button class='btn btn-success btn-lg btn-block' id='ConPay' onclick=FormPago('ord'); name='ConPay'>Realizar Pago<span><img src='images/pay.png'></span></button>"
                     + "</div><br>");
         }
     }

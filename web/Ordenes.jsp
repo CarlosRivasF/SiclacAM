@@ -75,6 +75,7 @@
                         <a class="nav-link" href="#"onclick="mostrarForm('Menu/Orden/Registro.jsp');">Nueva Órden</a>        
                         <a class="nav-link" href="#" onclick="mostrarForm('Menu/Cotizacion/Registro.jsp');">Nueva Cotización</a>        
                         <a class="nav-link" href="#" onclick='mostrarForm("${pageContext.request.contextPath}/ShowOrds");'>Órdenes Pendientes</a>                         
+                        <a class="nav-link" href="#" onclick='mostrarForm("${pageContext.request.contextPath}/ShowSaldos");'>Saldos</a>                         
                     </nav>
                 </div>
                 <div><br>

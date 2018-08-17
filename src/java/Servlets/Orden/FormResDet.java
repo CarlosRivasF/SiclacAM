@@ -30,11 +30,142 @@ public class FormResDet extends HttpServlet {
         if (request.getParameter("index") != null) {
             HttpSession sesion = request.getSession();
             Orden_DTO Orden = (Orden_DTO) sesion.getAttribute("OrdenSh");
+            int index = Integer.parseInt(request.getParameter("index").trim());
+            Det_Orden_DTO det = Orden.getDet_Orden().get(index);
             Fecha f = new Fecha();
             Period edad = f.getEdad(Orden.getPaciente().getFecha_Nac().trim());
             String sexo = Orden.getPaciente().getSexo().toUpperCase();
-            int index = Integer.parseInt(request.getParameter("index").trim());
-            Det_Orden_DTO det = Orden.getDet_Orden().get(index);
+            List<Configuracion_DTO> cnfRs = new ArrayList<>();
+            for (Configuracion_DTO cnf : det.getEstudio().getCnfs()) {
+                String[] CFsexo = cnf.getSexo().split("-");
+                String ed = CFsexo[0].trim().toUpperCase();
+                String sex = CFsexo[1].trim().toUpperCase();
+                switch (ed) {
+                    case "RN":
+                        switch (sex) {
+                            case "AMBOS":
+                                if (edad.getYears() == 0 && edad.getMonths() < 6) {
+                                    cnfRs.add(cnf);
+                                }
+                                break;
+                            case "MASCULINO":
+                                if (edad.getYears() == 0 && edad.getMonths() < 6) {
+                                    if (sex.equals(sexo)) {
+                                        cnfRs.add(cnf);
+                                    }
+                                }
+                                break;
+                            case "FEMENINO":
+                                if (edad.getYears() == 0 && edad.getMonths() < 6) {
+                                    if (sex.equals(sexo)) {
+                                        cnfRs.add(cnf);
+                                    }
+                                }
+                                break;
+                        }
+                        break;
+                    case "N":
+                        switch (sex) {
+                            case "AMBOS":
+                                if (edad.getYears() == 0 && edad.getMonths() >= 6) {
+                                    cnfRs.add(cnf);
+                                } else if (edad.getYears() < 12) {
+                                    cnfRs.add(cnf);
+                                }
+                                break;
+                            case "MASCULINO":
+                                if (edad.getYears() == 0 && edad.getMonths() >= 6) {
+                                    if (sex.equals(sexo)) {
+                                        cnfRs.add(cnf);
+                                    }
+                                } else if (edad.getYears() < 12) {
+                                    if (sex.equals(sexo)) {
+                                        cnfRs.add(cnf);
+                                    }
+                                }
+                                break;
+                            case "FEMENINO":
+                                if (edad.getYears() == 0 && edad.getMonths() >= 6) {
+                                    if (sex.equals(sexo)) {
+                                        cnfRs.add(cnf);
+                                    }
+                                } else if (edad.getYears() < 12) {
+                                    if (sex.equals(sexo)) {
+                                        cnfRs.add(cnf);
+                                    }
+                                }
+                                break;
+                        }
+                        break;
+                    case "A":
+                        switch (sex) {
+                            case "AMBOS":
+                                if (edad.getYears() >= 12 && edad.getMonths() < 60) {
+                                    cnfRs.add(cnf);
+                                }
+                                break;
+                            case "MASCULINO":
+                                if (edad.getYears() >= 12 && edad.getMonths() < 60) {
+                                    if (sex.equals(sexo)) {
+                                        cnfRs.add(cnf);
+                                    }
+                                }
+                                break;
+                            case "FEMENINO":
+                                if (edad.getYears() >= 12 && edad.getMonths() < 60) {
+                                    if (sex.equals(sexo)) {
+                                        cnfRs.add(cnf);
+                                    }
+                                }
+                                break;
+                        }
+                        break;
+                    case "3E":
+                        switch (sex) {
+                            case "AMBOS":
+                                if (edad.getYears() > 60) {
+                                    cnfRs.add(cnf);
+                                }
+                                break;
+                            case "MASCULINO":
+                                if (edad.getYears() > 60) {
+                                    if (sex.equals(sexo)) {
+                                        cnfRs.add(cnf);
+                                    }
+                                }
+                                break;
+                            case "FEMENINO":
+                                if (edad.getYears() > 60) {
+                                    if (sex.equals(sexo)) {
+                                        cnfRs.add(cnf);
+                                    }
+                                }
+                                break;
+                        }
+                        break;
+                    case "ALL":
+                        switch (sex) {
+                            case "AMBOS":
+                                cnfRs.add(cnf);
+                                break;
+                            case "MASCULINO":
+                                if (sex.equals(sexo)) {
+                                    cnfRs.add(cnf);
+                                }
+                                break;
+                            case "FEMENINO":
+                                if (sex.equals(sexo)) {
+                                    cnfRs.add(cnf);
+                                }
+                                break;
+                        }
+                        break;
+                }
+            }
+
+            det.getEstudio().setCnfs(cnfRs);
+            Orden.getDet_Orden().set(index, det);
+            sesion.setAttribute("OrdenSh", Orden);
             if (det.getEstudio().getAddRes()) {
                 out.println("<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
                         + "<tr class='table-info' style='color: black'>"
@@ -43,151 +174,36 @@ public class FormResDet extends HttpServlet {
                         + "<th >Val 2</th>"
                         + "<th >Resultado</th>"
                         + "<th >Unidades</th>"
+                        + "<th >Modificar</th>"
                         + "</tr>");
-
-                det.getEstudio().getCnfs().forEach((cnf) -> {
+                Boolean r;
+                Boolean r1 = false;
+                for (Configuracion_DTO cnf : det.getEstudio().getCnfs()) {
+                    r = false;
                     out.println("<tr>"
                             + "<td >" + cnf.getDescripcion() + "</td>"
                             + "<td >" + cnf.getValor_min() + "</td>"
-                            + "<td >" + cnf.getValor_MAX() + "</td>"
-                            + "<td >" + cnf.getRes().getValor_Obtenido() + "</td>"
-                            + "<td >" + cnf.getUniddes() + "</td>"
+                            + "<td >" + cnf.getValor_MAX() + "</td>");
+                    if (cnf.getRes() != null) {
+                        out.println("<td ><div id='diValRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "'>" + cnf.getRes().getValor_Obtenido() + "</div></td>");
+                    } else {
+                        r = true;
+                        r1 = true;
+                        out.println("<td><div id='diValRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "'><input style='text-align: center' type='text' class='form-control form-control-sm' name='valRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "' id='valRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "' placeholder='Resultado' required></div></td>");
+                    }
+                    out.println("<td >" + cnf.getUniddes() + "</td>");
+                    if (!r) {
+                        out.print("<th><div id='BTdiValRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "'><button href=# class='btn btn-warning btn-sm' onclick=FormUpRes(" + index + "," + det.getEstudio().getCnfs().indexOf(cnf) + ",'form') ><span><img src='images/pencil.png'></span></button></div></th>");
+                    }
+                    out.print("</tr>");
+                }
+                if (r1) {
+                    out.println("<tr>"
+                            + "<td colspan='6'><div id='addcnf'><button href=# class='btn btn-success btn-block' onclick=SaveResDet(" + index + "," + det.getEstudio().getCnfs().size() + ")>Guardar Resultados</button></div></td>"
                             + "</tr>");
-                });
+                }
                 out.println("</table>");
             } else {
-                List<Configuracion_DTO> cnfRs = new ArrayList<>();
-                for (Configuracion_DTO cnf : det.getEstudio().getCnfs()) {
-                    String[] CFsexo = cnf.getSexo().split("-");
-                    String ed = CFsexo[0].trim().toUpperCase();
-                    String sex = CFsexo[1].trim().toUpperCase();
-                    switch (ed) {
-                        case "RN":
-                            switch (sex) {
-                                case "AMBOS":
-                                    if (edad.getYears() == 0 && edad.getMonths() < 6) {
-                                        cnfRs.add(cnf);
-                                    }
-                                    break;
-                                case "MASCULINO":
-                                    if (edad.getYears() == 0 && edad.getMonths() < 6) {
-                                        if (sex.equals(sexo)) {
-                                            cnfRs.add(cnf);
-                                        }
-                                    }
-                                    break;
-                                case "FEMENINO":
-                                    if (edad.getYears() == 0 && edad.getMonths() < 6) {
-                                        if (sex.equals(sexo)) {
-                                            cnfRs.add(cnf);
-                                        }
-                                    }
-                                    break;
-                            }
-                            break;
-                        case "N":
-                            switch (sex) {
-                                case "AMBOS":
-                                    if (edad.getYears() == 0 && edad.getMonths() >= 6) {
-                                        cnfRs.add(cnf);
-                                    } else if (edad.getYears() < 12) {
-                                        cnfRs.add(cnf);
-                                    }
-                                    break;
-                                case "MASCULINO":
-                                    if (edad.getYears() == 0 && edad.getMonths() >= 6) {
-                                        if (sex.equals(sexo)) {
-                                            cnfRs.add(cnf);
-                                        }
-                                    } else if (edad.getYears() < 12) {
-                                        if (sex.equals(sexo)) {
-                                            cnfRs.add(cnf);
-                                        }
-                                    }
-                                    break;
-                                case "FEMENINO":
-                                    if (edad.getYears() == 0 && edad.getMonths() >= 6) {
-                                        if (sex.equals(sexo)) {
-                                            cnfRs.add(cnf);
-                                        }
-                                    } else if (edad.getYears() < 12) {
-                                        if (sex.equals(sexo)) {
-                                            cnfRs.add(cnf);
-                                        }
-                                    }
-                                    break;
-                            }
-                            break;
-                        case "A":
-                            switch (sex) {
-                                case "AMBOS":
-                                    if (edad.getYears() >= 12 && edad.getMonths() < 60) {
-                                        cnfRs.add(cnf);
-                                    }
-                                    break;
-                                case "MASCULINO":
-                                    if (edad.getYears() >= 12 && edad.getMonths() < 60) {
-                                        if (sex.equals(sexo)) {
-                                            cnfRs.add(cnf);
-                                        }
-                                    }
-                                    break;
-                                case "FEMENINO":
-                                    if (edad.getYears() >= 12 && edad.getMonths() < 60) {
-                                        if (sex.equals(sexo)) {
-                                            cnfRs.add(cnf);
-                                        }
-                                    }
-                                    break;
-                            }
-                            break;
-                        case "3E":
-                            switch (sex) {
-                                case "AMBOS":
-                                    if (edad.getYears() > 60) {
-                                        cnfRs.add(cnf);
-                                    }
-                                    break;
-                                case "MASCULINO":
-                                    if (edad.getYears() > 60) {
-                                        if (sex.equals(sexo)) {
-                                            cnfRs.add(cnf);
-                                        }
-                                    }
-                                    break;
-                                case "FEMENINO":
-                                    if (edad.getYears() > 60) {
-                                        if (sex.equals(sexo)) {
-                                            cnfRs.add(cnf);
-                                        }
-                                    }
-                                    break;
-                            }
-                            break;
-                        case "ALL":
-                            switch (sex) {
-                                case "AMBOS":
-                                    cnfRs.add(cnf);
-                                    break;
-                                case "MASCULINO":
-                                    if (sex.equals(sexo)) {
-                                        cnfRs.add(cnf);
-                                    }
-                                    break;
-                                case "FEMENINO":
-                                    if (sex.equals(sexo)) {
-                                        cnfRs.add(cnf);
-                                    }
-                                    break;
-                            }
-                            break;
-                    }
-                }
-
-                det.getEstudio().setCnfs(cnfRs);
-                Orden.getDet_Orden().set(index, det);
-                sesion.setAttribute("OrdenSh", Orden);
-
                 out.println("<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
                         + "<tr class='table-info' style='color: black'>"
                         + "<th >Desc</th>"
@@ -196,18 +212,17 @@ public class FormResDet extends HttpServlet {
                         + "<th >Resultado</th>"
                         + "<th >Unidades</th>"
                         + "</tr>");
-
-                cnfRs.forEach((cnf) -> {
+                det.getEstudio().getCnfs().forEach((cnf) -> {
                     out.println("<tr>"
                             + "<td >" + cnf.getDescripcion() + "</td>"
                             + "<td >" + cnf.getValor_min() + "</td>"
                             + "<td >" + cnf.getValor_MAX() + "</td>"
-                            + "<td><div id='diValRes-" + cnfRs.indexOf(cnf) + "'><input style='text-align: center' type='text' class='form-control form-control-sm' name='valRes-" + cnfRs.indexOf(cnf) + "' id='valRes-" + cnfRs.indexOf(cnf) + "' placeholder='Resultado' required></div></td>"
+                            + "<td><div id='diValRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "'><input style='text-align: center' type='text' class='form-control form-control-sm' name='valRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "' id='valRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "' placeholder='Resultado' required></div></td>"
                             + "<td >" + cnf.getUniddes() + "</td>"
                             + "</tr>");
                 });
                 out.println("<tr>"
-                        + "<td colspan='7'><div id='addcnf'><button href=# class='btn btn-success btn-block' onclick=SaveResDet(" + index + "," + cnfRs.size() + ")>Guardar Resultados</button></div></td>"
+                        + "<td colspan='5'><div id='addcnf'><button href=# class='btn btn-success btn-block' onclick=SaveResDet(" + index + "," + det.getEstudio().getCnfs().size() + ")>Guardar Resultados</button></div></td>"
                         + "</tr>");
                 out.println("</table>");
             }

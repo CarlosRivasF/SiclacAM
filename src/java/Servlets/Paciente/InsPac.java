@@ -98,7 +98,7 @@ public class InsPac extends HttpServlet {
                             Unidad_DAO U = new Unidad_DAO();
                             int id_unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
                             Orden_DTO Orden = new Orden_DTO();
-                            Orden.setRestante(Float.parseFloat("0"));
+                            Orden.setMontoPagado(Float.parseFloat("0"));
                             Orden.setUnidad(U.getUnidadAll(id_unidad));
                             Persona_DTO por = P.getPersona(Integer.parseInt(sesion.getAttribute("persona").toString().trim()));
                             Orden.setEmpleado(por);

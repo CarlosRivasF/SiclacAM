@@ -69,12 +69,12 @@ public class DelEst extends HttpServlet {
                         + "<td><div id='mat-" + Det_Orden.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEst(" + Det_Orden.indexOf(dto) + ",'show') ><span><img src='images/trash.png'></span></button></div></td>"
                         + "</tr>");
                 total = total + dto.getSubtotal();
-                Orden.setTotal(total);
+                Orden.setMontoRestante(total);
                 sesion.setAttribute("Orden", Orden);
             }
             out.println("</table>");
             out.println("</div>");
-            out.println("<p class='offset-8 col-3 col-sm-3 col-md-3'><strong>Pagar" + total + " pesos</strong></p>"
+            out.println("<p class='offset-8 col-3 col-sm-3 col-md-3'><strong>Pagar" + Orden.getMontoRestante() + " pesos</strong></p>"
                     + "<button class='btn btn-success btn-lg btn-block' id='ConPay' onclick='contOr();' name='ConPay'>Continuar</button>");
         } else {
             out.println("<div id='BEst'></div>");

@@ -1,3 +1,4 @@
+<%@page import="DataAccesObject.Orden_DAO"%>
 <%@page import="DataTransferObject.Det_Orden_DTO"%>
 <%@page import="DataTransferObject.Medico_DTO"%>
 <%@page import="DataTransferObject.Orden_DTO"%>
@@ -9,14 +10,17 @@
 <%
     HttpSession sesion = request.getSession();
     if (sesion.getAttribute("user") != null && sesion.getAttribute("unidad") != null) {
-        Orden_DTO Orden = (Orden_DTO) sesion.getAttribute("Orden");
+        int id_Orden = Integer.parseInt(request.getParameter("id_Orden").trim());
+        sesion.setAttribute("id_Orden", id_Orden);
+        Orden_DAO O = new Orden_DAO();
+        Orden_DTO Orden = O.getOrden(id_Orden);
         Paciente_DTO pac = Orden.getPaciente();
         Medico_DTO med = Orden.getMedico();
         List<Det_Orden_DTO> Det_Orden = Orden.getDet_Orden();
         Fecha f = new Fecha();
 %>
 <div class="nav-scroller bg-white box-shadow">
-    <nav class="nav nav-underline">        
+    <nav class="nav nav-underline">
         <a class="nav-link" href="#"onclick="mostrarForm('Menu/Orden/Registro.jsp');">Nueva Órden</a>        
         <a class="nav-link" href="#" onclick="mostrarForm('Menu/Cotizacion/Registro.jsp');">Nueva Cotización</a>        
         <a class="nav-link" href="#" onclick='mostrarForm("${pageContext.request.contextPath}/ShowOrds");'>Órdenes Pendientes</a>                         
@@ -72,7 +76,7 @@
             <table>
                 <tr>
                     <td>Total : </td>
-                    <td><%=Orden.getMontoRestante()+ Orden.getMontoPagado()%></td>
+                    <td><%=Orden.getMontoRestante() + Orden.getMontoPagado()%></td>
                 </tr>
                 <tr>
                     <td>A/C : </td>
@@ -85,10 +89,10 @@
             </table>
         </div>
         <div id="pago">            
-            <button class='btn btn-success btn-lg btn-block' id='ConPay' onclick="FormPago('ord');" name='ConPay'>Realizar Pago<span><img src='images/pay.png'></span></button>
+            <button class='btn btn-success btn-lg btn-block' id='ConPay' onclick="FormPago('list');" name='ConPay'>Realizar Pago<span><img src='images/pay.png'></span></button>
         </div><br>
     </div>
-    <a class='btn btn-success btn-lg btn-block' href='FinalOrd' >Generar Órden</a>
+
 </div>   
 <hr>
 <%} else {

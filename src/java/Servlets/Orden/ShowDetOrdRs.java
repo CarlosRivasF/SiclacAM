@@ -1,6 +1,7 @@
 package Servlets.Orden;
 
 import DataAccesObject.Orden_DAO;
+import DataTransferObject.Det_Orden_DTO;
 import DataTransferObject.Orden_DTO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -35,7 +36,7 @@ public class ShowDetOrdRs extends HttpServlet {
         out.print("<div class='nav-scroller bg-white box-shadow'>"
                 + "    <nav class='nav nav-underline'>"
                 + "        <a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Orden/Registro.jsp');>Nueva Órden</a>"
-                + "        <a class='nav-link active' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds');  style=\"color: blue\"><ins>Pendientes</ins></a>"                                
+                + "        <a class='nav-link active' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds');  style=\"color: blue\"><ins>Pendientes</ins></a>"
                 + "    </nav>"
                 + "</div>"
                 + "<div><hr class='mb-1'>"
@@ -69,9 +70,9 @@ public class ShowDetOrdRs extends HttpServlet {
                 + "<th >Precio Total</th>"
                 + "</tr>");
         out.println("<tr>"
-                + "<td >" + dto.getTotal() + " Pesos</td>"
-                + "<td >" + dto.getRestante() + " Pesos</td>"
-                + "<td >" + (dto.getTotal() + dto.getRestante()) + " Pesos</td>"
+                + "<td >" + dto.getMontoPagado() + " Pesos</td>"
+                + "<td >" + dto.getMontoRestante() + " Pesos</td>"
+                + "<td >" + (dto.getMontoPagado() + dto.getMontoRestante()) + " Pesos</td>"
                 + "</tr></table>");
         out.println("</div>");
 
@@ -97,8 +98,17 @@ public class ShowDetOrdRs extends HttpServlet {
             }
             out.println("</tr>");
         });
-        out.println("</table>"
-                + "<a class='btn btn-success btn-lg btn-block' href='PrintCot' >Imprimir Resultados</a>");
+
+        out.println("</table>");
+        Boolean pr = false;
+        for (Det_Orden_DTO d : dto.getDet_Orden()) {
+            if (d.getEstudio().getAddRes()) {
+                pr = true;
+            }
+        }
+        if (pr) {
+            out.print("<a class='btn btn-success btn-lg btn-block' href='PrintRes?LxOrdSald=" + dto.getId_Orden() + "' >Imprimir Resultados</a><br>");
+        }
         out.println("</div>");
         out.println("</div>");
     }

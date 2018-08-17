@@ -9,6 +9,7 @@ function test(e) {
         e.value = "";
     }
 }
+
 function test22(e, mode) {
     //alert(e.value + " - " + mode);
     var busq = e.value;
@@ -1679,7 +1680,7 @@ function contOr(m) {
     var p = "mode=" + m;
     xhr.send(p);
 }
-function FormPago() {
+function FormPago(mode) {
     buscarComentario();
     xhr.open("POST", "FormPago", true);
     xhr.onreadystatechange = function () {
@@ -1688,10 +1689,10 @@ function FormPago() {
         }
     };
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.send(null);
+    xhr.send("mode=" + mode);
 }
 
-function Pagar() {
+function Pagar(mode) {
     var Tp = document.getElementById("Tipo_Pago").value;
     var monto = document.getElementById("monto").value;
     if (document.getElementById("Tipo_Pago").value === "") {
@@ -1701,10 +1702,24 @@ function Pagar() {
             alert("Escriba un monto");
         } else {
             buscarComentario();
-            xhr.open("POST", "InsPago", true);
+            switch (mode) {
+                case 'ord':
+                    xhr.open("POST", "InsPago", true);
+                    break;
+                case 'list':
+                    xhr.open("POST", "AddPay", true);
+                    break;
+            }
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
-                    document.getElementById("estsOrd").innerHTML = xhr.responseText;
+                    switch (mode) {
+                        case 'ord':
+                            document.getElementById("estsOrd").innerHTML = xhr.responseText;
+                            break;
+                        case 'list':
+                            document.getElementById("Interaccion").innerHTML = xhr.responseText;
+                            break;
+                    }
                 }
             };
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -1954,7 +1969,7 @@ function AddNWConf(x) {
     }
 }
 
-function SrchOrd(e, mode) {
+function SrchOrd(e, mode, part) {
     var busq = e.value;
     if (busq.length === 0) {
         Ajax = buscarComentario();
@@ -1965,18 +1980,25 @@ function SrchOrd(e, mode) {
             }
         };
         Ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        var p = "mode=" + mode;
+        var p = "mode=" + mode + " &part=" + part;
         Ajax.send(p);
     } else {
         Ajax = buscarComentario();
-        Ajax.open('POST', "SrchOrd", true);
+        switch (part) {
+            case 'ord':
+                Ajax.open('POST', "SrchOrd", true);
+                break;
+            case 'sald':
+                Ajax.open('POST', "SrchOrdPay", true);
+                break;
+        }
         Ajax.onreadystatechange = function () {
             if (Ajax.readyState === 4) {
                 document.getElementById("SerchOrd").innerHTML = Ajax.responseText;
             }
         };
         Ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        var p = "busq=" + busq + " &mode=" + mode;
+        var p = "busq=" + busq + " &mode=" + mode + " &part=" + part;
         Ajax.send(p);
     }
 }
@@ -2014,20 +2036,49 @@ function PrResDet() {
     }
 }
 
-function SaveResDet(index,size) {    
-    var Res="";
-    for(var i=0;i<size;i++){        
-        Res=Res+"valRes-"+i+"="+document.getElementById("valRes-"+i).value+" &";
-    }   
-    document.getElementById("fill_detor").innerHTML = "";    
+function SaveResDet(index, size) {
+    var Res = "";
+    for (var i = 0; i < size; i++) {
+        if (document.getElementById("valRes-" + i) === null) {
+            continue;
+        } else {
+            Res = Res + "valRes-" + i + "=" + document.getElementById("valRes-" + i).value + " &";
+        }
+    }
+    document.getElementById("fill_detor").innerHTML = "";
     buscarComentario();
     xhr.open("POST", "UplResults", true);
     xhr.onreadystatechange = PrSavResDet;
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.send(Res+"index="+index);
+    xhr.send(Res + "index=" + index);
 }
 function PrSavResDet() {
     if (xhr.readyState === 4) {
         document.getElementById("detors").innerHTML = xhr.responseText;
     }
+}
+
+function FormUpRes(index, ixconf, acc) {
+    var dta = " &f=f";//BTdiValRes
+    var divRes = document.getElementById("diValRes-" + ixconf);
+    var BTdiV = document.getElementById("BTdiValRes-" + ixconf);
+    Ajax = buscarComentario();
+    Ajax.open('POST', "FormUpRes", true);
+    if (acc === "upd") {
+        var Resultado = document.getElementById("valRes-" + ixconf).value;
+        dta = " &Resultado=" + Resultado;
+        BTdiV.innerHTML = "<button href='#' class='btn btn-warning btn-sm' onclick=FormUpRes("+index+","+ixconf+",'form')><span><img src=images/pencil.png></span></button>";
+    } else {
+        BTdiV.innerHTML = "<button href='#' class='btn btn-success btn-sm' onclick=FormUpRes("+index+","+ixconf+",'upd')><span><img src=images/save.png></span></button>";
+    }
+    Ajax.onreadystatechange = function () {
+        if (Ajax.readyState === 4) {
+            divRes.focus();
+            divRes.innerHTML = Ajax.responseText;
+            divRes.focus();
+        }
+    };
+    var p = "index=" + index + " &acc=" + acc + " &ixconf=" + ixconf + dta;
+    Ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    Ajax.send(p);
 }

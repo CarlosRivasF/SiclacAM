@@ -21,6 +21,7 @@ public class Empleado_DTO extends Persona_DTO {
     protected String Hora_Com;
     protected String Hora_Reg;
     protected String Hora_Sal;
+    protected List<Orden_DTO> Ordenes;
 
     public int getId_Empleado() {
         return id_Empleado;
@@ -78,6 +79,22 @@ public class Empleado_DTO extends Persona_DTO {
         this.Dias_Trabajo = Dias_Trabajo;
     }
 
+    public List<String> getPermisos() {
+        return Permisos;
+    }
+
+    public void setPermisos(List<String> Permisos) {
+        this.Permisos = Permisos;
+    }
+
+    public Usuario_DTO getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario_DTO usuario) {
+        this.usuario = usuario;
+    }
+
     public String getHora_Ent() {
         return Hora_Ent;
     }
@@ -110,19 +127,11 @@ public class Empleado_DTO extends Persona_DTO {
         this.Hora_Sal = Hora_Sal;
     }
 
-    public List<String> getPermisos() {
-        return Permisos;
+    public List<Orden_DTO> getOrdenes() {
+        return Ordenes;
     }
 
-    public void setPermisos(List<String> Permisos) {
-        this.Permisos = Permisos;
-    }
-
-    public Usuario_DTO getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario_DTO usuario) {
-        this.usuario = usuario;
+    public void setOrdenes(List<Orden_DTO> Ordenes) {
+        this.Ordenes = Ordenes;
     }
 }

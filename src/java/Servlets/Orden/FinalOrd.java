@@ -178,7 +178,7 @@ public class FinalOrd extends HttpServlet {
             cb.beginText();
             cb.setFontAndSize(bf, 12);
             cb.setTextMatrix(500, 567);
-            cb.showText((Orden.getRestante()) + "");
+            cb.showText((Orden.getMontoPagado()) + "");
             cb.endText();
 
             cb.beginText();
@@ -189,7 +189,7 @@ public class FinalOrd extends HttpServlet {
             cb.beginText();
             cb.setFontAndSize(bf, 12);
             cb.setTextMatrix(500, 553);
-            cb.showText((Orden.getTotal()) + "");
+            cb.showText((Orden.getMontoRestante()) + "");
             cb.endText();
 
             cb.beginText();
@@ -200,7 +200,7 @@ public class FinalOrd extends HttpServlet {
             cb.beginText();
             cb.setFontAndSize(bf, 12);
             cb.setTextMatrix(500, 539);
-            cb.showText((Orden.getTotal() + Orden.getRestante()) + "");
+            cb.showText((Orden.getMontoPagado()+ Orden.getMontoRestante()) + "");
             cb.endText();
 
             ColumnText column = new ColumnText(stamper.getOverContent(1));

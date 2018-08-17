@@ -29,12 +29,12 @@ public class ShDetOrd extends HttpServlet {
         List<Orden_DTO> ords = O.getOrdenes(id_unidad);
         int index = Integer.parseInt(request.getParameter("index").trim());
         Orden_DTO dto = ords.get(index);
-        sesion.setAttribute("OrdenSh",dto);
+        sesion.setAttribute("OrdenSh", dto);
         String CodeCot = dto.getPaciente().getCodPac().substring(0, 4) + "-" + dto.getId_Orden();
         out.print("<div class='nav-scroller bg-white box-shadow'>"
                 + "    <nav class='nav nav-underline'>"
                 + "        <a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Orden/Registro.jsp');>Nueva Órden</a>"
-                + "        <a class='nav-link active' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds');  style=\"color: blue\"><ins>Pendientes</ins></a>"                
+                + "        <a class='nav-link active' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds');  style=\"color: blue\"><ins>Pendientes</ins></a>"
                 + "    </nav>"
                 + "</div>"
                 + "<div><hr class='mb-1'>"
@@ -43,7 +43,7 @@ public class ShDetOrd extends HttpServlet {
                 + "<pre><h6 style='color: white'>Realizó: " + dto.getEmpleado().getNombre() + " " + dto.getEmpleado().getAp_Paterno() + " " + dto.getEmpleado().getAp_Materno() + "&nbsp;&nbsp;&nbsp;&nbsp;"
                 + "</h6></pre>"
                 + "<hr class='mb-1'>");
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               out.println("<div style='color: white' class='table-responsive'>");
+        out.println("<div style='color: white' class='table-responsive'>");
         out.println("<div id='medico'>"
                 + "<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
                 + "<tr class='table-info' style='color: black'>"
@@ -71,9 +71,9 @@ public class ShDetOrd extends HttpServlet {
                 + "<th >Modificar</th>"
                 + "</tr>");
         out.println("<tr>"
-                + "<td >" + dto.getTotal() + " Pesos</td>"
-                + "<td >" + dto.getRestante() + " Pesos</td>"
-                + "<td >" + (dto.getTotal() + dto.getRestante()) + " Pesos</td>"
+                + "<td >" + dto.getMontoPagado() + " Pesos</td>"
+                + "<td >" + dto.getMontoRestante() + " Pesos</td>"
+                + "<td >" + (dto.getMontoPagado() + dto.getMontoRestante()) + " Pesos</td>"
                 + "<th><div id='detPr'><button href=# class='btn btn-warning btn-sm'  ><span><img src='images/pencil.png'></span></button></div></th>"
                 + "</tr></table>");
         out.println("</div>");
@@ -85,22 +85,23 @@ public class ShDetOrd extends HttpServlet {
                 + "<tr class='table-info' style='color: black'>"
                 + "<th >Nombre</th>"
                 + "<th >Precio</th>"
-                + "<th >Metodología</th>"                
+                + "<th >Metodología</th>"
                 + "<th>Eliminar</th>"
                 + "</tr>");
         dto.getDet_Orden().forEach((det) -> {
             out.println("<tr>"
                     + "<td >" + det.getEstudio().getNombre_Estudio() + "</td>"
                     + "<td >" + det.getSubtotal() + "</td>"
-                    + "<td >" + det.getEstudio().getMetodo() + "</td>"                    
+                    + "<td >" + det.getEstudio().getMetodo() + "</td>"
                     + "<td><div id='estCn-" + dto.getDet_Orden().indexOf(det) + "'><button href=# class='btn btn-danger btn-sm'  ><span><img src='images/trash.png'></span></button></div></td>"
                     + "</tr>");
         });
         out.println("</table>");
         out.println("</div>");
-        out.println("</div>"                
-                + "<a class='btn btn-primary btn-lg btn-block' href='FinalOrd?LsIxOrd=" + dto.getId_Orden() + "' >Imprimir Orden</a><br>"); 
+        out.println("</div>"
+                + "<a class='btn btn-primary btn-lg btn-block' href='FinalOrd?LsIxOrd=" + dto.getId_Orden() + "' >Imprimir Orden</a><br>");
     }
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

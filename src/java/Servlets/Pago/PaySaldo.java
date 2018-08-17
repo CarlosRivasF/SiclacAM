@@ -10,42 +10,38 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author ZionSystems
+ * @author ZionSystem
  */
-@WebServlet(name = "FormPago", urlPatterns = {"/FormPago"})
-public class FormPago extends HttpServlet {
+@WebServlet(name = "PaySaldo", urlPatterns = {"/PaySaldo"})
+public class PaySaldo extends HttpServlet {
 
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String mode = request.getParameter("mode").trim();
         try (PrintWriter out = response.getWriter()) {
-            out.println("<div class='form-row'>"
-                    + "<div class='col-sm-5 col-md-5 mb-3'>"
-                    + "<select class='custom-select d-block w-100 form-control' id='Tipo_Pago' name='Tipo_Pago' required>"
-                    + "<option value=''>Tipo de Pago</option>"
-                    + "<option value='Efectivo'>Efectivo</option>"
-                    + "<option value='Tarjeta'>Tarjeta</option>"
-                    + "</select>"
-                    + "<div class='invalid-feedback' style='width: 100%;'>"
-                    + "Por favor selecciona un Tipo de Pago."
-                    + "</div>"
-                    + "</div>"
-                    + "<div class='col-5 col-sm-4 col-md-4 mb-3'>"
-                    + "<label class='sr-only' >Monto</label>"
-                    + "<input style='text-align: center' type='number' class='form-control' name='monto' id='monto' placeholder='Monto' required>"
-                    + "<div class='invalid-feedback'>"
-                    + "Por favor ingresa un monto."
-                    + "</div>"
-                    + "</div>"
-                    + "<div class='col-7 col-sm-4 col-md-3 mb-3'>"
-                    + "<button class='btn btn-success btn-block' onclick=Pagar('" + mode + "');>Realizar Pago</button>"
-                    + "</div>"
-                    + "</div>");
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet PaySaldo</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet PaySaldo at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
         }
     }
 
-// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

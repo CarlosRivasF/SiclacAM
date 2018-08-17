@@ -44,7 +44,7 @@ public class AddPac extends HttpServlet {
             sesion.setAttribute("pacs", pacs);
         }
         Orden_DTO Orden = new Orden_DTO();
-        Orden.setRestante(Float.parseFloat("0"));
+        Orden.setMontoPagado(Float.parseFloat("0"));
         Orden.setUnidad(U.getUnidadAll(id_unidad));
         Persona_DAO P = new Persona_DAO();
         Persona_DTO por = P.getPersona(Integer.parseInt(sesion.getAttribute("persona").toString().trim()));
