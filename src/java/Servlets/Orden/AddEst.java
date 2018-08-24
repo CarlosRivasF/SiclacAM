@@ -115,7 +115,7 @@ public class AddEst extends HttpServlet {
                     + "<td >" + p + "</td>"
                     + "<td >$" + pd + "</td>"
                     + "<td >" + e + " días</td>"
-                    + "<td><div id='mat-" + Det_Orden.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEst(" + Det_Orden.indexOf(dto) + ") ><span><img src='images/trash.png'></span></button></div></td>"
+                    + "<td><div id='mat-" + Det_Orden.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEst(" + Det_Orden.indexOf(dto) + ",'Ord') ><span><img src='images/trash.png'></span></button></div></td>"
                     + "</tr>");
             total = total + dto.getSubtotal();
             Orden.setMontoRestante(total);

@@ -1575,7 +1575,7 @@ function SaveConv(x, mode) {
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.send("conv=" + x + "&mode=" + mode);
 }
-function DelEst(x) {
+function DelEst(x, modulo) {
     buscarComentario();
     xhr.open("POST", "DelEst", true);
     xhr.onreadystatechange = function () {
@@ -1584,7 +1584,7 @@ function DelEst(x) {
         }
     };
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.send("index=" + x);
+    xhr.send("index=" + x + " &modulo=" + modulo);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1887,6 +1887,10 @@ function AddEstProm(x, mode) {
             s = false;
         }
         var p = Desc + Tprec;
+        if (document.getElementById("shdet") !== null) {
+            var shd = " &shdet=xxxx";
+            p = p + shd;
+        }
         if (s) {
             buscarComentario();
             xhr.open("POST", "AddEstProm", true);
@@ -2067,9 +2071,9 @@ function FormUpRes(index, ixconf, acc) {
     if (acc === "upd") {
         var Resultado = document.getElementById("valRes-" + ixconf).value;
         dta = " &Resultado=" + Resultado;
-        BTdiV.innerHTML = "<button href='#' class='btn btn-warning btn-sm' onclick=FormUpRes("+index+","+ixconf+",'form')><span><img src=images/pencil.png></span></button>";
+        BTdiV.innerHTML = "<button href='#' class='btn btn-warning btn-sm' onclick=FormUpRes(" + index + "," + ixconf + ",'form')><span><img src=images/pencil.png></span></button>";
     } else {
-        BTdiV.innerHTML = "<button href='#' class='btn btn-success btn-sm' onclick=FormUpRes("+index+","+ixconf+",'upd')><span><img src=images/save.png></span></button>";
+        BTdiV.innerHTML = "<button href='#' class='btn btn-success btn-sm' onclick=FormUpRes(" + index + "," + ixconf + ",'upd')><span><img src=images/save.png></span></button>";
     }
     Ajax.onreadystatechange = function () {
         if (Ajax.readyState === 4) {
@@ -2079,6 +2083,195 @@ function FormUpRes(index, ixconf, acc) {
         }
     };
     var p = "index=" + index + " &acc=" + acc + " &ixconf=" + ixconf + dta;
+    Ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    Ajax.send(p);
+}
+
+function SrchProm(e, mode) {
+    var busq = e.value;
+    if (busq.length === 0) {
+        Ajax = buscarComentario();
+        Ajax.open('POST', "SrchProm", true);
+        Ajax.onreadystatechange = function () {
+            if (Ajax.readyState === 4) {
+                document.getElementById("srchProm").innerHTML = Ajax.responseText;
+            }
+        };
+        Ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        var p = "mode=" + mode;
+        Ajax.send(p);
+    } else {
+        Ajax = buscarComentario();
+        Ajax.open('POST', "SrchProm", true);
+        Ajax.onreadystatechange = function () {
+            if (Ajax.readyState === 4) {
+                document.getElementById("srchProm").innerHTML = Ajax.responseText;
+            }
+        };
+        Ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        var p = "busq=" + busq + " &mode=" + mode;
+        Ajax.send(p);
+    }
+}
+
+function chOpt(mode) {
+    switch (mode) {
+        case 'per':
+            document.getElementById("FrmSrch").innerHTML = "<div class='col-12 col-sm-12 col-md-12 mb-3'>" +
+                    "<label class='sr-only'>Buscar...</label>" +
+                    "<input style='text-align: center' type='text' class='form-control' onkeyup=test22(this, 'Orden'); name='clave_mat' id='clave_mat' placeholder='Buscar Paquetes(perfiles)...' required=''>" +
+                    "<div class='invalid-feedback'>" +
+                    "Ingresa un criterio de busqueda." +
+                    "</div>" +
+                    "</div>" +
+                    "<button class='btn btn-success btn-sm btn-block' onclick=chOpt('est'); >Buscar Estudios</button><br>";
+            break;
+        case 'est':
+            document.getElementById("FrmSrch").innerHTML = "<div class='col-5 col-sm-5 col-md-5 mb-3'>" +
+                    "    <label for='Tipo_Estudio' class='sr-only'>Tipo de Estudio</label>" +
+                    "    <select class='custom-select d-block w-100 form-control' id='Tipo_Estudio' name='Tipo_Estudio' required=''>" +
+                    "        <option value=''>Tipo de Estudio</option>   " +
+                    "        <option value='1'>RUTINARIO</option> " +
+                    "        <option value='2'>DE IMAGEN</option> " +
+                    "        <option value='3'>ESPECIALES</option> " +
+                    "        <option value='4'>RAYOS X</option> " +
+                    "        <option value='5'>ESTUDIOS ESPECIALES DE RAYOS X</option> " +
+                    "        <option value='6'>ULTRASONIDOS</option> " +
+                    "        <option value='7'>PERFILES</option> " +
+                    "        <option value='8'>CHECK UP</option> " +
+                    "    </select>" +
+                    "    <div class='invalid-feedback' style='width: 100%;'>" +
+                    "        Por favor seleccione un Tipo de Estudio." +
+                    "    </div>" +
+                    "</div>" +
+                    "<div class='col-7 col-sm-7 col-md-7 mb-3'>" +
+                    "    <label class='sr-only'>Buscar...</label>" +
+                    "    <input style='text-align: center' type='text' class='form-control' onkeyup='test22(this, 'Orden');' name='clave_mat' id='clave_mat' placeholder='Buscar...' required=''>" +
+                    "    <div class='invalid-feedback'>" +
+                    "        Ingresa un criterio de busqueda." +
+                    "    </div>" +
+                    "</div>" +
+                    "<button class='btn btn-warning btn-sm btn-block' onclick=chOpt('per');>Buscar Paquetes(perfiles)</button>" +
+                    "<br>";
+            break;
+    }
+}
+
+function ShDetProm(index) {
+    Ajax = buscarComentario();
+    Ajax.open('POST', "ShDetProm", true);
+    Ajax.onreadystatechange = function () {
+        if (Ajax.readyState === 4) {
+            document.getElementById("Interaccion").innerHTML = Ajax.responseText;
+        }
+    };
+    Ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    Ajax.send("index=" + index);
+}
+
+function addEstMode(mode) {
+    document.getElementById("EstsAdded").innerHTML = "<div class='form-row'><div class='col-5 col-sm-5 col-md-5 mb-3'>" +
+            "    <label for='Tipo_Estudio' class='sr-only'>Tipo de Estudio</label><input type='hidden' name='shdet' id='shdet'>" +
+            "    <select class='custom-select d-block w-100 form-control' id='Tipo_Estudio' name='Tipo_Estudio' required=''>" +
+            "        <option value=''>Tipo de Estudio</option>   " +
+            "        <option value='1'>RUTINARIO</option> " +
+            "        <option value='2'>DE IMAGEN</option> " +
+            "        <option value='3'>ESPECIALES</option> " +
+            "        <option value='4'>RAYOS X</option> " +
+            "        <option value='5'>ESTUDIOS ESPECIALES DE RAYOS X</option> " +
+            "        <option value='6'>ULTRASONIDOS</option> " +
+            "        <option value='7'>PERFILES</option> " +
+            "        <option value='8'>CHECK UP</option> " +
+            "    </select>" +
+            "    <div class='invalid-feedback' style='width: 100%;'>" +
+            "        Por favor seleccione un Tipo de Estudio." +
+            "    </div>" +
+            "</div>" +
+            "<div class='col-7 col-sm-7 col-md-7 mb-3'>" +
+            "    <label class='sr-only'>Buscar...</label>" +
+            "    <input style='text-align: center' type='text' class='form-control' onkeyup=test22(this,'" + mode + "');  name='clave_mat' id='clave_mat' placeholder='Buscar...' required=''>" +
+            "    <div class='invalid-feedback'>" +
+            "        Ingresa un criterio de busqueda." +
+            "    </div>" +
+            "</div></div>" +
+            "<div id='BEst'></div>" +
+            "<br>";
+}
+
+function DelEstSecc(x, modulo) {
+    buscarComentario();
+    xhr.open("POST", "DelEst", true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            document.getElementById("EstsAdded").innerHTML = xhr.responseText;
+        }
+    };
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send("index=" + x + " &modulo=" + modulo + " &shdet=xxx");
+}
+
+function FormDelProm(i, act) {
+    switch (act) {
+        case 'show':
+            divRes = document.getElementById('pac-' + i);
+            break;
+        case 'NO':
+            divRes = document.getElementById('pac-' + i);
+            break;
+        case 'SI':
+            divRes = document.getElementById("Interaccion");
+            break;
+    }
+    Ajax = buscarComentario();
+    Ajax.open('POST', "DelProm", true);
+    Ajax.onreadystatechange = function () {
+        if (Ajax.readyState === 4) {
+            divRes.innerHTML = Ajax.responseText;
+            divRes.focus();
+        }
+    };
+    Ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    var p = "index=" + i + " &ADelm=" + act;
+    Ajax.send(p);
+}
+
+function FormUpProm(index, part, acc) {
+    var dta = " &f=f";
+    var divRes;
+    switch (part) {
+        case 'name':
+            if (acc === "upd") {
+                divRes = document.getElementById("DvnameProm");
+                var nameProm = document.getElementById("nameProm").value;
+                dta = " &nameProm=" + nameProm;
+            }
+            break;
+        case 'desc':
+            if (acc === "upd") {
+                divRes = document.getElementById("DvdescProm");
+                var descProm = document.getElementById("descProm").value;
+                dta = " &descProm=" + descProm;
+            }
+            break;
+        case 'fchs':
+            if (acc === "upd") {
+                divRes = document.getElementById("DvfcsProm");
+                var fechaI = document.getElementById("fechaI").value;
+                var fechaF = document.getElementById("fechaF").value;
+                dta = " &fechaI=" + fechaI + " &fechaF=" + fechaF;
+            }
+            break;
+    }
+    Ajax = buscarComentario();
+    Ajax.open('POST', "UpdProm", true);
+    Ajax.onreadystatechange = function () {
+        if (Ajax.readyState === 4) {
+            divRes.focus();
+            divRes.innerHTML = Ajax.responseText;
+            divRes.focus();
+        }
+    };
+    var p = "index=" + index + " &part=" + part + " &acc=" + acc + dta;
     Ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     Ajax.send(p);
 }

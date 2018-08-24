@@ -47,7 +47,6 @@ public class SearchEst extends HttpServlet {
                     function = "AddEstProm";
                     break;
             }
-
             out.println("<div style='color: white' class='table-responsive'>"
                     + "<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
                     + "<tr class='bg-primary' style='color: black'>"

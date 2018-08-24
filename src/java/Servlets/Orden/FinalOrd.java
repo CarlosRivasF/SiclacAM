@@ -49,16 +49,15 @@ public class FinalOrd extends HttpServlet {
             Date fac = new Date();
             Fecha f = new Fecha();
             f.setHora(fac);
-            System.out.println("SESION RECUPERADA");
-            System.out.println("ÓRDEN RECUPERADA");
             Orden.setFecha(f.getFechaActual());
             Orden.setHora(f.getHoraActual());
             Orden.setEstado("Pendiente");
             Orden.setFolio_Unidad(O.getNoOrdenByUnidad(Orden.getUnidad().getId_Unidad()) + 1);
-            Orden.setId_Orden(O.registrarOrden(Orden));            
+            Orden.setId_Orden(O.registrarOrden(Orden));                
         }
+        sesion.removeAttribute("Orden");
         try {
-            String CodeOrd = Orden.getPaciente().getCodPac().substring(0, 4) + "-" + Orden.getId_Orden();
+            String CodeOrd = Orden.getId_Orden()+"-";
             System.out.println("Órden: " + CodeOrd);
             response.setContentType("application/pdf");
             response.setHeader("Content-disposition", "inline; filename=\"Órd_" + CodeOrd + ".pdf\"");

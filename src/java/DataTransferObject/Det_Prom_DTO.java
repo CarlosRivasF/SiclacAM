@@ -6,11 +6,9 @@ package DataTransferObject;
  */
 public class Det_Prom_DTO {
     
-    private int id_Det_Prom;
-    private int id_Promocion;
+    private int id_Det_Prom;    
     private Estudio_DTO estudio;
-    private int descuento;
-    private String Fecha_Entrega;
+    private int descuento;    
     private String T_Entrega;
     private Float Subtotal;
 
@@ -26,20 +24,6 @@ public class Det_Prom_DTO {
      */
     public void setId_Det_Prom(int id_Det_Prom) {
         this.id_Det_Prom = id_Det_Prom;
-    }
-
-    /**
-     * @return the id_Promocion
-     */
-    public int getId_Promocion() {
-        return id_Promocion;
-    }
-
-    /**
-     * @param id_Promocion the id_Promocion to set
-     */
-    public void setId_Promocion(int id_Promocion) {
-        this.id_Promocion = id_Promocion;
     }
 
     /**
@@ -68,20 +52,6 @@ public class Det_Prom_DTO {
      */
     public void setDescuento(int descuento) {
         this.descuento = descuento;
-    }
-
-    /**
-     * @return the Fecha_Entrega
-     */
-    public String getFecha_Entrega() {
-        return Fecha_Entrega;
-    }
-
-    /**
-     * @param Fecha_Entrega the Fecha_Entrega to set
-     */
-    public void setFecha_Entrega(String Fecha_Entrega) {
-        this.Fecha_Entrega = Fecha_Entrega;
     }
 
     /**

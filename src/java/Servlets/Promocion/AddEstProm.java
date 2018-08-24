@@ -1,6 +1,8 @@
 package Servlets.Promocion;
 
+import DataAccesObject.Det_Prom_DAO;
 import DataAccesObject.Estudio_DAO;
+import DataAccesObject.Promocion_DAO;
 import DataTransferObject.Det_Prom_DTO;
 import DataTransferObject.Estudio_DTO;
 import DataTransferObject.Promocion_DTO;
@@ -46,6 +48,9 @@ public class AddEstProm extends HttpServlet {
             Det_Prom = Prom.getDet_Prom();
         }
         String mode = request.getParameter("mode").trim();
+
+        Det_Prom_DAO Det = new Det_Prom_DAO();
+        Promocion_DAO P = new Promocion_DAO();
         switch (mode) {
             case "lst":
                 int index = Integer.parseInt(request.getParameter("estudio").trim());
@@ -71,7 +76,13 @@ public class AddEstProm extends HttpServlet {
                     p = estudio.getPrecio().getPrecio_U();
                 }
                 detprom.setSubtotal(p - ((detprom.getDescuento() * p) / 100));
+
                 Det_Prom.add(detprom);
+
+                if (request.getParameter("shdet") != null) {
+                    Det.registrarDetor(Prom.getId_Promocion(), detprom);
+                }
+
                 Prom.setDet_Prom(Det_Prom);
                 break;
             case "code":
@@ -104,18 +115,34 @@ public class AddEstProm extends HttpServlet {
                     + "<td >" + dto.getEstudio().getNombre_Estudio() + "</td>"
                     + "<td >" + dto.getT_Entrega() + "</td>"
                     + "<td >" + p + "</td>"
-                    + "<td >$" + pd + "</td>"
-                    + "<td><div id='mat-" + Det_Prom.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEst(" + Det_Prom.indexOf(dto) + ",'show') ><span><img src='images/trash.png'></span></button></div></td>"
-                    + "</tr>");
-            total = total + dto.getSubtotal(); 
+                    + "<td >$" + pd + "</td>");
+            if (request.getParameter("shdet") == null) {
+                out.println("<td><div id='mat-" + Det_Prom.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEst(" + Det_Prom.indexOf(dto) + ",'Prom') ><span><img src='images/trash.png'></span></button></div></td>");
+            } else {
+                out.println("<td><div id='mat-" + Det_Prom.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEstSecc(" + Det_Prom.indexOf(dto) + ",'Prom') ><span><img src='images/trash.png'></span></button></div></td>");
+            }
+            out.println("</tr>");
+            total = total + dto.getSubtotal();
             Prom.setPrecio_Total(total);
+            if (request.getParameter("shdet") != null) {
+                P.ActualizarPrecProm(Prom.getPrecio_Total(), Prom.getId_Promocion());
+            }
             sesion.setAttribute("Promocion", Prom);
         }
+        if (request.getParameter("shdet") != null) {
+            out.println("<tr>"
+                    + "<td colspan='7'><button href=# class='btn btn-success btn-block' onclick=addEstMode('Prom')>Agregar nuevo estudio</button></td>"
+                    + "</tr>");
+        }
         out.println("</table>");
+
         out.println("</div>");
-        out.println("<p class='offset-8 col-3 col-sm-3 col-md-3'><strong>Precio " + total + " pesos</strong></p>"
-                + "<a class='btn btn-success btn-lg btn-block' onclick='saveProm(this);' >Guardar Promoción</a><br>");
+        out.println("<p class='offset-8 col-3 col-sm-3 col-md-3'><strong>Precio " + total + " pesos</strong></p>");
+        if (request.getParameter("shdet") == null) {
+            out.println("<a class='btn btn-success btn-lg btn-block' onclick='saveProm(this);' >Guardar Promoción</a><br>");
+        }
     }
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

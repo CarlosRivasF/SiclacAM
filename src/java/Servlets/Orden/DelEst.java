@@ -1,8 +1,14 @@
 package Servlets.Orden;
 
+import DataAccesObject.Det_Prom_DAO;
+import DataAccesObject.Promocion_DAO;
 import DataBase.Fecha;
+import DataTransferObject.Cotizacion_DTO;
+import DataTransferObject.Det_Cot_DTO;
 import DataTransferObject.Det_Orden_DTO;
+import DataTransferObject.Det_Prom_DTO;
 import DataTransferObject.Orden_DTO;
+import DataTransferObject.Promocion_DTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
@@ -26,58 +32,196 @@ public class DelEst extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
         PrintWriter out = response.getWriter();
-        List<Det_Orden_DTO> Det_Orden;
         Date fac = new Date();
         Fecha f = new Fecha();
         f.setHora(fac);
-        Orden_DTO Orden = (Orden_DTO) sesion.getAttribute("Orden");
-        Det_Orden = Orden.getDet_Orden();
-        int index = Integer.parseInt(request.getParameter("index").trim());
-        Det_Orden.remove(index);
-        if (!Det_Orden.isEmpty()) {
-            out.println("<div id='BEst'></div>"
-                    + "<div style='color: white' class='table-responsive'>"
-                    + "<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
-                    + "<tr class='bg-warning' style='color: black'>"
-                    + "<th >Nombre de Estudio</th>"
-                    + "<th >Entrega</th>"
-                    + "<th >Precio</th>"
-                    + "<th >Descuento</th>"
-                    + "<th >Espera</th>"
-                    + "<th >Entrega</th>"
-                    + "<th >Quitar</th>"
-                    + "</tr>");
-            Float total = Float.parseFloat("0");
-            for (Det_Orden_DTO dto : Det_Orden) {
-                Float p = Float.parseFloat("0");
-                int e = 0;
-                if (dto.getT_Entrega().equals("Normal")) {
-                    p = dto.getEstudio().getPrecio().getPrecio_N();
-                    e = dto.getEstudio().getPrecio().getT_Entrega_N();
-                } else if (dto.getT_Entrega().equals("Urgente")) {
-                    p = dto.getEstudio().getPrecio().getPrecio_U();
-                    e = dto.getEstudio().getPrecio().getT_Entrega_U();
-                }
-                Float pd = ((dto.getDescuento() * p) / 100);
-                out.println("<tr>"
-                        + "<td >" + dto.getEstudio().getNombre_Estudio() + "</td>"
-                        + "<td >" + dto.getT_Entrega() + "</td>"
-                        + "<td >" + p + "</td>"
-                        + "<td >$" + pd + "</td>"
-                        + "<td >" + e + " días</td>"
-                        + "<td >" + f.SumarDias(e) + "</td>"
-                        + "<td><div id='mat-" + Det_Orden.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEst(" + Det_Orden.indexOf(dto) + ",'show') ><span><img src='images/trash.png'></span></button></div></td>"
-                        + "</tr>");
-                total = total + dto.getSubtotal();
-                Orden.setMontoRestante(total);
-                sesion.setAttribute("Orden", Orden);
+        if (request.getParameter("modulo") != null) {
+            String Modulo = request.getParameter("modulo").trim();
+            switch (Modulo) {
+                case "Ord":
+                    Orden_DTO Orden = (Orden_DTO) sesion.getAttribute("Orden");
+                    List<Det_Orden_DTO> Det_Orden = Orden.getDet_Orden();
+                    int index = Integer.parseInt(request.getParameter("index").trim());
+                    Det_Orden.remove(index);
+                    if (!Det_Orden.isEmpty()) {
+                        out.println("<div id='BEst'></div>"
+                                + "<div style='color: white' class='table-responsive'>"
+                                + "<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
+                                + "<tr class='bg-warning' style='color: black'>"
+                                + "<th >Nombre de Estudio</th>"
+                                + "<th >Entrega</th>"
+                                + "<th >Precio</th>"
+                                + "<th >Descuento</th>"
+                                + "<th >Espera</th>"
+                                + "<th >Entrega</th>"
+                                + "<th >Quitar</th>"
+                                + "</tr>");
+                        Float total = Float.parseFloat("0");
+                        for (Det_Orden_DTO dto : Det_Orden) {
+                            Float p = Float.parseFloat("0");
+                            int e = 0;
+                            if (dto.getT_Entrega().equals("Normal")) {
+                                p = dto.getEstudio().getPrecio().getPrecio_N();
+                                e = dto.getEstudio().getPrecio().getT_Entrega_N();
+                            } else if (dto.getT_Entrega().equals("Urgente")) {
+                                p = dto.getEstudio().getPrecio().getPrecio_U();
+                                e = dto.getEstudio().getPrecio().getT_Entrega_U();
+                            }
+                            Float pd = ((dto.getDescuento() * p) / 100);
+                            out.println("<tr>"
+                                    + "<td >" + dto.getEstudio().getNombre_Estudio() + "</td>"
+                                    + "<td >" + dto.getT_Entrega() + "</td>"
+                                    + "<td >" + p + "</td>"
+                                    + "<td >$" + pd + "</td>"
+                                    + "<td >" + e + " días</td>"
+                                    + "<td >" + f.SumarDias(e) + "</td>");
+                            if (request.getParameter("shdet") == null) {
+                                out.println("<td><div id='mat-" + Det_Orden.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEst(" + Det_Orden.indexOf(dto) + ",'show') ><span><img src='images/trash.png'></span></button></div></td>");
+                            } else {
+                                out.println("<td><div id='mat-" + Det_Orden.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEstSecc(" + Det_Orden.indexOf(dto) + ",'show') ><span><img src='images/trash.png'></span></button></div></td>");
+                            }
+                            out.println("</tr>");
+                            total = total + dto.getSubtotal();
+                            Orden.setMontoRestante(total);
+                            sesion.setAttribute("Orden", Orden);
+                        }
+                        out.println("</table>");
+                        out.println("</div>");
+                        out.println("<p class='offset-8 col-3 col-sm-3 col-md-3'><strong>Pagar" + Orden.getMontoRestante() + " pesos</strong></p>");
+
+                        if (request.getParameter("shdet") == null) {
+                            out.println("<button class='btn btn-success btn-lg btn-block' id='ConPay' onclick='contOr();' name='ConPay'>Continuar</button>");
+                        }
+                    } else {
+                        out.println("<div id='BEst'></div>");
+                    }
+                    break;
+                case "Cot":
+                    Cotizacion_DTO Cot = (Cotizacion_DTO) sesion.getAttribute("Cotizacion");
+                    List<Det_Cot_DTO> Det_Cot = Cot.getDet_Cot();
+                    int index2 = Integer.parseInt(request.getParameter("index").trim());
+                    Det_Cot.remove(index2);
+                    if (!Det_Cot.isEmpty()) {
+                        out.println("<div id='BEst'></div>"
+                                + "<div style='color: white' class='table-responsive'>"
+                                + "<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
+                                + "<tr class='bg-warning' style='color: black'>"
+                                + "<th >Nombre de Estudio</th>"
+                                + "<th >Entrega</th>"
+                                + "<th >Precio</th>"
+                                + "<th >Descuento</th>"
+                                + "<th >Espera</th>"
+                                + "<th >Quitar</th>"
+                                + "</tr>");
+                        Float total = Float.parseFloat("0");
+                        for (Det_Cot_DTO dto : Det_Cot) {
+                            Float p = Float.parseFloat("0");
+                            int e = 0;
+                            if (dto.getT_Entrega().equals("Normal")) {
+                                p = dto.getEstudio().getPrecio().getPrecio_N();
+                                e = dto.getEstudio().getPrecio().getT_Entrega_N();
+                            } else if (dto.getT_Entrega().equals("Urgente")) {
+                                p = dto.getEstudio().getPrecio().getPrecio_U();
+                                e = dto.getEstudio().getPrecio().getT_Entrega_U();
+                            }
+                            Float pd = ((dto.getDescuento() * p) / 100);
+                            out.println("<tr>"
+                                    + "<td >" + dto.getEstudio().getNombre_Estudio() + "</td>"
+                                    + "<td >" + dto.getT_Entrega() + "</td>"
+                                    + "<td >" + p + "</td>"
+                                    + "<td >$" + pd + "</td>"
+                                    + "<td >" + e + " días</td>");
+                            if (request.getParameter("shdet") == null) {
+                                out.println("<td><div id='mat-" + Det_Cot.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEst(" + Det_Cot.indexOf(dto) + ",'Cot') ><span><img src='images/trash.png'></span></button></div></td>");
+                            } else {
+                                out.println("<td><div id='mat-" + Det_Cot.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEstSecc(" + Det_Cot.indexOf(dto) + ",'Cot') ><span><img src='images/trash.png'></span></button></div></td>");
+                            }
+                            out.println("</tr>");
+                            total = total + dto.getSubtotal();
+                            Cot.setTotal(total);
+                            sesion.setAttribute("Cot", Cot);
+                        }
+                        out.println("</table>");
+                        out.println("</div>");
+
+                        out.println("<p class='offset-8 col-3 col-sm-3 col-md-3'><strong>Pagar " + total + " pesos</strong></p>");
+                        if (request.getParameter("shdet") == null) {
+                            out.println("<a class='btn btn-success btn-lg btn-block' href='PrintCot' >Imprimir Cotización</a>");
+                        }
+                    } else {
+                        out.println("<div id='BEst'></div>");
+                    }
+                    break;
+                case "Prom":
+                    Promocion_DTO Prom = (Promocion_DTO) sesion.getAttribute("Promocion");
+                    List<Det_Prom_DTO> Det_Prom = Prom.getDet_Prom();
+                    int index3 = Integer.parseInt(request.getParameter("index").trim());
+                    if (request.getParameter("shdet") != null) {
+                        Det_Prom_DTO det = Det_Prom.get(index3);
+                        Det_Prom_DAO Dp = new Det_Prom_DAO();
+                        Dp.EliminarMaterial(det.getId_Det_Prom());
+                    }
+                    Det_Prom.remove(index3);
+                    if (!Det_Prom.isEmpty()) {
+                        out.println("<div id='BEst'></div>"
+                                + "<div style='color: white' class='table-responsive'>"
+                                + "<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
+                                + "<tr class='bg-warning' style='color: black'>"
+                                + "<th >Nombre de Estudio</th>"
+                                + "<th >Entrega</th>"
+                                + "<th >Precio</th>"
+                                + "<th >Descuento</th>"
+                                + "<th >Quitar</th>"
+                                + "</tr>");
+                        Float total = Float.parseFloat("0");
+                        for (Det_Prom_DTO dto : Det_Prom) {
+                            Float p = Float.parseFloat("0");
+                            int e = 0;
+                            if (dto.getT_Entrega().equals("Normal")) {
+                                p = dto.getEstudio().getPrecio().getPrecio_N();
+                                e = dto.getEstudio().getPrecio().getT_Entrega_N();
+                            } else if (dto.getT_Entrega().equals("Urgente")) {
+                                p = dto.getEstudio().getPrecio().getPrecio_U();
+                                e = dto.getEstudio().getPrecio().getT_Entrega_U();
+                            }
+                            Float pd = ((dto.getDescuento() * p) / 100);
+                            out.println("<tr>"
+                                    + "<td >" + dto.getEstudio().getNombre_Estudio() + "</td>"
+                                    + "<td >" + dto.getT_Entrega() + "</td>"
+                                    + "<td >" + p + "</td>"
+                                    + "<td >$" + pd + "</td>");
+                            if (request.getParameter("shdet") == null) {
+                                out.println("<td><div id='mat-" + Det_Prom.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEst(" + Det_Prom.indexOf(dto) + ",'Prom') ><span><img src='images/trash.png'></span></button></div></td>");
+                            } else {
+                                out.println("<td><div id='mat-" + Det_Prom.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEstSecc(" + Det_Prom.indexOf(dto) + ",'Prom') ><span><img src='images/trash.png'></span></button></div></td>");
+                            }
+                            out.println("</tr>");
+                            total = total + dto.getSubtotal();
+                            Prom.setPrecio_Total(total);
+                            sesion.setAttribute("Promocion", Prom);
+                        }
+                        if (request.getParameter("shdet") != null) {
+                            out.println("<tr>"
+                                    + "<td colspan='7'><button href=# class='btn btn-success btn-block' onclick=addEstMode('Prom')>Agregar nuevo estudio</button></td>"
+                                    + "</tr>");
+                        }
+                        out.println("</table>");
+                        out.println("</div>");
+                        if (request.getParameter("shdet") != null) {
+                            Promocion_DAO P=new Promocion_DAO();
+                            P.ActualizarPrecProm(Prom.getPrecio_Total(), Prom.getId_Promocion());
+                        }
+                        out.println("<p class='offset-8 col-3 col-sm-3 col-md-3'><strong>Precio " + total + " pesos</strong></p>");
+                        if (request.getParameter("shdet") == null) {
+                            out.println("<a class='btn btn-success btn-lg btn-block' onclick='saveProm(this);' >Guardar Promoción</a><br>");
+                        }
+                    } else {
+                        out.println("<div id='BEst'></div>");
+                    }
+                    break;
+                default:
+                    break;
             }
-            out.println("</table>");
-            out.println("</div>");
-            out.println("<p class='offset-8 col-3 col-sm-3 col-md-3'><strong>Pagar" + Orden.getMontoRestante() + " pesos</strong></p>"
-                    + "<button class='btn btn-success btn-lg btn-block' id='ConPay' onclick='contOr();' name='ConPay'>Continuar</button>");
-        } else {
-            out.println("<div id='BEst'></div>");
         }
     }
 

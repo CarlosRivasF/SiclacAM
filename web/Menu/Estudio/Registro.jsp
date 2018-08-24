@@ -242,7 +242,7 @@
             </div>
             <div class="col mb-3">
                 <label class="sr-only" >Unidad</label>
-                <input style="text-align: center" type="text" class="form-control form-control-sm" name="unidad" id="unidad" placeholder="Unidad" required>
+                <input style="text-align: center" type="text" class="form-control form-control-sm" name="unidad" id="unidad" placeholder="Unidad">
                 <div class="invalid-feedback">
                     Escriba una unidad de medida.
                 </div>
@@ -256,7 +256,7 @@
             </div>
             <div class="col-md-3 mb-3">
                 <label class="sr-only" >Tipo de muestra</label>
-                <input style="text-align: center" type="text" class="form-control form-control-sm" name="muestra" id="muestra" placeholder="Tipo de muestra" required>            
+                <input style="text-align: center" type="text" class="form-control form-control-sm" name="muestra" id="muestra" placeholder="Tipo de muestra">            
                 <div class="invalid-feedback" style="width: 100%;">
                     Tipo de muestra requerido.
                 </div>

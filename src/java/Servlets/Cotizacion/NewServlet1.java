@@ -39,7 +39,8 @@ public class NewServlet1 extends HttpServlet {
             Image barras1;
             JBarcodeBean barcode = new JBarcodeBean();
             barcode.setCodeType(new Code39());
-            barcode.setCode("11-KSY");
+            String Code="MOEM-987";
+            barcode.setCode(Code);
             barcode.setCheckDigit(true);
             barcode.setShowText(false);
             BufferedImage bi = barcode.draw(new BufferedImage(155, 20, BufferedImage.TYPE_INT_RGB));
@@ -56,10 +57,22 @@ public class NewServlet1 extends HttpServlet {
             ////////////////////////// DATOS UNIDAD
             cb.beginText();
             cb.setFontAndSize(bf0, 10);
-            cb.setTextMatrix(330, 760);
-            cb.showText("UNIDAD EL CHARCO NICOLÁS ROMERO");
+            cb.setTextMatrix(290, 760);            
+            cb.showText("UNIDAD EL CHARDCO NICOLAS ROMERO");
             cb.endText();
-            barras1.setAbsolutePosition(350, 732);//x,y
+            cb.beginText();
+
+            cb.setFontAndSize(bf0, 10);
+            cb.setTextMatrix(443, 740);
+            cb.showText("Folio de Unidad: 1");
+            cb.endText();
+
+            barras1.setAbsolutePosition(260, 732);//x,y
+            cb.beginText();
+            cb.setFontAndSize(bf1, 9);
+            cb.setTextMatrix(310, 722);
+            cb.showText(Code);
+            cb.endText();
             ////////////////////////// DATOS PACIENTE
             cb.beginText();
             cb.setFontAndSize(bf, 10);

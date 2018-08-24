@@ -36,6 +36,7 @@ public class PrintCot extends HttpServlet {
         try {
             HttpSession sesion = request.getSession();            
             Cotizacion_DTO Cot = (Cotizacion_DTO) sesion.getAttribute("Cotizacion");
+            sesion.removeAttribute("Cotizacion");
             Cotizacion_DAO CD = new Cotizacion_DAO();            
             Cot.setId_Cotizacion(CD.RegistrarCotizacion(Cot));
             String CodeCot = Cot.getPaciente().getCodPac().substring(0, 4) + "-" + Cot.getId_Cotizacion();

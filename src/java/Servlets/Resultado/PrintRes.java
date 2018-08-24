@@ -28,6 +28,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import jbarcodebean.JBarcodeBean;
 import net.sourceforge.jbarcodebean.model.Code39;
 
@@ -41,10 +42,24 @@ public class PrintRes extends HttpServlet {
     Fecha f = new Fecha();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
-        int id_Orden = Integer.parseInt(request.getParameter("LxOrdSald"));
+        HttpSession sesion = request.getSession();
+        int id_Orden = 0;
+        if (sesion.getAttribute("OrdenSh") == null) {
+            id_Orden = Integer.parseInt(request.getParameter("LxOrdSald"));
+        } else {
+            id_Orden = 0;
+        }
+
         try {
-            Orden_DAO O = new Orden_DAO();
-            Orden_DTO Orden = O.getOrden(id_Orden);
+
+            Orden_DTO Orden;
+            if (sesion.getAttribute("OrdenSh") != null) {
+                Orden = (Orden_DTO) sesion.getAttribute("OrdenSh");
+                sesion.removeAttribute("OrdenSh.");
+            } else {
+                Orden_DAO O = new Orden_DAO();
+                Orden = O.getOrden(id_Orden);
+            }
             response.setContentType("application/pdf");
             response.setHeader("Content-disposition", "inline; filename=\"report" + 1 + ".pdf\"");
             String relativePath = getServletContext().getRealPath("/");
@@ -60,9 +75,9 @@ public class PrintRes extends HttpServlet {
                 Source = relativePath + "M/MembreteRes1.pdf";
             } else if (r > 35 & r < 70) {
                 Source = relativePath + "M/MembreteRes2.pdf";
-            }else if (r > 70 & r < 105) {
+            } else if (r > 70 & r < 105) {
                 Source = relativePath + "M/MembreteRes3.pdf";
-            }else if (r > 140 & r < 175) {
+            } else if (r > 140 & r < 175) {
                 Source = relativePath + "M/MembreteRes4.pdf";
             }
 
@@ -143,16 +158,16 @@ public class PrintRes extends HttpServlet {
             ///////////////////////despedida
 
             cb.beginText();
-        cb.setFontAndSize(bf0, 12);
-        cb.setTextMatrix(280, 70);
-        cb.showText("QFB. MARIA DE LOURDES GONZALEZ");
-        cb.endText();
+            cb.setFontAndSize(bf0, 12);
+            cb.setTextMatrix(280, 70);
+            cb.showText("QFB. MARIA DE LOURDES GONZALEZ");
+            cb.endText();
 
-        cb.beginText();
-        cb.setFontAndSize(bf0, 12);
-        cb.setTextMatrix(450, 55);
-        cb.showText("CED. PROF. 1204923");
-        cb.endText();
+            cb.beginText();
+            cb.setFontAndSize(bf0, 12);
+            cb.setTextMatrix(450, 55);
+            cb.showText("CED. PROF. 1204923");
+            cb.endText();
 
             cb.addImage(barras1, false);
 
@@ -287,16 +302,16 @@ public class PrintRes extends HttpServlet {
             ///////////////////////despedida
 
             cb.beginText();
-        cb.setFontAndSize(bf0, 12);
-        cb.setTextMatrix(280, 70);
-        cb.showText("QFB. MARIA DE LOURDES GONZALEZ");
-        cb.endText();
+            cb.setFontAndSize(bf0, 12);
+            cb.setTextMatrix(280, 70);
+            cb.showText("QFB. MARIA DE LOURDES GONZALEZ");
+            cb.endText();
 
-        cb.beginText();
-        cb.setFontAndSize(bf0, 12);
-        cb.setTextMatrix(450, 55);
-        cb.showText("CED. PROF. 1204923");
-        cb.endText();
+            cb.beginText();
+            cb.setFontAndSize(bf0, 12);
+            cb.setTextMatrix(450, 55);
+            cb.showText("CED. PROF. 1204923");
+            cb.endText();
 
             cb.addImage(barras1, false);
             column.setCanvas(cb);

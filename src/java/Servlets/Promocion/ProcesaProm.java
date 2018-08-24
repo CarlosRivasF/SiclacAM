@@ -1,5 +1,6 @@
 package Servlets.Promocion;
 
+import DataAccesObject.Promocion_DAO;
 import DataTransferObject.Promocion_DTO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -20,15 +21,15 @@ public class ProcesaProm extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            out.println("<h1>Servlet Registrando Promoción" + request.getParameter("titulo") + "</h1>");
-        }
+        PrintWriter out = response.getWriter();
+
         HttpSession sesion = request.getSession();
         Promocion_DTO Prom = (Promocion_DTO) sesion.getAttribute("Promocion");
         Prom.setNombre_Promocion(request.getParameter("titulo"));
         Prom.setDescripcion(request.getParameter("Desc"));
         Prom.setFecha_I(request.getParameter("FecI").trim());
         Prom.setFecha_F(request.getParameter("FecF").trim());
+        out.println("<h1>Servlet Registrando Promoción" + request.getParameter("titulo") + "</h1>");
         request.getRequestDispatcher("InsProm").forward(request, response);
     }
 

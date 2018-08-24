@@ -112,7 +112,7 @@ public class AddEstCot extends HttpServlet {
                     + "<td >" + p + "</td>"
                     + "<td >$" + pd + "</td>"
                     + "<td >" + e + " días</td>"                    
-                    + "<td><div id='mat-" + Det_Cot.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEst(" + Det_Cot.indexOf(dto) + ",'show') ><span><img src='images/trash.png'></span></button></div></td>"
+                    + "<td><div id='mat-" + Det_Cot.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEst(" + Det_Cot.indexOf(dto) + ",'Cot') ><span><img src='images/trash.png'></span></button></div></td>"
                     + "</tr>");
             total = total + dto.getSubtotal();
             Cot.setTotal(total);

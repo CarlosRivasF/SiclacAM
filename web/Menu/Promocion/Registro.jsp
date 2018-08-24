@@ -22,7 +22,7 @@
 <div class="nav-scroller bg-white box-shadow">
     <nav class="nav nav-underline">        
         <a class="nav-link active" href="#" style="color: blue"><ins>Nueva Promoción</ins></a>
-        <a class="nav-link" href="#/" onclick='mostrarForm("${pageContext.request.contextPath}/ShowEst");'>Lista de Promociones</a>                               
+        <a class="nav-link" href="#/" onclick='mostrarForm("${pageContext.request.contextPath}/ShowProms");'>Lista de Promociones</a>                               
     </nav>
 </div>   
 <div class="container-fluid" style="color: white"><br>
