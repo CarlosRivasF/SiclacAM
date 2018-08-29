@@ -36,7 +36,7 @@ public class UpdProm extends HttpServlet {
             case "name":
                 if ("upd".equals(acc)) {
                     prom.setNombre_Promocion(request.getParameter("nameProm"));
-                    P.ActualizarNameProm(prom.getNombre_Promocion(), prom.getId_Unidad());
+                    P.ActualizarNameProm(prom.getNombre_Promocion(), prom.getId_Promocion());
                     out.println("<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
                             + "<tr class='table-info' style='color: black'>"
                             + "<th style='color: black'>Nombre</th>"
@@ -48,7 +48,7 @@ public class UpdProm extends HttpServlet {
                             + "<tr class='table-info' style='color: black'>"
                             + "<th style='color: black'>Nombre</th>"
                             + "<td><input style='text-align: center' type='text' class='form-control form-control-sm' name='nameProm' value='" + prom.getNombre_Promocion() + "' id='nameProm' placeholder='Nombre' required></td>"
-                            + "<th><button href=# class='btn btn-warning btn-sm' onclick=FormUpProm(" + index + ",'name','upd') ><span><img src='images/pencil.png'></span></button></th>"
+                            + "<th><button href=# class='btn btn-success btn-sm' onclick=FormUpProm(" + index + ",'name','upd') ><span><img src='images/save.png'></span></button></th>"
                             + "</tr></table>");
                 }
                 break;
@@ -67,7 +67,7 @@ public class UpdProm extends HttpServlet {
                             + "<tr class='table-success' style='color: black'>"
                             + "<th style='color: black'>Descripción</th>"
                             + "<td><input style='text-align: center' type='text' class='form-control form-control-sm' name='descProm' value='" + prom.getDescripcion() + "' id='descProm' placeholder='Descripción' required></td>"
-                            + "<th><button href=# class='btn btn-warning btn-sm' onclick=FormUpProm(" + index + ",'desc','upd') ><span><img src='images/pencil.png'></span></button></th>"
+                            + "<th><button href=# class='btn btn-success btn-sm' onclick=FormUpProm(" + index + ",'desc','upd') ><span><img src='images/save.png'></span></button></th>"
                             + "</tr></table>");
                 }
                 break;
@@ -93,7 +93,7 @@ public class UpdProm extends HttpServlet {
                             + "<th style='color: black'>Modificar</th></tr><tr>"
                             + "<td><input style='text-align: center' type='date' class='form-control form-control-sm' name='fechaI' value='" + prom.getFecha_I() + "' id='fechaI' required></td>"
                             + "<td><input style='text-align: center' type='date' class='form-control form-control-sm' name='fechaF' value='" + prom.getFecha_F() + "' id='fechaF' required></td>"
-                            + "<th><button href=# class='btn btn-warning btn-sm' onclick=FormUpProm(" + index + ",'fchs','form') ><span><img src='images/pencil.png'></span></button></th>"
+                            + "<th><button href=# class='btn btn-success btn-sm' onclick=FormUpProm(" + index + ",'fchs','upd') ><span><img src='images/save.png'></span></button></th>"
                             + "</tr></table>");
                 }
                 break;

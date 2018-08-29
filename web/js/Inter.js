@@ -2146,7 +2146,7 @@ function chOpt(mode) {
                     "</div>" +
                     "<div class='col-7 col-sm-7 col-md-7 mb-3'>" +
                     "    <label class='sr-only'>Buscar...</label>" +
-                    "    <input style='text-align: center' type='text' class='form-control' onkeyup='test22(this, 'Orden');' name='clave_mat' id='clave_mat' placeholder='Buscar...' required=''>" +
+                    "    <input style='text-align: center' type='text' class='form-control' onkeyup=test22(this, 'Orden'); name='clave_mat' id='clave_mat' placeholder='Buscar...' required=''>" +
                     "    <div class='invalid-feedback'>" +
                     "        Ingresa un criterio de busqueda." +
                     "    </div>" +
@@ -2240,22 +2240,22 @@ function FormUpProm(index, part, acc) {
     var divRes;
     switch (part) {
         case 'name':
+            divRes = document.getElementById("DvnameProm");
             if (acc === "upd") {
-                divRes = document.getElementById("DvnameProm");
                 var nameProm = document.getElementById("nameProm").value;
                 dta = " &nameProm=" + nameProm;
             }
             break;
         case 'desc':
+            divRes = document.getElementById("DvdescProm");
             if (acc === "upd") {
-                divRes = document.getElementById("DvdescProm");
                 var descProm = document.getElementById("descProm").value;
                 dta = " &descProm=" + descProm;
             }
             break;
         case 'fchs':
+            divRes = document.getElementById("DvfcsProm");
             if (acc === "upd") {
-                divRes = document.getElementById("DvfcsProm");
                 var fechaI = document.getElementById("fechaI").value;
                 var fechaF = document.getElementById("fechaF").value;
                 dta = " &fechaI=" + fechaI + " &fechaF=" + fechaF;
