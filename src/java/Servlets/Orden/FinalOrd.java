@@ -62,6 +62,7 @@ public class FinalOrd extends HttpServlet {
             response.setContentType("application/pdf");
             response.setHeader("Content-disposition", "inline; filename=\"Órd_" + CodeOrd + ".pdf\"");
             String relativePath = getServletContext().getRealPath("/");
+            
             String Source = relativePath + "M/MembrOrden.pdf";
             Image barras1;
             JBarcodeBean barcode = new JBarcodeBean();

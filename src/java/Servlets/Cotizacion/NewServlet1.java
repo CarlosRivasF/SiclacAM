@@ -1,11 +1,17 @@
 package Servlets.Cotizacion;
 
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
@@ -34,12 +40,12 @@ public class NewServlet1 extends HttpServlet {
         response.setContentType("application/pdf");
         response.setHeader("Content-disposition", "inline; filename=\"report" + 1 + ".pdf\"");
         String relativePath = getServletContext().getRealPath("/");
-        String Source = relativePath + "M/MembrOrden.pdf";        
+        String Source = relativePath + "M/MembreteRes.pdf";        //MembreteRes MembrOrden
         try {
             Image barras1;
             JBarcodeBean barcode = new JBarcodeBean();
             barcode.setCodeType(new Code39());
-            String Code="MOEM-987";
+            String Code = "MOEM-987";
             barcode.setCode(Code);
             barcode.setCheckDigit(true);
             barcode.setShowText(false);
@@ -57,7 +63,7 @@ public class NewServlet1 extends HttpServlet {
             ////////////////////////// DATOS UNIDAD
             cb.beginText();
             cb.setFontAndSize(bf0, 10);
-            cb.setTextMatrix(290, 760);            
+            cb.setTextMatrix(290, 760);
             cb.showText("UNIDAD EL CHARDCO NICOLAS ROMERO");
             cb.endText();
             cb.beginText();
@@ -135,60 +141,71 @@ public class NewServlet1 extends HttpServlet {
 
             cb.addImage(barras1, false);
 
+            BaseColor orange = new BaseColor(211, 84, 0);
+            BaseColor blue = new BaseColor(52, 152, 219);
+            BaseColor green = new BaseColor(40, 180, 99);
+            BaseColor BackGr = new BaseColor(234, 236, 238);
+
+            Font Title_Font_Est = FontFactory.getFont("Times Roman", 12, blue);
+            Font Title_Font_Prec = FontFactory.getFont("Times Roman", 12, orange);
+            Font Title_Font_Prep = FontFactory.getFont("Times Roman", 12, green);
+            Font Content_Font = FontFactory.getFont("Arial", 11, BaseColor.BLACK);
+
+            int c = 745;
+            for (int i = 1; i <= 5; i++) {
+                PdfPTable table = new PdfPTable(2);
+
+                PdfPCell cell_Est_Title = new PdfPCell(new Paragraph("Nombre de Estudio", Title_Font_Est));
+                cell_Est_Title.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell_Est_Title.setBackgroundColor(BackGr);
+                table.addCell(cell_Est_Title);
+
+                PdfPCell cell_Prec_Title = new PdfPCell(new Paragraph("Precio", Title_Font_Prec));
+                cell_Prec_Title.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell_Prec_Title);
+
+                table.setHeaderRows(1);
+                table.setWidths(new int[]{7, 3});
+
+                PdfPCell cell_Estudio = new PdfPCell(new Paragraph("Estudio Solicitado" + i, Content_Font));
+                table.addCell(cell_Estudio);
+
+                PdfPCell cell_Precio = new PdfPCell(new Paragraph("Precio" + i, Content_Font));
+                table.addCell(cell_Precio);
+
+                PdfPCell cell_Prec_Prep = new PdfPCell(new Paragraph("Modo de Preparación", Title_Font_Prep));
+                cell_Prec_Prep.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell_Prec_Prep.setColspan(2);
+                table.addCell(cell_Prec_Prep);
+
+                PdfPCell prepar = new PdfPCell(new Paragraph("el modo de prepararse para el estudio que se ha solicitado(*el modo de prepararse para el estudio que se ha solicitado*)", Content_Font));
+                prepar.setColspan(2);
+                table.addCell(prepar);
+
+                ColumnText column = new ColumnText(stamper.getOverContent(1));
+                Rectangle rectPage1 = new Rectangle(-10, 40, 625, c = c - 85);//izq,esp-inf,ancho,alto
+                column.setSimpleColumn(rectPage1);
+                column.addElement(table);
+                column.go();
+            }
+
             cb.beginText();
             cb.setFontAndSize(bf, 12);
-            cb.setTextMatrix(452, 567);
-            cb.showText("A/C:");
-            cb.endText();
-            cb.beginText();
-            cb.setFontAndSize(bf, 12);
-            cb.setTextMatrix(500, 567);
-            cb.showText("300.50");
-            cb.endText();
-            
-            cb.beginText();
-            cb.setFontAndSize(bf, 12);
-            cb.setTextMatrix(452, 553);
-            cb.showText("Saldo: ");
-            cb.endText();
-            cb.beginText();
-            cb.setFontAndSize(bf, 12);
-            cb.setTextMatrix(500, 553);
-            cb.showText("272.30");
-            cb.endText();
-            
-            cb.beginText();
-            cb.setFontAndSize(bf, 12);
-            cb.setTextMatrix(452, 539);
+            cb.setTextMatrix(452, c - 90);
             cb.showText("TOTAL: ");
             cb.endText();
             cb.beginText();
             cb.setFontAndSize(bf, 12);
-            cb.setTextMatrix(500, 539);
+            cb.setTextMatrix(500, c - 90);
             cb.showText("572.80");
             cb.endText();
             
-            PdfPTable table = new PdfPTable(2);
-            table.addCell("Nombre de Estudio");
-            table.addCell("Precio");  
-            table.setHeaderRows(1);
-            table.setWidths(new int[]{7, 3});
-            for (int i = 1; i <= 12; i++) {
-                table.addCell("Estudio solicitado solicitado # " + i);
-                table.addCell("Precio " + i);
-            }            
-            
-            ColumnText column = new ColumnText(stamper.getOverContent(1));
-            Rectangle rectPage1 = new Rectangle(-10, 40, 480, 663);//izq,esp-inf,ancho,alto
-            column.setSimpleColumn(rectPage1);
-            column.addElement(table);            
+            cb.beginText();
+            cb.setFontAndSize(bf, 10);
+            cb.setTextMatrix(20,65);
+            cb.showText("Dirección:");
+            cb.endText();
 
-            int pagecount = 1;
-            Rectangle rectPage2 = new Rectangle(0, 40, 617, 650);
-            int status = column.go();
-            while (ColumnText.hasMoreText(status)) {
-                status = triggerNewPage(reader, stamper, pagesize, column, rectPage2, ++pagecount);
-            }
             stamper.setFormFlattening(true);
             stamper.close();
             reader.close();
@@ -196,6 +213,7 @@ public class NewServlet1 extends HttpServlet {
             Logger.getLogger(NewServlet1.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     public int triggerNewPage(PdfReader reader, PdfStamper stamper, Rectangle pagesize, ColumnText column, Rectangle rect, int pagecount) throws DocumentException {
         PdfContentByte canvas = stamper.getOverContent(pagecount);
         column.setCanvas(canvas);

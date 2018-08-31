@@ -58,12 +58,14 @@ public class SearchEst extends HttpServlet {
                     + "</tr>");
             String busq = request.getParameter("busq");
             int tipoE = Integer.parseInt(request.getParameter("tipoE").trim());
+            Boolean res=false;
             for (Estudio_DTO dto : ests) {
                 if (dto.getId_Tipo_Estudio() == tipoE) {
                     String[] parts = dto.getNombre_Estudio().split(" ");
                     if (parts[0].toUpperCase().contains(busq.toUpperCase().trim()) || dto.getClave_Estudio().toUpperCase().trim().contains(busq.toUpperCase().trim())
                             || dto.getNombre_Estudio().toUpperCase().trim().contains(busq.toUpperCase().trim())
                             || dto.getUtilidad().toUpperCase().trim().contains(busq.toUpperCase().trim())) {
+                        res=true;
                         out.println("<tr>"
                                 + "<td >" + dto.getNombre_Estudio() + "</td>"
                                 + "<td ><div class='col mb-3 custom-control custom-radio custom-control-inline'>"
@@ -80,6 +82,7 @@ public class SearchEst extends HttpServlet {
                     }
                 }
             }
+            
             out.println("</table>");
             out.println("</div>");
         }

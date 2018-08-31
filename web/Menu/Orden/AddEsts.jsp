@@ -108,7 +108,7 @@
                 Ingresa un criterio de busqueda.
             </div>
         </div>
-        <button class="btn btn-warning btn-sm btn-block" onclick="chOpt('per');" >Buscar Paquetes(perfiles)</button>
+        <button class="btn btn-outline-info btn-sm btn-block" onclick="chOpt('per');" >Buscar Paquetes(perfiles)</button>
         <br>
     </div>    
     <div id="EstsAdded">

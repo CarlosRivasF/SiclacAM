@@ -2119,18 +2119,18 @@ function chOpt(mode) {
         case 'per':
             document.getElementById("FrmSrch").innerHTML = "<div class='col-12 col-sm-12 col-md-12 mb-3'>" +
                     "<label class='sr-only'>Buscar...</label>" +
-                    "<input style='text-align: center' type='text' class='form-control' onkeyup=test22(this, 'Orden'); name='clave_mat' id='clave_mat' placeholder='Buscar Paquetes(perfiles)...' required=''>" +
+                    "<input style='text-align: center' type='text' class='form-control' onkeyup=SrchPromAt(this,'Orden'); name='clave_mat' id='clave_mat' placeholder='Buscar Paquetes(perfiles)...' required=''>" +
                     "<div class='invalid-feedback'>" +
                     "Ingresa un criterio de busqueda." +
                     "</div>" +
-                    "</div>" +
-                    "<button class='btn btn-success btn-sm btn-block' onclick=chOpt('est'); >Buscar Estudios</button><br>";
+                    "</div><div class='col-12 col-sm-12 col-md-12 mb-3'>" +
+                    "<button class='btn btn-outline-info btn-sm btn-block' onclick=chOpt('est'); >Buscar Estudios</button>" +
+                    "</div>";
             break;
         case 'est':
             document.getElementById("FrmSrch").innerHTML = "<div class='col-5 col-sm-5 col-md-5 mb-3'>" +
                     "    <label for='Tipo_Estudio' class='sr-only'>Tipo de Estudio</label>" +
                     "    <select class='custom-select d-block w-100 form-control' id='Tipo_Estudio' name='Tipo_Estudio' required=''>" +
-                    "        <option value=''>Tipo de Estudio</option>   " +
                     "        <option value='1'>RUTINARIO</option> " +
                     "        <option value='2'>DE IMAGEN</option> " +
                     "        <option value='3'>ESPECIALES</option> " +
@@ -2146,13 +2146,13 @@ function chOpt(mode) {
                     "</div>" +
                     "<div class='col-7 col-sm-7 col-md-7 mb-3'>" +
                     "    <label class='sr-only'>Buscar...</label>" +
-                    "    <input style='text-align: center' type='text' class='form-control' onkeyup=test22(this, 'Orden'); name='clave_mat' id='clave_mat' placeholder='Buscar...' required=''>" +
+                    "    <input style='text-align: center' type='text' class='form-control' onkeyup=test22(this,'Orden'); name='clave_mat' id='clave_mat' placeholder='Buscar...' required=''>" +
                     "    <div class='invalid-feedback'>" +
                     "        Ingresa un criterio de busqueda." +
                     "    </div>" +
-                    "</div>" +
-                    "<button class='btn btn-warning btn-sm btn-block' onclick=chOpt('per');>Buscar Paquetes(perfiles)</button>" +
-                    "<br>";
+                    "</div><div class='col-12 col-sm-12 col-md-12 mb-3'>" +
+                    "<button class='btn btn-outline-info btn-sm btn-block' onclick=chOpt('per');>Buscar Paquetes(perfiles)</button>" +
+                    "</div>";
             break;
     }
 }
@@ -2273,5 +2273,45 @@ function FormUpProm(index, part, acc) {
     };
     var p = "index=" + index + " &part=" + part + " &acc=" + acc + dta;
     Ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    Ajax.send(p);
+}
+
+function SrchPromAt(e, mode) {
+    var busq = e.value;
+    if (busq.length === 0) {
+        Ajax = buscarComentario();
+        Ajax.open('POST', "SrchPromAt", true);
+        Ajax.onreadystatechange = function () {
+            if (Ajax.readyState === 4) {
+                document.getElementById("BEst").innerHTML = Ajax.responseText;
+            }
+        };
+        Ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        var p = "mode=" + mode;
+        Ajax.send(p);
+    } else {
+        Ajax = buscarComentario();
+        Ajax.open('POST', "SrchPromAt", true);
+        Ajax.onreadystatechange = function () {
+            if (Ajax.readyState === 4) {
+                document.getElementById("BEst").innerHTML = Ajax.responseText;
+            }
+        };
+        Ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        var p = "busq=" + busq + " &mode=" + mode;
+        Ajax.send(p);
+    }
+}
+
+function AddProm(x, mode) {
+    Ajax = buscarComentario();
+    Ajax.open('POST', "CaptureProm", true);
+    Ajax.onreadystatechange = function () {
+        if (Ajax.readyState === 4) {
+            document.getElementById("BEst").innerHTML = Ajax.responseText;
+        }
+    };
+    Ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    var p = "index=" + x + " &mode=" + mode;
     Ajax.send(p);
 }
