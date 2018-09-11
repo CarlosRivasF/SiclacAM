@@ -49,7 +49,7 @@
                         <%for (Permiso_DTO permisos1 : lst) {
                                 if (permisos1.getNombre().equals("Reportes")) {%>
                         <li class="nav-item active">
-                            <a class="nav-link" href=""><strong><ins><%=permisos1.getNombre()%></ins></strong></a>
+                            <a style="color: #72d0f6" class="nav-link" href="<%=permisos1.getRuta()%>"><strong><ins><%=permisos1.getNombre()%></ins></strong></a>
                         </li>
                         <%} else {%>
                         <li class="nav-item">
@@ -70,8 +70,11 @@
             <div id="Interaccion">
                 <div class="nav-scroller bg-white box-shadow">
                     <nav class="nav nav-underline">
-                        <a class="nav-link" href="#/" onclick="mostrarForm('Menu/Unidad/Registro.jsp');">Reportes de Estudios</a>
-                        <a class="nav-link" href="#/" onclick='mostrarForm("${pageContext.request.contextPath}/ShowUnidad");'>Reportes de órdenes </a>              
+                        <a class="nav-link" href="#/ESTUDIOS">ESTUDIOS</a>
+                        <a class="nav-link" href="#/ÓRDENES">ÓRDENES </a>              
+                        <a class="nav-link" href="#/RESULTADOS">RESULTADOS </a>              
+                        <a class="nav-link" href="#/CORTES">CORTES </a>              
+                        <a class="nav-link" href="#/PARTICIPACIONES">PARTICIPACIONES </a>              
                     </nav>
                 </div>
                 <div><br>

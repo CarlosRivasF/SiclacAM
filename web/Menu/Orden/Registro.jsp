@@ -7,9 +7,10 @@
 %>
 <div class="nav-scroller bg-white box-shadow">
     <nav class="nav nav-underline">        
-        <a class="nav-link" href="#"onclick="mostrarForm('Menu/Orden/Registro.jsp');">Nueva Órden</a>        
-        <a class="nav-link" href="#" onclick="mostrarForm('Menu/Cotizacion/Registro.jsp');">Nueva Cotización</a>        
-        <a class="nav-link" href="#" onclick='mostrarForm("${pageContext.request.contextPath}/ShowOrds");'>Órdenes Pendientes</a>         
+        <a class="nav-link" href="#" onclick="mostrarForm('Menu/Orden/Registro.jsp');">Nueva Órden</a>
+        <a class="nav-link" href="#" onclick="mostrarForm('Menu/Cotizacion/Registro.jsp');">Nueva Cotización</a>
+        <a class="nav-link" href="#" onclick='mostrarForm("${pageContext.request.contextPath}/ShowOrds?mode=ord");'>Ver Órdenes</a>                      
+        <a class="nav-link" href="#" onclick='mostrarForm("${pageContext.request.contextPath}/ShowSaldos");'>Saldos</a>                         
     </nav>
 </div>
 <div class="container-fluid" style="color: white"><br>
@@ -19,7 +20,7 @@
         <div class="form-row">
             <div class=" offset-3 col-6 mb-3">
                 <label class="sr-only" >Codigo de Cotización</label>
-                <input style="text-align: center" type="text" class="form-control" name="CodeCot" id="CodeCot" placeholder="Escanear Codigo de Cotización" required>          
+                <input style="text-align: center" type="text" class="form-control" onchange="CastCot(this);" name="CodeCot" id="CodeCot" placeholder="Escanear Codigo de Cotización" required>          
             </div>               
         </div>
         <hr class="mb-4">

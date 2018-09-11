@@ -121,7 +121,7 @@
         <div class="form-row">       
             <div class="col-md-4 mb-3">
                 <label class="sr-only">Empresa</label>
-                <input style="text-align: center" type="text" class="form-control" name="empresa" id="empresa" placeholder="Empresa" required>            
+                <input style="text-align: center" type="text" class="form-control" name="empresa" id="empresa" placeholder="Empresa">            
                 <div class="invalid-feedback" style="width: 100%;">
                     Empresa obligatoria.
                 </div>
@@ -135,7 +135,7 @@
             </div>
             <div class="col mb-3">
                 <label class="sr-only">Descuento</label>
-                <input style="text-align: center" type="number" class="form-control" name="descuento" id="descuento" placeholder="Descuento" required>
+                <input style="text-align: center" type="number" class="form-control" name="descuento" id="descuento" placeholder="Descuento" >
                 <div class="invalid-feedback">
                     Descuento requerido.
                 </div>

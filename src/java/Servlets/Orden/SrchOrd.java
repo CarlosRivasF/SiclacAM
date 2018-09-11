@@ -26,27 +26,46 @@ public class SrchOrd extends HttpServlet {
         int id_unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
         PrintWriter out = response.getWriter();
         Orden_DAO O = new Orden_DAO();
-        List<Orden_DTO> ords = O.getOrdenes(id_unidad);
-        
+        List<Orden_DTO> ords;
+
+        String part = request.getParameter("part").trim();
+        switch (part) {
+            case "ord":
+                ords = O.getOrdenesPendientes(id_unidad);
+                break;
+            case "sald":
+                ords = O.getOrdenesSaldo(id_unidad);
+                break;
+            case "results":
+                ords = O.getOrdenesTerminadas(id_unidad);
+                break;
+            default:
+                ords = O.getOrdenes(id_unidad);
+                break;
+        }
+
         if (request.getParameter("mode") != null) {
-            String part = request.getParameter("part").trim();
             String mode = request.getParameter("mode").trim();
             switch (mode) {
                 case "pac":
                     out.println("<div style='color: white' class='table-responsive'>"
                             + "<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
                             + "<tr class='table-active'>"
+                            + "<th >Folio de Unidad</th>"
                             + "<th >Clave</th>"
                             + "<th >Paciente</th>");
                     switch (part) {
                         case "ord":
                             out.println("<th >Detalles</th>"
-                                    + "<th >Llenar</th>");
+                                    + "<th >Cancelar</th>");
                             break;
                         case "sald":
                             out.println("<th >Saldo</th>");
-                            out.println("<th >Pagar"
-                                    + "</th>");
+                            out.println("<th >Pagar</th>");
+                            break;
+                        case "results":
+                            out.println("<th >Resultados</th>");
+                            out.println("<th >Imprimir</th>");
                             break;
                     }
                     out.println("</tr>");
@@ -69,16 +88,21 @@ public class SrchOrd extends HttpServlet {
                                         String CodeCot = dto.getPaciente().getCodPac().substring(0, 4) + "-" + dto.getId_Orden();
                                         if (dto.getPaciente().getNombre().toUpperCase().trim().contains(prts[0].toUpperCase().trim()) & dto.getPaciente().getAp_Paterno().toUpperCase().trim().contains(prts[1].toUpperCase().trim())) {
                                             out.println("<tr>"
+                                                    + "<td >" + dto.getFolio_Unidad() + "</td>"
                                                     + "<td >" + CodeCot + "</td>"
                                                     + "<td >" + dto.getPaciente().getNombre() + " " + dto.getPaciente().getAp_Paterno() + " " + dto.getPaciente().getAp_Materno() + "</td>");
                                             switch (part) {
                                                 case "ord":
-                                                    out.print("<td><button href=# class='btn btn-default' onclick=ShDetOrden(" + ords.indexOf(dto) + ") ><span><img src='images/details.png'></span></button></td>"
-                                                            + "<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=ShDetOrdenRS(" + ords.indexOf(dto) + ") ><span><img src='images/fill.png'></span></button></div></td>");
+                                                    out.print("<td><button href=# class='btn btn-default' onclick=ShDetOrden(" + ords.indexOf(dto) + ",'ord') ><span><img src='images/details.png'></span></button></td>");
+                                                    out.println("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=CancelOrd(" + ords.indexOf(dto) + ") ><span><img src='images/cancel.png'></span></button></div></td>");
                                                     break;
                                                 case "sald":
-                                                    out.println("<td >" + dto.getMontoRestante()+ "</td>");
-                                                    out.print("<td><button href=# class='btn btn-default' onclick=ShDetOrden(" + ords.indexOf(dto) + ") ><span><img src='images/pay.png'></span></button></td>");
+                                                    out.println("<td >" + dto.getMontoRestante() + "</td>");
+                                                    out.print("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-success' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Pago/formAddPay.jsp?id_Orden=" + dto.getId_Orden() + "');><span><img src='images/pay.png'></span></button></div></td>");
+                                                    break;
+                                                case "results":
+                                                    out.println("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=ShDetOrdenRS(" + ords.indexOf(dto) + ") ><span><img src='images/fill.png'></span></button></div></td>");
+                                                    out.println("<td><div id='ord-" + ords.indexOf(dto) + "'><button href='PrintRes?LxOrdSald=" + dto.getId_Orden() + "' class='btn btn-primary' ><span><img src='images/print.png'></span></button></div></td>");
                                                     break;
                                             }
                                             out.print("</tr>");
@@ -90,16 +114,21 @@ public class SrchOrd extends HttpServlet {
                                         String CodeCot = dto.getPaciente().getCodPac().substring(0, 4) + "-" + dto.getId_Orden();
                                         if (dto.getPaciente().getNombre().toUpperCase().trim().contains(prts[0].toUpperCase().trim()) & dto.getPaciente().getAp_Paterno().toUpperCase().trim().contains(prts[1].toUpperCase().trim()) & dto.getPaciente().getAp_Materno().toUpperCase().trim().contains(prts[2].toUpperCase().trim())) {
                                             out.println("<tr>"
+                                                    + "<td >" + dto.getFolio_Unidad() + "</td>"
                                                     + "<td >" + CodeCot + "</td>"
                                                     + "<td >" + dto.getPaciente().getNombre() + " " + dto.getPaciente().getAp_Paterno() + " " + dto.getPaciente().getAp_Materno() + "</td>");
                                             switch (part) {
                                                 case "ord":
-                                                    out.print("<td><button href=# class='btn btn-default' onclick=ShDetOrden(" + ords.indexOf(dto) + ") ><span><img src='images/details.png'></span></button></td>"
-                                                            + "<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=ShDetOrdenRS(" + ords.indexOf(dto) + ") ><span><img src='images/fill.png'></span></button></div></td>");
+                                                    out.print("<td><button href=# class='btn btn-default' onclick=ShDetOrden(" + ords.indexOf(dto) + ",'ord') ><span><img src='images/details.png'></span></button></td>");
+                                                    out.println("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=CancelOrd(" + ords.indexOf(dto) + ") ><span><img src='images/cancel.png'></span></button></div></td>");
                                                     break;
                                                 case "sald":
                                                     out.println("<td >" + dto.getMontoRestante() + "</td>");
-                                                    out.print("<td><button href=# class='btn btn-default' onclick=ShDetOrden(" + ords.indexOf(dto) + ") ><span><img src='images/pay.png'></span></button></td>");
+                                                    out.print("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-success' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Pago/formAddPay.jsp?id_Orden=" + dto.getId_Orden() + "');><span><img src='images/pay.png'></span></button></div></td>");
+                                                    break;
+                                                case "results":
+                                                    out.println("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=ShDetOrdenRS(" + ords.indexOf(dto) + ") ><span><img src='images/fill.png'></span></button></div></td>");
+                                                    out.println("<td><div id='ord-" + ords.indexOf(dto) + "'><button href='PrintRes?LxOrdSald=" + dto.getId_Orden() + "' class='btn btn-primary' ><span><img src='images/print.png'></span></button></div></td>");
                                                     break;
                                             }
                                             out.print("</tr>");
@@ -110,19 +139,24 @@ public class SrchOrd extends HttpServlet {
                                     ords.stream().filter((dto) -> (dto.getPaciente().getNombre().toUpperCase().trim().contains(busq.toUpperCase().trim()) || dto.getPaciente().getAp_Paterno().toUpperCase().trim().contains(busq.toUpperCase().trim()) || dto.getPaciente().getAp_Materno().toUpperCase().trim().contains(busq.toUpperCase().trim()))).forEachOrdered((Orden_DTO dto) -> {
                                         String CodeCot = dto.getPaciente().getCodPac().substring(0, 4) + "-" + dto.getId_Orden();
                                         out.println("<tr>"
-                                                + "<td >" + CodeCot + "</td>"
-                                                + "<td >" + dto.getPaciente().getNombre() + " " + dto.getPaciente().getAp_Paterno() + " " + dto.getPaciente().getAp_Materno() + "</td>");
-                                        switch (part) {
-                                            case "ord":
-                                                out.print("<td><button href=# class='btn btn-default' onclick=ShDetOrden(" + ords.indexOf(dto) + ") ><span><img src='images/details.png'></span></button></td>"
-                                                        + "<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=ShDetOrdenRS(" + ords.indexOf(dto) + ") ><span><img src='images/fill.png'></span></button></div></td>");
-                                                break;
-                                            case "sald":
-                                                out.println("<td >" + dto.getMontoRestante() + "</td>");
-                                                out.print("<td><button href=# class='btn btn-default' onclick=ShDetOrden(" + ords.indexOf(dto) + ") ><span><img src='images/pay.png'></span></button></td>");
-                                                break;
-                                        }
-                                        out.print("</tr>");
+                                                    + "<td >" + dto.getFolio_Unidad() + "</td>"
+                                                    + "<td >" + CodeCot + "</td>"
+                                                    + "<td >" + dto.getPaciente().getNombre() + " " + dto.getPaciente().getAp_Paterno() + " " + dto.getPaciente().getAp_Materno() + "</td>");
+                                            switch (part) {
+                                                case "ord":
+                                                    out.print("<td><button href=# class='btn btn-default' onclick=ShDetOrden(" + ords.indexOf(dto) + ",'ord') ><span><img src='images/details.png'></span></button></td>");
+                                                    out.println("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=CancelOrd(" + ords.indexOf(dto) + ") ><span><img src='images/cancel.png'></span></button></div></td>");
+                                                    break;
+                                                case "sald":
+                                                    out.println("<td >" + dto.getMontoRestante() + "</td>");
+                                                    out.print("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-success' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Pago/formAddPay.jsp?id_Orden=" + dto.getId_Orden() + "');><span><img src='images/pay.png'></span></button></div></td>");
+                                                    break;
+                                                case "results":
+                                                    out.println("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=ShDetOrdenRS(" + ords.indexOf(dto) + ") ><span><img src='images/fill.png'></span></button></div></td>");
+                                                    out.println("<td><div id='ord-" + ords.indexOf(dto) + "'><button href='PrintRes?LxOrdSald=" + dto.getId_Orden() + "' class='btn btn-primary' ><span><img src='images/print.png'></span></button></div></td>");
+                                                    break;
+                                            }
+                                            out.print("</tr>");
                                     });
                                     break;
                             }
@@ -130,43 +164,27 @@ public class SrchOrd extends HttpServlet {
                             ords.stream().filter((dto) -> (dto.getPaciente().getNombre().toUpperCase().trim().contains(busq.toUpperCase().trim()) || dto.getPaciente().getAp_Paterno().toUpperCase().trim().contains(busq.toUpperCase().trim()) || dto.getPaciente().getAp_Materno().toUpperCase().trim().contains(busq.toUpperCase().trim()))).forEachOrdered((Orden_DTO dto) -> {
                                 String CodeCot = dto.getPaciente().getCodPac().substring(0, 4) + "-" + dto.getId_Orden();
                                 out.println("<tr>"
-                                        + "<td >" + CodeCot + "</td>"
-                                        + "<td >" + dto.getPaciente().getNombre() + " " + dto.getPaciente().getAp_Paterno() + " " + dto.getPaciente().getAp_Materno() + "</td>");
-                                switch (part) {
-                                    case "ord":
-                                        out.print("<td><button href=# class='btn btn-default' onclick=ShDetOrden(" + ords.indexOf(dto) + ") ><span><img src='images/details.png'></span></button></td>"
-                                                + "<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=ShDetOrdenRS(" + ords.indexOf(dto) + ") ><span><img src='images/fill.png'></span></button></div></td>");
-                                        break;
-                                    case "sald":
-                                        out.println("<td >" + dto.getMontoRestante() + "</td>");
-                                        out.print("<td><button href=# class='btn btn-default' onclick=ShDetOrden(" + ords.indexOf(dto) + ") ><span><img src='images/pay.png'></span></button></td>");
-                                        break;
-                                }
-                                out.print("</tr>");
+                                                    + "<td >" + dto.getFolio_Unidad() + "</td>"
+                                                    + "<td >" + CodeCot + "</td>"
+                                                    + "<td >" + dto.getPaciente().getNombre() + " " + dto.getPaciente().getAp_Paterno() + " " + dto.getPaciente().getAp_Materno() + "</td>");
+                                            switch (part) {
+                                                case "ord":
+                                                    out.print("<td><button href=# class='btn btn-default' onclick=ShDetOrden(" + ords.indexOf(dto) + ",'ord') ><span><img src='images/details.png'></span></button></td>");
+                                                    out.println("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=CancelOrd(" + ords.indexOf(dto) + ") ><span><img src='images/cancel.png'></span></button></div></td>");
+                                                    break;
+                                                case "sald":
+                                                    out.println("<td >" + dto.getMontoRestante() + "</td>");
+                                                    out.print("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-success' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Pago/formAddPay.jsp?id_Orden=" + dto.getId_Orden() + "');><span><img src='images/pay.png'></span></button></div></td>");
+                                                    break;
+                                                case "results":
+                                                    out.println("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=ShDetOrdenRS(" + ords.indexOf(dto) + ") ><span><img src='images/fill.png'></span></button></div></td>");
+                                                    out.println("<td><div id='ord-" + ords.indexOf(dto) + "'><button href='PrintRes?LxOrdSald=" + dto.getId_Orden() + "' class='btn btn-primary' ><span><img src='images/print.png'></span></button></div></td>");
+                                                    break;
+                                            }
+                                            out.print("</tr>");
                             });
                         }
                         out.println("</table>");
-                        out.println("</div>");
-                    } else {
-                        ords.forEach((dto) -> {
-                            String CodeCot = dto.getPaciente().getCodPac().substring(0, 4) + "-" + dto.getId_Orden();
-                            out.println("<tr>"
-                                    + "<td >" + CodeCot + "</td>"
-                                    + "<td >" + dto.getPaciente().getNombre() + " " + dto.getPaciente().getAp_Paterno() + " " + dto.getPaciente().getAp_Materno() + "</td>");
-                            switch (part) {
-                                case "ord":
-                                    out.print("<td><button href=# class='btn btn-default' onclick=ShDetOrden(" + ords.indexOf(dto) + ") ><span><img src='images/details.png'></span></button></td>"
-                                            + "<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=ShDetOrdenRS(" + ords.indexOf(dto) + ") ><span><img src='images/fill.png'></span></button></div></td>");
-                                    break;
-                                case "sald":
-                                    out.println("<td >" + dto.getMontoRestante() + "</td>");
-                                    out.print("<td><button href=# class='btn btn-default' onclick=ShDetOrden(" + ords.indexOf(dto) + ") ><span><img src='images/pay.png'></span></button></td>");
-                                    break;
-                            }
-                            out.print("</tr>");
-                        });
-                        out.println("</table>");
-                        out.println("</div>");
                         out.println("</div>");
                     }
                     break;

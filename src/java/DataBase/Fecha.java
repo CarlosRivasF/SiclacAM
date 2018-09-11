@@ -127,7 +127,13 @@ public class Fecha {
         Date fac = new Date();
         Fecha f = new Fecha();
         f.setHora(fac);
-        System.out.println(f.IsValid("2018-08-17"));
+        Scanner sc = new Scanner(System.in);
+        String codeBar = sc.nextLine();
+        String[] bar = codeBar.split("-");
+
+        int id_Cotizacion = Integer.parseInt(bar[0]);
+
+        System.out.println("id_Cotizacion:" + id_Cotizacion);
 
     }
 }

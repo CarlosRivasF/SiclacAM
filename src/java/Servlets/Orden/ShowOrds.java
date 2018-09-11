@@ -23,45 +23,44 @@ public class ShowOrds extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
-        int id_unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
         PrintWriter out = response.getWriter();
-        Orden_DAO O = new Orden_DAO();
-        List<Orden_DTO> ords = O.getOrdenes(id_unidad);
-
+        String mode = request.getParameter("mode").trim();
+        System.out.println(mode);
         out.print("<div class='nav-scroller bg-white box-shadow'>"
-                + "    <nav class='nav nav-underline'>"
-                + "        <a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Orden/Registro.jsp');>Nueva Órden</a>"
-                + "        <a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds');  style=\"color: blue\"><ins>Pendientes</ins></a>"
-                + "        <a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowSaldos'); >Saldos</a>"
-                + "    </nav>"
+                + "    <nav class='nav nav-underline'>");
+        switch (mode) {
+            case "ord":
+                out.println("<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=ord'); style=\"color: blue\"><ins>Órdenes Pendientes</ins></a>"
+                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=sald'); > Órdenes con Saldo</a>"
+                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=results'); >Órdenes Terminadas</a>"
+                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=results'); >Cargar Resultados</a>");
+                break;
+            case "sald":
+                out.println("<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=ord'); >Órdenes Pendientes</a>"
+                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=sald'); style=\"color: blue\"><ins> Órdenes con Saldo</ins></a>"
+                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=results'); >Órdenes Terminadas</a>"
+                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=results'); >Cargar Resultados</a>");
+                break;
+            case "results":
+                out.println("<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=ord'); >Órdenes Pendientes</a>"
+                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=sald'); > Órdenes con Saldo</a>"
+                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=results');  style=\"color: blue\"><ins>Órdenes Terminadas</ins></a>"
+                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=results');  >Cargar Resultados</a>");
+                break;
+        }
+        out.println("</nav>"
                 + "</div><br>");
         out.print("<div class='form-row'>"
-                + "<div class='offset-2 col-8 col-sm-8 col-md-8 mb-3'>"
-                + "<label class='sr-only' >Codigo de Estudio</label>"
-                + "<input style='text-align: center' type='text' class='form-control' name='medi' onkeyup=SrchOrd(this,'pac','ord'); id='medi' placeholder='Nombre de paciente' autofocus required>"
+                + "<div class='col-8 col-sm-8 col-md-8 mb-3'>"
+                + "<label class='sr-only' >Nombre de paciente</label>"
+                + "<input style='text-align: center' type='text' class='form-control' name='medi' onkeyup=SrchOrd(this,'pac','" + mode + "'); id='medi' placeholder='Nombre de paciente'>"
+                + "</div>"
+                + "<div class='col-4 col-sm-4 col-md-4 mb-3'>"
+                + "<label class='sr-only' >Folio de Órden</label>"
+                + "<input style='text-align: center' type='text' class='form-control' name='folio' onchange=SrchOrdFolio(this,'" + mode + "'); id='folio' placeholder='Folio de Unidad'>"
                 + "</div>"
                 + "</div>"
-                + "<div id='SerchOrd' style='color: white' class='table-responsive'>");
-        out.println("<div style='color: white' class='table-responsive'>"
-                + "<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
-                + "<tr class='table-active'>"
-                + "<th >Clave</th>"
-                + "<th >Paciente</th>"
-                + "<th >Detalles</th>"
-                + "<th >Llenar</th>"
-                + "</tr>");
-        ords.forEach((dto) -> {
-            String CodeCot = dto.getPaciente().getCodPac().substring(0, 4) + "-" + dto.getId_Orden();
-            out.println("<tr>"
-                    + "<td >" + CodeCot + "</td>"
-                    + "<td >" + dto.getPaciente().getNombre() + " " + dto.getPaciente().getAp_Paterno() + " " + dto.getPaciente().getAp_Materno() + "</td>"
-                    + "<td><button href=# class='btn btn-default' onclick=ShDetOrden(" + ords.indexOf(dto) + ") ><span><img src='images/details.png'></span></button></td>"
-                    + "<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=ShDetOrdenRS(" + ords.indexOf(dto) + ") ><span><img src='images/fill.png'></span></button></div></td>"
-                    + "</tr>");
-        });
-        out.println("</table>");
-        out.println("</div>");
-        out.println("</div>");
+                + "<div id='SerchOrd' style='color: white' class='table-responsive'></div>");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

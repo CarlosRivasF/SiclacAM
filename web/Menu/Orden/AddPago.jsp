@@ -17,9 +17,9 @@
 %>
 <div class="nav-scroller bg-white box-shadow">
     <nav class="nav nav-underline">        
-        <a class="nav-link" href="#"onclick="mostrarForm('Menu/Orden/Registro.jsp');">Nueva Órden</a>        
-        <a class="nav-link" href="#" onclick="mostrarForm('Menu/Cotizacion/Registro.jsp');">Nueva Cotización</a>        
-        <a class="nav-link" href="#" onclick='mostrarForm("${pageContext.request.contextPath}/ShowOrds");'>Órdenes Pendientes</a>                         
+        <a class="nav-link" href="#" onclick="mostrarForm('Menu/Orden/Registro.jsp');">Nueva Órden</a>
+        <a class="nav-link" href="#" onclick="mostrarForm('Menu/Cotizacion/Registro.jsp');">Nueva Cotización</a>
+        <a class="nav-link" href="#" onclick='mostrarForm("${pageContext.request.contextPath}/ShowOrds?mode=ord");'>Ver Órdenes</a>                      
         <a class="nav-link" href="#" onclick='mostrarForm("${pageContext.request.contextPath}/ShowSaldos");'>Saldos</a>                         
     </nav>
 </div>
@@ -72,7 +72,7 @@
             <table>
                 <tr>
                     <td>Total : </td>
-                    <td><%=Orden.getMontoRestante()+ Orden.getMontoPagado()%></td>
+                    <td><%=Orden.getMontoRestante() + Orden.getMontoPagado()%></td>
                 </tr>
                 <tr>
                     <td>A/C : </td>

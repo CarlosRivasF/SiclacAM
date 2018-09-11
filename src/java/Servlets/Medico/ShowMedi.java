@@ -22,7 +22,7 @@ public class ShowMedi extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession sesion = request.getSession();        
+        HttpSession sesion = request.getSession();
         PrintWriter out = response.getWriter();
         Medico_DAO M = new Medico_DAO();
         List<Medico_DTO> meds;
@@ -45,10 +45,9 @@ public class ShowMedi extends HttpServlet {
         out.println("<div style='color: white' class='table-responsive'>"
                 + "<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
                 + "<tr class='table-active'>"
+                + "<th >ID</th>"
                 + "<th >Empresa</th>"
                 + "<th >Nombre</th>"
-                + "<th >A Paterno</th>"
-                + "<th >A Materno</th>"
                 + "<th >Telefono</th>"
                 + "<th >Detalles</th>"
                 + "<th >Eliminar</th>"
@@ -56,10 +55,9 @@ public class ShowMedi extends HttpServlet {
         int i = 0;
         for (Medico_DTO dto : meds) {
             out.println("<tr>"
+                    + "<td >" + dto.getId_Medico() + "</td>"
                     + "<td >" + dto.getEmpresa() + "</td>"
-                    + "<td >" + dto.getNombre() + "</td>"
-                    + "<td >" + dto.getAp_Paterno() + "</td>"
-                    + "<td >" + dto.getAp_Materno() + "</td>"
+                    + "<td >" + dto.getNombre() + " " + dto.getAp_Paterno() + " " + dto.getAp_Materno() + "</td>"
                     + "<td >" + dto.getTelefono1() + "</td>"
                     + "<td><button href=# class='btn btn-default' onclick=ShDetMed(" + i + ") ><span><img src='images/details.png'></span></button></td>"
                     + "<td><div id='medi-" + i + "'><button href=# class='btn btn-danger' onclick=FormDelMed(" + i + ",'show') ><span><img src='images/trash.png'></span></button></div></td>"

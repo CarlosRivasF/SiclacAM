@@ -55,7 +55,7 @@ public class PrintRes extends HttpServlet {
             Orden_DTO Orden;
             if (sesion.getAttribute("OrdenSh") != null) {
                 Orden = (Orden_DTO) sesion.getAttribute("OrdenSh");
-                sesion.removeAttribute("OrdenSh.");
+                sesion.removeAttribute("OrdenSh");
             } else {
                 Orden_DAO O = new Orden_DAO();
                 Orden = O.getOrden(id_Orden);
@@ -90,7 +90,7 @@ public class PrintRes extends HttpServlet {
             Image barras1;
             JBarcodeBean barcode = new JBarcodeBean();
             barcode.setCodeType(new Code39());
-            barcode.setCode("SALA700731-914-3");
+            barcode.setCode(id_Orden+"-");
             barcode.setCheckDigit(true);
             barcode.setShowText(true);
             BufferedImage bi = barcode.draw(new BufferedImage(156, 12, BufferedImage.TYPE_INT_RGB));
@@ -234,7 +234,7 @@ public class PrintRes extends HttpServlet {
             Image barras1;
             JBarcodeBean barcode = new JBarcodeBean();
             barcode.setCodeType(new Code39());
-            barcode.setCode("SALA700731-914-3");
+            barcode.setCode(Orden.getId_Orden()+"-");
             barcode.setCheckDigit(true);
             barcode.setShowText(true);
             BufferedImage bi = barcode.draw(new BufferedImage(156, 12, BufferedImage.TYPE_INT_RGB));
@@ -314,6 +314,7 @@ public class PrintRes extends HttpServlet {
             cb.endText();
 
             cb.addImage(barras1, false);
+            
             column.setCanvas(cb);
             column.setSimpleColumn(rect);
         } catch (BadElementException | IOException ex) {

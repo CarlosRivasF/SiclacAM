@@ -1988,14 +1988,8 @@ function SrchOrd(e, mode, part) {
         Ajax.send(p);
     } else {
         Ajax = buscarComentario();
-        switch (part) {
-            case 'ord':
-                Ajax.open('POST', "SrchOrd", true);
-                break;
-            case 'sald':
-                Ajax.open('POST', "SrchOrdPay", true);
-                break;
-        }
+        Ajax.open('POST', "SrchOrd", true);
+
         Ajax.onreadystatechange = function () {
             if (Ajax.readyState === 4) {
                 document.getElementById("SerchOrd").innerHTML = Ajax.responseText;
@@ -2006,20 +2000,29 @@ function SrchOrd(e, mode, part) {
         Ajax.send(p);
     }
 }
-function ShDetOrden(index) {
+
+function ShDetOrden(index, part) {
     buscarComentario();
     xhr.open("POST", "ShDetOrd", true);
     xhr.onreadystatechange = PrShDetOrd;
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.send("index=" + index);
+    if (part === 'folio') {
+        xhr.send("id_Orden=" + index);
+    } else {
+        xhr.send("index=" + index + " &part=" + part);
+    }
 }//FormResDet
 
-function ShDetOrdenRS(index) {
+function ShDetOrdenRS(index, part) {
     buscarComentario();
     xhr.open("POST", "ShowDetOrdRs", true);
     xhr.onreadystatechange = PrShDetOrd;
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.send("index=" + index);
+    if (part === 'folio') {
+        xhr.send("id_Orden=" + index);
+    } else {
+        xhr.send("index=" + index);
+    }
 }
 function PrShDetOrd() {
     if (xhr.readyState === 4) {
@@ -2049,12 +2052,13 @@ function SaveResDet(index, size) {
             Res = Res + "valRes-" + i + "=" + document.getElementById("valRes-" + i).value + " &";
         }
     }
+    var Observ = document.getElementById("Observ-" + index).value;
     document.getElementById("fill_detor").innerHTML = "";
     buscarComentario();
     xhr.open("POST", "UplResults", true);
     xhr.onreadystatechange = PrSavResDet;
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.send(Res + "index=" + index);
+    xhr.send(Res + "index=" + index + " &Observ=" + Observ);
 }
 function PrSavResDet() {
     if (xhr.readyState === 4) {
@@ -2308,10 +2312,64 @@ function AddProm(x, mode) {
     Ajax.open('POST', "CaptureProm", true);
     Ajax.onreadystatechange = function () {
         if (Ajax.readyState === 4) {
-            document.getElementById("BEst").innerHTML = Ajax.responseText;
+            document.getElementById("EstsAdded").innerHTML = Ajax.responseText;
         }
     };
     Ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     var p = "index=" + x + " &mode=" + mode;
+    Ajax.send(p);
+}
+
+function CastCot(e) {
+    var Id_Cot = e.value;
+    Ajax = buscarComentario();
+    Ajax.open('POST', "CastToOrden", true);
+    Ajax.onreadystatechange = function () {
+        if (Ajax.readyState === 4) {
+            document.getElementById("Interaccion").innerHTML = Ajax.responseText;
+        }
+    };
+    Ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    var p = "Id_Cot=" + Id_Cot;
+    Ajax.send(p);
+}
+
+function FormUpResObs(index, acc) {
+    var dta = " &f=f";//BTdiValRes
+    var divRes = document.getElementById("diValObs-" + index);
+    var BTdiV = document.getElementById("BTdiValObs-" + index);
+    Ajax = buscarComentario();
+    Ajax.open('POST', "FormUpResObs", true);
+    if (acc === "upd") {
+        var Observ = document.getElementById("Observ-" + index).value;
+        dta = " &Observ=" + Observ;
+        BTdiV.innerHTML = "<button href='#' class='btn btn-warning btn-sm' onclick=FormUpResObs(" + index + ",'form')><span><img src=images/pencil.png></span></button>";
+    } else {
+        BTdiV.innerHTML = "<button href='#' class='btn btn-success btn-sm' onclick=FormUpResObs(" + index + ",'upd')><span><img src=images/save.png></span></button>";
+    }
+    Ajax.onreadystatechange = function () {
+        if (Ajax.readyState === 4) {
+            divRes.focus();
+            divRes.innerHTML = Ajax.responseText;
+            divRes.focus();
+        }
+    };
+    var p = "index=" + index + " &acc=" + acc + dta;
+    Ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    Ajax.send(p);
+}
+
+function SrchOrdFolio(e, mode) {
+    var Folio = e.value;
+    e.value="";
+    Ajax = buscarComentario();
+    Ajax.open('POST', "SrchOrdFolio", true);
+    Ajax.onreadystatechange = function () {
+        if (Ajax.readyState === 4) {
+            document.getElementById("SerchOrd").innerHTML = Ajax.responseText;
+        }
+    };
+    Ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    var p = "Folio=" + Folio + " &mode=" + mode;
     Ajax.send(p);
 }

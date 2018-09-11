@@ -1,14 +1,13 @@
 package Servlets.Orden;
 
+import DataAccesObject.Orden_DAO;
 import DataAccesObject.Resultado_DAO;
-import DataBase.Fecha;
-import DataTransferObject.Configuracion_DTO;
 import DataTransferObject.Det_Orden_DTO;
+import DataTransferObject.Observacion_DTO;
 import DataTransferObject.Orden_DTO;
 import DataTransferObject.Resultado_DTO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.Period;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,7 +21,7 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "UplResults", urlPatterns = {"/UplResults"})
 public class UplResults extends HttpServlet {
-
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -41,11 +40,33 @@ public class UplResults extends HttpServlet {
                 }
             }
         });
+        Observacion_DTO Observacion = new Observacion_DTO();
+        
+        Observacion.setObservacion(request.getParameter("Observ"));
+        Observacion.setId_Observacion(R.RegistrarObserv(det.getId_det_orden(), Observacion.getObservacion()));
+        
+        det.getEstudio().setObservacion(Observacion);
+        
         det.getEstudio().setAddRes(true);
-
+        
         Orden.getDet_Orden().set(index, det);
+        
+        Boolean finish = true;
+        
+        for (Det_Orden_DTO dt : Orden.getDet_Orden()) {
+            if (!dt.getEstudio().getAddRes()) {
+                finish = false;
+            }
+        }
+        
+        if (finish) {
+            Orden.setEstado("Finalizado");
+            Orden_DAO O = new Orden_DAO();
+            O.TerminarOrden(Orden);
+        }
+        
         sesion.setAttribute("OrdenSh", Orden);
-
+        
         try (PrintWriter out = response.getWriter()) {
             out.println("<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
                     + "<tr class='table-info' style='color: black'>"
@@ -55,7 +76,7 @@ public class UplResults extends HttpServlet {
                     + "<th>Llenar</th>"
                     + "</tr>");
             Orden.getDet_Orden().forEach((detor) -> {
-
+                
                 out.println("<tr>"
                         + "<td >" + detor.getEstudio().getNombre_Estudio() + "</td>"
                         + "<td >" + detor.getSubtotal() + "</td>"
@@ -68,7 +89,7 @@ public class UplResults extends HttpServlet {
                 out.println("</tr>");
             });
             out.println("</table>"
-                + "<a class='btn btn-success btn-lg btn-block' href='PrintRes' >Imprimir Resultados</a><br>");
+                    + "<a class='btn btn-success btn-lg btn-block' href='PrintRes' >Imprimir Resultados</a><br>");
         }
     }
 

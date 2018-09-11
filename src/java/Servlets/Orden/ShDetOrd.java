@@ -26,18 +26,46 @@ public class ShDetOrd extends HttpServlet {
         int id_unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
         PrintWriter out = response.getWriter();
         Orden_DAO O = new Orden_DAO();
-        List<Orden_DTO> ords = O.getOrdenes(id_unidad);
-        int index = Integer.parseInt(request.getParameter("index").trim());
-        Orden_DTO dto = ords.get(index);
+        Orden_DTO dto;
+        if (request.getParameter("part") != null && request.getParameter("index") != null) {
+            List<Orden_DTO> ords;
+            String part = request.getParameter("part").trim();
+            switch (part) {
+                case "ord":
+                    ords = O.getOrdenesPendientes(id_unidad);
+                    break;
+                case "sald":
+                    ords = O.getOrdenesSaldo(id_unidad);
+                    break;
+                default:
+                    ords = O.getOrdenes(id_unidad);
+                    break;
+            }
+
+            int index = Integer.parseInt(request.getParameter("index").trim());
+            dto = ords.get(index);
+        } else {
+            if (request.getParameter("id_Orden") != null) {
+                int id_orden = Integer.parseInt(request.getParameter("id_Orden").trim());
+                dto = O.getOrden(id_orden);
+            } else {
+                int Folio = Integer.parseInt(request.getParameter("Folio").trim());
+                dto = O.getOrdenByFolio(Folio, id_unidad);
+            }
+        }
+
         sesion.setAttribute("OrdenSh", dto);
         String CodeCot = dto.getPaciente().getCodPac().substring(0, 4) + "-" + dto.getId_Orden();
         out.print("<div class='nav-scroller bg-white box-shadow'>"
                 + "    <nav class='nav nav-underline'>"
-                + "        <a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Orden/Registro.jsp');>Nueva Órden</a>"
-                + "        <a class='nav-link active' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds');  style=\"color: blue\"><ins>Pendientes</ins></a>"
+                + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=ord'); >Órdenes Pendientes</a>"
+                + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=sald'); > Órdenes con Saldo</a>"
+                + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=results'); >Órdenes Terminadas</a>"
+                + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=results'); >Cargar Resultados</a>"
                 + "    </nav>"
-                + "</div>"
-                + "<div><hr class='mb-1'>"
+                + "</div>");
+
+        out.println("<div><hr class='mb-1'>"
                 + "<pre>          <h6 style='color: white'>Paciente: " + dto.getPaciente().getNombre() + " " + dto.getPaciente().getAp_Paterno() + " " + dto.getPaciente().getAp_Materno() + ""
                 + "          Fecha de Órden: " + dto.getFecha() + "          Hora: " + dto.getHora() + "</h6></pre><br>"
                 + "<pre><h6 style='color: white'>Realizó: " + dto.getEmpleado().getNombre() + " " + dto.getEmpleado().getAp_Paterno() + " " + dto.getEmpleado().getAp_Materno() + "&nbsp;&nbsp;&nbsp;&nbsp;"

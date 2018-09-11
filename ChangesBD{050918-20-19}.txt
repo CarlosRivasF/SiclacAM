@@ -1,0 +1,16 @@
+CREATE TABLE participacion(
+id_participacion INT PRIMARY KEY AUTO_INCREMENT,
+id_Unidad INT,
+id_Orden INT,
+id_Medico INT,
+Fecha DATE,
+Hora TIME,
+Monto DOUBLE,
+convenio varchar(10)
+);
+
+CREATE TABLE observacion(
+id_Observacion INT PRIMARY KEY AUTO_INCREMENT,
+id_Det_Orden INT,
+observacion varchar(9000)
+);

@@ -1,5 +1,6 @@
 package Servlets.Paciente;
 
+import DataAccesObject.Paciente_DAO;
 import DataTransferObject.Paciente_DTO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -19,7 +20,14 @@ public class ShDetPac extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
         PrintWriter out = response.getWriter();
-        List<Paciente_DTO> pacs = (List<Paciente_DTO>) sesion.getAttribute("pacs");
+        List<Paciente_DTO> pacs;
+        if (sesion.getAttribute("pacs") != null) {
+            pacs = (List<Paciente_DTO>) sesion.getAttribute("pacs");
+        } else {
+            Paciente_DAO Pa = new Paciente_DAO();
+            pacs = Pa.getPacientes();
+            sesion.setAttribute("pacs", pacs);
+        }
         int index = Integer.parseInt(request.getParameter("index").trim());
         Paciente_DTO pac = pacs.get(index);
         if (request.getParameter("modeP") != null) {

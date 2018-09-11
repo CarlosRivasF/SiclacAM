@@ -197,13 +197,21 @@ public class FormResDet extends HttpServlet {
                     }
                     out.print("</tr>");
                 }
-                if (r1) {
+                //Observaciones
+                if (det.getEstudio().getObservacion() == null||  det.getEstudio().getObservacion().getObservacion() == null) {
                     out.println("<tr>"
-                            + "<td colspan='6'><div id='addcnf'><button href=# class='btn btn-success btn-block' onclick=SaveResDet(" + index + "," + det.getEstudio().getCnfs().size() + ")>Guardar Resultados</button></div></td>"
-                            + "</tr>");
+                            + "<td colspan='5'><div id='diValObs-" + index + "'><div></td>");
+                    out.print("<th><div id='BTdiValObs-" + index + "'><button href=# class='btn btn-warning btn-sm' onclick=FormUpResObs(" + index + ",'form') ><span><img src='images/pencil.png'></span></button></div></th>");
+                    out.println("</tr>");
+                } else {
+                    out.println("<tr>"
+                            + "<td colspan='5'><div id='diValObs-" + index + "'>" + det.getEstudio().getObservacion().getObservacion() + "<div></td>");
+                    out.print("<th><div id='BTdiValObs-" + index + "'><button href=# class='btn btn-warning btn-sm' onclick=FormUpResObs(" + index + ",'form') ><span><img src='images/pencil.png'></span></button></div></th>");
+                    out.println("</tr>");
                 }
                 out.println("</table>");
             } else {
+                //Tabla de Resultados
                 out.println("<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
                         + "<tr class='table-info' style='color: black'>"
                         + "<th >Desc</th>"
@@ -221,6 +229,11 @@ public class FormResDet extends HttpServlet {
                             + "<td >" + cnf.getUniddes() + "</td>"
                             + "</tr>");
                 });
+                //Observaciones
+                out.println("<tr>"
+                        + "<td colspan='5'><input style='text-align: center' type='text' class='form-control form-control-sm' name='Observ-" + index + "' id='Observ-" + index + "' placeholder='Obervaciones...' required></td>"
+                        + "</tr>");
+                //Boton de Guardar Resultados
                 out.println("<tr>"
                         + "<td colspan='5'><div id='addcnf'><button href=# class='btn btn-success btn-block' onclick=SaveResDet(" + index + "," + det.getEstudio().getCnfs().size() + ")>Guardar Resultados</button></div></td>"
                         + "</tr>");

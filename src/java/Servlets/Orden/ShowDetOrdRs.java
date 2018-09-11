@@ -28,15 +28,29 @@ public class ShowDetOrdRs extends HttpServlet {
         int id_unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
         PrintWriter out = response.getWriter();
         Orden_DAO O = new Orden_DAO();
-        List<Orden_DTO> ords = O.getOrdenes(id_unidad);
-        int index = Integer.parseInt(request.getParameter("index").trim());
-        Orden_DTO dto = ords.get(index);
+        Orden_DTO dto;
+        if (request.getParameter("index") != null) {
+            List<Orden_DTO> ords = O.getOrdenesTerminadas(id_unidad);
+
+            int index = Integer.parseInt(request.getParameter("index").trim());
+            dto = ords.get(index);
+        } else {
+            if (request.getParameter("id_Orden") != null) {
+                int id_orden = Integer.parseInt(request.getParameter("id_Orden").trim());
+                dto = O.getOrden(id_orden);
+            } else {
+                int Folio = Integer.parseInt(request.getParameter("Folio").trim());
+                dto = O.getOrdenByFolio(Folio, id_unidad);
+            }
+        }
         sesion.setAttribute("OrdenSh", dto);
         String CodeCot = dto.getPaciente().getCodPac().substring(0, 4) + "-" + dto.getId_Orden();
         out.print("<div class='nav-scroller bg-white box-shadow'>"
                 + "    <nav class='nav nav-underline'>"
-                + "        <a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Orden/Registro.jsp');>Nueva Órden</a>"
-                + "        <a class='nav-link active' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds');  style=\"color: blue\"><ins>Pendientes</ins></a>"
+                + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=ord'); >Órdenes Pendientes</a>"
+                + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=sald'); > Órdenes con Saldo</a>"
+                + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=results'); >Órdenes Terminadas</a>"
+                + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=results'); >Cargar Resultados</a>"
                 + "    </nav>"
                 + "</div>"
                 + "<div><hr class='mb-1'>"

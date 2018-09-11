@@ -17,8 +17,10 @@
 %>
 <div class="nav-scroller bg-white box-shadow">
     <nav class="nav nav-underline">        
-        <a class="nav-link" href="#/" onclick="mostrarForm('Menu/Orden/Registro.jsp');">Nueva Órden</a>
-        <a class="nav-link" href="#" onclick='mostrarForm("${pageContext.request.contextPath}/ShowOrds");'>Ver Órdenes</a> 
+        <a class="nav-link" href="#" onclick="mostrarForm('Menu/Orden/Registro.jsp');">Nueva Órden</a>
+        <a class="nav-link" href="#" onclick="mostrarForm('Menu/Cotizacion/Registro.jsp');">Nueva Cotización</a>
+        <a class="nav-link" href="#" onclick='mostrarForm("${pageContext.request.contextPath}/ShowOrds?mode=ord");'>Ver Órdenes</a>                      
+        <a class="nav-link" href="#" onclick='mostrarForm("${pageContext.request.contextPath}/ShowSaldos");'>Saldos</a>                         
     </nav>
 </div>
 <div class="container-fluid" style="color: white"><hr>
@@ -44,7 +46,7 @@
     <div  id="DtsMed">
         <h6 style="text-align: center">Elegir Medico</h6><br> 
         <div class="form-row">     
-            <%if (Orden.getMedico() == null || Orden.getMedico().getNombre() == null) {%>
+            <%if (Orden.getMedico() == null || Orden.getMedico().getNombre() == null || Orden.getMedico().getNombre().trim() == "") {%>
             <div class="col col-sm-4 col-md-3">
                 <input style="text-align: center" type="text" onkeyup="SrchMed(this, 'est');" class="form-control" name="BMed" id="BMed" placeholder="Medico" required>
                 <br><button class="btn btn-danger btn-block" onclick="AddMed('form');" id="sendForm"  name="sendForm"><strong>Médico No Registrado</strong></button>
@@ -65,7 +67,7 @@
     <div class="form-row">
         <div class=" offset-3 col-6 mb-3" id="Gconvenvio">
             <label class="sr-only" >Convenio</label>
-            <%if (Orden.getConvenio() == null) {%>
+            <%if (Orden.getConvenio() == null || Orden.getConvenio() == "" || Orden.getConvenio().trim() == "null") {%>
             <input style="text-align: center" onchange="SaveConv(this.value, 'ord')" type="text" class="form-control" name="Convenio" id="Convenio" placeholder="Convenio" required>                      
             <%} else {%>            
             <input style="text-align: center" type="text"  value="<%=Orden.getConvenio()%>"class="form-control" name="Convenio" id="Convenio" placeholder="Convenio" required>          
@@ -108,8 +110,9 @@
                 Ingresa un criterio de busqueda.
             </div>
         </div>
-        <button class="btn btn-outline-info btn-sm btn-block" onclick="chOpt('per');" >Buscar Paquetes(perfiles)</button>
-        <br>
+        <div class="col-12 col-sm-12 col-md-12 mb-3">
+            <button class="btn btn-outline-info btn-sm btn-block" onclick="chOpt('per');" >Buscar Paquetes(perfiles)</button>
+        </div>
     </div>    
     <div id="EstsAdded">
         <div id="BEst"></div>

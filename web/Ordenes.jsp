@@ -1,8 +1,6 @@
-<%-- 
-    Document   : MainAdmin
+<%--Document   : MainAdmin
     Created on : 21/02/2018, 04:07:14 PM
-    Author     : ZionS
---%>
+    Author     : ZionS--%>
 <%@page import="DataTransferObject.Empresa_DTO"%>
 <%@page import="DataTransferObject.Permiso_DTO"%>
 <%@page import="java.util.ArrayList"%>
@@ -72,9 +70,9 @@
             <div id="Interaccion">
                 <div class="nav-scroller bg-white box-shadow">
                     <nav class="nav nav-underline">        
-                        <a class="nav-link" href="#"onclick="mostrarForm('Menu/Orden/Registro.jsp');">Nueva Órden</a>        
-                        <a class="nav-link" href="#" onclick="mostrarForm('Menu/Cotizacion/Registro.jsp');">Nueva Cotización</a>        
-                        <a class="nav-link" href="#" onclick='mostrarForm("${pageContext.request.contextPath}/ShowOrds");'>Órdenes Pendientes</a>                         
+                        <a class="nav-link" href="#" onclick="mostrarForm('Menu/Orden/Registro.jsp');">Nueva Órden</a>
+                        <a class="nav-link" href="#" onclick="mostrarForm('Menu/Cotizacion/Registro.jsp');">Nueva Cotización</a>
+                        <a class="nav-link" href="#" onclick='mostrarForm("${pageContext.request.contextPath}/ShowOrds?mode=ord");'>Ver Órdenes</a>                      
                         <a class="nav-link" href="#" onclick='mostrarForm("${pageContext.request.contextPath}/ShowSaldos");'>Saldos</a>                         
                     </nav>
                 </div>
