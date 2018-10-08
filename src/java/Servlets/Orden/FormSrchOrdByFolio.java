@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Servlets.Cotizacion;
+package Servlets.Orden;
 
+import DataAccesObject.Orden_DAO;
+import DataTransferObject.Orden_DTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -12,37 +14,34 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author ZionSystems
+ * @author Carlos Rivas
  */
-@WebServlet(name = "NewServlet2", urlPatterns = {"/NewServlet2"})
-public class NewServlet2 extends HttpServlet {
+@WebServlet(name = "FormSrchOrdByFolio", urlPatterns = {"/FormSrchOrdByFolio"})
+public class FormSrchOrdByFolio extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet NewServlet2</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet NewServlet2 at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+
+        HttpSession sesion = request.getSession();
+        int id_unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
+        PrintWriter out = response.getWriter();
+        Orden_DAO O = new Orden_DAO();
+        Orden_DTO dto;
+        int Folio = Integer.parseInt(request.getParameter("Folio").trim());
+
+        dto = O.getOrdenByFolio(Folio, id_unidad);
+
+        if (dto.getFolio_Unidad() != 0) {
+            sesion.setAttribute("OrdFol", dto);
+            request.getRequestDispatcher("ShowDetOrdRs").forward(request, response);
+        } else {
+            sesion.setAttribute("MSGOrdFol", "No se ha encontrado la órden solicitada...");
+            request.getRequestDispatcher("ShowOrds?mode=uplRs").forward(request, response);
         }
     }
 

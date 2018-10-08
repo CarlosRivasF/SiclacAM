@@ -40,7 +40,7 @@ public class NewServlet1 extends HttpServlet {
         response.setContentType("application/pdf");
         response.setHeader("Content-disposition", "inline; filename=\"report" + 1 + ".pdf\"");
         String relativePath = getServletContext().getRealPath("/");
-        String Source = relativePath + "M/MembreteRes.pdf";        //MembreteRes MembrOrden
+        String Source = relativePath + "M/MembreteRes1.pdf";        //MembreteRes MembrOrden
         try {
             Image barras1;
             JBarcodeBean barcode = new JBarcodeBean();

@@ -17,7 +17,7 @@
 <div class="form-row" >
     <div class="col-md-4 mb-3">
         <label class="sr-only" >Descripción</label>
-        <input style="text-align: center" type="text" class="form-control form-control-sm" name="desc<%=nc%>" id="desc<%=nc%>" placeholder="Descripción" required/>            
+        <input style="text-align: center" type="text" class="form-control form-control-sm" name="desc<%=nc%>" id="desc<%=nc%>" placeholder="Descripción"/>            
         <div class="invalid-feedback" style="width: 100%;">
             Descripción requerida.
         </div>

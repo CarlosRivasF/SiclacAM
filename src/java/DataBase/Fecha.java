@@ -126,14 +126,9 @@ public class Fecha {
     public static void main(String[] args) {
         Date fac = new Date();
         Fecha f = new Fecha();
-        f.setHora(fac);
-        Scanner sc = new Scanner(System.in);
-        String codeBar = sc.nextLine();
-        String[] bar = codeBar.split("-");
+        f.setHora(fac);        
 
-        int id_Cotizacion = Integer.parseInt(bar[0]);
-
-        System.out.println("id_Cotizacion:" + id_Cotizacion);
+        System.out.println(f.getFechaActual());
 
     }
 }

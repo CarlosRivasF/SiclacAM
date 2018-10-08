@@ -1,48 +1,46 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Servlets.Cotizacion;
 
+import com.itextpdf.text.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.OutputStream;
+import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import jbarcodebean.JBarcodeBean;
+import net.sourceforge.jbarcodebean.model.Code39;
 
 /**
  *
  * @author ZionSystems
  */
-@WebServlet(name = "NewServlet3", urlPatterns = {"/NewServlet3"})
-public class NewServlet3 extends HttpServlet {
+@WebServlet(name = "NewServlet", urlPatterns = {"/NewServlet"})
+public class PrintImage extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet NewServlet3</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet NewServlet3 at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        response.setContentType("image/png");
+        Image barras1 = null;
+        try {
+            String name = "Serv";
+            String path = request.getContextPath();
+            String r = path + "/PDF/" + name + ".png";
+            JBarcodeBean barcode = new JBarcodeBean();
+            barcode.setCodeType(new Code39());
+            barcode.setCode("11-KSY");
+            barcode.setCheckDigit(true);
+            barcode.setShowText(false);
+            BufferedImage bufferedImage = barcode.draw(new BufferedImage(150, 16, BufferedImage.TYPE_INT_RGB));
+            File file = new File(r);
+            try (OutputStream out = response.getOutputStream()) {
+                ImageIO.write(bufferedImage, "png", out);   
+            }
+        } catch (IOException e) {
+
         }
     }
 

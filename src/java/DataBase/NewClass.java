@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package DataBase;
 
 import DataAccesObject.Estudio_DAO;
@@ -23,6 +19,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import javax.sql.DataSource;
 import org.apache.commons.dbcp.BasicDataSource;
 
@@ -30,6 +27,8 @@ import org.apache.commons.dbcp.BasicDataSource;
  *
  * @author ZionSystem
  */
+
+
 public class NewClass {
 
     public static DataSource dataSource = null;//siclac2
@@ -79,7 +78,7 @@ public class NewClass {
         }
         return conexion;
     }
-    
+
     public List<Unidad_DTO> getUnidades() {
         List<Unidad_DTO> uns;
         String sql = "SELECT id_Unidad,id_Empresa,Nombre_Unidad,Clave,id_Persona FROM unidad";
@@ -188,9 +187,9 @@ public class NewClass {
                         dto.getUsuario().setNombre_Usuario(rs.getString("Nombre_Usuario"));
                         dto.getUsuario().setContraseña(rs.getString("Contrasena"));
                         dto.getUsuario().setRol(rs.getString("Rol"));
-                        dto.getUsuario().setEstado(rs.getString("Estado"));                        
+                        dto.getUsuario().setEstado(rs.getString("Estado"));
                     }
-                }                
+                }
                 List<String> lst = getPermisoString(dto.getUsuario().getId_Usuario());
                 dto.getUsuario().setLst(lst);
                 pstm.close();
@@ -200,7 +199,7 @@ public class NewClass {
             throw new RuntimeException(e);
         }
     }
-    
+
     public List<String> getPermisoString(int id_Usuario) {
         List<String> lst = new ArrayList<>();
         try (Connection con = conectar2()) {
@@ -217,7 +216,7 @@ public class NewClass {
             throw new RuntimeException(e);
         }
     }
-    
+
     public List<Material_DTO> getMateriales() {
         List<Material_DTO> mats;
         try (Connection con = conectar2()) {
@@ -359,23 +358,25 @@ public class NewClass {
     }
 
     public static void main(String[] args) {
-        NewClass nc = new NewClass();
-        /*
-        Unidad_DAO U=new Unidad_DAO();
-        for(Unidad_DTO unidad:nc.getUnidades()){
-        U.copy(unidad);        
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        Double riz = Math.sqrt(Double.parseDouble(String.valueOf(n)));
+        String str = String.valueOf(riz);
+        int X = Integer.parseInt(str.substring(0, str.indexOf('.')));
+        int c = 1;
+        for (int i = X; i > 0; i--) {
+            String esp = " ";
+            for (int e = 0; e < (i - 1); e++) {
+                System.out.print(esp);
+            }
+            String ch = "*";
+            for (int j = 0; j < c; j++) {
+                System.out.print(ch);
+            }
+            System.out.println();
+            c = c + 2;
         }
-        Material_DAO M=new Material_DAO();
-        for(Material_DTO material:nc.getMateriales()){
-            material.setCantidad(20);
-            material.setPrecio(Float.parseFloat("12.30"));
-        M.RegistrarMaterial(1, material);
-        }*/
-        Estudio_DAO E=new Estudio_DAO();
-        for(Estudio_DTO estudio:nc.getEstudios()){
-        E.copy(estudio,1);
-        }
-        
+
     }
 
 }

@@ -128,10 +128,10 @@ function validarFormulario(e) {
                 formulario[i].focus();
                 e.disabled = false;
                 break;
-            }
-            if (formulario[i].name === "min" || formulario[i].name === "max" || formulario[i].name === "unidades" || formulario[i].name === "telefono" || formulario[i].name === "celular"
+            }//
+            if (formulario[i].name === "muestra" || formulario[i].name === "unidad" || formulario[i].name === "desc" || formulario[i].name === "min" || formulario[i].name === "max" || formulario[i].name === "unidades" || formulario[i].name === "telefono" || formulario[i].name === "celular"
                     || formulario[i].name === "c_p" || formulario[i].name === "calle" || formulario[i].name === "no_int" || formulario[i].name === "no_ext") {
-            } else if (formulario[i].name.substring(0, 3) === "min" || formulario[i].name.substring(0, 3) === "max" || formulario[i].name.substring(0, 8) === "unidades") {
+            } else if (formulario[i].name.substring(0, 4) === "desc" ||formulario[i].name.substring(0, 3) === "min" || formulario[i].name.substring(0, 3) === "max" || formulario[i].name.substring(0, 8) === "unidades") {
             } else if (formulario[i].value.trim() === "") {
                 alert('El campo debe contener un valor completo');
                 todoCorrecto = false;
@@ -2361,15 +2361,31 @@ function FormUpResObs(index, acc) {
 
 function SrchOrdFolio(e, mode) {
     var Folio = e.value;
-    e.value="";
+    e.value = "";
     Ajax = buscarComentario();
     Ajax.open('POST', "SrchOrdFolio", true);
     Ajax.onreadystatechange = function () {
         if (Ajax.readyState === 4) {
-            document.getElementById("SerchOrd").innerHTML = Ajax.responseText;
+            document.getElementById("SerchOrd").innerHTML = Ajax.responseText;//Interaccion
         }
     };
     Ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     var p = "Folio=" + Folio + " &mode=" + mode;
+    Ajax.send(p);
+}
+
+
+function UplResbydFolio(e) {
+    var Folio = e.value;
+    e.value = "";
+    Ajax = buscarComentario();
+    Ajax.open('POST', "FormSrchOrdByFolio", true);
+    Ajax.onreadystatechange = function () {
+        if (Ajax.readyState === 4) {
+            document.getElementById("Interaccion").innerHTML = Ajax.responseText;//Interaccion
+        }
+    };
+    Ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    var p = "Folio=" + Folio;
     Ajax.send(p);
 }

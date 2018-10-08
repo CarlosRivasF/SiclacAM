@@ -38,11 +38,13 @@ public class SrchOrdFolio extends HttpServlet {
             case "results":
                 dto = O.getOrdenTerminada(Folio, id_unidad);
                 break;
+            case "uplRs":
+                dto = O.getOrdenByFolio(Folio, id_unidad);
+                break;
             default:
                 dto = O.getOrdenByFolio(Folio, id_unidad);
                 break;
         }
-
         out.println("<div style='color: white' class='table-responsive'>"
                 + "<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
                 + "<tr class='table-active'>"
@@ -62,6 +64,9 @@ public class SrchOrdFolio extends HttpServlet {
                 out.println("<th >Resultados</th>");
                 out.println("<th >Imprimir</th>");
                 break;
+            case "uplRs":
+                out.println("<th >LLenar</th>");
+                break;
         }
         if (dto.getFolio_Unidad() != 0) {
             String CodeCot = dto.getPaciente().getCodPac().substring(0, 4) + "-" + dto.getId_Orden();
@@ -80,21 +85,21 @@ public class SrchOrdFolio extends HttpServlet {
                     break;
                 case "results":
                     out.println("<td><div id='ord-" + dto.getId_Orden() + "'><button href=# class='btn btn-primary' onclick=ShDetOrdenRS(" + dto.getId_Orden() + ",'folio') ><span><img src='images/fill.png'></span></button></div></td>");
-                    out.println("<td><div id='ord-" + dto.getId_Orden() + "'><button href='PrintRes?LxOrdSald=" + dto.getId_Orden() + "' class='btn btn-primary' ><span><img src='images/print.png'></span></button></div></td>");
+                    out.println("<td><a href='PrintRes?LxOrdSald=" + dto.getId_Orden() + "' class='btn btn-primary' ><span><img src='images/print.png'></span></a></td>");
+                    break;
+                case "uplRs":
+                    out.println("<td><div id='ord-" + dto.getId_Orden() + "'><button href=# class='btn btn-primary' onclick=ShDetOrdenRS(" + dto.getId_Orden() + ",'folio') ><span><img src='images/fill.png'></span></button></div></td>");
                     break;
             }
             out.print("</tr>");
         } else {
-
             out.println("<tr>"
                     + "<td colspan='5'>Sin Resultados... [Folio de Unidad:" + Folio + "]</td>"
                     + "</tr>");
-
         }
-
     }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -132,5 +137,4 @@ public class SrchOrdFolio extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }

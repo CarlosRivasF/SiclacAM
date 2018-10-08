@@ -8,6 +8,8 @@ import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
@@ -21,8 +23,7 @@ import com.itextpdf.text.pdf.PdfStamper;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -39,11 +40,13 @@ import net.sourceforge.jbarcodebean.model.Code39;
 @WebServlet(name = "PrintRes", urlPatterns = {"/PrintRes"})
 public class PrintRes extends HttpServlet {
 
-    Fecha f = new Fecha();
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
+
+        Date fac = new Date();
+        Fecha f = new Fecha();
+        f.setHora(fac);
         HttpSession sesion = request.getSession();
-        int id_Orden = 0;
+        int id_Orden;
         if (sesion.getAttribute("OrdenSh") == null) {
             id_Orden = Integer.parseInt(request.getParameter("LxOrdSald"));
         } else {
@@ -51,7 +54,6 @@ public class PrintRes extends HttpServlet {
         }
 
         try {
-
             Orden_DTO Orden;
             if (sesion.getAttribute("OrdenSh") != null) {
                 Orden = (Orden_DTO) sesion.getAttribute("OrdenSh");
@@ -81,6 +83,8 @@ public class PrintRes extends HttpServlet {
                 Source = relativePath + "M/MembreteRes4.pdf";
             }
 
+            int pagecount = 1;
+
             PdfReader reader = new PdfReader(Source);
             Rectangle pagesize = reader.getPageSize(1);
             PdfStamper stamper = new PdfStamper(reader, response.getOutputStream());
@@ -90,7 +94,7 @@ public class PrintRes extends HttpServlet {
             Image barras1;
             JBarcodeBean barcode = new JBarcodeBean();
             barcode.setCodeType(new Code39());
-            barcode.setCode(id_Orden+"-");
+            barcode.setCode(Orden.getId_Orden() + "-");
             barcode.setCheckDigit(true);
             barcode.setShowText(true);
             BufferedImage bi = barcode.draw(new BufferedImage(156, 12, BufferedImage.TYPE_INT_RGB));
@@ -105,13 +109,13 @@ public class PrintRes extends HttpServlet {
             ///////////////////  DAATOS ORDEN
             cb.beginText();
             cb.setFontAndSize(bf, 10);
-            cb.setTextMatrix(305, 758);
+            cb.setTextMatrix(270, 758);
             cb.showText("Fecha de Emisión:");
             cb.endText();
             cb.beginText();
             cb.setFontAndSize(bf1, 12);
-            cb.setTextMatrix(390, 758);
-            cb.showText("2018-04-10");
+            cb.setTextMatrix(355, 758);
+            cb.showText(f.getFechaActual());
             cb.endText();
             ////////////////////////// DATOS PACIENTE
             cb.beginText();
@@ -124,24 +128,25 @@ public class PrintRes extends HttpServlet {
             cb.setTextMatrix(320, 740);
             cb.showText(Orden.getPaciente().getNombre() + " " + Orden.getPaciente().getAp_Paterno() + " " + Orden.getPaciente().getAp_Materno());
             cb.endText();
+
             cb.beginText();
             cb.setFontAndSize(bf, 10);
-            cb.setTextMatrix(300, 722);
+            cb.setTextMatrix(270, 722);
             cb.showText("Edad:");
             cb.endText();
             cb.beginText();
             cb.setFontAndSize(bf1, 12);
-            cb.setTextMatrix(335, 722);
+            cb.setTextMatrix(305, 722);
             cb.showText(f.getEdad(Orden.getPaciente().getFecha_Nac()).getYears() + "");
             cb.endText();
             cb.beginText();
             cb.setFontAndSize(bf, 10);
-            cb.setTextMatrix(370, 722);
+            cb.setTextMatrix(340, 722);
             cb.showText("Sexo:");
             cb.endText();
             cb.beginText();
             cb.setFontAndSize(bf1, 12);
-            cb.setTextMatrix(410, 722);
+            cb.setTextMatrix(380, 722);
             cb.showText(Orden.getPaciente().getSexo());
             cb.endText();
             ////////////////////////// DATOS DOCTOR
@@ -170,71 +175,102 @@ public class PrintRes extends HttpServlet {
             cb.endText();
 
             cb.addImage(barras1, false);
+
+            /////************************************************/////////////////
+            BaseColor orange = new BaseColor(211, 84, 0);
+            BaseColor blue = new BaseColor(52, 152, 219);
+            BaseColor green = new BaseColor(40, 180, 99);
+            BaseColor BackGr = new BaseColor(234, 236, 238);
+
+            Font Title_Font_Est = FontFactory.getFont("Times Roman", 12, blue);
+            Font Title_Font_Prec = FontFactory.getFont("Times Roman", 12, orange);
+            Font Title_Font_Prep = FontFactory.getFont("Times Roman", 12, green);
+            Font Content_Font = FontFactory.getFont("Arial", 10, BaseColor.BLACK);
 
             PdfPTable table = new PdfPTable(4);
             table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
             table.getDefaultCell().setBorder(0);
             table.setWidths(new int[]{7, 3, 7, 3});
             for (Det_Orden_DTO dto : Orden.getDet_Orden()) {
-                if (dto.getEstudio().getAddRes()) {
-                    PdfPCell est = new PdfPCell(new Paragraph(dto.getEstudio().getNombre_Estudio() + ""));
-                    est.setHorizontalAlignment(Element.ALIGN_LEFT);
-                    est.setColspan(4);
-                    est.setBorder(0);
-                    table.addCell(est);
-                    PdfPCell des = new PdfPCell(new Paragraph("Descripcion"));
-                    des.setBorderColor(BaseColor.RED);
-                    table.addCell(des);
-                    PdfPCell res = new PdfPCell(new Paragraph("Resultado"));
-                    res.setBorderColor(BaseColor.RED);
-                    table.addCell(res);
-                    PdfPCell valR = new PdfPCell(new Paragraph("Valores de Referencia"));
-                    valR.setBorderColor(BaseColor.RED);
-                    table.addCell(valR);
-                    PdfPCell un = new PdfPCell(new Paragraph("Unidad"));
-                    un.setBorderColor(BaseColor.RED);
-                    table.addCell(un);
-                    dto.getEstudio().getCnfs().stream().filter((cnf) -> (cnf.getRes() != null)).map((cnf) -> {
-                        table.addCell(cnf.getDescripcion());
-                        return cnf;
-                    }).map((cnf) -> {
-                        table.addCell(cnf.getRes().getValor_Obtenido());
-                        return cnf;
-                    }).map((cnf) -> {
-                        table.addCell(cnf.getValor_min() + "-" + cnf.getValor_MAX());
-                        return cnf;
-                    }).forEachOrdered((cnf) -> {
-                        table.addCell(cnf.getUniddes());
-                    });
 
-                    ColumnText column = new ColumnText(stamper.getOverContent(1));
-                    Rectangle rectPage1 = new Rectangle(-27, 120, 640, 690);//0,esp-inf,ancho,alto
-                    column.setSimpleColumn(rectPage1);
-                    column.addElement(table);
+                PdfPCell cell_Esp_Title = new PdfPCell(new Paragraph("                                   ", Title_Font_Est));
+                cell_Esp_Title.setColspan(4);
+                cell_Esp_Title.setBorder(0);
+                table.addCell(cell_Esp_Title);
 
-                    int pagecount = 1;
-                    Rectangle rectPage2 = new Rectangle(-27, 40, 640, 690);//0,esp-inf,ancho,alto
-                    int status = column.go();
-                    while (ColumnText.hasMoreText(status)) {
-                        status = triggerNewPage(Orden, reader, stamper, pagesize, column, rectPage2, ++pagecount);
-                    }
-                    stamper.setFormFlattening(true);
-                    stamper.close();
-                    reader.close();
-                }
+                PdfPCell cell_Est_Title = new PdfPCell(new Paragraph(dto.getEstudio().getNombre_Estudio(), Title_Font_Est));
+                cell_Est_Title.setHorizontalAlignment(Element.ALIGN_LEFT);
+                cell_Est_Title.setColspan(2);
+                cell_Est_Title.setBorder(0);
+                cell_Est_Title.setBackgroundColor(BackGr);
+                table.addCell(cell_Est_Title);
+
+                PdfPCell cell_Met_Title = new PdfPCell(new Paragraph("Meodo: " + dto.getEstudio().getMetodo(), Title_Font_Est));
+                cell_Met_Title.setHorizontalAlignment(Element.ALIGN_LEFT);
+                cell_Met_Title.setColspan(2);
+                cell_Met_Title.setBorder(0);
+                cell_Met_Title.setBackgroundColor(BackGr);
+                table.addCell(cell_Met_Title);
+
+                PdfPCell des = new PdfPCell(new Paragraph("Descripcion"));
+                des.setBorderColor(BaseColor.RED);
+                table.addCell(des);
+                PdfPCell res = new PdfPCell(new Paragraph("Resultado"));
+                res.setBorderColor(BaseColor.RED);
+                table.addCell(res);
+                PdfPCell valR = new PdfPCell(new Paragraph("Valores de Referencia"));
+                valR.setBorderColor(BaseColor.RED);
+                table.addCell(valR);
+                PdfPCell un = new PdfPCell(new Paragraph("Unidad"));
+                un.setBorderColor(BaseColor.RED);
+                table.addCell(un);
+                dto.getEstudio().getCnfs().stream().filter((cnf) -> (cnf.getRes() != null)).map((cnf) -> {
+                    PdfPCell cell_Desc = new PdfPCell(new Paragraph(cnf.getDescripcion(), Content_Font));
+                    cell_Desc.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    cell_Desc.setBorder(0);
+                    table.addCell(cell_Desc);
+                    // table.addCell(cnf.getDescripcion());
+                    return cnf;
+                }).map((cnf) -> {
+                    table.addCell(cnf.getRes().getValor_Obtenido());
+                    return cnf;
+                }).map((cnf) -> {
+                    table.addCell(cnf.getValor_min() + "-" + cnf.getValor_MAX());
+                    return cnf;
+                }).forEachOrdered((cnf) -> {
+                    table.addCell(cnf.getUniddes());
+                });
             }
+
+            ColumnText column = new ColumnText(stamper.getOverContent(1));
+            Rectangle rectPage1 = new Rectangle(-27, 120, 640, 690);//0,esp-inf,ancho,alto
+            column.setSimpleColumn(rectPage1);
+            column.addElement(table);
+
+            Rectangle rectPage2 = new Rectangle(-27, 40, 640, 690);//0,esp-inf,ancho,alto
+            int status = column.go();
+            while (ColumnText.hasMoreText(status)) {
+                status = triggerNewPage(Orden, reader, stamper, pagesize, column, rectPage2, ++pagecount);
+            }
+            stamper.setFormFlattening(true);
+            stamper.close();
+            reader.close();
+
         } catch (DocumentException | IOException ex) {
-            Logger.getLogger(PrintRes.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("processRequest" + ex.getMessage());
         }
     }
 
     public int triggerNewPage(Orden_DTO Orden, PdfReader reader, PdfStamper stamper, Rectangle pagesize, ColumnText column, Rectangle rect, int pagecount) throws DocumentException {
+        Date fac = new Date();
+        Fecha f = new Fecha();
+        f.setHora(fac);
         try {
             PdfContentByte cb = stamper.getOverContent(pagecount);
             Image barras1;
             JBarcodeBean barcode = new JBarcodeBean();
             barcode.setCodeType(new Code39());
-            barcode.setCode(Orden.getId_Orden()+"-");
+            barcode.setCode(Orden.getId_Orden() + "-");
             barcode.setCheckDigit(true);
             barcode.setShowText(true);
             BufferedImage bi = barcode.draw(new BufferedImage(156, 12, BufferedImage.TYPE_INT_RGB));
@@ -249,13 +285,13 @@ public class PrintRes extends HttpServlet {
             ///////////////////  DAATOS ORDEN
             cb.beginText();
             cb.setFontAndSize(bf, 10);
-            cb.setTextMatrix(305, 758);
+            cb.setTextMatrix(270, 758);
             cb.showText("Fecha de Emisión:");
             cb.endText();
             cb.beginText();
             cb.setFontAndSize(bf1, 12);
-            cb.setTextMatrix(390, 758);
-            cb.showText("2018-04-10");
+            cb.setTextMatrix(355, 758);
+            cb.showText(f.getFechaActual());
             cb.endText();
             ////////////////////////// DATOS PACIENTE
             cb.beginText();
@@ -268,24 +304,25 @@ public class PrintRes extends HttpServlet {
             cb.setTextMatrix(320, 740);
             cb.showText(Orden.getPaciente().getNombre() + " " + Orden.getPaciente().getAp_Paterno() + " " + Orden.getPaciente().getAp_Materno());
             cb.endText();
+
             cb.beginText();
             cb.setFontAndSize(bf, 10);
-            cb.setTextMatrix(300, 722);
+            cb.setTextMatrix(270, 722);
             cb.showText("Edad:");
             cb.endText();
             cb.beginText();
             cb.setFontAndSize(bf1, 12);
-            cb.setTextMatrix(335, 722);
+            cb.setTextMatrix(305, 722);
             cb.showText(f.getEdad(Orden.getPaciente().getFecha_Nac()).getYears() + "");
             cb.endText();
             cb.beginText();
             cb.setFontAndSize(bf, 10);
-            cb.setTextMatrix(370, 722);
+            cb.setTextMatrix(340, 722);
             cb.showText("Sexo:");
             cb.endText();
             cb.beginText();
             cb.setFontAndSize(bf1, 12);
-            cb.setTextMatrix(410, 722);
+            cb.setTextMatrix(380, 722);
             cb.showText(Orden.getPaciente().getSexo());
             cb.endText();
             ////////////////////////// DATOS DOCTOR
@@ -300,7 +337,6 @@ public class PrintRes extends HttpServlet {
             cb.showText(Orden.getMedico().getNombre() + " " + Orden.getMedico().getAp_Paterno() + " " + Orden.getMedico().getAp_Materno());
             cb.endText();
             ///////////////////////despedida
-
             cb.beginText();
             cb.setFontAndSize(bf0, 12);
             cb.setTextMatrix(280, 70);
@@ -314,11 +350,11 @@ public class PrintRes extends HttpServlet {
             cb.endText();
 
             cb.addImage(barras1, false);
-            
+
             column.setCanvas(cb);
             column.setSimpleColumn(rect);
         } catch (BadElementException | IOException ex) {
-
+            System.out.println("triggerNewPage" + ex.getMessage());
         }
         return column.go();
     }

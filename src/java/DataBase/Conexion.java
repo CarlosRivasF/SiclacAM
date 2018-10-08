@@ -8,6 +8,12 @@ import org.apache.commons.dbcp.BasicDataSource;
 /**
  *
  * @author ZionS
+ * <session-config>
+ * <cookie-config>
+ * <secure>true</secure>
+ * <http-only>true</http-only>
+ * </cookie-config>
+ * </session-config>
  */
 public class Conexion {
 
@@ -52,5 +58,8 @@ public class Conexion {
             dataSource = null;
             throw new RuntimeException(ex);
         }
+    }
+    public static void main(String[]args){
+    System.out.println(Conexion.getCon());
     }
 }

@@ -36,8 +36,7 @@ public class Usuario_DAO {
     }
 
     public Usuario_DTO Login(String Usuario, String Contraseña) {
-        Usuario_DTO usuario;
-        usuario = new Usuario_DTO();
+        Usuario_DTO usuario = new Usuario_DTO();
         String sql = "SELECT * FROM usuario WHERE Nombre_Usuario=? AND contrasena=?";
         try (Connection con = Conexion.getCon(); PreparedStatement pstm = con.prepareStatement(sql);) {
             pstm.setString(1, Usuario);

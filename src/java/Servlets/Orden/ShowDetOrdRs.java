@@ -31,17 +31,17 @@ public class ShowDetOrdRs extends HttpServlet {
         Orden_DTO dto;
         if (request.getParameter("index") != null) {
             List<Orden_DTO> ords = O.getOrdenesTerminadas(id_unidad);
-
             int index = Integer.parseInt(request.getParameter("index").trim());
             dto = ords.get(index);
+        } else if (request.getParameter("id_Orden") != null) {
+            int id_orden = Integer.parseInt(request.getParameter("id_Orden").trim());
+            dto = O.getOrden(id_orden);
+        } else if (request.getParameter("Folio") != null) {
+            int Folio = Integer.parseInt(request.getParameter("Folio").trim());
+            dto = O.getOrdenByFolio(Folio, id_unidad);
         } else {
-            if (request.getParameter("id_Orden") != null) {
-                int id_orden = Integer.parseInt(request.getParameter("id_Orden").trim());
-                dto = O.getOrden(id_orden);
-            } else {
-                int Folio = Integer.parseInt(request.getParameter("Folio").trim());
-                dto = O.getOrdenByFolio(Folio, id_unidad);
-            }
+            dto = (Orden_DTO) sesion.getAttribute("OrdFol");
+            sesion.removeAttribute("OrdFol");
         }
         sesion.setAttribute("OrdenSh", dto);
         String CodeCot = dto.getPaciente().getCodPac().substring(0, 4) + "-" + dto.getId_Orden();
@@ -50,7 +50,7 @@ public class ShowDetOrdRs extends HttpServlet {
                 + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=ord'); >Órdenes Pendientes</a>"
                 + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=sald'); > Órdenes con Saldo</a>"
                 + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=results'); >Órdenes Terminadas</a>"
-                + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=results'); >Cargar Resultados</a>"
+                + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=uplRs'); >Cargar Resultados</a>"
                 + "    </nav>"
                 + "</div>"
                 + "<div><hr class='mb-1'>"

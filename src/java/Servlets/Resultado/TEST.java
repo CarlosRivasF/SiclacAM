@@ -1,9 +1,8 @@
-package Servlets.Cotizacion;
+package Servlets.Resultado;
 
-import DataAccesObject.Orden_DAO;
 import DataBase.Fecha;
-import DataTransferObject.Det_Orden_DTO;
 import DataTransferObject.Orden_DTO;
+import Servlets.Cotizacion.NewServlet1;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.DocumentException;
@@ -25,12 +24,13 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import jbarcodebean.JBarcodeBean;
 import net.sourceforge.jbarcodebean.model.Code39;
 
@@ -38,15 +38,25 @@ import net.sourceforge.jbarcodebean.model.Code39;
  *
  * @author Carlos Rivas
  */
-@WebServlet(name = "PrintTest", urlPatterns = {"/PrintTest"})
-public class NewServlet extends HttpServlet {
+@WebServlet(name = "TEST", urlPatterns = {"/TEST"})
+public class TEST extends HttpServlet {
 
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("1");
         Orden_DTO Orden = new Orden_DTO();
         Date fac = new Date();
         Fecha f = new Fecha();
         f.setHora(fac);
-
+        System.out.println("2");
         try {
             response.setContentType("application/pdf");
             response.setHeader("Content-disposition", "inline; filename=\"report" + 1 + ".pdf\"");
@@ -62,15 +72,15 @@ public class NewServlet extends HttpServlet {
             } else if (r > 140 & r < 175) {
                 Source = relativePath + "M/MembreteRes4.pdf";
             }
-
+            System.out.println("3");
             int pagecount = 1;
 
             PdfReader reader = new PdfReader(Source);
             Rectangle pagesize = reader.getPageSize(1);
             PdfStamper stamper = new PdfStamper(reader, response.getOutputStream());
-
+            System.out.println("4");
             PdfContentByte cb = stamper.getOverContent(1);
-
+            System.out.println("5");
             Image barras1;
             JBarcodeBean barcode = new JBarcodeBean();
             barcode.setCodeType(new Code39());
@@ -79,13 +89,13 @@ public class NewServlet extends HttpServlet {
             barcode.setShowText(true);
             BufferedImage bi = barcode.draw(new BufferedImage(156, 12, BufferedImage.TYPE_INT_RGB));
             barras1 = Image.getInstance(Toolkit.getDefaultToolkit().createImage(bi.getSource()), null);
-
+            System.out.println("6");
             BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
             BaseFont bf0 = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
             BaseFont bf1 = BaseFont.createFont(BaseFont.COURIER, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
 
             barras1.setAbsolutePosition(92, 705);//x,y
-
+            System.out.println("7");
             /////////////////// *********** DATOS ORDEN ***********************************  ///////////////////            
             cb.beginText();
             cb.setFontAndSize(bf, 10);
@@ -159,7 +169,7 @@ public class NewServlet extends HttpServlet {
             cb.endText();
 
             cb.addImage(barras1, false);
-
+            System.out.println("8");
             /////*********************** RESULTADOS *************************/////////////////
             BaseColor orange = new BaseColor(211, 84, 0);
             BaseColor blue = new BaseColor(52, 152, 219);
@@ -171,21 +181,18 @@ public class NewServlet extends HttpServlet {
             Font Title_Font_Prep = FontFactory.getFont("Times Roman", 12, green);
             Font Content_Font = FontFactory.getFont("Arial", 10, BaseColor.BLACK);
 
-            PdfPTable table = new PdfPTable(4);
-            table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.getDefaultCell().setBorder(0);
-            table.setWidths(new int[]{7, 3, 7, 3});
-            int idx = 0;
-            ColumnText column = new ColumnText(stamper.getOverContent(1));
+            int status = 0;
+            ColumnText column = null;
+
             int c = 745;//Coordenada variable Y de la ubicación de la tabla
-            for (int i = 0; i < 5; i++) {
-                if (idx > 0) {
-                    PdfPCell cell_Esp_Title = new PdfPCell(new Paragraph("", Title_Font_Est));
-                    cell_Esp_Title.setColspan(4);
-                    cell_Esp_Title.setBorder(0);
-                    table.addCell(cell_Esp_Title);
-                }
-                idx++;
+            System.out.println("9");
+
+            for (int i = 0; i < 2; i++) {
+                PdfPTable table = new PdfPTable(4);
+                table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.getDefaultCell().setBorder(0);
+                table.setWidths(new int[]{7, 3, 7, 3});
+
                 PdfPCell cell_Est_Title = new PdfPCell(new Paragraph("Estudio Realizado", Title_Font_Est));
                 cell_Est_Title.setHorizontalAlignment(Element.ALIGN_LEFT);
                 cell_Est_Title.setColspan(2);
@@ -212,9 +219,9 @@ public class NewServlet extends HttpServlet {
                 PdfPCell un = new PdfPCell(new Paragraph("Unidad"));
                 un.setBorderColor(BaseColor.RED);
                 table.addCell(un);
+                c = c - 35;
                 ///******** RESULTADO DE CONFUGURACION ***********************////
-                for (int l = 0; l < 50; i++) {
-
+                for (int l = 0; l < 2; i++) {
                     PdfPCell cell_Desc = new PdfPCell(new Paragraph("DESC", Content_Font));
                     cell_Desc.setHorizontalAlignment(Element.ALIGN_LEFT);
                     cell_Desc.setBorder(0);
@@ -234,14 +241,17 @@ public class NewServlet extends HttpServlet {
                     cell_Uns.setHorizontalAlignment(Element.ALIGN_CENTER);
                     cell_Uns.setBorder(0);
                     table.addCell(cell_Uns);
+                    c=c-17;
                 }
-                Rectangle rectPage1 = new Rectangle(-27, 120, 640, 690);//0,esp-inf,ancho,alto
+                column = new ColumnText(stamper.getOverContent(1));
+                Rectangle rectPage1 = new Rectangle(-27, 120, 640, c);//0,esp-inf,ancho,alto
                 column.setSimpleColumn(rectPage1);
                 column.addElement(table);
+                status = column.go();
             }
 
             Rectangle rectPage2 = new Rectangle(-27, 40, 640, 690);//0,esp-inf,ancho,alto
-            int status = column.go();
+
             while (ColumnText.hasMoreText(status)) {
                 status = triggerNewPage(Orden, reader, stamper, pagesize, column, rectPage2, ++pagecount);
             }
@@ -257,7 +267,6 @@ public class NewServlet extends HttpServlet {
         Date fac = new Date();
         Fecha f = new Fecha();
         f.setHora(fac);
-
         try {
             BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
             BaseFont bf0 = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);

@@ -136,7 +136,7 @@ public class PrintCot extends HttpServlet {
             Font Title_Font_Prep = FontFactory.getFont("Times Roman", 12, green);
             Font Content_Font = FontFactory.getFont("Arial", 11, BaseColor.BLACK);
 
-            int c = 745;
+            int c = 745;//Coordenada variable Y de la ubicación de la tabla
             for (Det_Cot_DTO dto : Cot.getDet_Cot()) {
                 PdfPTable table = new PdfPTable(2);
 

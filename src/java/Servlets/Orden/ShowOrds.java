@@ -1,10 +1,8 @@
 package Servlets.Orden;
 
-import DataAccesObject.Orden_DAO;
 import DataTransferObject.Orden_DTO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -33,19 +31,25 @@ public class ShowOrds extends HttpServlet {
                 out.println("<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=ord'); style=\"color: blue\"><ins>Órdenes Pendientes</ins></a>"
                         + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=sald'); > Órdenes con Saldo</a>"
                         + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=results'); >Órdenes Terminadas</a>"
-                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=results'); >Cargar Resultados</a>");
+                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=uplRs'); >Cargar Resultados</a>");
                 break;
             case "sald":
                 out.println("<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=ord'); >Órdenes Pendientes</a>"
                         + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=sald'); style=\"color: blue\"><ins> Órdenes con Saldo</ins></a>"
                         + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=results'); >Órdenes Terminadas</a>"
-                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=results'); >Cargar Resultados</a>");
+                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=uplRs'); >Cargar Resultados</a>");
                 break;
             case "results":
                 out.println("<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=ord'); >Órdenes Pendientes</a>"
                         + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=sald'); > Órdenes con Saldo</a>"
                         + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=results');  style=\"color: blue\"><ins>Órdenes Terminadas</ins></a>"
-                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=results');  >Cargar Resultados</a>");
+                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=uplRs'); >Cargar Resultados</a>");
+                break;
+            case "uplRs":
+                out.println("<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=ord'); >Órdenes Pendientes</a>"
+                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=sald'); > Órdenes con Saldo</a>"
+                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=results'); >Órdenes Terminadas</a>"
+                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=uplRs'); style=\"color: blue\"><ins>Cargar Resultados</ins></a>");
                 break;
         }
         out.println("</nav>"
@@ -56,11 +60,21 @@ public class ShowOrds extends HttpServlet {
                 + "<input style='text-align: center' type='text' class='form-control' name='medi' onkeyup=SrchOrd(this,'pac','" + mode + "'); id='medi' placeholder='Nombre de paciente'>"
                 + "</div>"
                 + "<div class='col-4 col-sm-4 col-md-4 mb-3'>"
-                + "<label class='sr-only' >Folio de Órden</label>"
-                + "<input style='text-align: center' type='text' class='form-control' name='folio' onchange=SrchOrdFolio(this,'" + mode + "'); id='folio' placeholder='Folio de Unidad'>"
+                + "<label class='sr-only' >Folio de Órden</label>");
+        if (!mode.equals("uplRs")) {
+            out.println("<input style='text-align: center' type='text' class='form-control' name='folio' onchange=SrchOrdFolio(this,'" + mode + "'); id='folio' placeholder='Folio de Unidad'>");
+        } else {
+            out.println("<input style='text-align: center' type='text' class='form-control' name='folio' onchange=UplResbydFolio(this); id='folio' placeholder='Folio de Unidad'>");
+        }
+        out.println("</div>"
                 + "</div>"
-                + "</div>"
-                + "<div id='SerchOrd' style='color: white' class='table-responsive'></div>");
+                + "<div id='SerchOrd' style='color: white' class='table-responsive'>");
+
+        if (sesion.getAttribute("MSGOrdFol") != null) {
+            out.println("<br><h3 style='color: white'>" + sesion.getAttribute("MSGOrdFol").toString() + "</h3>");
+            sesion.removeAttribute("OrdFol");
+        }
+        out.println("</div>");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

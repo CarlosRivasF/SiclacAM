@@ -11,5 +11,5 @@
     <filter-mapping>
         <filter-name>Character Encoding Filter</filter-name>
         <url-pattern>/*</url-pattern>
-    </filter-mapping>
+    </filter-mapping>    
 </web-app>

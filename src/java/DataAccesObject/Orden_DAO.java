@@ -788,7 +788,7 @@ public class Orden_DAO {
         Medico_DAO M = new Medico_DAO();
         Persona_DAO Pr = new Persona_DAO();
         try (Connection con = Conexion.getCon()) {
-            String sql = "SELECT * FROM orden  WHERE Estado='Finalizado' AND id_Unidad=" + id_Unidad + "  AND montoRes=0";
+            String sql = "SELECT * FROM orden  WHERE Estado='Finalizado' AND id_Unidad=" + id_Unidad + " AND folio_unidad=" + folio_unidad + " AND montoRes=0";
             try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery();) {
                 while (rs.next()) {
                     ord.setId_Orden(rs.getInt("id_Orden"));
@@ -862,7 +862,7 @@ public class Orden_DAO {
     }
 
     public void updateSaldo(Float MontoPagado, Float MontoRestante, Pago_DTO pago) {
-        String sql = "UPDATE ORDEN "
+        String sql = "UPDATE orden "
                 + "set Precio_Total='" + (MontoPagado + pago.getMonto()) + "',"
                 + " montoRes='" + (MontoRestante - pago.getMonto()) + "' "
                 + "where id_Orden=" + pago.getId_Orden() + "";
@@ -877,7 +877,7 @@ public class Orden_DAO {
     }
 
     public void TerminarOrden(Orden_DTO Orden) {
-        String sql = "UPDATE ORDEN "
+        String sql = "UPDATE orden "
                 + "set Estado='" + Orden.getEstado() + "' "
                 + "where id_Orden=" + Orden.getId_Orden() + "";
         System.out.println(sql);
@@ -888,5 +888,43 @@ public class Orden_DAO {
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    public static void main(String[] args) {
+        Orden_DAO O = new Orden_DAO();
+        Orden_DTO Orden = O.getOrden(3);
+        int r = 0;
+        for (Det_Orden_DTO d : Orden.getDet_Orden()) {
+            if (d.getEstudio().getAddRes()) {
+                r = r + 2;
+                r = d.getEstudio().getCnfs().stream().filter((c) -> (c.getRes() != null)).map((_item) -> 1).reduce(r, Integer::sum);
+            }
+        }
+        String Source = "";
+        if (r < 35) {
+            Source = "M/MembreteRes1.pdf";
+        } else if (r > 35 & r < 70) {
+            Source = "M/MembreteRes2.pdf";
+        } else if (r > 70 & r < 105) {
+            Source = "M/MembreteRes3.pdf";
+        } else if (r > 140 & r < 175) {
+            Source = "M/MembreteRes4.pdf";
+        }
+        for (Det_Orden_DTO dto : Orden.getDet_Orden()) {
+            System.out.println("*********************************************");
+            dto.getEstudio().getCnfs().stream().filter((cnf) -> (cnf.getRes() != null)).map((cnf) -> {
+                System.out.println(cnf.getDescripcion());
+                return cnf;
+            }).map((cnf) -> {
+                System.out.println(cnf.getRes().getValor_Obtenido());
+                return cnf;
+            }).map((cnf) -> {
+                System.out.println(cnf.getValor_min() + "-" + cnf.getValor_MAX());
+                return cnf;
+            }).forEachOrdered((cnf) -> {
+                System.out.println(cnf.getUniddes());
+            });
+        }
+
     }
 }

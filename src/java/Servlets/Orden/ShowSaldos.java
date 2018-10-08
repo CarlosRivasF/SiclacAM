@@ -31,7 +31,8 @@ public class ShowSaldos extends HttpServlet {
         out.print("<div class='nav-scroller bg-white box-shadow'>"
                 + "    <nav class='nav nav-underline'>"
                 + "        <a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Orden/Registro.jsp');>Nueva Órden</a>"
-                + "        <a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds'); >Pendientes</a>"
+                        + "        <a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Cotizacion/Registro.jsp');>Nueva Cotización</a>"
+                + "        <a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=ord'); >Ver Órdenes</a>"
                 + "        <a class='nav-link active' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowSaldos');  style=\"color: blue\"><ins>Saldos</ins></a>"
                 + "    </nav>"
                 + "</div><br>");
