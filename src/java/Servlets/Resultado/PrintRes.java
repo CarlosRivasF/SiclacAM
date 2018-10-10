@@ -23,7 +23,9 @@ import com.itextpdf.text.pdf.PdfStamper;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -63,7 +65,7 @@ public class PrintRes extends HttpServlet {
                 Orden = O.getOrden(id_Orden);
             }
             response.setContentType("application/pdf");
-            response.setHeader("Content-disposition", "inline; filename=\"report" + 1 + ".pdf\"");
+            response.setHeader("Content-disposition", "inline; filename=\"" + Orden.getPaciente().getCodPac() + "_" + Orden.getId_Orden() + ".pdf\"");
             String relativePath = getServletContext().getRealPath("/");
             int r = 0;
             for (Det_Orden_DTO d : Orden.getDet_Orden()) {
@@ -72,6 +74,16 @@ public class PrintRes extends HttpServlet {
                     r = d.getEstudio().getCnfs().stream().filter((c) -> (c.getRes() != null)).map((_item) -> 1).reduce(r, Integer::sum);
                 }
             }
+
+            List<Det_Orden_DTO> DetImage = new ArrayList<>();
+            Orden.getDet_Orden().stream().filter((d) -> (d.getEstudio().getId_Tipo_Estudio() == 2 || d.getEstudio().getId_Tipo_Estudio() == 4 || d.getEstudio().getId_Tipo_Estudio() == 6)).forEachOrdered((d) -> {
+                DetImage.add(d);
+            });
+
+            Orden.getDet_Orden().removeAll(DetImage);
+
+            r = r - (DetImage.size() - 1);
+
             String Source = "";
             if (r < 35) {
                 Source = relativePath + "M/MembreteRes1.pdf";
@@ -192,7 +204,6 @@ public class PrintRes extends HttpServlet {
             table.getDefaultCell().setBorder(0);
             table.setWidths(new int[]{7, 3, 7, 3});
             for (Det_Orden_DTO dto : Orden.getDet_Orden()) {
-
                 PdfPCell cell_Esp_Title = new PdfPCell(new Paragraph("                                   ", Title_Font_Est));
                 cell_Esp_Title.setColspan(4);
                 cell_Esp_Title.setBorder(0);

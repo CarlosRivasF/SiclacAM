@@ -20,7 +20,6 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
-import com.itextpdf.text.pdf.PdfTransition;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -53,7 +52,7 @@ public class AddCover2 {
      * The resulting PDF file.
      */
     public static final String DEST
-            = "results/merge/Stamper.pdf";
+            = "results/merge/StamperX.pdf";
 
     public void manipulatePdf(String src, String dest)
             throws IOException, DocumentException {
@@ -161,7 +160,6 @@ public class AddCover2 {
         Boolean textLine = false;
         int IdxOrd;
         for (int l = 0; l < 6; l++) {
-
             //if(tipoEstudio=="Imagen"){
             if (l == 3) {
                 textLine = true;
@@ -191,20 +189,6 @@ public class AddCover2 {
                 table.addCell("20.00");
                 table.addCell("32.12");
             }
-            //PdfTransition pdft = new PdfTransition();            
-        }
-
-        for (int i = 1; i <= 2; i++) {
-            stamper.insertPage(1, cover.getPageSizeWithRotation(1));
-            PdfContentByte page1 = stamper.getOverContent(1);
-            PdfImportedPage page = stamper.getImportedPage(cover, 1);
-            page1.addTemplate(page, 0, 0);
-            
-            cb.beginText();
-            cb.setFontAndSize(bf, 10);
-            cb.setTextMatrix(50, 680);
-            cb.showText("HOLA SOY EL TEXTO NUEVO Num. " + i);
-            cb.endText();
         }
 
         ColumnText column = new ColumnText(stamper.getOverContent(1));
@@ -212,6 +196,17 @@ public class AddCover2 {
         column.setSimpleColumn(rectPage1);
         column.addElement(table);
 
+        for (int i = 1; i <= 5; i++) {
+            stamper.insertPage(1, cover.getPageSizeWithRotation(1));
+            PdfContentByte pageI = stamper.getOverContent(1);
+            pageI.beginText();
+            pageI.setFontAndSize(bf, 10);
+            pageI.setTextMatrix(50, 680);
+            pageI.showText("HOLA SOY EL TEXTO NUEVO Num. " + i);
+            pageI.endText();
+            PdfImportedPage pageA = stamper.getImportedPage(cover, 1);
+            pageI.addTemplate(pageA, 0, 0);
+        }
         int pagecount = 1;
         Rectangle rectPage2 = new Rectangle(-27, 40, 640, 690);//0,esp-inf,ancho,alto
         int status = column.go();
