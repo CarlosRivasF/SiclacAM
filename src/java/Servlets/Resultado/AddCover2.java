@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Servlets.Resultado;
 
 import com.itextpdf.text.BadElementException;
@@ -68,90 +63,7 @@ public class AddCover2 {
         page1.addTemplate(page, 0, 0);*/
         PdfContentByte cb = stamper.getOverContent(1);
 
-        int id_Orden = 1;
-        Image barras1;
-        JBarcodeBean barcode = new JBarcodeBean();
-        barcode.setCodeType(new Code39());
-        barcode.setCode(id_Orden + "-");
-        barcode.setCheckDigit(true);
-        barcode.setShowText(true);
-        BufferedImage bi = barcode.draw(new BufferedImage(156, 12, BufferedImage.TYPE_INT_RGB));
-        barras1 = Image.getInstance(Toolkit.getDefaultToolkit().createImage(bi.getSource()), null);
-
-        BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
-        BaseFont bf0 = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
-        BaseFont bf1 = BaseFont.createFont(BaseFont.COURIER, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
-
-        barras1.setAbsolutePosition(92, 705);//x,y
-
-        ///////////////////  DAATOS ORDEN
-        cb.beginText();
-        cb.setFontAndSize(bf, 10);
-        cb.setTextMatrix(305, 758);
-        cb.showText("Fecha de Emisión:");
-        cb.endText();
-        cb.beginText();
-        cb.setFontAndSize(bf1, 12);
-        cb.setTextMatrix(390, 758);
-        cb.showText("2018-04-10");
-        cb.endText();
-        ////////////////////////// DATOS PACIENTE
-        cb.beginText();
-        cb.setFontAndSize(bf, 10);
-        cb.setTextMatrix(270, 740);
-        cb.showText("Paciente:");
-        cb.endText();
-        cb.beginText();
-        cb.setFontAndSize(bf1, 12);
-        cb.setTextMatrix(320, 740);
-        cb.showText("Carlos Juarez Cazares");
-        cb.endText();
-        cb.beginText();
-        cb.setFontAndSize(bf, 10);
-        cb.setTextMatrix(300, 722);
-        cb.showText("Edad:");
-        cb.endText();
-        cb.beginText();
-        cb.setFontAndSize(bf1, 12);
-        cb.setTextMatrix(335, 722);
-        cb.showText("23");
-        cb.endText();
-        cb.beginText();
-        cb.setFontAndSize(bf, 10);
-        cb.setTextMatrix(370, 722);
-        cb.showText("Sexo:");
-        cb.endText();
-        cb.beginText();
-        cb.setFontAndSize(bf1, 12);
-        cb.setTextMatrix(410, 722);
-        cb.showText("Masculino");
-        cb.endText();
-        ////////////////////////// DATOS DOCTOR
-        cb.beginText();
-        cb.setFontAndSize(bf, 10);
-        cb.setTextMatrix(270, 707);
-        cb.showText("Doctor:");
-        cb.endText();
-        cb.beginText();
-        cb.setFontAndSize(bf1, 12);
-        cb.setTextMatrix(315, 707);
-        cb.showText("Carlos Rivas Frutero");
-        cb.endText();
-        ///////////////////////despedida
-
-        cb.beginText();
-        cb.setFontAndSize(bf0, 12);
-        cb.setTextMatrix(280, 70);
-        cb.showText("QFB. MARIA DE LOURDES GONZALEZ");
-        cb.endText();
-
-        cb.beginText();
-        cb.setFontAndSize(bf0, 12);
-        cb.setTextMatrix(450, 55);
-        cb.showText("CED. PROF. 1204923");
-        cb.endText();
-
-        cb.addImage(barras1, false);
+        PrintDataHead(cb, 1);
 
         PdfPTable table = new PdfPTable(4);
         table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -195,15 +107,24 @@ public class AddCover2 {
         Rectangle rectPage1 = new Rectangle(-27, 120, 640, 690);//0,esp-inf,ancho,alto
         column.setSimpleColumn(rectPage1);
         column.addElement(table);
-
+        BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
         for (int i = 5; i >= 1; i--) {
             stamper.insertPage(1, cover.getPageSizeWithRotation(1));
             PdfContentByte pageI = stamper.getOverContent(1);
-            pageI.beginText();
-            pageI.setFontAndSize(bf, 10);
-            pageI.setTextMatrix(50, 680);
-            pageI.showText("HOLA SOY EL TEXTO NUEVO Num. " + i);
-            pageI.endText();
+            PrintDataHead(pageI, 1);
+            int y = 680;
+            /*
+            Maximo de caracteres por linea: 76
+            Lineas por página: MAX(32) Recomend: 28
+             */
+            for (int l = 0; l < 32; l++) {
+                pageI.beginText();
+                pageI.setFontAndSize(bf, 10);
+                pageI.setTextMatrix(50, y);
+                pageI.showText("QWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYU");
+                pageI.endText();
+                y = y - 15;
+            }
             PdfImportedPage pageA = stamper.getImportedPage(cover, 1);
             pageI.addTemplate(pageA, 0, 0);
         }
@@ -222,11 +143,8 @@ public class AddCover2 {
         reader.close();
     }
 
-    public int triggerNewPage(PdfReader reader, PdfStamper stamper, Rectangle pagesize, ColumnText column, Rectangle rect, int pagecount) throws DocumentException {
+    public PdfContentByte PrintDataHead(PdfContentByte cb, int id_Orden) {
         try {
-            PdfContentByte cb = stamper.getOverContent(pagecount);
-
-            int id_Orden = 1;
             Image barras1;
             JBarcodeBean barcode = new JBarcodeBean();
             barcode.setCodeType(new Code39());
@@ -311,12 +229,18 @@ public class AddCover2 {
 
             cb.addImage(barras1, false);
 
-            column.setCanvas(cb);
-            column.setSimpleColumn(rect);
-
-        } catch (BadElementException | IOException ex) {
+        } catch (BadElementException ex) {
+            Logger.getLogger(AddCover2.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException | DocumentException ex) {
             Logger.getLogger(AddCover2.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return cb;
+    }
+
+    public int triggerNewPage(PdfReader reader, PdfStamper stamper, Rectangle pagesize, ColumnText column, Rectangle rect, int pagecount) throws DocumentException {
+        PdfContentByte cb = stamper.getOverContent(pagecount);
+        column.setCanvas(PrintDataHead(cb, 1));
+        column.setSimpleColumn(rect);
         return column.go();
     }
 
