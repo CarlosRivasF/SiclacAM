@@ -52,7 +52,7 @@ public class AddCover2 {
      * The resulting PDF file.
      */
     public static final String DEST
-            = "results/merge/StamperX.pdf";
+            = "results/merge/StamperFine.pdf";
 
     public void manipulatePdf(String src, String dest)
             throws IOException, DocumentException {
@@ -196,7 +196,7 @@ public class AddCover2 {
         column.setSimpleColumn(rectPage1);
         column.addElement(table);
 
-        for (int i = 1; i <= 5; i++) {
+        for (int i = 5; i >= 1; i--) {
             stamper.insertPage(1, cover.getPageSizeWithRotation(1));
             PdfContentByte pageI = stamper.getOverContent(1);
             pageI.beginText();
