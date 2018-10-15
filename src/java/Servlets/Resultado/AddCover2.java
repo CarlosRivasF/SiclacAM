@@ -63,7 +63,7 @@ public class AddCover2 {
         page1.addTemplate(page, 0, 0);*/
         PdfContentByte cb = stamper.getOverContent(1);
 
-        PrintDataHead(cb, 1);
+        PrintDataHead(cb, 1, true);
 
         PdfPTable table = new PdfPTable(4);
         table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -107,24 +107,59 @@ public class AddCover2 {
         Rectangle rectPage1 = new Rectangle(-27, 120, 640, 690);//0,esp-inf,ancho,alto
         column.setSimpleColumn(rectPage1);
         column.addElement(table);
+        /*Comienza a recorrer los estudios de tipo Imagen,etc que sean en hoja blanca*/
         BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
         for (int i = 5; i >= 1; i--) {
             stamper.insertPage(1, cover.getPageSizeWithRotation(1));
             PdfContentByte pageI = stamper.getOverContent(1);
-            PrintDataHead(pageI, 1);
+            PrintDataHead(pageI, 1, false);
             int y = 680;
             /*
             Maximo de caracteres por linea: 76
             Lineas por página: MAX(32) Recomend: 28
              */
-            for (int l = 0; l < 32; l++) {
+            BaseFont bf0 = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+
+            int idx = 75;
+            String line = "QWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYU"
+                    + "QWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYU"
+                    + "QWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYU";
+            int rows = 0;
+            while (idx <= line.length() && rows <= 30) {
+                rows++;
                 pageI.beginText();
                 pageI.setFontAndSize(bf, 10);
                 pageI.setTextMatrix(50, y);
-                pageI.showText("QWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYU");
+                pageI.showText(line.substring((idx - 75), idx));
                 pageI.endText();
                 y = y - 15;
+                idx = idx + 75;
             }
+            pageI.beginText();
+            pageI.setFontAndSize(bf, 11);
+            pageI.setTextMatrix(244, 200);
+            pageI.showText("ATENTAMENTE");
+            pageI.endText();
+            pageI.beginText();
+            pageI.setFontAndSize(bf, 11);
+            pageI.setTextMatrix(165, 140);
+            pageI.showText("_________________________________________");
+            pageI.endText();
+            pageI.beginText();
+            pageI.setFontAndSize(bf0, 11);
+            pageI.setTextMatrix(210, 125);
+            pageI.showText("Doctor Profesor Patricio Estrella");
+            pageI.endText();
+            pageI.beginText();
+            pageI.setFontAndSize(bf, 10);
+            pageI.setTextMatrix(245, 110);
+            pageI.showText("Médico Inmunólogo");
+            pageI.endText();
+            pageI.beginText();
+            pageI.setFontAndSize(bf, 10);
+            pageI.setTextMatrix(242, 95);
+            pageI.showText("CED. PROF. 1204923o");
+            pageI.endText();
             PdfImportedPage pageA = stamper.getImportedPage(cover, 1);
             pageI.addTemplate(pageA, 0, 0);
         }
@@ -143,7 +178,7 @@ public class AddCover2 {
         reader.close();
     }
 
-    public PdfContentByte PrintDataHead(PdfContentByte cb, int id_Orden) {
+    public PdfContentByte PrintDataHead(PdfContentByte cb, int id_Orden, Boolean footer) {
         try {
             Image barras1;
             JBarcodeBean barcode = new JBarcodeBean();
@@ -214,18 +249,19 @@ public class AddCover2 {
             cb.showText("Carlos Rivas Frutero");
             cb.endText();
             ///////////////////////despedida
+            if (footer) {
+                cb.beginText();
+                cb.setFontAndSize(bf0, 12);
+                cb.setTextMatrix(280, 70);
+                cb.showText("QFB. MARIA DE LOURDES GONZALEZ");
+                cb.endText();
 
-            cb.beginText();
-            cb.setFontAndSize(bf0, 12);
-            cb.setTextMatrix(280, 70);
-            cb.showText("QFB. MARIA DE LOURDES GONZALEZ");
-            cb.endText();
-
-            cb.beginText();
-            cb.setFontAndSize(bf0, 12);
-            cb.setTextMatrix(450, 55);
-            cb.showText("CED. PROF. 1204923");
-            cb.endText();
+                cb.beginText();
+                cb.setFontAndSize(bf0, 12);
+                cb.setTextMatrix(450, 55);
+                cb.showText("CED. PROF. 1204923");
+                cb.endText();
+            }
 
             cb.addImage(barras1, false);
 
@@ -239,7 +275,7 @@ public class AddCover2 {
 
     public int triggerNewPage(PdfReader reader, PdfStamper stamper, Rectangle pagesize, ColumnText column, Rectangle rect, int pagecount) throws DocumentException {
         PdfContentByte cb = stamper.getOverContent(pagecount);
-        column.setCanvas(PrintDataHead(cb, 1));
+        column.setCanvas(PrintDataHead(cb, 1, true));
         column.setSimpleColumn(rect);
         return column.go();
     }
