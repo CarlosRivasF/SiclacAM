@@ -257,7 +257,6 @@ public class NewServlet extends HttpServlet {
         Date fac = new Date();
         Fecha f = new Fecha();
         f.setHora(fac);
-
         try {
             BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
             BaseFont bf0 = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
@@ -271,7 +270,6 @@ public class NewServlet extends HttpServlet {
             barcode.setShowText(true);
             BufferedImage bi = barcode.draw(new BufferedImage(156, 12, BufferedImage.TYPE_INT_RGB));
             barras1.setAbsolutePosition(92, 705);//x,y
-
             /////////////////// *********** DATOS ORDEN ***********************************  ///////////////////            
             cb.beginText();
             cb.setFontAndSize(bf, 10);
