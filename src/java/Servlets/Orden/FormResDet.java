@@ -167,84 +167,114 @@ public class FormResDet extends HttpServlet {
             Orden.getDet_Orden().set(index, det);
             sesion.setAttribute("OrdenSh", Orden);
             if (det.getEstudio().getAddRes()) {
-                out.println("<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
-                        + "<tr class='table-info' style='color: black'>"
-                        + "<th >Desc</th>"
-                        + "<th >Val 1</th>"
-                        + "<th >Val 2</th>"
-                        + "<th >Resultado</th>"
-                        + "<th >Unidades</th>"
-                        + "<th >Modificar</th>"
-                        + "</tr>");
                 Boolean r;
                 Boolean r1 = false;
-                for (Configuracion_DTO cnf : det.getEstudio().getCnfs()) {
-                    r = false;
-                    out.println("<tr>"
-                            + "<td >" + cnf.getDescripcion() + "</td>"
-                            + "<td >" + cnf.getValor_min() + "</td>"
-                            + "<td >" + cnf.getValor_MAX() + "</td>");
-                    if (cnf.getRes() != null) {
-                        out.println("<td ><div id='diValRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "'>" + cnf.getRes().getValor_Obtenido() + "</div></td>");
-                    } else {
-                        r = true;
-                        r1 = true;
-                        out.println("<td><div id='diValRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "'><input style='text-align: center' type='text' class='form-control form-control-sm' name='valRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "' id='valRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "' placeholder='Resultado' required></div></td>");
+                //<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                if (det.getEstudio().getId_Tipo_Estudio() == 2 || det.getEstudio().getId_Tipo_Estudio() == 4 || det.getEstudio().getId_Tipo_Estudio() == 5 || det.getEstudio().getId_Tipo_Estudio() == 6) {
+
+                    for (Configuracion_DTO cnf : det.getEstudio().getCnfs()) {
+                        //out.println("<div id='diValRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "'><textarea rows='15' class='form-control form-control-sm' name='valRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "' id='valRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "' placeholder='Valoración del Médico...' required></textarea></div>");
+                        r = false;
+                        if (cnf.getRes() != null) {
+                            out.println("<div class='offset-2 col-8 mb-3' id='diValRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "'><textarea rows='15' class='form-control form-control-sm' name='valRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "' id='valRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "' placeholder='Valoración del Médico...' readonly>" + cnf.getRes().getValor_Obtenido() + "</textarea></div>");
+                        } else {
+                            r = true;
+                            r1 = true;
+                            out.println("<div class='offset-2 col-8 mb-3' id='diValRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "'><textarea rows='15' class='form-control form-control-sm' name='valRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "' id='valRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "' placeholder='Valoración del Médico...' required></textarea></div>");
+                        }
+                        out.println("<br>");
+                        if (!r) {
+                            out.print("<div id='BTdiValRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "'><button href=# class='btn btn-warning btn-sm btn-block' onclick=FormUpRes(" + index + "," + det.getEstudio().getCnfs().indexOf(cnf) + ",'form'," + det.getEstudio().getId_Tipo_Estudio() + ") >Modificar valoración de médico</button></div>");
+                        }
+                        out.print("<br>");
                     }
-                    out.println("<td >" + cnf.getUniddes() + "</td>");
-                    if (!r) {
-                        out.print("<th><div id='BTdiValRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "'><button href=# class='btn btn-warning btn-sm' onclick=FormUpRes(" + index + "," + det.getEstudio().getCnfs().indexOf(cnf) + ",'form') ><span><img src='images/pencil.png'></span></button></div></th>");
-                    }
-                    out.print("</tr>");
-                }
-                //Observaciones
-                if (det.getEstudio().getObservacion() == null||  det.getEstudio().getObservacion().getObservacion() == null) {
-                    out.println("<tr>"
-                            + "<td colspan='5'><div id='diValObs-" + index + "'><div></td>");
-                    out.print("<th><div id='BTdiValObs-" + index + "'><button href=# class='btn btn-warning btn-sm' onclick=FormUpResObs(" + index + ",'form') ><span><img src='images/pencil.png'></span></button></div></th>");
-                    out.println("</tr>");
                 } else {
-                    out.println("<tr>"
-                            + "<td colspan='5'><div id='diValObs-" + index + "'>" + det.getEstudio().getObservacion().getObservacion() + "<div></td>");
-                    out.print("<th><div id='BTdiValObs-" + index + "'><button href=# class='btn btn-warning btn-sm' onclick=FormUpResObs(" + index + ",'form') ><span><img src='images/pencil.png'></span></button></div></th>");
-                    out.println("</tr>");
-                }
-                out.println("</table>");
-            } else {
-                //Tabla de Resultados
-                out.println("<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
-                        + "<tr class='table-info' style='color: black'>"
-                        + "<th >Desc</th>"
-                        + "<th >Val 1</th>"
-                        + "<th >Val 2</th>"
-                        + "<th >Resultado</th>"
-                        + "<th >Unidades</th>"
-                        + "</tr>");
-                det.getEstudio().getCnfs().forEach((cnf) -> {
-                    out.println("<tr>"
-                            + "<td >" + cnf.getDescripcion() + "</td>"
-                            + "<td >" + cnf.getValor_min() + "</td>"
-                            + "<td >" + cnf.getValor_MAX() + "</td>"
-                            + "<td><div id='diValRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "'><input style='text-align: center' type='text' class='form-control form-control-sm' name='valRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "' id='valRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "' placeholder='Resultado' required></div></td>"
-                            + "<td >" + cnf.getUniddes() + "</td>"
+                    out.println("<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
+                            + "<tr class='table-info' style='color: black'>"
+                            + "<th >Desc</th>"
+                            + "<th >Val 1</th>"
+                            + "<th >Val 2</th>"
+                            + "<th >Resultado</th>"
+                            + "<th >Unidades</th>"
+                            + "<th >Modificar</th>"
                             + "</tr>");
-                });
-                //Observaciones
-                out.println("<tr>"
-                        + "<td colspan='5'><input style='text-align: center' type='text' class='form-control form-control-sm' name='Observ-" + index + "' id='Observ-" + index + "' placeholder='Obervaciones...' required></td>"
-                        + "</tr>");
-                //Boton de Guardar Resultados
-                out.println("<tr>"
-                        + "<td colspan='5'><div id='addcnf'><button href=# class='btn btn-success btn-block' onclick=SaveResDet(" + index + "," + det.getEstudio().getCnfs().size() + ")>Guardar Resultados</button></div></td>"
-                        + "</tr>");
-                out.println("</table>");
+                    for (Configuracion_DTO cnf : det.getEstudio().getCnfs()) {
+                        r = false;
+                        out.println("<tr>"
+                                + "<td >" + cnf.getDescripcion() + "</td>"
+                                + "<td >" + cnf.getValor_min() + "</td>"
+                                + "<td >" + cnf.getValor_MAX() + "</td>");
+                        if (cnf.getRes() != null) {
+                            out.println("<td ><div id='diValRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "'>" + cnf.getRes().getValor_Obtenido() + "</div></td>");
+                        } else {
+                            r = true;
+                            r1 = true;
+                            out.println("<td><div id='diValRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "'><input style='text-align: center' type='text' class='form-control form-control-sm' name='valRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "' id='valRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "' placeholder='Resultado' required></div></td>");
+                        }
+                        out.println("<td >" + cnf.getUniddes() + "</td>");
+                        if (!r) {
+                            out.print("<th><div id='BTdiValRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "'><button href=# class='btn btn-warning btn-sm' onclick=FormUpRes(" + index + "," + det.getEstudio().getCnfs().indexOf(cnf) + ",'form') ><span><img src='images/pencil.png'></span></button></div></th>");
+                        }
+                        out.print("</tr>");
+                    }
+                    //Observaciones
+                    if (det.getEstudio().getObservacion() == null || det.getEstudio().getObservacion().getObservacion() == null) {
+                        out.println("<tr>"
+                                + "<td colspan='5'><div id='diValObs-" + index + "'><div></td>");
+                        out.print("<th><div id='BTdiValObs-" + index + "'><button href=# class='btn btn-warning btn-sm' onclick=FormUpResObs(" + index + ",'form') ><span><img src='images/pencil.png'></span></button></div></th>");
+                        out.println("</tr>");
+                    } else {
+                        out.println("<tr>"
+                                + "<td colspan='5'><div id='diValObs-" + index + "'>" + det.getEstudio().getObservacion().getObservacion() + "<div></td>");
+                        out.print("<th><div id='BTdiValObs-" + index + "'><button href=# class='btn btn-warning btn-sm' onclick=FormUpResObs(" + index + ",'form') ><span><img src='images/pencil.png'></span></button></div></th>");
+                        out.println("</tr>");
+                    }
+                    out.println("</table>");
+                }
+            } else {
+                if (det.getEstudio().getId_Tipo_Estudio() == 2 || det.getEstudio().getId_Tipo_Estudio() == 4 || det.getEstudio().getId_Tipo_Estudio() == 5 || det.getEstudio().getId_Tipo_Estudio() == 6) {
+                    for (Configuracion_DTO cnf : det.getEstudio().getCnfs()) {
+                        out.println("<div class='offset-2 col-8 mb-3' id='diValRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "'><textarea rows='15' class='form-control form-control-sm' name='valRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "' id='valRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "' placeholder='Valoración del Médico...' required></textarea></div>");
+                        out.println("<br>");//                        
+                    }
+                    out.println("<input style='text-align: center' type='text' class='form-control form-control-sm' name='Observ-" + index + "' id='Observ-" + index + "' placeholder='Obervaciones...' required><br>");
+                    out.println("<div id='addcnf'><button href=# class='btn btn-success btn-block' onclick=SaveResDet(" + index + "," + det.getEstudio().getCnfs().size() + ")>Guardar Resultados</button></div>");
+                } else {
+                    //Tabla de Resultados
+                    out.println("<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
+                            + "<tr class='table-info' style='color: black'>"
+                            + "<th >Desc</th>"
+                            + "<th >Val 1</th>"
+                            + "<th >Val 2</th>"
+                            + "<th >Resultado</th>"
+                            + "<th >Unidades</th>"
+                            + "</tr>");
+                    det.getEstudio().getCnfs().forEach((cnf) -> {
+                        out.println("<tr>"
+                                + "<td >" + cnf.getDescripcion() + "</td>"
+                                + "<td >" + cnf.getValor_min() + "</td>"
+                                + "<td >" + cnf.getValor_MAX() + "</td>"
+                                + "<td><div id='diValRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "'><input style='text-align: center' type='text' class='form-control form-control-sm' name='valRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "' id='valRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "' placeholder='Resultado' required></div></td>"
+                                + "<td >" + cnf.getUniddes() + "</td>"
+                                + "</tr>");
+                    });
+                    //Observaciones
+                    out.println("<tr>"
+                            + "<td colspan='5'><input style='text-align: center' type='text' class='form-control form-control-sm' name='Observ-" + index + "' id='Observ-" + index + "' placeholder='Obervaciones...' required></td>"
+                            + "</tr>");
+                    //Boton de Guardar Resultados
+                    out.println("<tr>"
+                            + "<td colspan='5'><div id='addcnf'><button href=# class='btn btn-success btn-block' onclick=SaveResDet(" + index + "," + det.getEstudio().getCnfs().size() + ")>Guardar Resultados</button></div></td>"
+                            + "</tr>");
+                    out.println("</table>");
+                }
             }
         } else {
             out.println("<h1>Servlet FormResDet at " + request.getContextPath() + "</h1>");
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

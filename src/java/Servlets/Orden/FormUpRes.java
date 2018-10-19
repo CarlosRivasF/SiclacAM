@@ -32,16 +32,24 @@ public class FormUpRes extends HttpServlet {
             int ixconf = Integer.parseInt(request.getParameter("ixconf").trim());
             Det_Orden_DTO det = Orden.getDet_Orden().get(index);
             Configuracion_DTO cnf = det.getEstudio().getCnfs().get(ixconf);
-            Resultado_DAO R=new Resultado_DAO();
+            Resultado_DAO R = new Resultado_DAO();
             if ("upd".equals(acc)) {
                 cnf.getRes().setValor_Obtenido(request.getParameter("Resultado"));
-                det.getEstudio().getCnfs().set(ixconf, cnf);                
+                det.getEstudio().getCnfs().set(ixconf, cnf);
                 Orden.getDet_Orden().set(index, det);
                 sesion.setAttribute("OrdenSh", Orden);
                 R.updateRes(cnf.getRes());
-                out.print(cnf.getRes().getValor_Obtenido());
+                if (det.getEstudio().getId_Tipo_Estudio() == 2 || det.getEstudio().getId_Tipo_Estudio() == 4 || det.getEstudio().getId_Tipo_Estudio() == 5 || det.getEstudio().getId_Tipo_Estudio() == 6) {
+                    out.println("<textarea rows='15' class='form-control form-control-sm' name='valRes-" + ixconf + "' id='valRes-" + ixconf + "' placeholder='Valoración del Médico...' readonly>" + cnf.getRes().getValor_Obtenido() + "</textarea>");
+                } else {
+                    out.print(cnf.getRes().getValor_Obtenido());
+                }
             } else {
-                out.println("<input style='text-align: center' type='text' class='form-control form-control-sm' name='valRes-" + ixconf + "' value='" + cnf.getRes().getValor_Obtenido() + "' id='valRes-" + ixconf + "' placeholder='Resultado'>");
+                if (det.getEstudio().getId_Tipo_Estudio() == 2 || det.getEstudio().getId_Tipo_Estudio() == 4 || det.getEstudio().getId_Tipo_Estudio() == 5 || det.getEstudio().getId_Tipo_Estudio() == 6) {
+                    out.println("<textarea rows='15' class='form-control form-control-sm' name='valRes-" + ixconf + "' id='valRes-" + ixconf + "' placeholder='Valoración del Médico...'>" + cnf.getRes().getValor_Obtenido() + "</textarea>");
+                } else {
+                    out.println("<input style='text-align: center' type='text' class='form-control form-control-sm' name='valRes-" + ixconf + "' value='" + cnf.getRes().getValor_Obtenido() + "' id='valRes-" + ixconf + "' placeholder='Resultado'>");
+                }
             }
         }
     }

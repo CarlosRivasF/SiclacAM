@@ -19,7 +19,7 @@ public class Conexion {
 
     public static DataSource dataSource = null;//siclac2
     private static final String DB = "siclac2";//node74321-amlab.whelastic.net // localhost //node74321-amlab.whelastic.net:11065
-    private static final String URL = "jdbc:mysql://node74321-amlab.whelastic.net/" + DB + "?useServerPrepStmts=true&autoReconnect=true&useSSL=false";
+    private static final String URL = "jdbc:mysql://node74321-amlab.whelastic.net:11065/" + DB + "?useServerPrepStmts=true&autoReconnect=true&useSSL=false";
     private static final String USER = "root";
     private static final String PASS = "NAVngv51153";//NAVngv51153
 

@@ -131,7 +131,7 @@ function validarFormulario(e) {
             }//
             if (formulario[i].name === "muestra" || formulario[i].name === "unidad" || formulario[i].name === "desc" || formulario[i].name === "min" || formulario[i].name === "max" || formulario[i].name === "unidades" || formulario[i].name === "telefono" || formulario[i].name === "celular"
                     || formulario[i].name === "c_p" || formulario[i].name === "calle" || formulario[i].name === "no_int" || formulario[i].name === "no_ext") {
-            } else if (formulario[i].name.substring(0, 4) === "desc" ||formulario[i].name.substring(0, 3) === "min" || formulario[i].name.substring(0, 3) === "max" || formulario[i].name.substring(0, 8) === "unidades") {
+            } else if (formulario[i].name.substring(0, 4) === "desc" || formulario[i].name.substring(0, 3) === "min" || formulario[i].name.substring(0, 3) === "max" || formulario[i].name.substring(0, 8) === "unidades") {
             } else if (formulario[i].value.trim() === "") {
                 alert('El campo debe contener un valor completo');
                 todoCorrecto = false;
@@ -2066,7 +2066,7 @@ function PrSavResDet() {
     }
 }
 
-function FormUpRes(index, ixconf, acc) {
+function FormUpRes(index, ixconf, acc, Id_Tpo_Est) {
     var dta = " &f=f";//BTdiValRes
     var divRes = document.getElementById("diValRes-" + ixconf);
     var BTdiV = document.getElementById("BTdiValRes-" + ixconf);
@@ -2075,9 +2075,21 @@ function FormUpRes(index, ixconf, acc) {
     if (acc === "upd") {
         var Resultado = document.getElementById("valRes-" + ixconf).value;
         dta = " &Resultado=" + Resultado;
-        BTdiV.innerHTML = "<button href='#' class='btn btn-warning btn-sm' onclick=FormUpRes(" + index + "," + ixconf + ",'form')><span><img src=images/pencil.png></span></button>";
+        if (Id_Tpo_Est !== null) {
+            if (Id_Tpo_Est === 2 || Id_Tpo_Est === 4 || Id_Tpo_Est === 5 || Id_Tpo_Est === 6) {
+                BTdiV.innerHTML = "<button href='#' class='btn btn-warning btn-sm btn-block' onclick=FormUpRes(" + index + "," + ixconf + ",'form',"+Id_Tpo_Est+")>Modificar valoración de médico</button>";
+            }
+        } else {
+            BTdiV.innerHTML = "<button href='#' class='btn btn-warning btn-sm' onclick=FormUpRes(" + index + "," + ixconf + ",'form')><span><img src=images/pencil.png></span></button>";
+        }
     } else {
-        BTdiV.innerHTML = "<button href='#' class='btn btn-success btn-sm' onclick=FormUpRes(" + index + "," + ixconf + ",'upd')><span><img src=images/save.png></span></button>";
+        if (Id_Tpo_Est !== null) {
+            if (Id_Tpo_Est === 2 || Id_Tpo_Est === 4 || Id_Tpo_Est === 5 || Id_Tpo_Est === 6) {
+                BTdiV.innerHTML = "<button href='#' class='btn btn-success btn-sm btn-block' onclick=FormUpRes(" + index + "," + ixconf + ",'upd',"+Id_Tpo_Est+")>Guardar valoración de médico</button>";
+            }
+        } else {
+            BTdiV.innerHTML = "<button href='#' class='btn btn-success btn-sm' onclick=FormUpRes(" + index + "," + ixconf + ",'upd')><span><img src=images/save.png></span></button>";
+        }
     }
     Ajax.onreadystatechange = function () {
         if (Ajax.readyState === 4) {

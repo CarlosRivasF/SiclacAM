@@ -195,6 +195,7 @@ public class Orden_DAO {
                 Boolean r = false;
                 while (rs.next()) {
                     Det_Orden_DTO det = new Det_Orden_DTO();
+                    det.setId_orden(ord.getId_Orden());
                     det.setId_det_orden(rs.getInt("id_Det_Orden"));
                     det.setEstudio(E.getEst_Uni(rs.getInt("id_Est_Uni")));
                     det.setDescuento(rs.getInt("Descuento"));
@@ -892,7 +893,7 @@ public class Orden_DAO {
 
     public static void main(String[] args) {
         Orden_DAO O = new Orden_DAO();
-        Orden_DTO Orden = O.getOrden(3);
+        Orden_DTO Orden = O.getOrdenByFolio(4, 1);
         int r = 0;
         for (Det_Orden_DTO d : Orden.getDet_Orden()) {
             if (d.getEstudio().getAddRes()) {
@@ -910,20 +911,16 @@ public class Orden_DAO {
         } else if (r > 140 & r < 175) {
             Source = "M/MembreteRes4.pdf";
         }
+        System.out.println("Id_Orden=" + Orden.getId_Orden());
         for (Det_Orden_DTO dto : Orden.getDet_Orden()) {
-            System.out.println("*********************************************");
-            dto.getEstudio().getCnfs().stream().filter((cnf) -> (cnf.getRes() != null)).map((cnf) -> {
-                System.out.println(cnf.getDescripcion());
-                return cnf;
-            }).map((cnf) -> {
-                System.out.println(cnf.getRes().getValor_Obtenido());
-                return cnf;
-            }).map((cnf) -> {
-                System.out.println(cnf.getValor_min() + "-" + cnf.getValor_MAX());
-                return cnf;
-            }).forEachOrdered((cnf) -> {
-                System.out.println(cnf.getUniddes());
-            });
+            System.out.println("Orden:" + dto.getId_orden() + " Id_Det_Orden=" + dto.getId_det_orden());
+            if (dto.getEstudio().getAddRes()) {
+                for (Configuracion_DTO cnf : dto.getEstudio().getCnfs()) {
+                    if (cnf.getRes() != null) {
+                        System.out.println("Id_Resultado=" + cnf.getRes().getId_resultado());
+                    }
+                }
+            }
         }
 
     }

@@ -16,6 +16,7 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfImportedPage;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfReader;
@@ -26,6 +27,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -41,6 +44,8 @@ import net.sourceforge.jbarcodebean.model.Code39;
  */
 @WebServlet(name = "PrintRes", urlPatterns = {"/PrintRes"})
 public class PrintRes extends HttpServlet {
+
+    PdfReader cover;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
 
@@ -76,7 +81,7 @@ public class PrintRes extends HttpServlet {
             }
 
             List<Det_Orden_DTO> DetImage = new ArrayList<>();
-            Orden.getDet_Orden().stream().filter((d) -> (d.getEstudio().getId_Tipo_Estudio() == 2 || d.getEstudio().getId_Tipo_Estudio() == 4 || d.getEstudio().getId_Tipo_Estudio() == 6)).forEachOrdered((d) -> {
+            Orden.getDet_Orden().stream().filter((d) -> (d.getEstudio().getId_Tipo_Estudio() == 2 || d.getEstudio().getId_Tipo_Estudio() == 4 || d.getEstudio().getId_Tipo_Estudio() == 5 || d.getEstudio().getId_Tipo_Estudio() == 6)).forEachOrdered((d) -> {
                 DetImage.add(d);
             });
 
@@ -96,97 +101,14 @@ public class PrintRes extends HttpServlet {
             }
 
             int pagecount = 1;
-
+            cover = new PdfReader(Source);
             PdfReader reader = new PdfReader(Source);
             Rectangle pagesize = reader.getPageSize(1);
             PdfStamper stamper = new PdfStamper(reader, response.getOutputStream());
 
             PdfContentByte cb = stamper.getOverContent(1);
 
-            Image barras1;
-            JBarcodeBean barcode = new JBarcodeBean();
-            barcode.setCodeType(new Code39());
-            barcode.setCode(Orden.getId_Orden() + "-");
-            barcode.setCheckDigit(true);
-            barcode.setShowText(true);
-            BufferedImage bi = barcode.draw(new BufferedImage(156, 12, BufferedImage.TYPE_INT_RGB));
-            barras1 = Image.getInstance(Toolkit.getDefaultToolkit().createImage(bi.getSource()), null);
-
-            BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
-            BaseFont bf0 = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
-            BaseFont bf1 = BaseFont.createFont(BaseFont.COURIER, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
-
-            barras1.setAbsolutePosition(92, 705);//x,y
-
-            ///////////////////  DAATOS ORDEN
-            cb.beginText();
-            cb.setFontAndSize(bf, 10);
-            cb.setTextMatrix(270, 758);
-            cb.showText("Fecha de Emisión:");
-            cb.endText();
-            cb.beginText();
-            cb.setFontAndSize(bf1, 12);
-            cb.setTextMatrix(355, 758);
-            cb.showText(f.getFechaActual());
-            cb.endText();
-            ////////////////////////// DATOS PACIENTE
-            cb.beginText();
-            cb.setFontAndSize(bf, 10);
-            cb.setTextMatrix(270, 740);
-            cb.showText("Paciente:");
-            cb.endText();
-            cb.beginText();
-            cb.setFontAndSize(bf1, 12);
-            cb.setTextMatrix(320, 740);
-            cb.showText(Orden.getPaciente().getNombre() + " " + Orden.getPaciente().getAp_Paterno() + " " + Orden.getPaciente().getAp_Materno());
-            cb.endText();
-
-            cb.beginText();
-            cb.setFontAndSize(bf, 10);
-            cb.setTextMatrix(270, 722);
-            cb.showText("Edad:");
-            cb.endText();
-            cb.beginText();
-            cb.setFontAndSize(bf1, 12);
-            cb.setTextMatrix(305, 722);
-            cb.showText(f.getEdad(Orden.getPaciente().getFecha_Nac()).getYears() + "");
-            cb.endText();
-            cb.beginText();
-            cb.setFontAndSize(bf, 10);
-            cb.setTextMatrix(340, 722);
-            cb.showText("Sexo:");
-            cb.endText();
-            cb.beginText();
-            cb.setFontAndSize(bf1, 12);
-            cb.setTextMatrix(380, 722);
-            cb.showText(Orden.getPaciente().getSexo());
-            cb.endText();
-            ////////////////////////// DATOS DOCTOR
-            cb.beginText();
-            cb.setFontAndSize(bf, 10);
-            cb.setTextMatrix(270, 707);
-            cb.showText("Doctor:");
-            cb.endText();
-            cb.beginText();
-            cb.setFontAndSize(bf1, 12);
-            cb.setTextMatrix(315, 707);
-            cb.showText(Orden.getMedico().getNombre() + " " + Orden.getMedico().getAp_Paterno() + " " + Orden.getMedico().getAp_Materno());
-            cb.endText();
-            ///////////////////////despedida
-
-            cb.beginText();
-            cb.setFontAndSize(bf0, 12);
-            cb.setTextMatrix(280, 70);
-            cb.showText("QFB. MARIA DE LOURDES GONZALEZ");
-            cb.endText();
-
-            cb.beginText();
-            cb.setFontAndSize(bf0, 12);
-            cb.setTextMatrix(450, 55);
-            cb.showText("CED. PROF. 1204923");
-            cb.endText();
-
-            cb.addImage(barras1, false);
+            PrintDataHead(cb, Orden, true);
 
             /////************************************************/////////////////
             BaseColor orange = new BaseColor(211, 84, 0);
@@ -203,6 +125,7 @@ public class PrintRes extends HttpServlet {
             table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
             table.getDefaultCell().setBorder(0);
             table.setWidths(new int[]{7, 3, 7, 3});
+            List<Det_Orden_DTO> Det_Images = new ArrayList<>();
             for (Det_Orden_DTO dto : Orden.getDet_Orden()) {
                 PdfPCell cell_Esp_Title = new PdfPCell(new Paragraph("                                   ", Title_Font_Est));
                 cell_Esp_Title.setColspan(4);
@@ -252,11 +175,68 @@ public class PrintRes extends HttpServlet {
                     table.addCell(cnf.getUniddes());
                 });
             }
-
+            Orden.getDet_Orden().removeAll(DetImage);
             ColumnText column = new ColumnText(stamper.getOverContent(1));
             Rectangle rectPage1 = new Rectangle(-27, 120, 640, 690);//0,esp-inf,ancho,alto
             column.setSimpleColumn(rectPage1);
             column.addElement(table);
+
+            /*Comienza a recorrer los estudios de tipo Imagen,etc que sean en hoja blanca*/
+            BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+            for (Det_Orden_DTO dto : Det_Images) {
+                stamper.insertPage(1, cover.getPageSizeWithRotation(1));
+                PdfContentByte pageI = stamper.getOverContent(1);
+                PrintDataHead(pageI, Orden, false);
+                int y = 680;
+                /*
+            Maximo de caracteres por linea: 76
+            Lineas por página: MAX(32) Recomend: 28
+                 */
+                BaseFont bf0 = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+
+                int idx = 75;
+                String line = "QWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYU"
+                        + "QWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYU"
+                        + "QWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYU";
+                int rows = 0;
+                while (idx <= line.length() && rows <= 30) {
+                    rows++;
+                    pageI.beginText();
+                    pageI.setFontAndSize(bf, 10);
+                    pageI.setTextMatrix(50, y);
+                    pageI.showText(line.substring((idx - 75), idx));
+                    pageI.endText();
+                    y = y - 15;
+                    idx = idx + 75;
+                }
+                pageI.beginText();
+                pageI.setFontAndSize(bf, 11);
+                pageI.setTextMatrix(244, 200);
+                pageI.showText("ATENTAMENTE");
+                pageI.endText();
+                pageI.beginText();
+                pageI.setFontAndSize(bf, 11);
+                pageI.setTextMatrix(165, 140);
+                pageI.showText("_________________________________________");
+                pageI.endText();
+                pageI.beginText();
+                pageI.setFontAndSize(bf0, 11);
+                pageI.setTextMatrix(210, 125);
+                pageI.showText("Doctor Profesor Patricio Estrella");
+                pageI.endText();
+                pageI.beginText();
+                pageI.setFontAndSize(bf, 10);
+                pageI.setTextMatrix(245, 110);
+                pageI.showText("Médico Inmunólogo");
+                pageI.endText();
+                pageI.beginText();
+                pageI.setFontAndSize(bf, 10);
+                pageI.setTextMatrix(242, 95);
+                pageI.showText("CED. PROF. 1204923o");
+                pageI.endText();
+                PdfImportedPage pageA = stamper.getImportedPage(cover, 1);
+                pageI.addTemplate(pageA, 0, 0);
+            }
 
             Rectangle rectPage2 = new Rectangle(-27, 40, 640, 690);//0,esp-inf,ancho,alto
             int status = column.go();
@@ -276,8 +256,18 @@ public class PrintRes extends HttpServlet {
         Date fac = new Date();
         Fecha f = new Fecha();
         f.setHora(fac);
+        PdfContentByte cb = stamper.getOverContent(pagecount);
+        PrintDataHead(cb, Orden, false);
+        column.setCanvas(cb);
+        column.setSimpleColumn(rect);
+        return column.go();
+    }
+
+    public PdfContentByte PrintDataHead(PdfContentByte cb, Orden_DTO Orden, Boolean footer) {
+        Date fac = new Date();
+        Fecha f = new Fecha();
+        f.setHora(fac);
         try {
-            PdfContentByte cb = stamper.getOverContent(pagecount);
             Image barras1;
             JBarcodeBean barcode = new JBarcodeBean();
             barcode.setCodeType(new Code39());
@@ -348,26 +338,28 @@ public class PrintRes extends HttpServlet {
             cb.showText(Orden.getMedico().getNombre() + " " + Orden.getMedico().getAp_Paterno() + " " + Orden.getMedico().getAp_Materno());
             cb.endText();
             ///////////////////////despedida
-            cb.beginText();
-            cb.setFontAndSize(bf0, 12);
-            cb.setTextMatrix(280, 70);
-            cb.showText("QFB. MARIA DE LOURDES GONZALEZ");
-            cb.endText();
+            if (footer) {
+                cb.beginText();
+                cb.setFontAndSize(bf0, 12);
+                cb.setTextMatrix(280, 70);
+                cb.showText("QFB. MARIA DE LOURDES GONZALEZ");
+                cb.endText();
 
-            cb.beginText();
-            cb.setFontAndSize(bf0, 12);
-            cb.setTextMatrix(450, 55);
-            cb.showText("CED. PROF. 1204923");
-            cb.endText();
+                cb.beginText();
+                cb.setFontAndSize(bf0, 12);
+                cb.setTextMatrix(450, 55);
+                cb.showText("CED. PROF. 1204923");
+                cb.endText();
+            }
 
             cb.addImage(barras1, false);
 
-            column.setCanvas(cb);
-            column.setSimpleColumn(rect);
-        } catch (BadElementException | IOException ex) {
-            System.out.println("triggerNewPage" + ex.getMessage());
+        } catch (BadElementException ex) {
+            Logger.getLogger(AddCover2.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException | DocumentException ex) {
+            Logger.getLogger(AddCover2.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return column.go();
+        return cb;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

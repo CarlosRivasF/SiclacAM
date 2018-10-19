@@ -72,12 +72,6 @@ public class AddCover2 {
         Boolean textLine = false;
         int IdxOrd;
         for (int l = 0; l < 6; l++) {
-            //if(tipoEstudio=="Imagen"){
-            if (l == 3) {
-                textLine = true;
-                IdxOrd = l + 1;
-                break;
-            }
             PdfPCell est = new PdfPCell(new Paragraph("NUEVO ESTUDIO " + l + ""));
             est.setHorizontalAlignment(Element.ALIGN_LEFT);
             est.setColspan(4);
