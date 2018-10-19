@@ -2,6 +2,7 @@ package Servlets.Resultado;
 
 import DataAccesObject.Orden_DAO;
 import DataBase.Fecha;
+import DataTransferObject.Configuracion_DTO;
 import DataTransferObject.Det_Orden_DTO;
 import DataTransferObject.Orden_DTO;
 import com.itextpdf.text.BadElementException;
@@ -48,7 +49,7 @@ public class PrintRes extends HttpServlet {
     PdfReader cover;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
-
+        System.out.println("ProcessRequest");
         Date fac = new Date();
         Fecha f = new Fecha();
         f.setHora(fac);
@@ -69,6 +70,8 @@ public class PrintRes extends HttpServlet {
                 Orden_DAO O = new Orden_DAO();
                 Orden = O.getOrden(id_Orden);
             }
+            System.out.println("Orden " + Orden.getId_Orden() + " Recuperada");
+            System.out.println("Det_Orden.Size():" + Orden.getDet_Orden().size());
             response.setContentType("application/pdf");
             response.setHeader("Content-disposition", "inline; filename=\"" + Orden.getPaciente().getCodPac() + "_" + Orden.getId_Orden() + ".pdf\"");
             String relativePath = getServletContext().getRealPath("/");
@@ -84,7 +87,7 @@ public class PrintRes extends HttpServlet {
             Orden.getDet_Orden().stream().filter((d) -> (d.getEstudio().getId_Tipo_Estudio() == 2 || d.getEstudio().getId_Tipo_Estudio() == 4 || d.getEstudio().getId_Tipo_Estudio() == 5 || d.getEstudio().getId_Tipo_Estudio() == 6)).forEachOrdered((d) -> {
                 DetImage.add(d);
             });
-
+            System.out.println("DetImage.Size()" + DetImage.size());
             Orden.getDet_Orden().removeAll(DetImage);
 
             r = r - (DetImage.size() - 1);
@@ -99,7 +102,7 @@ public class PrintRes extends HttpServlet {
             } else if (r > 140 & r < 175) {
                 Source = relativePath + "M/MembreteRes4.pdf";
             }
-
+            System.out.println("Source:" + Source);
             int pagecount = 1;
             cover = new PdfReader(Source);
             PdfReader reader = new PdfReader(Source);
@@ -109,7 +112,7 @@ public class PrintRes extends HttpServlet {
             PdfContentByte cb = stamper.getOverContent(1);
 
             PrintDataHead(cb, Orden, true);
-
+            System.out.println("Stamper");
             /////************************************************/////////////////
             BaseColor orange = new BaseColor(211, 84, 0);
             BaseColor blue = new BaseColor(52, 152, 219);
@@ -125,7 +128,6 @@ public class PrintRes extends HttpServlet {
             table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
             table.getDefaultCell().setBorder(0);
             table.setWidths(new int[]{7, 3, 7, 3});
-            List<Det_Orden_DTO> Det_Images = new ArrayList<>();
             for (Det_Orden_DTO dto : Orden.getDet_Orden()) {
                 PdfPCell cell_Esp_Title = new PdfPCell(new Paragraph("                                   ", Title_Font_Est));
                 cell_Esp_Title.setColspan(4);
@@ -175,17 +177,32 @@ public class PrintRes extends HttpServlet {
                     table.addCell(cnf.getUniddes());
                 });
             }
-            Orden.getDet_Orden().removeAll(DetImage);
+
             ColumnText column = new ColumnText(stamper.getOverContent(1));
             Rectangle rectPage1 = new Rectangle(-27, 120, 640, 690);//0,esp-inf,ancho,alto
             column.setSimpleColumn(rectPage1);
             column.addElement(table);
 
+
             /*Comienza a recorrer los estudios de tipo Imagen,etc que sean en hoja blanca*/
             BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
-            for (Det_Orden_DTO dto : Det_Images) {
-                stamper.insertPage(1, cover.getPageSizeWithRotation(1));
-                PdfContentByte pageI = stamper.getOverContent(1);
+            int c = 0;
+            for (Det_Orden_DTO dto : DetImage) {
+                c++;
+                PdfContentByte pageI;
+                if (Orden.getDet_Orden().isEmpty() && DetImage.size() == 1) {
+                    pageI = cb;
+                } else if (!Orden.getDet_Orden().isEmpty() && DetImage.size() > 1) {
+                    stamper.insertPage(1, cover.getPageSizeWithRotation(1));
+                    pageI = stamper.getOverContent(1);
+                } else {
+                    if (c == 1) {
+                        pageI = cb;
+                    } else {
+                        stamper.insertPage(1, cover.getPageSizeWithRotation(1));
+                        pageI = stamper.getOverContent(1);
+                    }
+                }
                 PrintDataHead(pageI, Orden, false);
                 int y = 680;
                 /*
@@ -193,49 +210,48 @@ public class PrintRes extends HttpServlet {
             Lineas por página: MAX(32) Recomend: 28
                  */
                 BaseFont bf0 = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
-
-                int idx = 75;
-                String line = "QWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYU"
-                        + "QWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYU"
-                        + "QWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYUQWERTYUIOPASDFGHJKLÑZXCVBNM.,ÑLKJHGFDSASDFGHJKLWERTYUÑLKJHGFDSASDFJKLWERTYU";
-                int rows = 0;
-                while (idx <= line.length() && rows <= 30) {
-                    rows++;
+                for (Configuracion_DTO cnf : dto.getEstudio().getCnfs()) {
+                    int idx = 75;
+                    String line = cnf.getRes().getValor_Obtenido();
+                    int rows = 0;
+                    while (idx <= line.length() && rows <= 30) {
+                        rows++;
+                        pageI.beginText();
+                        pageI.setFontAndSize(bf, 10);
+                        pageI.setTextMatrix(50, y);
+                        pageI.showText(line.substring((idx - 75), idx));
+                        pageI.endText();
+                        y = y - 15;
+                        idx = idx + 75;
+                    }
+                    pageI.beginText();
+                    pageI.setFontAndSize(bf, 11);
+                    pageI.setTextMatrix(244, 200);
+                    pageI.showText("ATENTAMENTE");
+                    pageI.endText();
+                    pageI.beginText();
+                    pageI.setFontAndSize(bf, 11);
+                    pageI.setTextMatrix(165, 140);
+                    pageI.showText("_________________________________________");
+                    pageI.endText();
+                    pageI.beginText();
+                    pageI.setFontAndSize(bf0, 11);
+                    pageI.setTextMatrix(210, 125);
+                    pageI.showText("Doctor Profesor Patricio Estrella");
+                    pageI.endText();
                     pageI.beginText();
                     pageI.setFontAndSize(bf, 10);
-                    pageI.setTextMatrix(50, y);
-                    pageI.showText(line.substring((idx - 75), idx));
+                    pageI.setTextMatrix(245, 110);
+                    pageI.showText("Médico Inmunólogo");
                     pageI.endText();
-                    y = y - 15;
-                    idx = idx + 75;
+                    pageI.beginText();
+                    pageI.setFontAndSize(bf, 10);
+                    pageI.setTextMatrix(242, 95);
+                    pageI.showText("CED. PROF. 1204923o");
+                    pageI.endText();
+                    PdfImportedPage pageA = stamper.getImportedPage(cover, 1);
+                    pageI.addTemplate(pageA, 0, 0);
                 }
-                pageI.beginText();
-                pageI.setFontAndSize(bf, 11);
-                pageI.setTextMatrix(244, 200);
-                pageI.showText("ATENTAMENTE");
-                pageI.endText();
-                pageI.beginText();
-                pageI.setFontAndSize(bf, 11);
-                pageI.setTextMatrix(165, 140);
-                pageI.showText("_________________________________________");
-                pageI.endText();
-                pageI.beginText();
-                pageI.setFontAndSize(bf0, 11);
-                pageI.setTextMatrix(210, 125);
-                pageI.showText("Doctor Profesor Patricio Estrella");
-                pageI.endText();
-                pageI.beginText();
-                pageI.setFontAndSize(bf, 10);
-                pageI.setTextMatrix(245, 110);
-                pageI.showText("Médico Inmunólogo");
-                pageI.endText();
-                pageI.beginText();
-                pageI.setFontAndSize(bf, 10);
-                pageI.setTextMatrix(242, 95);
-                pageI.showText("CED. PROF. 1204923o");
-                pageI.endText();
-                PdfImportedPage pageA = stamper.getImportedPage(cover, 1);
-                pageI.addTemplate(pageA, 0, 0);
             }
 
             Rectangle rectPage2 = new Rectangle(-27, 40, 640, 690);//0,esp-inf,ancho,alto
