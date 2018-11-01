@@ -38,6 +38,8 @@ public class Conexion {
         basicDataSource.setNumTestsPerEvictionRun(100);
         basicDataSource.setMaxWait(500);
         dataSource = basicDataSource;
+        
+        
     }
 
     public static Connection getCon() {
