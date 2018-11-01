@@ -89,6 +89,10 @@ public class PrintRes extends HttpServlet {
             });
             System.out.println("DetImage.Size()" + DetImage.size());
             Orden.getDet_Orden().removeAll(DetImage);
+            
+            //aqui se agrupan las configuraciones que tengan el mismo nombre para ponerlas en una sola fila
+            
+            //termina agrupacion de configuraciones
 
             r = r - (DetImage.size() - 1);
 
@@ -183,6 +187,11 @@ public class PrintRes extends HttpServlet {
             column.setSimpleColumn(rectPage1);
             column.addElement(table);
 
+            Rectangle rectPage2 = new Rectangle(-27, 40, 640, 690);//0,esp-inf,ancho,alto
+            int status = column.go();
+            while (ColumnText.hasMoreText(status)) {
+                status = triggerNewPage(Orden, reader, stamper, pagesize, column, rectPage2, ++pagecount);
+            }
 
             /*Comienza a recorrer los estudios de tipo Imagen,etc que sean en hoja blanca*/
             BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
@@ -252,12 +261,6 @@ public class PrintRes extends HttpServlet {
                     PdfImportedPage pageA = stamper.getImportedPage(cover, 1);
                     pageI.addTemplate(pageA, 0, 0);
                 }
-            }
-
-            Rectangle rectPage2 = new Rectangle(-27, 40, 640, 690);//0,esp-inf,ancho,alto
-            int status = column.go();
-            while (ColumnText.hasMoreText(status)) {
-                status = triggerNewPage(Orden, reader, stamper, pagesize, column, rectPage2, ++pagecount);
             }
             stamper.setFormFlattening(true);
             stamper.close();

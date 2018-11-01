@@ -6,7 +6,6 @@ import javax.sql.DataSource;
 import org.apache.commons.dbcp.BasicDataSource;
 
 /**
- *
  * @author ZionS
  * <session-config>
  * <cookie-config>

@@ -146,53 +146,11 @@ public class CP_DAO {
     }
 
     public static void main(String[] args) {
-        for (int a = 1; a < 11; a++) {
-            try (Connection cona = Conexion.getCon()) {
-                System.out.println("A*" + a);
-                for (int b = 1; b < 11; b++) {
-                    try (Connection conb = Conexion.getCon()) {
-                        System.out.println("B**" + b);
-                        for (int c = 1; c < 11; c++) {
-                            try (Connection conc = Conexion.getCon()) {
-                                System.out.println("C***" + c);
-                                for (int d = 1; d < 11; d++) {
-                                    try (Connection cond = Conexion.getCon()) {
-                                        System.out.println("D****" + d);
-                                        for (int e = 1; e < 11; e++) {
-                                            try (Connection cone = Conexion.getCon()) {
-                                                System.out.println("E*****" + e);
-                                                for (int f = 1; f < 11; f++) {
-                                                    try (Connection conf = Conexion.getCon()) {
-                                                        System.out.println("F******" + f);
-                                                        for (int g = 1; g < 11; g++) {
-                                                            try (Connection cong = Conexion.getCon()) {
-                                                                System.out.println("G*******" + g);
-                                                                for (int h = 1; h < 11; h++) {
-                                                                    try (Connection conh = Conexion.getCon()) {
-                                                                        System.out.println("H********" + h);
-                                                                    } catch (SQLException ex) {
-                                                                    }
-                                                                }
-                                                            } catch (SQLException ex) {
-                                                            }
-                                                        }
-                                                    } catch (SQLException ex) {
-                                                    }
-                                                }
-                                            } catch (SQLException ex) {
-                                            }
-                                        }
-                                    } catch (SQLException ex) {
-                                    }
-                                }
-                            } catch (SQLException ex) {
-                            }
-                        }
-                    } catch (SQLException ex) {
-                    }
-                }
-            } catch (SQLException ex) {
-            }
+        CP_DAO cp = new CP_DAO();
+        for (Colonia_DTO col : cp.getColsByCp(1060)) {
+            System.out.println(col.getNombre_Colonia());
+            System.out.println(col.getNombre_Municipio());
+            System.out.println(col.getNombre_Estado());
         }
     }
 }
