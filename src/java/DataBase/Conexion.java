@@ -43,6 +43,7 @@ public class Conexion {
     }
 
     public static Connection getCon() {
+        
         try {
             if (Conexion.dataSource == null) {
                 Conexion co = new Conexion();
