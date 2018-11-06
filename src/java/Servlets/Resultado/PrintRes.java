@@ -370,9 +370,7 @@ public class PrintRes extends HttpServlet {
                 cb.showText("CED. PROF. 1204923");
                 cb.endText();
             }
-
             cb.addImage(barras1, false);
-
         } catch (BadElementException ex) {
             Logger.getLogger(AddCover2.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException | DocumentException ex) {

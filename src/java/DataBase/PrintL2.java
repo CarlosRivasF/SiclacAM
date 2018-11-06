@@ -31,22 +31,9 @@ import javax.servlet.http.HttpServletResponse;
 import jbarcodebean.JBarcodeBean;
 import net.sourceforge.jbarcodebean.model.Code39;
 
-/**
- *
- * @author carlos
- */
 @WebServlet(name = "PrintL2", urlPatterns = {"/PrintL2"})
 public class PrintL2 extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
@@ -63,7 +50,7 @@ public class PrintL2 extends HttpServlet {
 
             PdfStamper stamper = new PdfStamper(reader, response.getOutputStream());
             PdfContentByte canvas = stamper.getOverContent(1);
-            
+
             BaseColor orange = new BaseColor(211, 84, 0);
             BaseColor blue = new BaseColor(52, 152, 219);
             BaseColor green = new BaseColor(40, 180, 99);
@@ -72,7 +59,14 @@ public class PrintL2 extends HttpServlet {
             Font Title_Font_Prec = FontFactory.getFont("Times Roman", 12, orange);
             Font Title_Font_Prep = FontFactory.getFont("Times Roman", 12, green);
             Font Content_Font = FontFactory.getFont("Arial", 8, BaseColor.BLACK);
-            //ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("hola"), 20, 70, 0);
+            Font Content_Font2 = FontFactory.getFont("Arial", 9, BaseColor.BLACK);
+            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Carlos Francisco Rivas Futero", Content_Font), 15, 65, 0);
+            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("22 años", Content_Font), 131, 65, 0);
+            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Masculino", Content_Font), 167, 65, 0);
+            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("ESTUDIO REALIZADO", Content_Font2), 40, 50, 0);
+            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Fecha: 12-12-2018", Content_Font), 15, 36, 0);
+            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Mat utilizado", Content_Font), 15, 25, 0);
+            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Datos adicionales en etiqueta", Content_Font), 15, 13, 0);
             Image barras1;
             JBarcodeBean barcode = new JBarcodeBean();
             barcode.setCodeType(new Code39());
@@ -82,13 +76,9 @@ public class PrintL2 extends HttpServlet {
             BufferedImage bi = barcode.draw(new BufferedImage(100, 15, BufferedImage.TYPE_INT_RGB));
             barras1 = Image.getInstance(Toolkit.getDefaultToolkit().createImage(bi.getSource()), null);
 
-            BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
-            BaseFont bf0 = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
-            BaseFont bf1 = BaseFont.createFont(BaseFont.COURIER, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
-
-            barras1.setAbsolutePosition(130, 23);//x,y
+            barras1.setAbsolutePosition(110, 25);
             canvas.addImage(barras1, false);
-            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("1-2", Content_Font), 160, 13, 0);
+            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("(1-2)", Content_Font), 160, 13, 0);
             stamper.close();
         } catch (DocumentException ex) {
             Logger.getLogger(PrintL2.class.getName()).log(Level.SEVERE, null, ex);
