@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package DataBase;
 
 import com.itextpdf.text.BaseColor;
@@ -12,7 +7,6 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfReader;
@@ -20,7 +14,6 @@ import com.itextpdf.text.pdf.PdfStamper;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -41,7 +34,7 @@ public class PrintL2 extends HttpServlet {
             response.setHeader("Content-disposition", "inline; filename=\"" + 1 + ".pdf\"");
             String cadena = request.getParameter("idPrac");
             String relativePath = getServletContext().getRealPath("/");
-            String path = relativePath + "M/templ.pdf";
+            String path = relativePath + "M/templ.pdf";//Am_LabsWM
 
             String ca = "Formato-" + cadena + "";
             response.setHeader("Content-disposition", "inline; filename=\"" + ca + ".pdf\"");
