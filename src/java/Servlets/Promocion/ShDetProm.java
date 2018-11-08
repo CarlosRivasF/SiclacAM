@@ -40,7 +40,7 @@ public class ShDetProm extends HttpServlet {
                 + "<h4 style='text-align: center; color: white'>Registró: " + prom.getEmpleado().getNombre() + " " + prom.getEmpleado().getAp_Paterno() + " " + prom.getEmpleado().getAp_Materno() + "</h4>"
                 + "<hr class='mb-1'>");
         out.println("<div style='color: white'>");
-
+        
         out.println("<div id='DvnameProm' class='table-responsive'>"
                 + "<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
                 + "<tr class='table-info' style='color: black'>"
@@ -111,7 +111,7 @@ public class ShDetProm extends HttpServlet {
         out.println("</table>");
         out.println("<p class='offset-8 col-3 col-sm-3 col-md-3'><strong>Precio " + total + " pesos</strong></p>");
         out.println("</div>");        
-
+        out.println("<button href=# class='btn btn-success btn-block' onclick=addEstMode('Prom')>Imprimir Etiqueta</button>");
         out.println("</div>");
         out.println("</div>");
     }

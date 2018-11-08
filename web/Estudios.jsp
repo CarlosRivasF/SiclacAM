@@ -75,7 +75,7 @@
                         <a class="nav-link" href="#/" onclick="mostrarForm('Menu/Estudio/Registro.jsp');">Nuevo Estudio</a>
                         <a class="nav-link" href="#/" onclick='mostrarForm("${pageContext.request.contextPath}/ShowEst");'>Lista de Estudios</a>                                                
                         <a class="nav-link" href="#/" onclick='mostrarForm("${pageContext.request.contextPath}/ShareEst");'>Estudios Nuevos</a>                                                
-                        <a class="nav-link" href="Promociones.jsp">Crear Promoción</a>
+                        <a class="nav-link" href="Promociones.jsp">Promociones</a>
                     </nav>                    
                 </div>
                 <div><br>

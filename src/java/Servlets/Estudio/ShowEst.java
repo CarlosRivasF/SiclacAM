@@ -34,6 +34,7 @@ public class ShowEst extends HttpServlet {
                 + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Estudio/Registro.jsp');>Nuevo Estudio</a>"
                 + "<a class='nav-link active' href='#'style='color: blue'><ins>Lista de Estudios</ins></a>"
                 + "        <a class='nav-link' href='#' onclick=mostrarForm('ShareEst'); >Nuevos Estudios</a>"
+                + "        <a class='nav-link' href='Promociones.jsp'>Promociones</a>"
                 + "</nav>"
                 + "</div>"
                 + "<div><br>");

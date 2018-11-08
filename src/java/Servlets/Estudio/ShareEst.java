@@ -25,7 +25,7 @@ public class ShareEst extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
         int id_unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
-        PrintWriter out = response.getWriter();        
+        PrintWriter out = response.getWriter();
         Estudio_DAO E = new Estudio_DAO();
         List<Estudio_DTO> eu = E.getEstudiosByUnidad(id_unidad);
         List<Estudio_DTO> enu = E.getEstudiosNotRegUnidad(id_unidad);
@@ -39,16 +39,17 @@ public class ShareEst extends HttpServlet {
                 }
             }
         } catch (Exception e) {
-out.println("<br>'ShareEst'<br><h1 style='color: white'>" + e.getMessage() + "...<br>Por favor capture una imagen del error y comuniquelo de inmediato a ZionSystems</h1>");
+            out.println("<br>'ShareEst'<br><h1 style='color: white'>" + e.getMessage() + "...<br>Por favor capture una imagen del error y comuniquelo de inmediato a ZionSystems</h1>");
         }
         if (request.getParameter("busq") != null) {
-                        
+
         } else {
             out.print("<div class='nav-scroller bg-white box-shadow'>"
                     + "<nav class='nav nav-underline'>"
                     + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Estudio/Registro.jsp');>Nuevo Estudio</a>"
                     + "<a class='nav-link' href='#' onclick=mostrarForm('ShowEst'); >Lista de Estudios</a>"
                     + "<a class='nav-link active' href='#'style='color: blue'><ins>Nuevos Estudios</ins></a>"
+                    + "<a class='nav-link' href='Promociones.jsp'>Promociones</a>"
                     + "</nav>"
                     + "</div>"
                     + "<div><br>");
