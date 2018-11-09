@@ -60,18 +60,15 @@ public class PrintRes extends HttpServlet {
         } else {
             id_Orden = 0;
         }
-        
 
         try {
             Orden_DTO Orden;
             if (sesion.getAttribute("OrdenSh") != null) {
                 Orden = (Orden_DTO) sesion.getAttribute("OrdenSh");
                 sesion.removeAttribute("OrdenSh");
-            } else 
-            {
+            } else {
                 Orden_DAO O = new Orden_DAO();
                 Orden = O.getOrden(id_Orden);
-                
             }
             System.out.println("Orden " + Orden.getId_Orden() + " Recuperada");
             System.out.println("Det_Orden.Size():" + Orden.getDet_Orden().size());
@@ -136,24 +133,24 @@ public class PrintRes extends HttpServlet {
             table.getDefaultCell().setBorder(0);
             table.setWidths(new int[]{7, 3, 7, 3});
             for (Det_Orden_DTO dto : Orden.getDet_Orden()) {
-//x                PdfPCell cell_Esp_Title = new PdfPCell(new Paragraph("                                   ", Title_Font_Est));
-//                cell_Esp_Title.setColspan(4);
-//                cell_Esp_Title.setBorder(0);
-//                table.addCell(cell_Esp_Title);
-//
-//                PdfPCell cell_Est_Title = new PdfPCell(new Paragraph(dto.getEstudio().getNombre_Estudio(), Title_Font_Est));
-//                cell_Est_Title.setHorizontalAlignment(Element.ALIGN_LEFT);
-//                cell_Est_Title.setColspan(2);
-//                cell_Est_Title.setBorder(0);
-//                cell_Est_Title.setBackgroundColor(BackGr);
-//                table.addCell(cell_Est_Title);
-//
-//                PdfPCell cell_Met_Title = new PdfPCell(new Paragraph("Meodo: " + dto.getEstudio().getMetodo(), Title_Font_Est));
-//                cell_Met_Title.setHorizontalAlignment(Element.ALIGN_LEFT);
-//                cell_Met_Title.setColspan(2);
-//                cell_Met_Title.setBorder(0);
-//                cell_Met_Title.setBackgroundColor(BackGr);
-//                table.addCell(cell_Met_Title);
+                PdfPCell cell_Esp_Title = new PdfPCell(new Paragraph("                                   ", Title_Font_Est));
+                cell_Esp_Title.setColspan(4);
+                cell_Esp_Title.setBorder(0);
+                table.addCell(cell_Esp_Title);
+
+                PdfPCell cell_Est_Title = new PdfPCell(new Paragraph(dto.getEstudio().getNombre_Estudio(), Title_Font_Est));
+                cell_Est_Title.setHorizontalAlignment(Element.ALIGN_LEFT);
+                cell_Est_Title.setColspan(2);
+                cell_Est_Title.setBorder(0);
+                cell_Est_Title.setBackgroundColor(BackGr);
+                table.addCell(cell_Est_Title);
+
+                PdfPCell cell_Met_Title = new PdfPCell(new Paragraph("Meodo: " + dto.getEstudio().getMetodo(), Title_Font_Est));
+                cell_Met_Title.setHorizontalAlignment(Element.ALIGN_LEFT);
+                cell_Met_Title.setColspan(2);
+                cell_Met_Title.setBorder(0);
+                cell_Met_Title.setBackgroundColor(BackGr);
+                table.addCell(cell_Met_Title);
 
                 PdfPCell des = new PdfPCell(new Paragraph("Descripcion"));
                 des.setBorderColor(BaseColor.RED);
@@ -223,18 +220,18 @@ public class PrintRes extends HttpServlet {
                  */
                 BaseFont bf0 = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
                 for (Configuracion_DTO cnf : dto.getEstudio().getCnfs()) {
-//                    int idx = 75;
-                    String res = cnf.getRes().getValor_Obtenido();
-                    ArrayList<String> lines=CreateParrafo(110,res);
-//                    int rows = 0;
-                    for(String line:lines){
-//                        rows++;
+                    int idx = 75;
+                    String line = cnf.getRes().getValor_Obtenido();
+                    int rows = 0;
+                    while (idx <= line.length() && rows <= 30) {
+                        rows++;
                         pageI.beginText();
                         pageI.setFontAndSize(bf, 10);
                         pageI.setTextMatrix(50, y);
-                        pageI.showText(line);
+                        pageI.showText(line.substring((idx - 75), idx));
                         pageI.endText();
                         y = y - 15;
+                        idx = idx + 75;
                     }
                     pageI.beginText();
                     pageI.setFontAndSize(bf, 11);
@@ -272,26 +269,6 @@ public class PrintRes extends HttpServlet {
         } catch (DocumentException | IOException ex) {
             System.out.println("processRequest" + ex.getMessage());
         }
-    }
-    
-    public ArrayList<String> CreateParrafo(int Tline, String cadena) {
-        ArrayList<String> parrafo = new ArrayList<>();
-        String[] palabras = cadena.split(" ");
-        int CcharLine = 0;
-        String line = "";
-        for (String palabra : palabras) {
-            CcharLine = CcharLine + (palabra.length() + 1);
-            if (CcharLine <= Tline) {
-                line = line + palabra + " ";
-            } else {
-                line = line + palabra + " ";
-                parrafo.add(line);
-                CcharLine = 0;
-                line = "";
-            }
-        }
-        parrafo.add(line.trim());
-        return parrafo;
     }
 
     public int triggerNewPage(Orden_DTO Orden, PdfReader reader, PdfStamper stamper, Rectangle pagesize, ColumnText column, Rectangle rect, int pagecount) throws DocumentException {
