@@ -133,24 +133,24 @@ public class PrintRes extends HttpServlet {
             table.getDefaultCell().setBorder(0);
             table.setWidths(new int[]{7, 3, 7, 3});
             for (Det_Orden_DTO dto : Orden.getDet_Orden()) {
-                PdfPCell cell_Esp_Title = new PdfPCell(new Paragraph("                                   ", Title_Font_Est));
-                cell_Esp_Title.setColspan(4);
-                cell_Esp_Title.setBorder(0);
-                table.addCell(cell_Esp_Title);
-
-                PdfPCell cell_Est_Title = new PdfPCell(new Paragraph(dto.getEstudio().getNombre_Estudio(), Title_Font_Est));
-                cell_Est_Title.setHorizontalAlignment(Element.ALIGN_LEFT);
-                cell_Est_Title.setColspan(2);
-                cell_Est_Title.setBorder(0);
-                cell_Est_Title.setBackgroundColor(BackGr);
-                table.addCell(cell_Est_Title);
-
-                PdfPCell cell_Met_Title = new PdfPCell(new Paragraph("Meodo: " + dto.getEstudio().getMetodo(), Title_Font_Est));
-                cell_Met_Title.setHorizontalAlignment(Element.ALIGN_LEFT);
-                cell_Met_Title.setColspan(2);
-                cell_Met_Title.setBorder(0);
-                cell_Met_Title.setBackgroundColor(BackGr);
-                table.addCell(cell_Met_Title);
+//x                PdfPCell cell_Esp_Title = new PdfPCell(new Paragraph("                                   ", Title_Font_Est));
+//                cell_Esp_Title.setColspan(4);
+//                cell_Esp_Title.setBorder(0);
+//                table.addCell(cell_Esp_Title);
+//
+//                PdfPCell cell_Est_Title = new PdfPCell(new Paragraph(dto.getEstudio().getNombre_Estudio(), Title_Font_Est));
+//                cell_Est_Title.setHorizontalAlignment(Element.ALIGN_LEFT);
+//                cell_Est_Title.setColspan(2);
+//                cell_Est_Title.setBorder(0);
+//                cell_Est_Title.setBackgroundColor(BackGr);
+//                table.addCell(cell_Est_Title);
+//
+//                PdfPCell cell_Met_Title = new PdfPCell(new Paragraph("Meodo: " + dto.getEstudio().getMetodo(), Title_Font_Est));
+//                cell_Met_Title.setHorizontalAlignment(Element.ALIGN_LEFT);
+//                cell_Met_Title.setColspan(2);
+//                cell_Met_Title.setBorder(0);
+//                cell_Met_Title.setBackgroundColor(BackGr);
+//                table.addCell(cell_Met_Title);
 
                 PdfPCell des = new PdfPCell(new Paragraph("Descripcion"));
                 des.setBorderColor(BaseColor.RED);
