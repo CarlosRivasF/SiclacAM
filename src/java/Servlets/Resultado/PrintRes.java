@@ -60,15 +60,18 @@ public class PrintRes extends HttpServlet {
         } else {
             id_Orden = 0;
         }
+        
 
         try {
             Orden_DTO Orden;
             if (sesion.getAttribute("OrdenSh") != null) {
                 Orden = (Orden_DTO) sesion.getAttribute("OrdenSh");
                 sesion.removeAttribute("OrdenSh");
-            } else {
+            } else 
+            {
                 Orden_DAO O = new Orden_DAO();
                 Orden = O.getOrden(id_Orden);
+                
             }
             System.out.println("Orden " + Orden.getId_Orden() + " Recuperada");
             System.out.println("Det_Orden.Size():" + Orden.getDet_Orden().size());
