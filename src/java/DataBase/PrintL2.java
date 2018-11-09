@@ -37,7 +37,7 @@ public class PrintL2 extends HttpServlet {
             String path = relativePath + "M/templ.pdf";//Am_LabsWM
 
             String ca = "Formato-" + cadena + "";
-            response.setHeader("Content-disposition", "inline; filename=\"" + ca + ".pdf\"");
+            response.setHeader("Content-disposition", "inline; filename=\"filenameLabel.pdf\"");
             //PROPIEDADES INICIO
             PdfReader reader = new PdfReader(path);
 

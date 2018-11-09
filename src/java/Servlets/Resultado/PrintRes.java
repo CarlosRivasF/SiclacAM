@@ -220,18 +220,18 @@ public class PrintRes extends HttpServlet {
                  */
                 BaseFont bf0 = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
                 for (Configuracion_DTO cnf : dto.getEstudio().getCnfs()) {
-                    int idx = 75;
-                    String line = cnf.getRes().getValor_Obtenido();
-                    int rows = 0;
-                    while (idx <= line.length() && rows <= 30) {
-                        rows++;
+//                    int idx = 75;
+                    String res = cnf.getRes().getValor_Obtenido();
+                    ArrayList<String> lines=CreateParrafo(110,res);
+//                    int rows = 0;
+                    for(String line:lines){
+//                        rows++;
                         pageI.beginText();
                         pageI.setFontAndSize(bf, 10);
                         pageI.setTextMatrix(50, y);
-                        pageI.showText(line.substring((idx - 75), idx));
+                        pageI.showText(line);
                         pageI.endText();
                         y = y - 15;
-                        idx = idx + 75;
                     }
                     pageI.beginText();
                     pageI.setFontAndSize(bf, 11);
@@ -269,6 +269,26 @@ public class PrintRes extends HttpServlet {
         } catch (DocumentException | IOException ex) {
             System.out.println("processRequest" + ex.getMessage());
         }
+    }
+    
+    public ArrayList<String> CreateParrafo(int Tline, String cadena) {
+        ArrayList<String> parrafo = new ArrayList<>();
+        String[] palabras = cadena.split(" ");
+        int CcharLine = 0;
+        String line = "";
+        for (String palabra : palabras) {
+            CcharLine = CcharLine + (palabra.length() + 1);
+            if (CcharLine <= Tline) {
+                line = line + palabra + " ";
+            } else {
+                line = line + palabra + " ";
+                parrafo.add(line);
+                CcharLine = 0;
+                line = "";
+            }
+        }
+        parrafo.add(line.trim());
+        return parrafo;
     }
 
     public int triggerNewPage(Orden_DTO Orden, PdfReader reader, PdfStamper stamper, Rectangle pagesize, ColumnText column, Rectangle rect, int pagecount) throws DocumentException {
