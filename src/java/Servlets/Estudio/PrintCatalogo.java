@@ -113,17 +113,20 @@ public class PrintCatalogo extends HttpServlet {
             prec2.setBorderColor(BaseColor.RED);
             table.addCell(prec2);
             //CONTENIDO DE LA TABLA EN EL REPORTE
-            for (Estudio_DTO dto : Catalogo) {
+            Catalogo.stream().map((dto) -> {
                 PdfPCell cell_Desc = new PdfPCell(new Paragraph(dto.getNombre_Estudio(), Content_Font));
                 cell_Desc.setHorizontalAlignment(Element.ALIGN_LEFT);
                 cell_Desc.setBorder(0);
                 table.addCell(cell_Desc);
                 // table.addCell(cnf.getDescripcion());          
                 table.addCell(dto.getPreparacion());
-
+                return dto;
+            }).map((dto) -> {
                 table.addCell(String.valueOf(dto.getPrecio().getPrecio_N()));
+                return dto;
+            }).forEachOrdered((dto) -> {
                 table.addCell(String.valueOf(dto.getPrecio().getPrecio_U()));
-            }
+            });
 
             //FINALZA CONTENIDO
             ColumnText column = new ColumnText(stamper.getOverContent(1));
