@@ -169,7 +169,6 @@ public class PrintRes extends HttpServlet {
                     cell_Desc.setHorizontalAlignment(Element.ALIGN_LEFT);
                     cell_Desc.setBorder(0);
                     table.addCell(cell_Desc);
-                    // table.addCell(cnf.getDescripcion());
                     return cnf;
                 }).map((cnf) -> {
                     table.addCell(cnf.getRes().getValor_Obtenido());

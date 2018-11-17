@@ -15,7 +15,6 @@ import com.itextpdf.text.pdf.PdfStamper;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -31,18 +30,20 @@ import net.sourceforge.jbarcodebean.model.Code39;
  * @author KODE
  */
 @WebServlet(name = "PrintLabelEstudio", urlPatterns = {"/PrintLabelEstudio"})
-public class PrintLabelEstudio extends HttpServlet {
+public class PrintCode extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            String par = request.getParameter("CodeEst");
+            String[] pars = par.split("-");
             response.setContentType("application/pdf");
             response.setHeader("Content-disposition", "inline; filename=\"" + 1 + ".pdf\"");
             String cadena = request.getParameter("idPrac");
             String relativePath = getServletContext().getRealPath("/");
-            String path = relativePath + "M/templ.pdf";
+            String path = relativePath + "M/templ0.pdf";
 
-            String ca = "Formato-" + cadena + "";
+            String ca = "Est-" + pars[0] + "";
             response.setHeader("Content-disposition", "inline; filename=\"" + ca + ".pdf\"");
             //PROPIEDADES INICIO
             PdfReader reader = new PdfReader(path);
@@ -53,30 +54,20 @@ public class PrintLabelEstudio extends HttpServlet {
             BaseColor orange = new BaseColor(211, 84, 0);
             BaseColor blue = new BaseColor(52, 152, 219);
             BaseColor green = new BaseColor(40, 180, 99);
-            BaseColor BackGr = new BaseColor(234, 236, 238);
-            Font Title_Font_Est = FontFactory.getFont("Times Roman", 12, blue);
-            Font Title_Font_Prec = FontFactory.getFont("Times Roman", 12, orange);
-            Font Title_Font_Prep = FontFactory.getFont("Times Roman", 12, green);
-            Font Content_Font = FontFactory.getFont("Arial", 8, BaseColor.BLACK);
-            Font Content_Font2 = FontFactory.getFont("Arial", 9, BaseColor.BLACK);
-//            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Carlos Francisco Rivas Futero", Content_Font), 15, 65, 0);
-//            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("22 años", Content_Font), 131, 65, 0);
-//            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Masculino", Content_Font), 167, 65, 0);
-//            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("ESTUDIO REALIZADO", Content_Font2), 40, 50, 0);
-//            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Fecha: 12-12-2018", Content_Font), 15, 36, 0);
-//            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Mat utilizado", Content_Font), 15, 25, 0);
-//            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Datos adicionales en etiqueta", Content_Font), 15, 13, 0);
+            Font Content_Font = FontFactory.getFont("Arial", 9, BaseColor.BLACK);
+            Font Content_Font2 = FontFactory.getFont("Arial", 7, BaseColor.BLACK);
             Image barras1;
             JBarcodeBean barcode = new JBarcodeBean();
             barcode.setCodeType(new Code39());
-            barcode.setCode(1 + "-2ESTUDIOcs");//
+            barcode.setCode(pars[1] + "-2-");
             barcode.setCheckDigit(true);
             barcode.setShowText(false);
-            BufferedImage bi = barcode.draw(new BufferedImage(185, 60, BufferedImage.TYPE_INT_RGB));
+            BufferedImage bi = barcode.draw(new BufferedImage(100, 20, BufferedImage.TYPE_INT_RGB));
             barras1 = Image.getInstance(Toolkit.getDefaultToolkit().createImage(bi.getSource()), null);
-            barras1.setAbsolutePosition(20, 20);
+            barras1.setAbsolutePosition(72, 20);//x,y
             canvas.addImage(barras1, false);
-            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Contenido de Codigo", Content_Font), 70, 18, 0);
+            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Nombre del Estudio:", Content_Font), 73, 70, 0);
+            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(pars[2], Content_Font), 15, 53, 0);
             stamper.close();
         } catch (DocumentException ex) {
             Logger.getLogger(PrintL2.class.getName()).log(Level.SEVERE, null, ex);
@@ -121,5 +112,4 @@ public class PrintLabelEstudio extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }

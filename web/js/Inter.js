@@ -2401,3 +2401,28 @@ function UplResbydFolio(e) {
     var p = "Folio=" + Folio;
     Ajax.send(p);
 }
+
+function SendcodeEst() {
+    switch (act) {
+        case 'show':
+            divRes = document.getElementById('pac-' + i);
+            break;
+        case 'NO':
+            divRes = document.getElementById('pac-' + i);
+            break;
+        case 'SI':
+            divRes = document.getElementById("Interaccion");
+            break;
+    }
+    Ajax = buscarComentario();
+    Ajax.open('POST', "DelProm", true);
+    Ajax.onreadystatechange = function () {
+        if (Ajax.readyState === 4) {
+            divRes.innerHTML = Ajax.responseText;
+            divRes.focus();
+        }
+    };
+    Ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    var p = "index=" + i + " &ADelm=" + act;
+    Ajax.send(p);
+}

@@ -111,8 +111,8 @@ public class ShDetProm extends HttpServlet {
         out.println("</table>");
         out.println("<p class='offset-8 col-3 col-sm-3 col-md-3'><strong>Precio " + total + " pesos</strong></p>");
         out.println("</div>");        
-        out.println("<button href=# class='btn btn-success btn-block' onclick=addEstMode('Prom')>Imprimir Etiqueta</button>");
-        out.println("</div>");
+        out.println("<button class='btn btn-outline-secondary btn-block' href='FinalOrd?CodeProm=" + prom + "'><span><img src='images/barcode.png'></span>Imprimir Etiqueta</button>");
+        out.println("<br></div>");
         out.println("</div>");
     }
 
