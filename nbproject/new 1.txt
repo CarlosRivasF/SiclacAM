@@ -1,0 +1,45 @@
+function chOpt(mode) {
+    switch (mode) {
+        case 'per':
+            document.getElementById("FrmSrch").innerHTML = "
+					<div class='form-row'>
+					<div class='col-12 col-sm-12 col-md-12 mb-3'>" +
+                    "<label class='sr-only'>Buscar...</label>" +
+                    "<input style='text-align: center' type='text' class='form-control' onkeyup=SrchPromAt(this,'Orden'); name='clave_mat' id='clave_mat' placeholder='Buscar Paquetes(perfiles)...' required=''>" +
+                    "<div class='invalid-feedback'>" +
+                    "Ingresa un criterio de busqueda." +
+                    "</div>" +
+                    "</div><div class='col-12 col-sm-12 col-md-12 mb-3'>" +
+                    "<button class='btn btn-outline-info btn-sm btn-block' onclick=chOpt('est'); >Buscar Estudios</button>" +
+                    "</div>
+					</div>";
+            break;
+        case 'est':
+            document.getElementById("FrmSrch").innerHTML = "<div class='col-5 col-sm-5 col-md-5 mb-3'>" +
+                    "    <label for='Tipo_Estudio' class='sr-only'>Tipo de Estudio</label>" +
+                    "    <select class='custom-select d-block w-100 form-control' id='Tipo_Estudio' name='Tipo_Estudio' required=''>" +
+                    "        <option value='1'>RUTINARIO</option> " +
+                    "        <option value='2'>DE IMAGEN</option> " +
+                    "        <option value='3'>ESPECIALES</option> " +
+                    "        <option value='4'>RAYOS X</option> " +
+                    "        <option value='5'>ESTUDIOS ESPECIALES DE RAYOS X</option> " +
+                    "        <option value='6'>ULTRASONIDOS</option> " +
+                    "        <option value='7'>PERFILES</option> " +
+                    "        <option value='8'>CHECK UP</option> " +
+                    "    </select>" +
+                    "    <div class='invalid-feedback' style='width: 100%;'>" +
+                    "        Por favor seleccione un Tipo de Estudio." +
+                    "    </div>" +
+                    "</div>" +
+                    "<div class='col-7 col-sm-7 col-md-7 mb-3'>" +
+                    "    <label class='sr-only'>Buscar...</label>" +
+                    "    <input style='text-align: center' type='text' class='form-control' onkeyup=test22(this,'Orden'); name='clave_mat' id='clave_mat' placeholder='Buscar...' required=''>" +
+                    "    <div class='invalid-feedback'>" +
+                    "        Ingresa un criterio de busqueda." +
+                    "    </div>" +
+                    "</div><div class='col-12 col-sm-12 col-md-12 mb-3'>" +
+                    "<button class='btn btn-outline-info btn-sm btn-block' onclick=chOpt('per');>Buscar Paquetes(perfiles)</button>" +
+                    "</div>";
+            break;
+    }
+}

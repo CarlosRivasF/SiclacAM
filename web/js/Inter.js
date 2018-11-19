@@ -1426,8 +1426,38 @@ function test2(e) {
 }
 function AddEst(x, mode) {
     if (mode === "code") {
-        document.getElementById("codeEst").value = "";
-        document.getElementById("codeEst").focus();
+        var s = false;
+        var ds = document.getElementById("descE").value;
+        var Desc = " &Desc=" + ds;
+        var Tprec;
+        if (document.getElementById("prEsN").checked) {
+            Tprec = " &Tprec=Normal";
+            s = true;
+            document.getElementById("prEsN").checked = false;
+        } else if (document.getElementById("prEsU").checked) {
+            Tprec = " &Tprec=Urgente";
+            s = true;
+            document.getElementById("prEsU").checked = false;
+        } else {
+            alert("Seleccione un tipo de precio");
+            s = false;
+        }
+        var p = Desc + Tprec;
+        document.getElementById("descE").value = "";
+
+        if (x.value !== "" && s) {
+            buscarComentario();
+            xhr.open("POST", "AddEst", true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    document.getElementById("EstsAdded").innerHTML = xhr.responseText;
+
+                }
+            };
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.send("estudio=" + x.value + " &mode=" + mode + p);
+            x.value = "";
+        }
     } else {
         var s = false;
         var ds = document.getElementById("desc" + x).value;
@@ -2077,7 +2107,7 @@ function FormUpRes(index, ixconf, acc, Id_Tpo_Est) {
         dta = " &Resultado=" + Resultado;
         if (Id_Tpo_Est !== null) {
             if (Id_Tpo_Est === 2 || Id_Tpo_Est === 4 || Id_Tpo_Est === 5 || Id_Tpo_Est === 6) {
-                BTdiV.innerHTML = "<button href='#' class='btn btn-warning btn-sm btn-block' onclick=FormUpRes(" + index + "," + ixconf + ",'form',"+Id_Tpo_Est+")>Modificar valoración de médico</button>";
+                BTdiV.innerHTML = "<button href='#' class='btn btn-warning btn-sm btn-block' onclick=FormUpRes(" + index + "," + ixconf + ",'form'," + Id_Tpo_Est + ")>Modificar valoración de médico</button>";
             }
         } else {
             BTdiV.innerHTML = "<button href='#' class='btn btn-warning btn-sm' onclick=FormUpRes(" + index + "," + ixconf + ",'form')><span><img src=images/pencil.png></span></button>";
@@ -2085,7 +2115,7 @@ function FormUpRes(index, ixconf, acc, Id_Tpo_Est) {
     } else {
         if (Id_Tpo_Est !== null) {
             if (Id_Tpo_Est === 2 || Id_Tpo_Est === 4 || Id_Tpo_Est === 5 || Id_Tpo_Est === 6) {
-                BTdiV.innerHTML = "<button href='#' class='btn btn-success btn-sm btn-block' onclick=FormUpRes(" + index + "," + ixconf + ",'upd',"+Id_Tpo_Est+")>Guardar valoración de médico</button>";
+                BTdiV.innerHTML = "<button href='#' class='btn btn-success btn-sm btn-block' onclick=FormUpRes(" + index + "," + ixconf + ",'upd'," + Id_Tpo_Est + ")>Guardar valoración de médico</button>";
             }
         } else {
             BTdiV.innerHTML = "<button href='#' class='btn btn-success btn-sm' onclick=FormUpRes(" + index + "," + ixconf + ",'upd')><span><img src=images/save.png></span></button>";
@@ -2144,7 +2174,30 @@ function chOpt(mode) {
                     "</div>";
             break;
         case 'est':
-            document.getElementById("FrmSrch").innerHTML = "<div class='col-5 col-sm-5 col-md-5 mb-3'>" +
+            document.getElementById("FrmSrch").innerHTML = "<div class='form-row'>" +
+                    "<div class='offset-3 col-6 mb-3' id='Gconvenvio'>" +
+                    "<label class='sr-only' >Convenio</label>" +
+                    "<input style='text-align: center' onchange=SaveConv(this.value,'ord') type='text' class='form-control' name='Convenio' id='Convenio' placeholder='Convenio' required>" +
+                    "</div>" +
+                    "<div class='offset-1 col-7 col-sm-6 col-md-3 mb-3'>" +
+                    "<div class='col-2 col-sm-2 col-md-2 mb-3 custom-control custom-radio custom-control-inline'>" +
+                    "<input id='prEsN' class='custom-control-input' name='precE' type='radio' required>" +
+                    "<label class='custom-control-label mb-3'  for='prEsN'>Normal</label>&nbsp;" +
+                    "</div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
+                    "<div class='col-2 col-sm-2 col-md-2 mb-3 custom-control custom-radio custom-control-inline'>" +
+                    "<input id='prEsU' class='custom-control-input' name='precE' type='radio' required>" +
+                    "<label class='custom-control-label' for='prEsU'>Urgente</label>&nbsp;" +
+                    "</div>" +
+                    "</div>&nbsp;&nbsp;&nbsp;" +
+                    "<div class='col-5 col-sm-4 col-md-2 mb-3'>" +
+                    "<input style='text-align: center' type='text' class='form-control' onkeypress='return soloNumeros(event)' name='descE' id='descE' placeholder='%' required>" +
+                    "</div>" +
+                    "<div class='col-7 col-sm-12 col-md-5 mb-3'>" +
+                    "<input style='text-align: center' type='text' class='form-control' name='codeEst' onchange=AddEst(this,'code'); id='codeEst' placeholder='Codigo de Estudio' required>" +
+                    "</div>" +
+                    "</div>" +
+                    "<div class='form-row'>" +
+                    "<div class='col-5 col-sm-5 col-md-5 mb-3'>" +
                     "    <label for='Tipo_Estudio' class='sr-only'>Tipo de Estudio</label>" +
                     "    <select class='custom-select d-block w-100 form-control' id='Tipo_Estudio' name='Tipo_Estudio' required=''>" +
                     "        <option value='1'>RUTINARIO</option> " +
@@ -2168,6 +2221,7 @@ function chOpt(mode) {
                     "    </div>" +
                     "</div><div class='col-12 col-sm-12 col-md-12 mb-3'>" +
                     "<button class='btn btn-outline-info btn-sm btn-block' onclick=chOpt('per');>Buscar Paquetes(perfiles)</button>" +
+                    "</div>" +
                     "</div>";
             break;
     }
@@ -2399,30 +2453,5 @@ function UplResbydFolio(e) {
     };
     Ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     var p = "Folio=" + Folio;
-    Ajax.send(p);
-}
-
-function SendcodeEst() {
-    switch (act) {
-        case 'show':
-            divRes = document.getElementById('pac-' + i);
-            break;
-        case 'NO':
-            divRes = document.getElementById('pac-' + i);
-            break;
-        case 'SI':
-            divRes = document.getElementById("Interaccion");
-            break;
-    }
-    Ajax = buscarComentario();
-    Ajax.open('POST', "DelProm", true);
-    Ajax.onreadystatechange = function () {
-        if (Ajax.readyState === 4) {
-            divRes.innerHTML = Ajax.responseText;
-            divRes.focus();
-        }
-    };
-    Ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    var p = "index=" + i + " &ADelm=" + act;
     Ajax.send(p);
 }

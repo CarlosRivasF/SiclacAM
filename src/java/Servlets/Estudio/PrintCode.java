@@ -8,6 +8,7 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.Barcode;
 import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfReader;
@@ -24,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import jbarcodebean.JBarcodeBean;
 import net.sourceforge.jbarcodebean.model.Code39;
+import net.sourceforge.jbarcodebean.model.Interleaved25;
 
 /**
  *
@@ -55,19 +57,29 @@ public class PrintCode extends HttpServlet {
             BaseColor blue = new BaseColor(52, 152, 219);
             BaseColor green = new BaseColor(40, 180, 99);
             Font Content_Font = FontFactory.getFont("Arial", 9, BaseColor.BLACK);
-            Font Content_Font2 = FontFactory.getFont("Arial", 7, BaseColor.BLACK);
+            Font Content_FontG = FontFactory.getFont("Arial", 15, BaseColor.BLACK);
+            Font Content_Font2 = FontFactory.getFont("Arial", 8, BaseColor.BLACK);
+            Font Content_Font3 = FontFactory.getFont("Arial", 7, BaseColor.BLACK);
             Image barras1;
-            JBarcodeBean barcode = new JBarcodeBean();
+            JBarcodeBean barcode = new JBarcodeBean();            
+            //barcode.setCodeType(new Interleaved25());
             barcode.setCodeType(new Code39());
-            barcode.setCode(pars[1] + "-2-");
+            barcode.setCode(pars[1]+"-");
             barcode.setCheckDigit(true);
-            barcode.setShowText(false);
-            BufferedImage bi = barcode.draw(new BufferedImage(100, 20, BufferedImage.TYPE_INT_RGB));
+            barcode.setShowText(true);
+            BufferedImage bi = barcode.draw(new BufferedImage(140, 30, BufferedImage.TYPE_INT_RGB));
             barras1 = Image.getInstance(Toolkit.getDefaultToolkit().createImage(bi.getSource()), null);
-            barras1.setAbsolutePosition(72, 20);//x,y
+            barras1.setAbsolutePosition(90, 18);//x,y
             canvas.addImage(barras1, false);
-            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Nombre del Estudio:", Content_Font), 73, 70, 0);
+            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Nombre del Estudio:", Content_Font2), 73, 70, 0);
+            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Clave del Estudio:", Content_Font3), 20, 34, 0);
+            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("("+pars[1]+")", Content_Font3), 150, 10, 0);
+            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("("+pars[0]+")", Content_Font3), 28, 20, 0);
+            if(pars[2].length()<=30){
+            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(pars[2], Content_FontG), 15, 53, 0);
+            }else{
             ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(pars[2], Content_Font), 15, 53, 0);
+            }            
             stamper.close();
         } catch (DocumentException ex) {
             Logger.getLogger(PrintL2.class.getName()).log(Level.SEVERE, null, ex);

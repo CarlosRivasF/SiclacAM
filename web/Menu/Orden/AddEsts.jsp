@@ -64,109 +64,111 @@
     </div>
     <hr>        
     <h6 style="text-align: center"><strong>Añadir Estudios</strong></h6><br>       
-    <div class="form-row">
-        <div class=" offset-3 col-6 mb-3" id="Gconvenvio">
-            <label class="sr-only" >Convenio</label>
-            <%if (Orden.getConvenio() == null || Orden.getConvenio() == "" || Orden.getConvenio().trim() == "null") {%>
-            <input style="text-align: center" onchange="SaveConv(this.value, 'ord')" type="text" class="form-control" name="Convenio" id="Convenio" placeholder="Convenio" required>                      
-            <%} else {%>            
-            <input style="text-align: center" type="text"  value="<%=Orden.getConvenio()%>"class="form-control" name="Convenio" id="Convenio" placeholder="Convenio" required>          
-            <%}%>            
-        </div> 
-        <div class="offset-1 col-7 col-sm-6 col-md-3 mb-3"> 
-            <div class="col-2 col-sm-2 col-md-2 mb-3 custom-control custom-radio custom-control-inline">
-                <input id="prEsN" class="custom-control-input" name="precE" type="radio" required>
-                <label class="custom-control-label mb-3"  for="prEsN">Normal</label>&nbsp;
-            </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <div class="col-2 col-sm-2 col-md-2 mb-3 custom-control custom-radio custom-control-inline">
-                <input id="prEsU" class="custom-control-input" name="precE" type="radio" required>
-                <label class="custom-control-label" for="prEsU">Urgente</label>&nbsp;
-            </div>  
-        </div>&nbsp;&nbsp;&nbsp;
-        <div class="col-5 col-sm-4 col-md-2 mb-3">            
-            <input style="text-align: center" type="text" class="form-control" onkeypress="return soloNumeros(event)" name="descE" id="descE" placeholder="%" required>
+    <div id="FrmSrch">
+        <div class="form-row">
+            <div class=" offset-3 col-6 mb-3" id="Gconvenvio">
+                <label class="sr-only" >Convenio</label>
+                <%if (Orden.getConvenio() == null || Orden.getConvenio() == "" || Orden.getConvenio().trim() == "null") {%>
+                <input style="text-align: center" onchange="SaveConv(this.value, 'ord')" type="text" class="form-control" name="Convenio" id="Convenio" placeholder="Convenio" required>                      
+                <%} else {%>            
+                <input style="text-align: center" type="text"  value="<%=Orden.getConvenio()%>"class="form-control" name="Convenio" id="Convenio" placeholder="Convenio" required>          
+                <%}%>            
+            </div>
+            <div class="offset-1 col-7 col-sm-6 col-md-3 mb-3">
+                <div class="col-2 col-sm-2 col-md-2 mb-3 custom-control custom-radio custom-control-inline">
+                    <input id="prEsN" class="custom-control-input" name="precE" type="radio" required>
+                    <label class="custom-control-label mb-3"  for="prEsN">Normal</label>&nbsp;
+                </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="col-2 col-sm-2 col-md-2 mb-3 custom-control custom-radio custom-control-inline">
+                    <input id="prEsU" class="custom-control-input" name="precE" type="radio" required>
+                    <label class="custom-control-label" for="prEsU">Urgente</label>&nbsp;
+                </div>  
+            </div>&nbsp;&nbsp;&nbsp;
+            <div class="col-5 col-sm-4 col-md-2 mb-3">
+                <input style="text-align: center" type="text" class="form-control" onkeypress="return soloNumeros(event)" name="descE" id="descE" placeholder="%" required>
+            </div>
+            <div class="col-7 col-sm-12 col-md-5 mb-3">
+                <input style="text-align: center" type="text" class="form-control" name="codeEst" onchange="AddEst(this, 'code');" id="codeEst" placeholder="Codigo de Estudio" required>
+            </div>
+        </div>            
+        <div class="form-row">
+            <div class="col-5 col-sm-5 col-md-5 mb-3">
+                <label for="Tipo_Estudio" class="sr-only">Tipo de Estudio</label>
+                <select class="custom-select d-block w-100 form-control" id="Tipo_Estudio" name="Tipo_Estudio" required>
+                    <option value="">Tipo de Estudio</option>   
+                    <%for (Tipo_Estudio_DTO dto : tipos) {%>
+                    <option value="<%=dto.getId_Tipo_Estudio()%>"><%=dto.getNombre_Tipo_Estudio().toUpperCase()%></option> 
+                    <%}%>
+                </select>
+                <div class="invalid-feedback" style="width: 100%;">
+                    Por favor seleccione un Tipo de Estudio.
+                </div>
+            </div>
+            <div class="col-7 col-sm-7 col-md-7 mb-3">
+                <label class="sr-only" >Buscar...</label>
+                <input style="text-align: center" type="text" class="form-control" onkeyup="test22(this, 'Orden');" name="clave_mat" id="clave_mat" placeholder="Buscar..." required>
+                <div class="invalid-feedback">
+                    Ingresa un criterio de busqueda.
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 mb-3">
+                <button class="btn btn-outline-info btn-sm btn-block" onclick="chOpt('per');" >Buscar Paquetes(perfiles)</button>
+            </div>
+        </div>    
         </div>
-        <div class="col-7 col-sm-12 col-md-5 mb-3">                      
-            <input style="text-align: center" type="text" class="form-control" name="codeEst" onchange="AddEst(this.value, 'code');" id="codeEst" placeholder="Codigo de Estudio" required>
-        </div>
-    </div>            
-    <div id="FrmSrch" class="form-row">
-        <div class="col-5 col-sm-5 col-md-5 mb-3">
-            <label for="Tipo_Estudio" class="sr-only">Tipo de Estudio</label>
-            <select class="custom-select d-block w-100 form-control" id="Tipo_Estudio" name="Tipo_Estudio" required>
-                <option value="">Tipo de Estudio</option>   
-                <%for (Tipo_Estudio_DTO dto : tipos) {%>
-                <option value="<%=dto.getId_Tipo_Estudio()%>"><%=dto.getNombre_Tipo_Estudio().toUpperCase()%></option> 
+            <div id="EstsAdded">
+                <div id="BEst"></div>
+                <%if (Orden.getDet_Orden() != null) {%>     
+                <%if (!Orden.getDet_Orden().isEmpty()) {%>
+                <div style="color: white" class="table-responsive">
+                    <table style=" text-align: center" class="table table-bordered table-hover table-sm">
+                        <tbody>
+                            <tr class="bg-warning" style="color: black">
+                                <th>Nombre de Estudio</th>
+                                <th>Entrega</th>
+                                <th>Precio</th>
+                                <th>Descuento</th>
+                                <th>Espera</th>
+                                <th>Quitar</th>
+                            </tr>
+                            <%
+                                Float total = Float.parseFloat("0");
+                                for (Det_Orden_DTO dto : Orden.getDet_Orden()) {
+                                    Float p = Float.parseFloat("0");
+                                    int e = 0;
+                                    if (dto.getT_Entrega().equals("Normal")) {
+                                        p = dto.getEstudio().getPrecio().getPrecio_N();
+                                        e = dto.getEstudio().getPrecio().getT_Entrega_N();
+                                    } else if (dto.getT_Entrega().equals("Urgente")) {
+                                        p = dto.getEstudio().getPrecio().getPrecio_U();
+                                        e = dto.getEstudio().getPrecio().getT_Entrega_U();
+                                    }
+                                    Float pd = ((dto.getDescuento() * p) / 100);
+                            %>
+                            <tr>
+                                <td><%=dto.getEstudio().getNombre_Estudio()%></td>
+                                <td><%=dto.getT_Entrega()%></td>
+                                <td><%=p%></td>
+                                <td>$<%=pd%></td>
+                                <td><%=e%> días</td>
+                                <td><div id="mat-<%=Orden.getDet_Orden()%>"><button href="#" class="btn btn-danger" onclick="DelEst(<%=Orden.getDet_Orden()%>, 'Ord')"><span><img src="images/trash.png"></span></button></div></td>
+                            </tr>
+                            <%
+                                    total = total + dto.getSubtotal();
+                                }
+                                Orden.setMontoRestante(total);
+                                sesion.setAttribute("Orden", Orden);
+                            %>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="offset-8 col-3 col-sm-3 col-md-3"><strong>Pagar <%=Orden.getMontoRestante()%> pesos</strong></p>
+                <button class="btn btn-success btn-lg btn-block" id="ConPay" onclick="contOr('ord');" name="ConPay">Continuar</button>                
+                <%}%>                
                 <%}%>
-            </select>
-            <div class="invalid-feedback" style="width: 100%;">
-                Por favor seleccione un Tipo de Estudio.
-            </div>
+            </div>                
         </div>
-        <div class="col-7 col-sm-7 col-md-7 mb-3">
-            <label class="sr-only" >Buscar...</label>
-            <input style="text-align: center" type="text" class="form-control" onkeyup="test22(this, 'Orden');" name="clave_mat" id="clave_mat" placeholder="Buscar..." required>
-            <div class="invalid-feedback">
-                Ingresa un criterio de busqueda.
-            </div>
-        </div>
-        <div class="col-12 col-sm-12 col-md-12 mb-3">
-            <button class="btn btn-outline-info btn-sm btn-block" onclick="chOpt('per');" >Buscar Paquetes(perfiles)</button>
-        </div>
-    </div>    
-    <div id="EstsAdded">
-        <div id="BEst"></div>
-        <%if (Orden.getDet_Orden() != null) {%>     
-        <%if (!Orden.getDet_Orden().isEmpty()) {%>
-        <div style="color: white" class="table-responsive">
-            <table style=" text-align: center" class="table table-bordered table-hover table-sm">
-                <tbody>
-                    <tr class="bg-warning" style="color: black">
-                        <th>Nombre de Estudio</th>
-                        <th>Entrega</th>
-                        <th>Precio</th>
-                        <th>Descuento</th>
-                        <th>Espera</th>
-                        <th>Quitar</th>
-                    </tr>
-                    <%
-                        Float total = Float.parseFloat("0");
-                        for (Det_Orden_DTO dto : Orden.getDet_Orden()) {
-                            Float p = Float.parseFloat("0");
-                            int e = 0;
-                            if (dto.getT_Entrega().equals("Normal")) {
-                                p = dto.getEstudio().getPrecio().getPrecio_N();
-                                e = dto.getEstudio().getPrecio().getT_Entrega_N();
-                            } else if (dto.getT_Entrega().equals("Urgente")) {
-                                p = dto.getEstudio().getPrecio().getPrecio_U();
-                                e = dto.getEstudio().getPrecio().getT_Entrega_U();
-                            }
-                            Float pd = ((dto.getDescuento() * p) / 100);
-                    %>
-                    <tr>
-                        <td><%=dto.getEstudio().getNombre_Estudio()%></td>
-                        <td><%=dto.getT_Entrega()%></td>
-                        <td><%=p%></td>
-                        <td>$<%=pd%></td>
-                        <td><%=e%> días</td>
-                        <td><div id="mat-<%=Orden.getDet_Orden()%>"><button href="#" class="btn btn-danger" onclick="DelEst(<%=Orden.getDet_Orden()%>, 'Ord')"><span><img src="images/trash.png"></span></button></div></td>
-                    </tr>
-                    <%
-                            total = total + dto.getSubtotal();
-                        }
-                        Orden.setMontoRestante(total);
-                        sesion.setAttribute("Orden", Orden);
-                    %>
-                </tbody>
-            </table>
-        </div>
-        <p class="offset-8 col-3 col-sm-3 col-md-3"><strong>Pagar <%=Orden.getMontoRestante()%> pesos</strong></p>
-        <button class="btn btn-success btn-lg btn-block" id="ConPay" onclick="contOr('ord');" name="ConPay">Continuar</button>                
-        <%}%>                
-        <%}%>
-    </div>                
-</div>
-<hr>
-<%} else {
-        out.print("<h1 style='color:white'>La sesión ha caducado, Actualice el sistema y realice nuevamente el proceso necesario</h1>");
-    }%>   
+        <hr>
+        <%} else {
+                out.print("<h1 style='color:white'>La sesión ha caducado, Actualice el sistema y realice nuevamente el proceso necesario</h1>");
+            }%>   

@@ -57,7 +57,7 @@ public class FinalOrd extends HttpServlet {
         }
         sesion.removeAttribute("Orden");
         try {
-            String CodeOrd = Orden.getId_Orden()+"-";
+            String CodeOrd = Orden.getId_Orden()+"";
             System.out.println("Órden: " + CodeOrd);
             response.setContentType("application/pdf");
             response.setHeader("Content-disposition", "inline; filename=\"Órd_" + CodeOrd + ".pdf\"");

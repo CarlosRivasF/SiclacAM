@@ -52,11 +52,23 @@ public class AddEst extends HttpServlet {
         Fecha f = new Fecha();
         f.setHora(fac);
         String mode = request.getParameter("mode").trim();
+        int index;
+        String est = request.getParameter("estudio").trim();        
+        if (est.contains("-")) {
+            String[] ixs = est.split("-");
+             index = Integer.parseInt(ixs[0]);
+        } else {
+             index = Integer.parseInt(request.getParameter("estudio").trim());
+        }
+
+        Estudio_DTO estudio = null;
+        int descuento;
+        String tpr;
+        Det_Orden_DTO detor;
+        Float p;
         switch (mode) {
             case "lst":
-                int index = Integer.parseInt(request.getParameter("estudio").trim());
-                Estudio_DTO estudio = ests.get(index);
-                int descuento;
+                estudio = ests.get(index);
                 if (request.getParameter("Desc").trim().equals("") || request.getParameter("Desc").trim().equals("0")
                         || Integer.parseInt(request.getParameter("Desc").trim()) < 0) {
                     descuento = 0;
@@ -65,11 +77,11 @@ public class AddEst extends HttpServlet {
                 } else {
                     descuento = Integer.parseInt(request.getParameter("Desc").trim());
                 }
-                String tpr = request.getParameter("Tprec").trim();
-                Det_Orden_DTO detor = new Det_Orden_DTO();
+                tpr = request.getParameter("Tprec").trim();
+                detor = new Det_Orden_DTO();
                 detor.setEstudio(estudio);
                 detor.setDescuento(descuento);
-                Float p = Float.parseFloat("0");
+                p = Float.parseFloat("0");
                 detor.setT_Entrega(tpr);
                 if (detor.getT_Entrega().equals("Normal")) {
                     detor.setFecha_Entrega(f.SumarDias(detor.getEstudio().getPrecio().getT_Entrega_N()));
@@ -83,7 +95,38 @@ public class AddEst extends HttpServlet {
                 Orden.setDet_Orden(Det_Orden);
                 break;
             case "code":
-
+                for (Estudio_DTO e : ests) {
+                    if (e.getId_Est_Uni() == index) {
+                        estudio = e;
+                    }
+                }
+                if (estudio == null) {
+                    estudio = E.getEst_Uni(index);
+                }
+                if (request.getParameter("Desc").trim().equals("") || request.getParameter("Desc").trim().equals("0")
+                        || Integer.parseInt(request.getParameter("Desc").trim()) < 0) {
+                    descuento = 0;
+                } else if (Integer.parseInt(request.getParameter("Desc").trim()) > 100) {
+                    descuento = 100;
+                } else {
+                    descuento = Integer.parseInt(request.getParameter("Desc").trim());
+                }
+                tpr = request.getParameter("Tprec").trim();
+                detor = new Det_Orden_DTO();
+                detor.setEstudio(estudio);
+                detor.setDescuento(descuento);
+                p = Float.parseFloat("0");
+                detor.setT_Entrega(tpr);
+                if (detor.getT_Entrega().equals("Normal")) {
+                    detor.setFecha_Entrega(f.SumarDias(detor.getEstudio().getPrecio().getT_Entrega_N()));
+                    p = estudio.getPrecio().getPrecio_N();
+                } else if (detor.getT_Entrega().equals("Urgente")) {
+                    detor.setFecha_Entrega(f.SumarDias(detor.getEstudio().getPrecio().getT_Entrega_U()));
+                    p = estudio.getPrecio().getPrecio_U();
+                }
+                detor.setSubtotal(p - ((detor.getDescuento() * p) / 100));
+                Det_Orden.add(detor);
+                Orden.setDet_Orden(Det_Orden);
                 break;
         }
         out.println("<div id='BEst'></div>"
@@ -99,7 +142,7 @@ public class AddEst extends HttpServlet {
                 + "</tr>");
         Float total = Float.parseFloat("0");
         for (Det_Orden_DTO dto : Det_Orden) {
-            Float p = Float.parseFloat("0");
+            p = Float.parseFloat("0");
             int e = 0;
             if (dto.getT_Entrega().equals("Normal")) {
                 p = dto.getEstudio().getPrecio().getPrecio_N();
