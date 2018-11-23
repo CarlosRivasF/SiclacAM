@@ -264,7 +264,6 @@ public class PrintRes extends HttpServlet {
             stamper.setFormFlattening(true);
             stamper.close();
             reader.close();
-
         } catch (DocumentException | IOException ex) {
             System.out.println("processRequest" + ex.getMessage());
         }

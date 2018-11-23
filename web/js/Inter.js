@@ -2163,7 +2163,9 @@ function SrchProm(e, mode) {
 function chOpt(mode) {
     switch (mode) {
         case 'per':
-            document.getElementById("FrmSrch").innerHTML = "<div class='col-12 col-sm-12 col-md-12 mb-3'>" +
+            document.getElementById("FrmSrch").innerHTML =
+ "<div class='form-row'>" +           
+"<div class='col-12 col-sm-12 col-md-12 mb-3'>" +
                     "<label class='sr-only'>Buscar...</label>" +
                     "<input style='text-align: center' type='text' class='form-control' onkeyup=SrchPromAt(this,'Orden'); name='clave_mat' id='clave_mat' placeholder='Buscar Paquetes(perfiles)...' required=''>" +
                     "<div class='invalid-feedback'>" +

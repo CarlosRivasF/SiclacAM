@@ -332,7 +332,7 @@ public class Estudio_DAO {
                 }
             }
             for (Estudio_DTO est : ests) {
-                sql = "SELECT id_Estudio,id_Tipo_Estudio,Nombre_Estudio,Clave_Estudio, Preparacion,Utilidad,metodo FROM estudio WHERE id_Estudio=" + est.getId_Estudio() + "";
+                sql = "SELECT id_Estudio,id_Tipo_Estudio,Nombre_Estudio,Clave_Estudio, Preparacion,Utilidad,metodo FROM estudio WHERE id_Estudio=" + est.getId_Estudio() + " ORDER BY id_Tipo_Estudio ASC";
                 try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery();) {
                     while (rs.next()) {
                         est.setId_Tipo_Estudio(rs.getInt("id_Tipo_Estudio"));
@@ -555,7 +555,7 @@ public class Estudio_DAO {
     }
 
     public int ActualizarMet(int id, int id_Tipo_Estudio, String metodo) {
-        int rp = 0;
+        int rp;
         try (Connection con = Conexion.getCon();) {
             String sql = "UPDATE estudio SET id_Tipo_Estudio=" + id_Tipo_Estudio + ", metodo='" + metodo + "' WHERE id_Estudio=" + id + "";
             System.out.println(sql);
@@ -569,7 +569,7 @@ public class Estudio_DAO {
     }
 
     public int ActualizarPrep(String prep, int id_Estudio) {
-        int rp = 0;
+        int rp;
         try (Connection con = Conexion.getCon();) {
             String sql = "UPDATE estudio SET Preparacion='" + prep + "' WHERE id_Estudio=" + id_Estudio + "";
             try (PreparedStatement pstm = con.prepareStatement(sql);) {
@@ -582,7 +582,7 @@ public class Estudio_DAO {
     }
 
     public int ActualizarUtilidad(int id, String util) {
-        int rp = 0;
+        int rp;
         try (Connection con = Conexion.getCon();) {
             String sql = "UPDATE estudio SET Utilidad='" + util + "' WHERE id_Estudio=" + id + "";
             try (PreparedStatement pstm = con.prepareStatement(sql);) {
@@ -595,7 +595,7 @@ public class Estudio_DAO {
     }
 
     public int ActualizarPrec(int id_Precio, int id_Est_Uni, Float Pn, int En, Float Pu, int Eu) {
-        int rp = 0;
+        int rp;
         try (Connection con = Conexion.getCon();) {
             String sql = "UPDATE precio SET Precio_N='" + Pn + "',T_Entrega_N='" + En + "',Precio_U='" + Pu + "'"
                     + ",T_Entrega_U='" + Eu + "' WHERE id_Precio=" + id_Precio + " and id_Est_Uni=" + id_Est_Uni + "";
@@ -609,7 +609,7 @@ public class Estudio_DAO {
     }
 
     public int ActualizarConfig(Configuracion_DTO dto) {
-        int rp = 0;
+        int rp;
         try (Connection con = Conexion.getCon();) {
             String sql = "UPDATE configuracion SET Descripcion='" + dto.getDescripcion() + "',Valor_min='" + dto.getValor_min() + "',Valor_MAX='" + dto.getValor_MAX() + "'"
                     + ",Unidades='" + dto.getUniddes() + "',sexo='" + dto.getSexo() + "' WHERE id_Configuracion=" + dto.getId_Configuración() + "";
@@ -625,7 +625,7 @@ public class Estudio_DAO {
     }
 
     public int ActualizarMat_Est(int id_Est_Uni, int id_Unid_Mat, Est_Mat_DTO dto) {
-        int rp = 0;
+        int rp;
         try (Connection con = Conexion.getCon();) {
             String sql = "UPDATE mat_est SET id_Unid_Mat=" + dto.getId_Unid_Mat() + ",cantidad='" + dto.getCantidadE() + "',unidad='" + dto.getUnidadE() + "'"
                     + ",T_Muestra='" + dto.getT_Muestra() + "' WHERE id_Est_Uni=" + id_Est_Uni + " and id_Unid_Mat=" + id_Unid_Mat + "";
@@ -639,7 +639,7 @@ public class Estudio_DAO {
     }
 
     public int EliminarEst(Estudio_DTO dto) {
-        int rp = 0;
+        int rp;
         try (Connection con = Conexion.getCon();) {
             String sql = "DELETE from est_uni WHERE id_Est_Uni=" + dto.getId_Est_Uni() + "";
             try (PreparedStatement pstm = con.prepareStatement(sql);) {
@@ -653,7 +653,7 @@ public class Estudio_DAO {
     }
 
     public int EliminarEst_Conf(int id_Estudio, int id_Configuracion) {
-        int rp = 0;
+        int rp;
         try (Connection con = Conexion.getCon();) {
             String sql = "DELETE from conf_est WHERE id_Estudio=" + id_Estudio + " and id_Configuracion=" + id_Configuracion + "";
             try (PreparedStatement pstm = con.prepareStatement(sql);) {
@@ -667,7 +667,7 @@ public class Estudio_DAO {
     }
 
     public int EliminarEst_Mat(int id_Est_Uni, int id_Unid_Mat) {
-        int rp = 0;
+        int rp;
         try (Connection con = Conexion.getCon();) {
             String sql = "DELETE from mat_est WHERE id_Est_Uni=" + id_Est_Uni + " and id_Unid_Mat=" + id_Unid_Mat + "";
             try (PreparedStatement pstm = con.prepareStatement(sql);) {
