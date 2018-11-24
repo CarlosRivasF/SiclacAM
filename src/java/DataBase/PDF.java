@@ -28,76 +28,88 @@ import net.sourceforge.jbarcodebean.model.Code39;
  */
 public class PDF {
 
-    public void ReportRes(String src, String dest) throws DocumentException, IOException {
-        Image barras1 = null;
+    public static void ReportRes(String src, String dest) {
+        PdfReader reader = null;
+        PdfStamper stamper = null;
         try {
-            String name = "Bar-46S40hj7NOP47";
-            JBarcodeBean barcode = new JBarcodeBean();
-            //barcode.setCodeType(new Interleaved25());
-            barcode.setCodeType(new Code39());
-            // nuestro valor a codificar y algunas configuraciones mas
-            barcode.setCode("11-KSY");
-            barcode.setCheckDigit(true);
-            barcode.setShowText(false);
-            BufferedImage bufferedImage = barcode.draw(new BufferedImage(150, 16, BufferedImage.TYPE_INT_RGB));
-            // guardar en disco como png
-            File file = new File(name + ".png");
-            ImageIO.write(bufferedImage, "png", file);
-            barras1 = Image.getInstance((name + ".png"));
-        } catch (BadElementException | IOException e) {
-
+            reader = new PdfReader(src);
+            stamper = new PdfStamper(reader, new FileOutputStream(dest));
+        } catch (IOException | DocumentException ex) {
+            Logger.getLogger(PDF.class.getName()).log(Level.SEVERE, null, ex);
         }
+        try {
+            Image barras1 = null;
+            try {
+                String name = "Bar-46S40hj7NOP47";
+                JBarcodeBean barcode = new JBarcodeBean();
+                //barcode.setCodeType(new Interleaved25());
+                barcode.setCodeType(new Code39());
+                // nuestro valor a codificar y algunas configuraciones mas
+                barcode.setCode("11-KSY");
+                barcode.setCheckDigit(true);
+                barcode.setShowText(false);
+                BufferedImage bufferedImage = barcode.draw(new BufferedImage(150, 16, BufferedImage.TYPE_INT_RGB));
+                // guardar en disco como png
+                File file = new File(name + ".png");
+                ImageIO.write(bufferedImage, "png", file);
+                barras1 = Image.getInstance((name + ".png"));
+            } catch (BadElementException | IOException e) {
 
-        PdfReader reader = new PdfReader(src);
-        Rectangle pagesize = reader.getPageSize(1);
-        PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(dest));
+            }
 
-        PdfContentByte cb = stamper.getUnderContent(1);
-        barras1.setAbsolutePosition(73, 708);
-        BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
-        cb.beginText();
-        cb.setFontAndSize(bf, 10);
-        cb.setTextMatrix(35, 680);
-        cb.showText("Nombre (s Apellido Pat Apellido Mat)");
-        cb.endText();
+            // PdfReader reader = new PdfReader(src);
+            Rectangle pagesize = reader.getPageSize(1);
+            //PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(dest));
 
-        cb.beginText();
-        cb.setFontAndSize(bf, 10);
-        cb.setTextMatrix(500, 695);
-        cb.showText("Fecha de Orden");
-        cb.endText();
+            PdfContentByte cb = stamper.getUnderContent(1);
+            barras1.setAbsolutePosition(73, 708);
+            BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+            cb.beginText();
+            cb.setFontAndSize(bf, 10);
+            cb.setTextMatrix(35, 680);
+            cb.showText("Nombre (s Apellido Pat Apellido Mat)");
+            cb.endText();
 
-        cb.addImage(barras1, false);
+            cb.beginText();
+            cb.setFontAndSize(bf, 10);
+            cb.setTextMatrix(500, 695);
+            cb.showText("Fecha de Orden");
+            cb.endText();
 
-        PdfPTable table = new PdfPTable(4);
-        table.addCell("#");
-        table.addCell("description");
-        table.addCell("test");
-        table.addCell("row");
-        table.setHeaderRows(1);
-        //table.setWidths(new int[]{2, 5, 5,5});
-        for (int i = 1; i <= 37; i++) {
-            table.addCell(String.valueOf(i));
-            table.addCell("Descrip " + i);
-            table.addCell("test " + i);
-            table.addCell("row " + i);
+            cb.addImage(barras1, false);
+
+            PdfPTable table = new PdfPTable(4);
+            table.addCell("#");
+            table.addCell("description");
+            table.addCell("test");
+            table.addCell("row");
+            table.setHeaderRows(1);
+            //table.setWidths(new int[]{2, 5, 5,5});
+            for (int i = 1; i <= 50; i++) {
+                table.addCell(String.valueOf(i));
+                table.addCell("Descrip " + i);
+                table.addCell("test " + i);
+                table.addCell("row " + i);
+            }
+            ColumnText column = new ColumnText(stamper.getOverContent(1));
+            Rectangle rectPage1 = new Rectangle(0, 40, 617, 650);//0,esp-inf,ancho,alto
+            column.setSimpleColumn(rectPage1);
+            column.addElement(table);
+            int pagecount = 1;
+            Rectangle rectPage2 = new Rectangle(0, 40, 617, 650);
+            int status = column.go();
+            while (ColumnText.hasMoreText(status)) {
+                status = triggerNewPage(reader, stamper, pagesize, column, rectPage2, ++pagecount);
+            }
+            stamper.setFormFlattening(true);
+            stamper.close();
+            reader.close();
+        } catch (DocumentException | IOException ex) {
+            stamper.insertPage(1, reader.getPageSizeWithRotation(1));
         }
-        ColumnText column = new ColumnText(stamper.getOverContent(1));
-        Rectangle rectPage1 = new Rectangle(0, 40, 617, 650);//0,esp-inf,ancho,alto
-        column.setSimpleColumn(rectPage1);
-        column.addElement(table);
-        int pagecount = 1;
-        Rectangle rectPage2 = new Rectangle(0, 40, 617, 650);
-        int status = column.go();
-        while (ColumnText.hasMoreText(status)) {
-            status = triggerNewPage(reader, stamper, pagesize, column, rectPage2, ++pagecount);
-        }
-        stamper.setFormFlattening(true);
-        stamper.close();
-        reader.close();
     }
 
-    public void ReportCot(String src, String dest, Orden_DTO orden) throws DocumentException, IOException {
+    public static void ReportCot(String src, String dest, Orden_DTO orden) throws DocumentException, IOException {
         Image barras1;
         JBarcodeBean barcode = new JBarcodeBean();
         barcode.setCodeType(new Code39());
@@ -163,7 +175,7 @@ public class PDF {
         reader.close();
     }
 
-    public void ReportOrd(String src, String dest, Orden_DTO orden) throws DocumentException, IOException {
+    public static void ReportOrd(String src, String dest, Orden_DTO orden) throws DocumentException, IOException {
         Image barras1;
         JBarcodeBean barcode = new JBarcodeBean();
         barcode.setCodeType(new Code39());
@@ -251,7 +263,7 @@ public class PDF {
         reader.close();
     }
 
-    public int triggerNewPage(PdfReader reader, PdfStamper stamper, Rectangle pagesize, ColumnText column, Rectangle rect, int pagecount) throws DocumentException {
+    public static int triggerNewPage(PdfReader reader, PdfStamper stamper, Rectangle pagesize, ColumnText column, Rectangle rect, int pagecount) throws DocumentException {
         PdfContentByte canvas = stamper.getOverContent(pagecount);
         column.setCanvas(canvas);
         column.setSimpleColumn(rect);
@@ -259,9 +271,6 @@ public class PDF {
     }
 
     public static void main(String[] args) {
-        
-
-        
-        
+        ReportRes("C:\\Users\\KODE\\Documents\\NetBeansProjects\\SiclacAM_CRF\\web\\M\\MembreteRes1.pdf", "Rep.pdf");
     }
 }

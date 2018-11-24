@@ -173,10 +173,10 @@ public class Promocion_DAO {
         }
     }
 
-    public static void main(String[] args) {
-        String Nombre_Promocion = "NameProm";
-        int id_Promocion = 1;
-        String sql = "UPDATE promocion SET Nombre_Promocion='" + Nombre_Promocion + "' WHERE id_Promocion=" + id_Promocion + "";
-System.out.println(sql);
-    }
+//    public static void main(String[] args) {
+//        String Nombre_Promocion = "NameProm";
+//        int id_Promocion = 1;
+//        String sql = "UPDATE promocion SET Nombre_Promocion='" + Nombre_Promocion + "' WHERE id_Promocion=" + id_Promocion + "";
+//        System.out.println(sql);
+//    }
 }

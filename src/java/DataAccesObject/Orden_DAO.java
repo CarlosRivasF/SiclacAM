@@ -891,37 +891,37 @@ public class Orden_DAO {
         }
     }
 
-    public static void main(String[] args) {
-        Orden_DAO O = new Orden_DAO();
-        Orden_DTO Orden = O.getOrdenByFolio(4, 1);
-        int r = 0;
-        for (Det_Orden_DTO d : Orden.getDet_Orden()) {
-            if (d.getEstudio().getAddRes()) {
-                r = r + 2;
-                r = d.getEstudio().getCnfs().stream().filter((c) -> (c.getRes() != null)).map((_item) -> 1).reduce(r, Integer::sum);
-            }
-        }
-        String Source = "";
-        if (r < 35) {
-            Source = "M/MembreteRes1.pdf";
-        } else if (r > 35 & r < 70) {
-            Source = "M/MembreteRes2.pdf";
-        } else if (r > 70 & r < 105) {
-            Source = "M/MembreteRes3.pdf";
-        } else if (r > 140 & r < 175) {
-            Source = "M/MembreteRes4.pdf";
-        }
-        System.out.println("Id_Orden=" + Orden.getId_Orden());
-        for (Det_Orden_DTO dto : Orden.getDet_Orden()) {
-            System.out.println("Orden:" + dto.getId_orden() + " Id_Det_Orden=" + dto.getId_det_orden());
-            if (dto.getEstudio().getAddRes()) {
-                for (Configuracion_DTO cnf : dto.getEstudio().getCnfs()) {
-                    if (cnf.getRes() != null) {
-                        System.out.println("Id_Resultado=" + cnf.getRes().getId_resultado());
-                    }
-                }
-            }
-        }
-
-    }
+//    public static void main(String[] args) {
+//        Orden_DAO O = new Orden_DAO();
+//        Orden_DTO Orden = O.getOrdenByFolio(4, 1);
+//        int r = 0;
+//        for (Det_Orden_DTO d : Orden.getDet_Orden()) {
+//            if (d.getEstudio().getAddRes()) {
+//                r = r + 2;
+//                r = d.getEstudio().getCnfs().stream().filter((c) -> (c.getRes() != null)).map((_item) -> 1).reduce(r, Integer::sum);
+//            }
+//        }
+//        String Source = "";
+//        if (r < 35) {
+//            Source = "M/MembreteRes1.pdf";
+//        } else if (r > 35 & r < 70) {
+//            Source = "M/MembreteRes2.pdf";
+//        } else if (r > 70 & r < 105) {
+//            Source = "M/MembreteRes3.pdf";
+//        } else if (r > 140 & r < 175) {
+//            Source = "M/MembreteRes4.pdf";
+//        }
+//        System.out.println("Id_Orden=" + Orden.getId_Orden());
+//        for (Det_Orden_DTO dto : Orden.getDet_Orden()) {
+//            System.out.println("Orden:" + dto.getId_orden() + " Id_Det_Orden=" + dto.getId_det_orden());
+//            if (dto.getEstudio().getAddRes()) {
+//                for (Configuracion_DTO cnf : dto.getEstudio().getCnfs()) {
+//                    if (cnf.getRes() != null) {
+//                        System.out.println("Id_Resultado=" + cnf.getRes().getId_resultado());
+//                    }
+//                }
+//            }
+//        }
+//
+//    }
 }

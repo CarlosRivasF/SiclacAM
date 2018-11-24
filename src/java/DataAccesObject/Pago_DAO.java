@@ -25,7 +25,7 @@ public class Pago_DAO {
                 + "'" + pago.getT_Pago() + "',"
                 + "'" + pago.getMonto() + "',"
                 + "'" + pago.getFecha() + "',"
-                + "'" + pago.getHora() + "')";        
+                + "'" + pago.getHora() + "')";
         int rp;
         try (Connection con = Conexion.getCon();) {
             try (PreparedStatement pstm = con.prepareStatement(sql);) {
@@ -42,26 +42,26 @@ public class Pago_DAO {
                     while (rs.next()) {
                         id_Pago = rs.getInt("id_Pago");
                     }
-                }                
+                }
             }
             return id_Pago;
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
-        }        
+        }
     }
-    
-    public static void main(String[]args){
-    Pago_DAO P=new Pago_DAO();
-    Pago_DTO pago=new Pago_DTO();
-    
-    pago.setFecha("2018-08-09");
-    pago.setHora("20:16");
-    pago.setId_Orden(7);
-    pago.setMonto(Float.parseFloat("1"));
-    pago.setT_Pago("Efectivo");
-    
-    P.registrarPago(pago);
-    Orden_DAO O=new Orden_DAO();
-    O.updateSaldo(Float.parseFloat("8"), Float.parseFloat("3"), pago);
-    }
+
+//    public static void main(String[] args) {
+//        Pago_DAO P = new Pago_DAO();
+//        Pago_DTO pago = new Pago_DTO();
+//
+//        pago.setFecha("2018-08-09");
+//        pago.setHora("20:16");
+//        pago.setId_Orden(7);
+//        pago.setMonto(Float.parseFloat("1"));
+//        pago.setT_Pago("Efectivo");
+//
+//        P.registrarPago(pago);
+//        Orden_DAO O = new Orden_DAO();
+//        O.updateSaldo(Float.parseFloat("8"), Float.parseFloat("3"), pago);
+//    }
 }

@@ -444,6 +444,133 @@ public class Estudio_DAO {
         }
         return ests;
     }
+    
+    public List<Estudio_DTO> getEstudiosByUnidadANDTipo(int id_Unidad,int id_Tipo_Estudio) {
+        List<Estudio_DTO> ests = new ArrayList<>();
+        try (Connection con = Conexion.getCon()) {
+            String sql = "SELECT id_Est_Uni,id_Estudio FROM est_uni  WHERE id_Unidad=" + id_Unidad + "";
+            try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery();) {
+                ests = new ArrayList<>();
+                while (rs.next()) {
+                    Estudio_DTO est = new Estudio_DTO();
+                    est.setId_Est_Uni(rs.getInt("id_Est_Uni"));
+                    est.setId_Estudio(rs.getInt("id_Estudio"));
+                    ests.add(est);
+                }
+            }
+            for (Estudio_DTO est : ests) {
+                sql = "SELECT id_Estudio,id_Tipo_Estudio,Nombre_Estudio,Clave_Estudio, Preparacion,Utilidad,metodo FROM estudio WHERE id_Estudio=" + est.getId_Estudio() + " AND id_Estudio=" + est.getId_Estudio() + "";
+                try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery();) {
+                    while (rs.next()) {
+                        est.setId_Tipo_Estudio(rs.getInt("id_Tipo_Estudio"));
+                        est.setNombre_Estudio(rs.getString("Nombre_Estudio"));
+                        est.setClave_Estudio(rs.getString("Clave_Estudio"));
+                        est.setPreparacion(rs.getString("Preparacion"));
+                        est.setUtilidad(rs.getString("Utilidad"));
+                        est.setMetodo(rs.getString("metodo"));
+                    }
+                }
+            }
+            for (Estudio_DTO est : ests) {
+                sql = "SELECT Nombre_Tipo_Estudio FROM tipo_estudio WHERE id_Tipo_Estudio=" + est.getId_Tipo_Estudio() + "";
+                try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery();) {
+                    while (rs.next()) {
+                        est.setNombre_Tipo_Estudio(rs.getString("Nombre_Tipo_Estudio"));
+                    }
+                }
+            }
+
+            for (Estudio_DTO est : ests) {
+                List<Configuracion_DTO> confs = new ArrayList<>();
+                sql = "SELECT id_Configuracion FROM conf_est WHERE id_Estudio=" + est.getId_Estudio() + "";
+                try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery();) {
+                    while (rs.next()) {
+                        Configuracion_DTO conf = new Configuracion_DTO();
+                        conf.setId_Configuración(rs.getInt("id_Configuracion"));
+                        confs.add(conf);
+                    }
+                }
+                est.setCnfs(confs);
+            }
+            for (Estudio_DTO est : ests) {
+                for (Configuracion_DTO conf : est.getCnfs()) {
+                    sql = "SELECT * FROM configuracion WHERE id_Configuracion=" + conf.getId_Configuración() + "";
+                    try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery();) {
+                        while (rs.next()) {
+                            conf.setDescripcion(rs.getString("Descripcion"));
+                            conf.setSexo(rs.getString("sexo"));
+                            conf.setValor_min(rs.getString("Valor_min"));
+                            conf.setValor_MAX(rs.getString("Valor_MAX"));
+                            conf.setUniddes(rs.getString("Unidades"));
+                        }
+                    }
+                }
+            }
+            for (Estudio_DTO est : ests) {
+                List<Est_Mat_DTO> matsE = new ArrayList<>();
+                sql = "SELECT * FROM mat_est WHERE id_Est_Uni=" + est.getId_Est_Uni() + "";
+                try (PreparedStatement pstm = con.prepareStatement(sql);
+                        ResultSet rs = pstm.executeQuery();) {
+                    while (rs.next()) {
+                        Est_Mat_DTO matE = new Est_Mat_DTO();
+                        matE.setId_Unid_Mat(rs.getInt("id_Unid_Mat"));
+                        matE.setUnidadE(rs.getString("unidad"));
+                        matE.setCantidadE(rs.getInt("cantidad"));
+                        matE.setT_Muestra(rs.getString("T_Muestra"));
+                        matsE.add(matE);
+                    }
+                }
+                est.setMts(matsE);
+            }
+            for (Estudio_DTO est : ests) {
+                for (Est_Mat_DTO matE : est.getMts()) {
+                    sql = "SELECT id_Unidad,id_Empr_Mat,Cantidad FROM unid_mat WHERE id_Unid_Mat=" + matE.getId_Unid_Mat() + "";
+                    try (PreparedStatement pstm = con.prepareStatement(sql);
+                            ResultSet rs = pstm.executeQuery();) {
+                        while (rs.next()) {
+                            matE.setId_Unidad(rs.getInt("id_Unidad"));
+                            matE.setId_Empr_Mat(rs.getInt("id_Empr_Mat"));
+                            matE.setCantidad(rs.getInt("Cantidad"));
+                        }
+                    }
+                    sql = "SELECT id_Empresa,id_Material,Precio FROM empr_mat WHERE id_Empr_Mat=" + matE.getId_Empr_Mat() + "";
+                    try (PreparedStatement pstm = con.prepareStatement(sql);
+                            ResultSet rs = pstm.executeQuery();) {
+                        while (rs.next()) {
+                            matE.setId_Empresa(rs.getInt("id_Empresa"));
+                            matE.setId_Material(rs.getInt("id_Material"));
+                            matE.setPrecio(rs.getFloat("Precio"));
+                        }
+                    }
+                    sql = "SELECT * FROM material WHERE id_Material=" + matE.getId_Material() + "";
+                    try (PreparedStatement pstm = con.prepareStatement(sql);
+                            ResultSet rs = pstm.executeQuery();) {
+                        while (rs.next()) {
+                            matE.setNombre_Material(rs.getString("Nombre_Material"));
+                        }
+                    }
+                }
+            }
+            for (Estudio_DTO est : ests) {
+                sql = "SELECT * FROM precio WHERE id_Est_Uni=" + est.getId_Est_Uni() + "";
+                try (PreparedStatement pstm = con.prepareStatement(sql);
+                        ResultSet rs = pstm.executeQuery();) {
+                    Precio_DTO precio = new Precio_DTO();
+                    while (rs.next()) {
+                        precio.setId_Precio(rs.getInt("id_Precio"));
+                        precio.setPrecio_N(rs.getFloat("Precio_N"));
+                        precio.setPrecio_U(rs.getFloat("Precio_U"));
+                        precio.setT_Entrega_N(rs.getInt("T_Entrega_N"));
+                        precio.setT_Entrega_U(rs.getInt("T_Entrega_U"));
+                    }
+                    est.setPrecio(precio);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return ests;
+    }
 
     public Estudio_DTO getEst_Uni(int id_Est_Uni) {
         Estudio_DTO est = new Estudio_DTO();
@@ -680,30 +807,30 @@ public class Estudio_DAO {
         }
     }
 
-    public static void main(String[] args) {
-        Estudio_DAO E = new Estudio_DAO();
-        List<Estudio_DTO> eu = E.getEstudiosByUnidad(1);
-        List<Estudio_DTO> enu = E.getEstudiosNotRegUnidad(1);
-
-        try {
-            for (int i = 0; i < eu.size(); i++) {
-                for (int j = 0; j < enu.size(); j++) {
-                    if (eu.get(i).getId_Estudio() == enu.get(j).getId_Estudio()) {
-                        enu.remove(enu.get(j));
-                    }
-                }
-            }
-        } catch (Exception e) {
-
-        }
-
-        enu.forEach((e) -> {
-            System.out.print(e.getNombre_Estudio());
-            e.getMts().forEach((me) -> {
-                System.out.print(me.getId_Material() + " - " + me.getNombre_Material());
-            });
-        });
-    }
+//    public static void main(String[] args) {
+//        Estudio_DAO E = new Estudio_DAO();
+//        List<Estudio_DTO> eu = E.getEstudiosByUnidad(1);
+//        List<Estudio_DTO> enu = E.getEstudiosNotRegUnidad(1);
+//
+//        try {
+//            for (int i = 0; i < eu.size(); i++) {
+//                for (int j = 0; j < enu.size(); j++) {
+//                    if (eu.get(i).getId_Estudio() == enu.get(j).getId_Estudio()) {
+//                        enu.remove(enu.get(j));
+//                    }
+//                }
+//            }
+//        } catch (Exception e) {
+//
+//        }
+//
+//        enu.forEach((e) -> {
+//            System.out.print(e.getNombre_Estudio());
+//            e.getMts().forEach((me) -> {
+//                System.out.print(me.getId_Material() + " - " + me.getNombre_Material());
+//            });
+//        });
+//    }
 
     public void copy(Estudio_DTO estudio, int id_Unidad) {
         Precio_DAO P = new Precio_DAO();

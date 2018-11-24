@@ -145,12 +145,12 @@ public class CP_DAO {
         }
     }
 
-    public static void main(String[] args) {
-        CP_DAO cp = new CP_DAO();
-        for (Colonia_DTO col : cp.getColsByCp(1060)) {
-            System.out.println(col.getNombre_Colonia());
-            System.out.println(col.getNombre_Municipio());
-            System.out.println(col.getNombre_Estado());
-        }
-    }
+//    public static void main(String[] args) {
+//        CP_DAO cp = new CP_DAO();
+//        for (Colonia_DTO col : cp.getColsByCp(1060)) {
+//            System.out.println(col.getNombre_Colonia());
+//            System.out.println(col.getNombre_Municipio());
+//            System.out.println(col.getNombre_Estado());
+//        }
+//    }
 }

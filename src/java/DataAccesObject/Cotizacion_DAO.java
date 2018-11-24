@@ -98,16 +98,16 @@ public class Cotizacion_DAO {
         }
         return cot;
     }
-
-    public static void main(String[] args) {
-        Cotizacion_DAO C = new Cotizacion_DAO();
-        
-        Cotizacion_DTO cot = C.getCotizacion(1);
-        System.out.println(cot.getPaciente().getNombre());
-        System.out.println(cot.getMedico().getNombre());
-        System.out.println(cot.getEmpleado().getNombre());
-        cot.getDet_Cot().forEach((det) -> {
-            System.out.println(det.getEstudio().getNombre_Estudio());
-        });
-    }
+//
+//    public static void main(String[] args) {
+//        Cotizacion_DAO C = new Cotizacion_DAO();
+//        
+//        Cotizacion_DTO cot = C.getCotizacion(1);
+//        System.out.println(cot.getPaciente().getNombre());
+//        System.out.println(cot.getMedico().getNombre());
+//        System.out.println(cot.getEmpleado().getNombre());
+//        cot.getDet_Cot().forEach((det) -> {
+//            System.out.println(det.getEstudio().getNombre_Estudio());
+//        });
+//    }
 }

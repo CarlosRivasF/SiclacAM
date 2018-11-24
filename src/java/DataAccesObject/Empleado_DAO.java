@@ -736,23 +736,23 @@ public class Empleado_DAO {
         }
     }
 
-    public static void main(String[] args) {
-        Empleado_DAO E = new Empleado_DAO();
-        Float ACTotal = Float.parseFloat("0");
-        Float ResTotal = Float.parseFloat("0");
-        for (Empleado_DTO dto : E.getOrdsByEmpleado(1, "2018-07-01", "2018-08-10")) {
-            System.out.println(dto.getNombre() + " " + dto.getAp_Paterno());
-            for (Orden_DTO ord : dto.getOrdenes()) {
-                ACTotal = ACTotal + ord.getMontoPagado();
-                ResTotal = ResTotal + ord.getMontoRestante();
-                System.out.println("Fecha:" + ord.getFecha() + " Paciente" + ord.getPaciente().getNombre());
-                System.out.println("Saldo A/C:" + ord.getMontoPagado() + " Saldo Res:" + ord.getMontoRestante());
-                System.out.println("Estudios:");
-                for (Det_Orden_DTO det : ord.getDet_Orden()) {
-                    System.out.println("\t-" + det.getEstudio().getClave_Estudio());
-                }
-            }
-        }
-        System.out.println("A/C Total:" + ACTotal + "\tRes Total:" + ResTotal + "\t TOTAL:" + (ACTotal + ResTotal));
-    }
+//    public static void main(String[] args) {
+//        Empleado_DAO E = new Empleado_DAO();
+//        Float ACTotal = Float.parseFloat("0");
+//        Float ResTotal = Float.parseFloat("0");
+//        for (Empleado_DTO dto : E.getOrdsByEmpleado(1, "2018-07-01", "2018-08-10")) {
+//            System.out.println(dto.getNombre() + " " + dto.getAp_Paterno());
+//            for (Orden_DTO ord : dto.getOrdenes()) {
+//                ACTotal = ACTotal + ord.getMontoPagado();
+//                ResTotal = ResTotal + ord.getMontoRestante();
+//                System.out.println("Fecha:" + ord.getFecha() + " Paciente" + ord.getPaciente().getNombre());
+//                System.out.println("Saldo A/C:" + ord.getMontoPagado() + " Saldo Res:" + ord.getMontoRestante());
+//                System.out.println("Estudios:");
+//                for (Det_Orden_DTO det : ord.getDet_Orden()) {
+//                    System.out.println("\t-" + det.getEstudio().getClave_Estudio());
+//                }
+//            }
+//        }
+//        System.out.println("A/C Total:" + ACTotal + "\tRes Total:" + ResTotal + "\t TOTAL:" + (ACTotal + ResTotal));
+//    }
 }

@@ -9,7 +9,6 @@ import java.util.Date;
  * @author ZionSystems
  */
 public class Main {
-
     private String compararFechasConDate(String fecha1, String fechaActual) {
         String resultado = "";
         try {
@@ -30,19 +29,5 @@ public class Main {
             System.out.println("Se Produjo un Error!!!  " + e.getMessage());
         }
         return resultado;
-    }
-
-    public static void main(String[] args) {
-        Main objetoPrincipal = new Main();
-
-        String fecha1 = "12/05/2018";
-
-        Date fechaActual = new Date();
-        SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
-        String fechaSistema = formateador.format(fechaActual);
-
-        String resultadoMenor = objetoPrincipal.compararFechasConDate(fecha1, fechaSistema);
-        System.out.println(resultadoMenor + "\n");
-
-    }
+    }   
 }
