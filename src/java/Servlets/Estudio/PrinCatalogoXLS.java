@@ -33,19 +33,10 @@ import org.apache.poi.ss.usermodel.Workbook;
 @WebServlet(name = "PrinCatalogoXLS", urlPatterns = {"/PrinCatXLS"})
 public class PrinCatalogoXLS extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/vnd.ms-excel");
-        response.setHeader("Content-Disposition", "attachment; filename=sampleName.xls");
+        response.setHeader("Content-Disposition", "attachment; filename=CatExcel.xls");
         HttpSession sesion = request.getSession();
         int id_Unidad;
 
@@ -53,46 +44,43 @@ public class PrinCatalogoXLS extends HttpServlet {
         List<Estudio_DTO> Catalogo;
 
         Estudio_DAO E = new Estudio_DAO();
-        Catalogo = E.getEstudiosByUnidad(id_Unidad);//recupera lista de estudios por unidad
+        Catalogo = E.getEstudiosByUnidad(id_Unidad);
         try {
             Workbook libro = new HSSFWorkbook();
             int id_Tipo_Estudio = 0;
             for (Estudio_DTO dto : Catalogo) {
                 try {
+                    int f =0;
                     Sheet hoja = null;
                     if (id_Tipo_Estudio != dto.getId_Tipo_Estudio()) {
+
                         hoja = libro.createSheet(dto.getNombre_Tipo_Estudio());
-                    }
-                    int f = 0;
-                    System.out.println("Imprimiendo Columnas");
-                    try (Connection con = Conexion.getCon();
-                            PreparedStatement pstm = con.prepareStatement("select Nombre,Ap_Paterno,Ap_Materno from persona");
-                            ResultSet rs = pstm.executeQuery();) {
-                        if (rs.first()) { //filas                                   
-                            Row fila = hoja.createRow(f);
-                            for (int c = 1; c <= rs.getMetaData().getColumnCount(); c++) { //columnas                    
-                                Cell celda = fila.createCell(c - 1);
-                                celda.setCellValue(rs.getMetaData().getColumnName(c).toUpperCase());
-                            }
-                        }
-                    } catch (SQLException ex) {
-                        System.out.println("SQLException: " + ex.getMessage());
-                    }
-                    System.out.println("Imprimiendo datos");
-                    try (Connection con = Conexion.getCon();
-                            PreparedStatement pstm = con.prepareStatement("select Nombre,Ap_Paterno,Ap_Materno from persona");
-                            ResultSet rc = pstm.executeQuery();) {
-                        while (rc.next()) { //filas               
-                            f++;
-                            Row fila = hoja.createRow(f);
-                            for (int c = 1; c <= rc.getMetaData().getColumnCount(); c++) { //columnas                    
-                                Cell celda = fila.createCell(c - 1);
-                                celda.setCellValue(rc.getString(c).toLowerCase());
-                            }
-                        }
-                    } catch (SQLException ex) {
-                        System.out.println("SQLException: " + ex.getMessage());
-                    }
+                        id_Tipo_Estudio = dto.getId_Tipo_Estudio();
+                        f = 0;                        
+                        Row Head = hoja.createRow(f);//Fila de Cabecera
+                        //columnas                    
+                        Cell cellHClave = Head.createCell(0);
+                        cellHClave.setCellValue("Clave");
+                        Cell cellHnombre = Head.createCell(1);
+                        cellHnombre.setCellValue("Nombre de Estudio");
+                        Cell cellHPrecioN = Head.createCell(2);
+                        cellHPrecioN.setCellValue("Precio Normal");
+                        Cell cellHPrecioU = Head.createCell(3);
+                        cellHPrecioU.setCellValue("Precio Urgente");
+
+                    }                    
+                    //filas               
+                    f++;
+                    Row fila = hoja.createRow(f);
+                    //columnas                    
+                    Cell cellCClave = fila.createCell(0);
+                    cellCClave.setCellValue(dto.getClave_Estudio());
+                    Cell cellCnombre = fila.createCell(1);
+                    cellCnombre.setCellValue(dto.getNombre_Estudio());
+                    Cell cellCPrecioN = fila.createCell(2);
+                    cellCPrecioN.setCellValue(dto.getPrecio().getPrecio_N());
+                    Cell cellCPrecioU = fila.createCell(3);
+                    cellCPrecioU.setCellValue(dto.getPrecio().getPrecio_U());
                 } catch (Exception e) {
                 }
 
