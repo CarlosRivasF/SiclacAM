@@ -6,13 +6,9 @@
 package Servlets.Estudio;
 
 import DataAccesObject.Estudio_DAO;
-import DataBase.Conexion;
 import DataTransferObject.Estudio_DTO;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -42,21 +38,31 @@ public class PrinCatalogoXLS extends HttpServlet {
 
         id_Unidad = Integer.parseInt(request.getParameter("Id_Unidad"));
         List<Estudio_DTO> Catalogo;
+        List<Estudio_DTO> Catalogo2 = new ArrayList<>();
 
         Estudio_DAO E = new Estudio_DAO();
         Catalogo = E.getEstudiosByUnidad(id_Unidad);
+        for (int i = 1; i <= 8; i++) {
+            for (Estudio_DTO dto : Catalogo) {
+                if (dto.getId_Tipo_Estudio() == i) {
+                    Catalogo2.add(dto);
+                }
+            }
+        }
+        Catalogo.clear();
+        System.out.println("SIZE: " + Catalogo2.size());
         try {
+            Sheet hoja = null;
+            int f = 0;
             Workbook libro = new HSSFWorkbook();
             int id_Tipo_Estudio = 0;
-            for (Estudio_DTO dto : Catalogo) {
+            for (Estudio_DTO dto : Catalogo2) {
                 try {
-                    int f =0;
-                    Sheet hoja = null;
                     if (id_Tipo_Estudio != dto.getId_Tipo_Estudio()) {
-
-                        hoja = libro.createSheet(dto.getNombre_Tipo_Estudio());
                         id_Tipo_Estudio = dto.getId_Tipo_Estudio();
-                        f = 0;                        
+                        hoja = libro.createSheet(dto.getNombre_Tipo_Estudio());
+                        System.out.println("Nueva Hoja para: " + dto.getNombre_Tipo_Estudio().toLowerCase());
+                        f = 0;
                         Row Head = hoja.createRow(f);//Fila de Cabecera
                         //columnas                    
                         Cell cellHClave = Head.createCell(0);
@@ -67,8 +73,7 @@ public class PrinCatalogoXLS extends HttpServlet {
                         cellHPrecioN.setCellValue("Precio Normal");
                         Cell cellHPrecioU = Head.createCell(3);
                         cellHPrecioU.setCellValue("Precio Urgente");
-
-                    }                    
+                    }
                     //filas               
                     f++;
                     Row fila = hoja.createRow(f);
@@ -82,15 +87,17 @@ public class PrinCatalogoXLS extends HttpServlet {
                     Cell cellCPrecioU = fila.createCell(3);
                     cellCPrecioU.setCellValue(dto.getPrecio().getPrecio_U());
                 } catch (Exception e) {
+                    e.getMessage();
                 }
 
             }
             libro.write(response.getOutputStream());
             response.getOutputStream().close();
         } catch (IOException ex) {
+            Catalogo2.clear();
             System.out.println("IOException: " + ex.getMessage());
         }
-
+        Catalogo2.clear();
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

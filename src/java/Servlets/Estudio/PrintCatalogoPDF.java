@@ -20,6 +20,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -52,7 +53,7 @@ public class PrintCatalogoPDF extends HttpServlet {
 
         try {
             List<Estudio_DTO> Catalogo;
-
+            List<Estudio_DTO> Catalogo2 = new ArrayList<>();
             Estudio_DAO E = new Estudio_DAO();
             Catalogo = E.getEstudiosByUnidad(id_Unidad);//recupera lista de estudios por unidad
 
@@ -161,7 +162,15 @@ public class PrintCatalogoPDF extends HttpServlet {
             table.setWidths(new int[]{5, 10, 4, 4});
             int id_Tipo_Estudio = 0;
             int c = 0;
-            for (Estudio_DTO dto : Catalogo) {
+            for (int i = 1; i <= 8; i++) {
+                for (Estudio_DTO dto : Catalogo) {
+                    if (dto.getId_Tipo_Estudio() == i) {
+                        Catalogo2.add(dto);
+                    }
+                }
+            }
+            System.out.println("SIZE: " + Catalogo2.size());
+            for (Estudio_DTO dto : Catalogo2) {
                 if (id_Tipo_Estudio != dto.getId_Tipo_Estudio()) {
                     id_Tipo_Estudio = dto.getId_Tipo_Estudio();
                     if (c != 0) {
