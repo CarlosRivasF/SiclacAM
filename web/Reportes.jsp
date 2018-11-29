@@ -79,8 +79,19 @@
                 </div>
                 <div><br>
                     <h2 style="text-align: center;color: white"><%=msg%></h2>
+                    <div class="col-md-6">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-magnet"></i>Catalogo de Esudios de la Unidad</h3>
+                            </div>
+                            <div class="panel-body">                                
+                                <a href="#" class="btn btn-md btn-hover btn-default">Medium</a>
+                                <a href="#" class="btn btn-md btn-hover btn-default">Medium</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>       
+            </div>                
         </div>
         <script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/popper.min.js"></script>        
