@@ -4,6 +4,7 @@ import DataAccesObject.Estudio_DAO;
 import DataAccesObject.Persona_DAO;
 import DataBase.Fecha;
 import DataTransferObject.Estudio_DTO;
+import DataTransferObject.Material_DTO;
 import DataTransferObject.Persona_DTO;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.DocumentException;
@@ -62,29 +63,45 @@ public class PrintCatalogoPDF extends HttpServlet {
             String relativePath = getServletContext().getRealPath("/");//ruta real del proyecto
             int r = Catalogo.size() + 23;
             //cantidad de registros
-            System.out.println("ROWS: " + r);
-            String Source = "";
-            if (r < 40) {
-                Source = relativePath + "M/MembreteRes1.pdf";
-            } else if (r > 40 & r < 80) {
-                Source = relativePath + "M/MembreteRes2.pdf";
-            } else if (r > 80 & r < 120) {
-                Source = relativePath + "M/MembreteRes3.pdf";
-            } else if (r > 120 & r < 160) {
-                Source = relativePath + "M/MembreteRes4.pdf";
-            } else if (r > 160 & r < 200) {
-                Source = relativePath + "M/MembreteRes5.pdf";
-            } else if (r > 200 & r < 240) {
-                Source = relativePath + "M/MembreteRes6.pdf";
-            } else if (r > 280 & r < 320) {
-                Source = relativePath + "M/MembreteRes7.pdf";
-            } else if (r > 360 & r < 400) {
-                Source = relativePath + "M/MembreteRes8.pdf";
-            } else if (r > 420 & r < 460) {
-                Source = relativePath + "M/MembreteRes9.pdf";
-            } else if (r > 500 & r < 520) {
-                Source = relativePath + "M/MembreteRes10.pdf";
+            Boolean Det = false;
+            for (int i = 1; i <= 8; i++) {
+                for (Estudio_DTO dto : Catalogo) {
+                    if (dto.getId_Tipo_Estudio() == i) {
+                        Catalogo2.add(dto);
+                    }
+                }
             }
+            Catalogo.clear();
+            if (Det) {
+                for (Estudio_DTO dto : Catalogo2) {
+                    for (Material_DTO mt : dto.getMts()) {
+                        r = r + 1;
+                    }
+                }
+                r = r + (Catalogo2.size() * 4);
+            }
+            String Source = "";
+//            if (r < 40) {
+//                Source = relativePath + "M/MembreteRes1.pdf";
+//            } else if (r > 40 & r < 80) {
+//                Source = relativePath + "M/MembreteRes2.pdf";
+//            } else if (r > 80 & r < 120) {
+//                Source = relativePath + "M/MembreteRes3.pdf";
+//            } else if (r > 120 & r < 160) {
+//                Source = relativePath + "M/MembreteRes4.pdf";
+//            } else if (r > 160 & r < 200) {
+//                Source = relativePath + "M/MembreteRes5.pdf";
+//            } else if (r > 200 & r < 240) {
+//                Source = relativePath + "M/MembreteRes6.pdf";
+//            } else if (r > 280 & r < 320) {
+//                Source = relativePath + "M/MembreteRes7.pdf";
+//            } else if (r > 360 & r < 400) {
+//                Source = relativePath + "M/MembreteRes8.pdf";
+//            } else if (r > 420 & r < 460) {
+//                Source = relativePath + "M/MembreteRes9.pdf";
+//            } else if (r > 500 & r < 520) {
+                Source = relativePath + "M/MembreteRes10White.pdf";
+//            }
             int pagecount = 1;
             try {
                 cover = new PdfReader(Source);//PDF extra para posterior modificacion (omitir)
@@ -162,14 +179,7 @@ public class PrintCatalogoPDF extends HttpServlet {
             table.setWidths(new int[]{5, 10, 4, 4});
             int id_Tipo_Estudio = 0;
             int c = 0;
-            for (int i = 1; i <= 8; i++) {
-                for (Estudio_DTO dto : Catalogo) {
-                    if (dto.getId_Tipo_Estudio() == i) {
-                        Catalogo2.add(dto);
-                    }
-                }
-            }
-            System.out.println("SIZE: " + Catalogo2.size());
+
             for (Estudio_DTO dto : Catalogo2) {
                 if (id_Tipo_Estudio != dto.getId_Tipo_Estudio()) {
                     id_Tipo_Estudio = dto.getId_Tipo_Estudio();
@@ -204,33 +214,93 @@ public class PrintCatalogoPDF extends HttpServlet {
                 PdfPCell ClaveEst = new PdfPCell(new Paragraph("~ " + dto.getClave_Estudio().toUpperCase(), Content_Font));
                 ClaveEst.setHorizontalAlignment(Element.ALIGN_LEFT);
                 ClaveEst.setBorder(PdfPCell.BOTTOM);
+                if (Det) {
+                    ClaveEst.setBackgroundColor(green);
+                }
                 table.addCell(ClaveEst);
 
                 PdfPCell NombreEstudio = new PdfPCell(new Paragraph(dto.getNombre_Estudio().toUpperCase(), Content_Font));
                 NombreEstudio.setHorizontalAlignment(Element.ALIGN_LEFT);
                 NombreEstudio.setBorder(PdfPCell.BOTTOM);
+                if (Det) {
+                    NombreEstudio.setBackgroundColor(green);
+                }
                 table.addCell(NombreEstudio);
 
                 PdfPCell PrecioN = new PdfPCell(new Paragraph(String.valueOf(dto.getPrecio().getPrecio_N()), Content_Font));
                 PrecioN.setHorizontalAlignment(Element.ALIGN_CENTER);
                 PrecioN.setBorder(PdfPCell.BOTTOM);
+                if (Det) {
+                    PrecioN.setBackgroundColor(green);
+                }
                 table.addCell(PrecioN);
 
                 PdfPCell PrecioU = new PdfPCell(new Paragraph(String.valueOf(dto.getPrecio().getPrecio_U()), Content_Font));
                 PrecioU.setHorizontalAlignment(Element.ALIGN_CENTER);
                 PrecioU.setBorder(PdfPCell.BOTTOM);
+                if (Det) {
+                    PrecioU.setBackgroundColor(green);
+                }
                 table.addCell(PrecioU);
+
+                if (Det) {
+                    PdfPCell HPreparacion = new PdfPCell(new Paragraph("DESCRIPCIÓN", Content_Font));
+                    HPreparacion.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    HPreparacion.setColspan(4);
+                    HPreparacion.setBorder(0);
+                    table.addCell(HPreparacion);
+                    PdfPCell Preparacion = new PdfPCell(new Paragraph(dto.getPreparacion().toLowerCase(), Content_Font));
+                    // Preparacion.setBorder(0);
+                    Preparacion.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    Preparacion.setColspan(4);
+                    table.addCell(Preparacion);
+                    PdfPCell HMateriales = new PdfPCell(new Paragraph("MATERIALES", Content_Font));
+                    HMateriales.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    HMateriales.setColspan(4);
+                    HMateriales.setBorder(0);
+                    table.addCell(HMateriales);
+                    PdfPCell HNombreMaterial = new PdfPCell(new Paragraph("Nombre de Material", Content_Font));
+                    HNombreMaterial.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    HNombreMaterial.setColspan(2);
+                    HNombreMaterial.setBackgroundColor(BackGr);
+                    table.addCell(HNombreMaterial);
+                    PdfPCell HPrecioMaterial = new PdfPCell(new Paragraph("Precio", Content_Font));
+                    HPrecioMaterial.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    HPrecioMaterial.setBackgroundColor(BackGr);
+                    table.addCell(HPrecioMaterial);
+                    PdfPCell HCantidadMaterial = new PdfPCell(new Paragraph("Cantidad", Content_Font));
+                    HCantidadMaterial.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    HCantidadMaterial.setBackgroundColor(BackGr);
+                    table.addCell(HCantidadMaterial);
+                    for (Material_DTO mt : dto.getMts()) {
+                        PdfPCell Material = new PdfPCell(new Paragraph(mt.getNombre_Material(), Content_Font));
+                        Material.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        Material.setColspan(2);
+                        table.addCell(Material);
+                        PdfPCell Precio = new PdfPCell(new Paragraph(String.valueOf(mt.getPrecio()), Content_Font));
+                        Precio.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        table.addCell(Precio);
+                        PdfPCell Cantidad = new PdfPCell(new Paragraph(String.valueOf(mt.getCantidad()), Content_Font));
+                        Cantidad.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        table.addCell(Cantidad);
+                    }
+                    PdfPCell HEsp = new PdfPCell(new Paragraph("      "));
+                    HEsp.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    HEsp.setColspan(4);
+                    HEsp.setBorder(0);
+                    table.addCell(HEsp);
+                }
             }
 
             //FINALZA CONTENIDO
             ColumnText column = new ColumnText(stamper.getOverContent(1));
-            Rectangle rectPage1 = new Rectangle(-27, 60, 640, 690);//0,esp-inf,ancho,alto (SON COORDENADAS EN LA HOJA DEL PDF Y EL TAMAÑO DEL ELEMENTO A AGREGAR)
+            Rectangle rectPage1 = new Rectangle(-27, 60, 640, 700);//izaq,esp-inf,ancho,alto (SON COORDENADAS EN LA HOJA DEL PDF Y EL TAMAÑO DEL ELEMENTO A AGREGAR)
             //(SANGRIA IZQ,Espacio que queda al final de la hoja,Ancho de Elemento,(no recuerdo))
             column.setSimpleColumn(rectPage1);//envia propiedades del contenido(tamaño)
             column.addElement(table);//añade la tabla creada
 
             //Realiza pruebas con este bloque
-            Rectangle rectPage2 = new Rectangle(-27, 60, 640, 690);//0,esp-inf,ancho,alto
+            Rectangle rectPage2 = new Rectangle(-27, 60, 640, 700);//0,esp-inf,ancho,alto
             int status = column.go();
             while (ColumnText.hasMoreText(status)) {
                 status = triggerNewPage(reader, stamper, pagesize, column, rectPage2, ++pagecount);//este metodo ingresa una hoja nueva si el conetido es superior al lo que puede tener la hoja principal

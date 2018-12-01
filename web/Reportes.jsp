@@ -71,10 +71,10 @@
                 <div class="nav-scroller bg-white box-shadow">
                     <nav class="nav nav-underline">
                         <a class="nav-link" href="#/ESTUDIOS">ESTUDIOS</a>
-                        <a class="nav-link" href="#/ÓRDENES">ÓRDENES </a>              
-                        <a class="nav-link" href="#/RESULTADOS">RESULTADOS </a>              
-                        <a class="nav-link" href="#/CORTES">CORTES </a>              
-                        <a class="nav-link" href="#/PARTICIPACIONES">PARTICIPACIONES </a>              
+                        <a class="nav-link" href="#/ÓRDENES">ÓRDENES </a>
+                        <a class="nav-link" href="#/RESULTADOS">RESULTADOS </a>
+                        <a class="nav-link" href="#/CORTES">CORTES </a>      
+                        <a class="nav-link" href="#/PARTICIPACIONES">PARTICIPACIONES </a>
                     </nav>
                 </div>
                 <div><br>
@@ -84,14 +84,25 @@
                             <div class="panel-heading">
                                 <h3 class="panel-title"><i class="fa fa-magnet"></i>Catalogo de Esudios de la Unidad</h3>
                             </div>
-                            <div class="panel-body">                                
-                                <a href="#" class="btn btn-md btn-hover btn-default">Medium</a>
-                                <a href="#" class="btn btn-md btn-hover btn-default">Medium</a>
+                            <div class="panel-body">                   
+                                <a href="#" class="btn btn-md btn-hover btn-default">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
+                                <a href="#" class="btn btn-md btn-hover btn-default">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-magnet"></i>Catalogo de Esudios a Detalle de la Unidad</h3>
+                            </div>
+                            <div class="panel-body">                   
+                                <a href="#" class="btn btn-md btn-hover btn-default">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
+                                <a href="#" class="btn btn-md btn-hover btn-default">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></a>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>                
+            </div>
         </div>
         <script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/popper.min.js"></script>        

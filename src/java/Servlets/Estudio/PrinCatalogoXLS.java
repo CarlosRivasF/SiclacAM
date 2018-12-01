@@ -7,6 +7,7 @@ package Servlets.Estudio;
 
 import DataAccesObject.Estudio_DAO;
 import DataTransferObject.Estudio_DTO;
+import DataTransferObject.Material_DTO;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +34,9 @@ public class PrinCatalogoXLS extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-Disposition", "attachment; filename=CatExcel.xls");
-        HttpSession sesion = request.getSession();
         int id_Unidad;
+
+        Boolean Det = true;
 
         id_Unidad = Integer.parseInt(request.getParameter("Id_Unidad"));
         List<Estudio_DTO> Catalogo;
@@ -73,6 +75,10 @@ public class PrinCatalogoXLS extends HttpServlet {
                         cellHPrecioN.setCellValue("Precio Normal");
                         Cell cellHPrecioU = Head.createCell(3);
                         cellHPrecioU.setCellValue("Precio Urgente");
+                        if (Det) {
+                            Cell cellHDescripcion = Head.createCell(3);
+                            cellHDescripcion.setCellValue("Descripcion");
+                        }
                     }
                     //filas               
                     f++;
@@ -86,6 +92,27 @@ public class PrinCatalogoXLS extends HttpServlet {
                     cellCPrecioN.setCellValue(dto.getPrecio().getPrecio_N());
                     Cell cellCPrecioU = fila.createCell(3);
                     cellCPrecioU.setCellValue(dto.getPrecio().getPrecio_U());
+                    if (Det) {
+                        f ++;
+                        Row fila2 = hoja.createRow(f);
+                        Cell HMateriales = fila2.createCell(0);
+                        HMateriales.setCellValue("Material");
+                        Cell HPrecio = fila2.createCell(1);
+                        HPrecio.setCellValue("Precic");
+                        Cell HCantidad = fila2.createCell(2);
+                        HCantidad.setCellValue("Cantidad");
+                        for (Material_DTO mt : dto.getMts()) {
+                            f++;
+                            Row fila3 = hoja.createRow(f);
+                            Cell Material = fila3.createCell(0);
+                            Material.setCellValue(mt.getNombre_Material());
+                            Cell Precio = fila3.createCell(1);
+                            Precio.setCellValue(mt.getPrecio());
+                            Cell Cantidad = fila3.createCell(2);
+                            Cantidad.setCellValue(mt.getCantidad());
+                        }
+                    }
+                    f+=2;
                 } catch (Exception e) {
                     e.getMessage();
                 }
