@@ -3,6 +3,8 @@
     Created on : 21/02/2018, 04:07:14 PM
     Author     : ZionS
 --%>
+<%@page import="DataTransferObject.Tipo_Estudio_DTO"%>
+<%@page import="DataAccesObject.Tipo_Estudio_DAO"%>
 <%@page import="DataTransferObject.Empresa_DTO"%>
 <%@page import="DataTransferObject.Permiso_DTO"%>
 <%@page import="java.util.ArrayList"%>
@@ -15,6 +17,8 @@
     int unidad = 0;
     if (sesion.getAttribute("permisos") != null && sesion.getAttribute("user") != null && sesion.getAttribute("unidad") != null) {
         Empresa_DTO empresa = null;
+        Tipo_Estudio_DAO TE = new Tipo_Estudio_DAO();
+        List<Tipo_Estudio_DTO> tipos = TE.getTipo_Estudios();
         empresa = (Empresa_DTO) sesion.getAttribute("empresa");
         List<Permiso_DTO> lst = (ArrayList<Permiso_DTO>) sesion.getAttribute("permisos");
         user = Integer.parseInt(sesion.getAttribute("user").toString());
@@ -96,6 +100,48 @@
                                 <h3 class="panel-title"><i class="fa fa-magnet"></i>Catalogo de Esudios a Detalle de la Unidad</h3>
                             </div>
                             <div class="panel-body">                   
+                                <a href="#" class="btn btn-md btn-hover btn-default">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
+                                <a href="#" class="btn btn-md btn-hover btn-default">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-magnet"></i>Catalogo de Esudios de la Unidad (Un solo Tipo de Estudio)</h3>
+                            </div>
+                            <div class="panel-body">    
+                                <label for="Tipo_Estudio" class="sr-only">Tipo de Estudio</label><br>
+                                <select class="custom-select d-block w-100 form-control-sm" id="Tipo_Estudio" name="Tipo_Estudio" required>
+                                    <option value="">Tipo de Estudio</option>   
+                                    <%for (Tipo_Estudio_DTO dto : tipos) {%>
+                                    <option value="<%=dto.getId_Tipo_Estudio()%>"><%=dto.getNombre_Tipo_Estudio().toUpperCase()%></option> 
+                                    <%}%>
+                                </select>
+                                <div class="invalid-feedback" style="width: 100%;">
+                                    Por favor seleccione un Tipo de Estudio.
+                                </div>
+                                <a href="#" class="btn btn-md btn-hover btn-default">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
+                                <a href="#" class="btn btn-md btn-hover btn-default">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-magnet"></i>Catalogo de Esudios a Detalle de la Unidad (Un solo Tipo de Estudio)</h3>
+                            </div>
+                            <div class="panel-body">  
+                                <label for="Tipo_Estudio" class="sr-only">Tipo de Estudio</label><br>
+                                <select class="custom-select d-block w-100 form-control-sm" id="Tipo_Estudio" name="Tipo_Estudio" required>
+                                    <option value="">Tipo de Estudio</option>   
+                                    <%for (Tipo_Estudio_DTO dto : tipos) {%>
+                                    <option value="<%=dto.getId_Tipo_Estudio()%>"><%=dto.getNombre_Tipo_Estudio().toUpperCase()%></option> 
+                                    <%}%>
+                                </select>
+                                <div class="invalid-feedback" style="width: 100%;">
+                                    Por favor seleccione un Tipo de Estudio.
+                                </div>
                                 <a href="#" class="btn btn-md btn-hover btn-default">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
                                 <a href="#" class="btn btn-md btn-hover btn-default">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></a>
                             </div>

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Servlets.Estudio;
 
 import DataAccesObject.Estudio_DAO;
@@ -25,7 +20,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 /**
  *
- * @author KODE
+ * @author CRIVF KODE
  */
 @WebServlet(name = "PrinCatalogoXLS", urlPatterns = {"/PrinCatXLS"})
 public class PrinCatalogoXLS extends HttpServlet {
@@ -34,11 +29,17 @@ public class PrinCatalogoXLS extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-Disposition", "attachment; filename=CatExcel.xls");
+        HttpSession sesion = request.getSession();
         int id_Unidad;
+        int Tipo_Estudio = 0;
+        if (request.getParameter("ITpoEto") != null) {
+            Tipo_Estudio = Integer.parseInt(request.getParameter("ITpoEto").trim());
+            System.out.println("Tipo de Estudio: " + Tipo_Estudio);
+        }
 
         Boolean Det = true;
 
-        id_Unidad = Integer.parseInt(request.getParameter("Id_Unidad"));
+        id_Unidad = Integer.parseInt(request.getParameter("IUdad"));
         List<Estudio_DTO> Catalogo;
         List<Estudio_DTO> Catalogo2 = new ArrayList<>();
 
@@ -52,7 +53,14 @@ public class PrinCatalogoXLS extends HttpServlet {
             }
         }
         Catalogo.clear();
-        System.out.println("SIZE: " + Catalogo2.size());
+        if (Tipo_Estudio != 0) {
+            for (Estudio_DTO dto : Catalogo2) {
+                if (Tipo_Estudio != dto.getId_Tipo_Estudio()) {
+                    System.out.println("Borrando: " + dto.getNombre_Estudio());
+                    Catalogo2.remove(dto);
+                }
+            }
+        }
         try {
             Sheet hoja = null;
             int f = 0;
@@ -63,7 +71,6 @@ public class PrinCatalogoXLS extends HttpServlet {
                     if (id_Tipo_Estudio != dto.getId_Tipo_Estudio()) {
                         id_Tipo_Estudio = dto.getId_Tipo_Estudio();
                         hoja = libro.createSheet(dto.getNombre_Tipo_Estudio());
-                        System.out.println("Nueva Hoja para: " + dto.getNombre_Tipo_Estudio().toLowerCase());
                         f = 0;
                         Row Head = hoja.createRow(f);//Fila de Cabecera
                         //columnas                    
@@ -93,7 +100,7 @@ public class PrinCatalogoXLS extends HttpServlet {
                     Cell cellCPrecioU = fila.createCell(3);
                     cellCPrecioU.setCellValue(dto.getPrecio().getPrecio_U());
                     if (Det) {
-                        f ++;
+                        f++;
                         Row fila2 = hoja.createRow(f);
                         Cell HMateriales = fila2.createCell(0);
                         HMateriales.setCellValue("Material");
@@ -112,7 +119,7 @@ public class PrinCatalogoXLS extends HttpServlet {
                             Cantidad.setCellValue(mt.getCantidad());
                         }
                     }
-                    f+=2;
+                    f += 2;
                 } catch (Exception e) {
                     e.getMessage();
                 }
@@ -126,44 +133,4 @@ public class PrinCatalogoXLS extends HttpServlet {
         }
         Catalogo2.clear();
     }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }

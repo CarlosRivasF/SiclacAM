@@ -49,19 +49,24 @@ public class PrintCatalogoPDF extends HttpServlet {
         f.setHora(fac);
         HttpSession sesion = request.getSession();
         int id_Unidad;
-
-        id_Unidad = Integer.parseInt(request.getParameter("Id_Unidad"));
-
+        int Tipo_Estudio = 0;
+        if (request.getParameter("ITpoEto") != null) {
+            Tipo_Estudio = Integer.parseInt(request.getParameter("ITpoEto").trim());
+            System.out.println("Tipo de Estudio: " + Tipo_Estudio);
+        } else {
+            System.out.println("No hay Tipo de Estudio, El Reporte será general");
+        }
+        id_Unidad = Integer.parseInt(request.getParameter("IUdad"));
+        System.out.println("Unidad " + id_Unidad);
         try {
             List<Estudio_DTO> Catalogo;
             List<Estudio_DTO> Catalogo2 = new ArrayList<>();
             Estudio_DAO E = new Estudio_DAO();
             Catalogo = E.getEstudiosByUnidad(id_Unidad);//recupera lista de estudios por unidad
-
+            System.out.println("recupera lista de estudios por unidad");
             response.setContentType("application/pdf");
             response.setHeader("Content-disposition", "inline; filename=\"CatalogoEstudiosOrderByTipoEstudios.pdf\"");//nombre de archivo
             String relativePath = getServletContext().getRealPath("/");//ruta real del proyecto
-            int r = Catalogo.size() + 23;
             //cantidad de registros
             Boolean Det = false;
             for (int i = 1; i <= 8; i++) {
@@ -72,6 +77,20 @@ public class PrintCatalogoPDF extends HttpServlet {
                 }
             }
             Catalogo.clear();
+                        
+            System.out.println("Se ordenó la lista de estudios");
+            
+            if (Tipo_Estudio != 0) {
+                List<Estudio_DTO> Catalogo3 = new ArrayList<>();
+                for (Estudio_DTO dto : Catalogo2) {
+                    if (Tipo_Estudio != dto.getId_Tipo_Estudio()) {
+                        System.out.println("Borrando Estudio: " + dto.getNombre_Estudio());
+                        Catalogo3.add(dto);
+                    }
+                }
+                Catalogo2.removeAll(Catalogo3);
+            }
+            int r = Catalogo2.size() + 23;
             if (Det) {
                 for (Estudio_DTO dto : Catalogo2) {
                     for (Material_DTO mt : dto.getMts()) {
@@ -80,40 +99,45 @@ public class PrintCatalogoPDF extends HttpServlet {
                 }
                 r = r + (Catalogo2.size() * 4);
             }
+            System.out.println("Numero de filas: " + r);
             String Source = "";
-//            if (r < 40) {
-//                Source = relativePath + "M/MembreteRes1.pdf";
-//            } else if (r > 40 & r < 80) {
-//                Source = relativePath + "M/MembreteRes2.pdf";
-//            } else if (r > 80 & r < 120) {
-//                Source = relativePath + "M/MembreteRes3.pdf";
-//            } else if (r > 120 & r < 160) {
-//                Source = relativePath + "M/MembreteRes4.pdf";
-//            } else if (r > 160 & r < 200) {
-//                Source = relativePath + "M/MembreteRes5.pdf";
-//            } else if (r > 200 & r < 240) {
-//                Source = relativePath + "M/MembreteRes6.pdf";
-//            } else if (r > 280 & r < 320) {
-//                Source = relativePath + "M/MembreteRes7.pdf";
-//            } else if (r > 360 & r < 400) {
-//                Source = relativePath + "M/MembreteRes8.pdf";
-//            } else if (r > 420 & r < 460) {
-//                Source = relativePath + "M/MembreteRes9.pdf";
-//            } else if (r > 500 & r < 520) {
+            if (r < 40) {
+                Source = relativePath + "M/MembreteRes1.pdf";
+            } else if (r > 40 & r < 80) {
+                Source = relativePath + "M/MembreteRes2.pdf";
+            } else if (r > 80 & r < 120) {
+                Source = relativePath + "M/MembreteRes3.pdf";
+            } else if (r > 120 & r < 160) {
+                Source = relativePath + "M/MembreteRes4.pdf";
+            } else if (r > 160 & r < 200) {
+                Source = relativePath + "M/MembreteRes5.pdf";
+            } else if (r > 200 & r < 240) {
+                Source = relativePath + "M/MembreteRes6.pdf";
+            } else if (r > 280 & r < 320) {
+                Source = relativePath + "M/MembreteRes7.pdf";
+            } else if (r > 360 & r < 400) {
+                Source = relativePath + "M/MembreteRes8.pdf";
+            } else if (r > 420 & r < 460) {
+                Source = relativePath + "M/MembreteRes9.pdf";
+            } else if (r > 500 & r < 520) {
                 Source = relativePath + "M/MembreteRes10White.pdf";
-//            }
+            }
             int pagecount = 1;
             try {
                 cover = new PdfReader(Source);//PDF extra para posterior modificacion (omitir)
             } catch (IOException ex) {
                 Logger.getLogger(PrintCatalogoPDF.class.getName()).log(Level.SEVERE, null, ex);
             }
-            PdfReader reader = new PdfReader(Source);//Lee plantilla PDF
+            PdfReader reader = new PdfReader(Source);//
+            System.out.println("Lee plantilla PDF");
             Rectangle pagesize = reader.getPageSize(1);//obtiene tamaño de pagina
             PdfStamper stamper = new PdfStamper(reader, response.getOutputStream());//Crea nuevo documento PDF en base al template y lo manda al navegador con  response.getOutputStream()
+
             Persona_DAO P = new Persona_DAO();
             Persona_DTO persona = P.getPersona(Integer.parseInt(sesion.getAttribute("persona").toString()));
+
             PdfContentByte cb = stamper.getOverContent(1);//Obtiene contenido PDF donde se incrustaran los datos
+
             BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
             BaseFont bf0 = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
             BaseFont bf1 = BaseFont.createFont(BaseFont.COURIER, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
