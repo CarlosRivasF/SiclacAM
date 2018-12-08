@@ -41,7 +41,7 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/offcanvas.css">
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/images/favicon.ico">
     </head>
-    <body class="bg-Labs">
+    <body>
         <div id="Main">
             <nav class="navbar navbar-expand-md fixed-top navbar-Am-Labs bg-light">
                 <strong><a class="navbar-brand" href="MainAdmin.jsp" style="color: black"><%=empresa.getNombre_Empresa()%></a></strong>
@@ -81,39 +81,56 @@
                         <a class="nav-link" href="#/PARTICIPACIONES">PARTICIPACIONES </a>
                     </nav>
                 </div>
-                <div><br>
-                    <h2 style="text-align: center;color: white"><%=msg%></h2>
-                    <div class="col-md-6">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-magnet"></i>Catalogo de Esudios de la Unidad</h3>
-                            </div>
-                            <div class="panel-body">                   
-                                <a href="#" class="btn btn-md btn-hover btn-default">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
-                                <a href="#" class="btn btn-md btn-hover btn-default">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></a>
+                <script>
+                    var vITpoEto = "0";
+                    function ITpoEto() {
+                        if (document.getElementById("Tipo_Estudio1").value !== "0") {
+                            vITpoEto = "?ITpoEto=" + document.getElementById("Tipo_Estudio1").value;
+                        }
+                        return vITpoEto;
+                    }
+                    function ITpoEto2() {
+                        if (document.getElementById("Tipo_Estudio2").value !== "0") {
+                            vITpoEto = "?ITpoEto=" + document.getElementById("Tipo_Estudio2").value;
+                        }
+                        return vITpoEto;
+                    }
+
+                    function OpenRep(url) {
+                        if (vITpoEto !== "0") {
+                            window.open(url);
+                        } else {
+                            alert("Elige un Tipo de Estudio a Consultar");                            
+                        }
+                    }
+                </script>
+                <div class="container-fluid"><br>
+                    <h2 style="text-align: center;color: #4e555b"><%=msg%></h2><br>
+                    <div class="form-row" >
+                        <div class="card" class="col-md-5 mb-3">
+                            <h5 class="card-header">Catalogo de Esudios de la Unidad</h5>
+                            <div class="card-body">
+                                <a href="#" onclick="Open('');" class="btn btn-light">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
+                                <button onclick="OpenRep('PrintCatPDF');" class="btn btn-light">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></button>
                             </div>
                         </div>
+                        <div class="offset-1"></div>
+                        <div class="card" class="col-md-6 mb-3">
+                            <h5 class="card-header">Catalogo de Esudios a Detalle de la Unidad</h5>
+                            <div class="card-body">
+                                <a href="#" class="btn btn-light">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
+                                <a href="#" onclick="OpenRep('PrintCatPDF?DetCat=Ys');" class="btn btn-light">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></a>
+                            </div>
+                        </div>      
                     </div>
-                    <div class="col-md-6">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-magnet"></i>Catalogo de Esudios a Detalle de la Unidad</h3>
-                            </div>
-                            <div class="panel-body">                   
-                                <a href="#" class="btn btn-md btn-hover btn-default">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
-                                <a href="#" class="btn btn-md btn-hover btn-default">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-magnet"></i>Catalogo de Esudios de la Unidad (Un solo Tipo de Estudio)</h3>
-                            </div>
-                            <div class="panel-body">    
+                    <br>                   
+                    <div class="form-row" >
+                        <div class="card" class="col-md-5 mb-3">
+                            <h6 class="card-header">Catalogo de Esudios de la Unidad (Un solo Tipo de Estudio)</h6>
+                            <div class="card-body">
                                 <label for="Tipo_Estudio" class="sr-only">Tipo de Estudio</label><br>
-                                <select class="custom-select d-block w-100 form-control-sm" id="Tipo_Estudio" name="Tipo_Estudio" required>
-                                    <option value="">Tipo de Estudio</option>   
+                                <select class="custom-select d-block w-100 form-control-sm" id="Tipo_Estudio1" name="Tipo_Estudio1" required>
+                                    <option value="0">Tipo de Estudio</option>   
                                     <%for (Tipo_Estudio_DTO dto : tipos) {%>
                                     <option value="<%=dto.getId_Tipo_Estudio()%>"><%=dto.getNombre_Tipo_Estudio().toUpperCase()%></option> 
                                     <%}%>
@@ -121,20 +138,17 @@
                                 <div class="invalid-feedback" style="width: 100%;">
                                     Por favor seleccione un Tipo de Estudio.
                                 </div>
-                                <a href="#" class="btn btn-md btn-hover btn-default">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
-                                <a href="#" class="btn btn-md btn-hover btn-default">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></a>
+                                <a href="#" onclick="" class="btn btn-light">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
+                                <a href="#" onclick="OpenRep('PrintCatPDF' + ITpoEto());" class="btn btn-light">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></a>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-magnet"></i>Catalogo de Esudios a Detalle de la Unidad (Un solo Tipo de Estudio)</h3>
-                            </div>
-                            <div class="panel-body">  
+                        <div class="offset-1"></div>
+                        <div class="card" class="col-md-6 mb-3">
+                            <h6 class="card-header">Catalogo de Esudios a Detalle de la Unidad (Un solo Tipo de Estudio)</h6>
+                            <div class="card-body">
                                 <label for="Tipo_Estudio" class="sr-only">Tipo de Estudio</label><br>
-                                <select class="custom-select d-block w-100 form-control-sm" id="Tipo_Estudio" name="Tipo_Estudio" required>
-                                    <option value="">Tipo de Estudio</option>   
+                                <select class="custom-select d-block w-100 form-control-sm" id="Tipo_Estudio2" name="Tipo_Estudio2" required>
+                                    <option value="0">Tipo de Estudio</option>   
                                     <%for (Tipo_Estudio_DTO dto : tipos) {%>
                                     <option value="<%=dto.getId_Tipo_Estudio()%>"><%=dto.getNombre_Tipo_Estudio().toUpperCase()%></option> 
                                     <%}%>
@@ -142,8 +156,8 @@
                                 <div class="invalid-feedback" style="width: 100%;">
                                     Por favor seleccione un Tipo de Estudio.
                                 </div>
-                                <a href="#" class="btn btn-md btn-hover btn-default">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
-                                <a href="#" class="btn btn-md btn-hover btn-default">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></a>
+                                <a href="#" class="btn btn-light">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
+                                <a href="#" onclick="OpenRep('PrintCatPDF' + ITpoEto2() + '&DetCat=Ys');" class="btn btn-light">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></a>
                             </div>
                         </div>
                     </div>

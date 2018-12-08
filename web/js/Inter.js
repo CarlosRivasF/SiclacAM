@@ -2164,8 +2164,8 @@ function chOpt(mode) {
     switch (mode) {
         case 'per':
             document.getElementById("FrmSrch").innerHTML =
- "<div class='form-row'>" +           
-"<div class='col-12 col-sm-12 col-md-12 mb-3'>" +
+                    "<div class='form-row'>" +
+                    "<div class='col-12 col-sm-12 col-md-12 mb-3'>" +
                     "<label class='sr-only'>Buscar...</label>" +
                     "<input style='text-align: center' type='text' class='form-control' onkeyup=SrchPromAt(this,'Orden'); name='clave_mat' id='clave_mat' placeholder='Buscar Paquetes(perfiles)...' required=''>" +
                     "<div class='invalid-feedback'>" +
@@ -2456,4 +2456,21 @@ function UplResbydFolio(e) {
     Ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     var p = "Folio=" + Folio;
     Ajax.send(p);
+}
+
+
+
+function ITpoEto() {
+    var ITpoEto="";
+    if (document.getElementById("Tipo_Estudio1").value !== 0) {
+        ITpoEto = "?ITpoEto=" + document.getElementById("Tipo_Estudio1").value;
+    } else {
+        alert("Elige un Tipo de Estudio a Consultar");
+        document.getElementById("Tipo_Estudio1").focus();
+    }
+    return ITpoEto;
+}
+
+function OpenRep(url) {
+    window.open(url);
 }

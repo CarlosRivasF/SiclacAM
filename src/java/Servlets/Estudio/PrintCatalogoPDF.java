@@ -43,20 +43,24 @@ public class PrintCatalogoPDF extends HttpServlet {
     PdfReader cover;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("ProcessRequest");
         Date fac = new Date();
         Fecha f = new Fecha();
         f.setHora(fac);
         HttpSession sesion = request.getSession();
         int id_Unidad;
         int Tipo_Estudio = 0;
+        Boolean Det = false;
+        id_Unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
         if (request.getParameter("ITpoEto") != null) {
             Tipo_Estudio = Integer.parseInt(request.getParameter("ITpoEto").trim());
-            System.out.println("Tipo de Estudio: " + Tipo_Estudio);
         } else {
             System.out.println("No hay Tipo de Estudio, El Reporte será general");
         }
-        id_Unidad = Integer.parseInt(request.getParameter("IUdad"));
+        if (request.getParameter("DetCat") != null) {
+            Det=true;
+        }
+        
+
         System.out.println("Unidad " + id_Unidad);
         try {
             List<Estudio_DTO> Catalogo;
@@ -68,7 +72,7 @@ public class PrintCatalogoPDF extends HttpServlet {
             response.setHeader("Content-disposition", "inline; filename=\"CatalogoEstudiosOrderByTipoEstudios.pdf\"");//nombre de archivo
             String relativePath = getServletContext().getRealPath("/");//ruta real del proyecto
             //cantidad de registros
-            Boolean Det = false;
+
             for (int i = 1; i <= 8; i++) {
                 for (Estudio_DTO dto : Catalogo) {
                     if (dto.getId_Tipo_Estudio() == i) {
@@ -77,9 +81,9 @@ public class PrintCatalogoPDF extends HttpServlet {
                 }
             }
             Catalogo.clear();
-                        
+
             System.out.println("Se ordenó la lista de estudios");
-            
+
             if (Tipo_Estudio != 0) {
                 List<Estudio_DTO> Catalogo3 = new ArrayList<>();
                 for (Estudio_DTO dto : Catalogo2) {

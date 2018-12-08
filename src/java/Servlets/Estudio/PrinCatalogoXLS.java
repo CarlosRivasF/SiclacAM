@@ -34,12 +34,11 @@ public class PrinCatalogoXLS extends HttpServlet {
         int Tipo_Estudio = 0;
         if (request.getParameter("ITpoEto") != null) {
             Tipo_Estudio = Integer.parseInt(request.getParameter("ITpoEto").trim());
-            System.out.println("Tipo de Estudio: " + Tipo_Estudio);
         }
 
         Boolean Det = true;
 
-        id_Unidad = Integer.parseInt(request.getParameter("IUdad"));
+        id_Unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
         List<Estudio_DTO> Catalogo;
         List<Estudio_DTO> Catalogo2 = new ArrayList<>();
 
@@ -56,7 +55,6 @@ public class PrinCatalogoXLS extends HttpServlet {
         if (Tipo_Estudio != 0) {
             for (Estudio_DTO dto : Catalogo2) {
                 if (Tipo_Estudio != dto.getId_Tipo_Estudio()) {
-                    System.out.println("Borrando: " + dto.getNombre_Estudio());
                     Catalogo2.remove(dto);
                 }
             }
@@ -133,4 +131,5 @@ public class PrinCatalogoXLS extends HttpServlet {
         }
         Catalogo2.clear();
     }
+
 }
