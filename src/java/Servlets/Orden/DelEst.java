@@ -76,9 +76,9 @@ public class DelEst extends HttpServlet {
                                     + "<td >" + e + " días</td>"
                                     + "<td >" + f.SumarDias(e) + "</td>");
                             if (request.getParameter("shdet") == null) {
-                                out.println("<td><div id='mat-" + Det_Orden.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEst(" + Det_Orden.indexOf(dto) + ",'show') ><span><img src='images/trash.png'></span></button></div></td>");
+                                out.println("<td><div id='mat-" + Det_Orden.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEst(" + Det_Orden.indexOf(dto) + ",'Ord') ><span><img src='images/trash.png'></span></button></div></td>");
                             } else {
-                                out.println("<td><div id='mat-" + Det_Orden.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEstSecc(" + Det_Orden.indexOf(dto) + ",'show') ><span><img src='images/trash.png'></span></button></div></td>");
+                                out.println("<td><div id='mat-" + Det_Orden.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEstSecc(" + Det_Orden.indexOf(dto) + ",'Ord') ><span><img src='images/trash.png'></span></button></div></td>");
                             }
                             out.println("</tr>");
                             total = total + dto.getSubtotal();

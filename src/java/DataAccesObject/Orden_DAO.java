@@ -47,7 +47,6 @@ public class Orden_DAO {
                     orden.setId_Orden(rs.getInt("id_Orden"));
                 }
             }
-            System.out.println("Id_Orden: " + orden.getId_Orden());
             if (orden.getId_Orden() != 0) {
                 System.out.println("ORDEN REGISTRADA");
                 Det_Orden_DAO DET = new Det_Orden_DAO();
@@ -342,7 +341,7 @@ public class Orden_DAO {
 
     public List<Orden_DTO> getOrdenesPendientes(int id_Unidad) {
         /*las Ordenes son 'PENDIENTES' cuando aún no se completan los resultados
-        [*uede estar liquidada(montoRes==0) pero SIN resultados]*/
+        [*puede estar liquidada(montoRes==0) pero SIN resultados]*/
         List<Orden_DTO> ords = new ArrayList<>();
         Estudio_DAO E = new Estudio_DAO();
         Unidad_DAO U = new Unidad_DAO();

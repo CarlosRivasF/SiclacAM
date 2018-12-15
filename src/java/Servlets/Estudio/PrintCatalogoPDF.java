@@ -54,20 +54,19 @@ public class PrintCatalogoPDF extends HttpServlet {
         if (request.getParameter("ITpoEto") != null) {
             Tipo_Estudio = Integer.parseInt(request.getParameter("ITpoEto").trim());
         } else {
-            System.out.println("No hay Tipo de Estudio, El Reporte será general");
+//            System.out.println("No hay Tipo de Estudio, El Reporte será general");
         }
         if (request.getParameter("DetCat") != null) {
-            Det=true;
+            Det = true;
         }
-        
 
-        System.out.println("Unidad " + id_Unidad);
+//        System.out.println("Unidad " + id_Unidad);
         try {
             List<Estudio_DTO> Catalogo;
             List<Estudio_DTO> Catalogo2 = new ArrayList<>();
             Estudio_DAO E = new Estudio_DAO();
             Catalogo = E.getEstudiosByUnidad(id_Unidad);//recupera lista de estudios por unidad
-            System.out.println("recupera lista de estudios por unidad");
+//            System.out.println("recupera lista de estudios por unidad");
             response.setContentType("application/pdf");
             response.setHeader("Content-disposition", "inline; filename=\"CatalogoEstudiosOrderByTipoEstudios.pdf\"");//nombre de archivo
             String relativePath = getServletContext().getRealPath("/");//ruta real del proyecto
@@ -82,13 +81,12 @@ public class PrintCatalogoPDF extends HttpServlet {
             }
             Catalogo.clear();
 
-            System.out.println("Se ordenó la lista de estudios");
-
+//            System.out.println("Se ordenó la lista de estudios");
             if (Tipo_Estudio != 0) {
                 List<Estudio_DTO> Catalogo3 = new ArrayList<>();
                 for (Estudio_DTO dto : Catalogo2) {
                     if (Tipo_Estudio != dto.getId_Tipo_Estudio()) {
-                        System.out.println("Borrando Estudio: " + dto.getNombre_Estudio());
+//                        System.out.println("Borrando Estudio: " + dto.getNombre_Estudio());
                         Catalogo3.add(dto);
                     }
                 }
@@ -103,7 +101,7 @@ public class PrintCatalogoPDF extends HttpServlet {
                 }
                 r = r + (Catalogo2.size() * 4);
             }
-            System.out.println("Numero de filas: " + r);
+//            System.out.println("Numero de filas: " + r);
             String Source = "";
             if (r < 40) {
                 Source = relativePath + "M/MembreteRes1.pdf";
@@ -133,7 +131,7 @@ public class PrintCatalogoPDF extends HttpServlet {
                 Logger.getLogger(PrintCatalogoPDF.class.getName()).log(Level.SEVERE, null, ex);
             }
             PdfReader reader = new PdfReader(Source);//
-            System.out.println("Lee plantilla PDF");
+//            System.out.println("Lee plantilla PDF");
             Rectangle pagesize = reader.getPageSize(1);//obtiene tamaño de pagina
             PdfStamper stamper = new PdfStamper(reader, response.getOutputStream());//Crea nuevo documento PDF en base al template y lo manda al navegador con  response.getOutputStream()
 
@@ -188,7 +186,7 @@ public class PrintCatalogoPDF extends HttpServlet {
             cb.showText(persona.getSexo());
             cb.endText();
             ////////////////////////// DATOS DOCTOR           
-            System.out.println("Stamper");// inicia Stamper(Incrustacion de datos)
+//            System.out.println("Stamper");// inicia Stamper(Incrustacion de datos)
             /////***************FUENTES PARA FORMATO DEL REPORTE*********************************/////////////////
             BaseColor orange = new BaseColor(211, 84, 0);
             BaseColor blue = new BaseColor(52, 152, 219);
@@ -319,7 +317,6 @@ public class PrintCatalogoPDF extends HttpServlet {
                     table.addCell(HEsp);
                 }
             }
-
             //FINALZA CONTENIDO
             ColumnText column = new ColumnText(stamper.getOverContent(1));
             Rectangle rectPage1 = new Rectangle(-27, 60, 640, 700);//izaq,esp-inf,ancho,alto (SON COORDENADAS EN LA HOJA DEL PDF Y EL TAMAÑO DEL ELEMENTO A AGREGAR)

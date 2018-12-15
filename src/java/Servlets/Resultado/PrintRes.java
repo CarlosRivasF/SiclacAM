@@ -145,14 +145,14 @@ public class PrintRes extends HttpServlet {
                 cell_Est_Title.setBackgroundColor(BackGr);
                 table.addCell(cell_Est_Title);
 
-                PdfPCell cell_Met_Title = new PdfPCell(new Paragraph("Meodo: " + dto.getEstudio().getMetodo(), Title_Font_Est));
+                PdfPCell cell_Met_Title = new PdfPCell(new Paragraph("Método: " + dto.getEstudio().getMetodo(), Title_Font_Est));
                 cell_Met_Title.setHorizontalAlignment(Element.ALIGN_LEFT);
                 cell_Met_Title.setColspan(2);
                 cell_Met_Title.setBorder(0);
                 cell_Met_Title.setBackgroundColor(BackGr);
                 table.addCell(cell_Met_Title);
 
-                PdfPCell des = new PdfPCell(new Paragraph("Descripcion"));
+                PdfPCell des = new PdfPCell(new Paragraph("Descripción"));
                 des.setBorderColor(BaseColor.RED);
                 table.addCell(des);
                 PdfPCell res = new PdfPCell(new Paragraph("Resultado"));
