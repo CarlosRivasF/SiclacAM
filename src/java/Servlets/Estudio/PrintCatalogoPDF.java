@@ -59,7 +59,6 @@ public class PrintCatalogoPDF extends HttpServlet {
         if (request.getParameter("DetCat") != null) {
             Det = true;
         }
-
 //        System.out.println("Unidad " + id_Unidad);
         try {
             List<Estudio_DTO> Catalogo;
@@ -68,7 +67,7 @@ public class PrintCatalogoPDF extends HttpServlet {
             Catalogo = E.getEstudiosByUnidad(id_Unidad);//recupera lista de estudios por unidad
 //            System.out.println("recupera lista de estudios por unidad");
             response.setContentType("application/pdf");
-            response.setHeader("Content-disposition", "inline; filename=\"CatalogoEstudiosOrderByTipoEstudios.pdf\"");//nombre de archivo
+            response.setHeader("Content-disposition", "inline; filename=\"CatalogoEstudios.pdf\"");//nombre de archivo
             String relativePath = getServletContext().getRealPath("/");//ruta real del proyecto
             //cantidad de registros
 
@@ -80,7 +79,6 @@ public class PrintCatalogoPDF extends HttpServlet {
                 }
             }
             Catalogo.clear();
-
 //            System.out.println("Se ordenó la lista de estudios");
             if (Tipo_Estudio != 0) {
                 List<Estudio_DTO> Catalogo3 = new ArrayList<>();
@@ -103,30 +101,30 @@ public class PrintCatalogoPDF extends HttpServlet {
             }
 //            System.out.println("Numero de filas: " + r);
             String Source = "";
-            if (r < 40) {
+//            if (r < 40) {
                 Source = relativePath + "M/MembreteRes1.pdf";
-            } else if (r > 40 & r < 80) {
-                Source = relativePath + "M/MembreteRes2.pdf";
-            } else if (r > 80 & r < 120) {
-                Source = relativePath + "M/MembreteRes3.pdf";
-            } else if (r > 120 & r < 160) {
-                Source = relativePath + "M/MembreteRes4.pdf";
-            } else if (r > 160 & r < 200) {
-                Source = relativePath + "M/MembreteRes5.pdf";
-            } else if (r > 200 & r < 240) {
-                Source = relativePath + "M/MembreteRes6.pdf";
-            } else if (r > 280 & r < 320) {
-                Source = relativePath + "M/MembreteRes7.pdf";
-            } else if (r > 360 & r < 400) {
-                Source = relativePath + "M/MembreteRes8.pdf";
-            } else if (r > 420 & r < 460) {
-                Source = relativePath + "M/MembreteRes9.pdf";
-            } else if (r > 500 & r < 520) {
-                Source = relativePath + "M/MembreteRes10White.pdf";
-            }
+//            } else if (r > 40 & r < 80) {
+//                Source = relativePath + "M/MembreteRes2.pdf";
+//            } else if (r > 80 & r < 120) {
+//                Source = relativePath + "M/MembreteRes3.pdf";
+//            } else if (r > 120 & r < 160) {
+//                Source = relativePath + "M/MembreteRes4.pdf";
+//            } else if (r > 160 & r < 200) {
+//                Source = relativePath + "M/MembreteRes5.pdf";
+//            } else if (r > 200 & r < 240) {
+//                Source = relativePath + "M/MembreteRes6.pdf";
+//            } else if (r > 280 & r < 320) {
+//                Source = relativePath + "M/MembreteRes7.pdf";
+//            } else if (r > 360 & r < 400) {
+//                Source = relativePath + "M/MembreteRes8.pdf";
+//            } else if (r > 420 & r < 460) {
+//                Source = relativePath + "M/MembreteRes9.pdf";
+//            } else if (r > 500 & r < 520) {
+//                Source = relativePath + "M/MembreteRes10White.pdf";
+//            }
             int pagecount = 1;
             try {
-                cover = new PdfReader(Source);//PDF extra para posterior modificacion (omitir)
+            cover = new PdfReader(Source);//PDF extra para posterior modificacion (omitir)
             } catch (IOException ex) {
                 Logger.getLogger(PrintCatalogoPDF.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -343,7 +341,8 @@ public class PrintCatalogoPDF extends HttpServlet {
         Date fac = new Date();
         Fecha f = new Fecha();
         f.setHora(fac);
-        PdfContentByte cb = stamper.getOverContent(pagecount);
+        stamper.insertPage(pagecount, reader.getPageSizeWithRotation(1));
+        PdfContentByte cb = stamper.getOverContent(1);
         column.setCanvas(cb);
         column.setSimpleColumn(rect);
         return column.go();
@@ -364,25 +363,14 @@ public class PrintCatalogoPDF extends HttpServlet {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
+
     @Override
     public String getServletInfo() {
         return "Short description";
