@@ -226,10 +226,10 @@ public class PrintCatalogoPDF extends HttpServlet {
                     PdfPCell HNombreEsudio = new PdfPCell(new Paragraph("Nombre Estudio"));
                     HNombreEsudio.setBorderColor(BaseColor.RED);
                     table.addCell(HNombreEsudio);
-                    PdfPCell HPrecioN = new PdfPCell(new Paragraph("Precio Normal"));
+                    PdfPCell HPrecioN = new PdfPCell(new Paragraph("Dias Normal"));
                     HPrecioN.setBorderColor(BaseColor.RED);
                     table.addCell(HPrecioN);
-                    PdfPCell HPrecioU = new PdfPCell(new Paragraph("Precio Urgente"));
+                    PdfPCell HPrecioU = new PdfPCell(new Paragraph("Precio Normal"));
                     HPrecioU.setBorderColor(BaseColor.RED);
                     table.addCell(HPrecioU);
                     c++;
@@ -251,13 +251,13 @@ public class PrintCatalogoPDF extends HttpServlet {
                 }
                 table.addCell(NombreEstudio);
 
-                PdfPCell PrecioN = new PdfPCell(new Paragraph(String.valueOf(dto.getPrecio().getPrecio_N()), Content_Font));
-                PrecioN.setHorizontalAlignment(Element.ALIGN_CENTER);
-                PrecioN.setBorder(PdfPCell.BOTTOM);
+                PdfPCell DiasN = new PdfPCell(new Paragraph(String.valueOf(dto.getPrecio().getT_Entrega_N()), Content_Font));
+                DiasN.setHorizontalAlignment(Element.ALIGN_CENTER);
+                DiasN.setBorder(PdfPCell.BOTTOM);
                 if (Det) {
-                    PrecioN.setBackgroundColor(green);
+                    DiasN.setBackgroundColor(green);
                 }
-                table.addCell(PrecioN);
+                table.addCell(DiasN);
 
                 PdfPCell PrecioU = new PdfPCell(new Paragraph(String.valueOf(dto.getPrecio().getPrecio_U()), Content_Font));
                 PrecioU.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -288,10 +288,10 @@ public class PrintCatalogoPDF extends HttpServlet {
                     HNombreMaterial.setColspan(2);
                     HNombreMaterial.setBackgroundColor(BackGr);
                     table.addCell(HNombreMaterial);
-                    PdfPCell HPrecioMaterial = new PdfPCell(new Paragraph("Precio", Content_Font));
-                    HPrecioMaterial.setHorizontalAlignment(Element.ALIGN_CENTER);
-                    HPrecioMaterial.setBackgroundColor(BackGr);
-                    table.addCell(HPrecioMaterial);
+                    PdfPCell HClaveMaterial = new PdfPCell(new Paragraph("Clave", Content_Font));
+                    HClaveMaterial.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    HClaveMaterial.setBackgroundColor(BackGr);
+                    table.addCell(HClaveMaterial);
                     PdfPCell HCantidadMaterial = new PdfPCell(new Paragraph("Cantidad", Content_Font));
                     HCantidadMaterial.setHorizontalAlignment(Element.ALIGN_CENTER);
                     HCantidadMaterial.setBackgroundColor(BackGr);
@@ -301,7 +301,7 @@ public class PrintCatalogoPDF extends HttpServlet {
                         Material.setHorizontalAlignment(Element.ALIGN_LEFT);
                         Material.setColspan(2);
                         table.addCell(Material);
-                        PdfPCell Precio = new PdfPCell(new Paragraph(String.valueOf(mt.getPrecio()), Content_Font));
+                        PdfPCell Precio = new PdfPCell(new Paragraph(String.valueOf(mt.getClave()), Content_Font));
                         Precio.setHorizontalAlignment(Element.ALIGN_LEFT);
                         table.addCell(Precio);
                         PdfPCell Cantidad = new PdfPCell(new Paragraph(String.valueOf(mt.getCantidad()), Content_Font));

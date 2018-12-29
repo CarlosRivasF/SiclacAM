@@ -2461,7 +2461,7 @@ function UplResbydFolio(e) {
 
 
 function ITpoEto() {
-    var ITpoEto="";
+    var ITpoEto = "";
     if (document.getElementById("Tipo_Estudio1").value !== 0) {
         ITpoEto = "?ITpoEto=" + document.getElementById("Tipo_Estudio1").value;
     } else {
@@ -2473,4 +2473,12 @@ function ITpoEto() {
 
 function OpenRep(url) {
     window.open(url);
+}
+
+function verRep(id) {
+    var IDs = ['CardEstudios', 'CardOrdenes'];
+    for (var i = 0; i < IDs.length; i++) {
+        document.getElementById(IDs[i]).style.display = "none";
+    }
+    document.getElementById(id).style.display = "block";
 }

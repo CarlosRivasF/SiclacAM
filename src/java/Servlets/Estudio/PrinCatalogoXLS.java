@@ -76,12 +76,12 @@ public class PrinCatalogoXLS extends HttpServlet {
                         cellHClave.setCellValue("Clave");
                         Cell cellHnombre = Head.createCell(1);
                         cellHnombre.setCellValue("Nombre de Estudio");
-                        Cell cellHPrecioN = Head.createCell(2);
+                        Cell cellHDiasN = Head.createCell(2);
+                        cellHDiasN.setCellValue("Dias Normal");
+                        Cell cellHPrecioN = Head.createCell(3);
                         cellHPrecioN.setCellValue("Precio Normal");
-                        Cell cellHPrecioU = Head.createCell(3);
-                        cellHPrecioU.setCellValue("Precio Urgente");
                         if (Det) {
-                            Cell cellHDescripcion = Head.createCell(3);
+                            Cell cellHDescripcion = Head.createCell(4);
                             cellHDescripcion.setCellValue("Descripcion");
                         }
                     }
@@ -94,16 +94,18 @@ public class PrinCatalogoXLS extends HttpServlet {
                     Cell cellCnombre = fila.createCell(1);
                     cellCnombre.setCellValue(dto.getNombre_Estudio());
                     Cell cellCPrecioN = fila.createCell(2);
-                    cellCPrecioN.setCellValue(dto.getPrecio().getPrecio_N());
+                    cellCPrecioN.setCellValue(dto.getPrecio().getT_Entrega_N());
                     Cell cellCPrecioU = fila.createCell(3);
-                    cellCPrecioU.setCellValue(dto.getPrecio().getPrecio_U());
+                    cellCPrecioU.setCellValue(dto.getPrecio().getPrecio_N());
                     if (Det) {
+                        Cell cellCDescripcion = fila.createCell(3);
+                        cellCDescripcion.setCellValue(dto.getPreparacion());
                         f++;
                         Row fila2 = hoja.createRow(f);
                         Cell HMateriales = fila2.createCell(0);
                         HMateriales.setCellValue("Material");
                         Cell HPrecio = fila2.createCell(1);
-                        HPrecio.setCellValue("Precic");
+                        HPrecio.setCellValue("Clave");
                         Cell HCantidad = fila2.createCell(2);
                         HCantidad.setCellValue("Cantidad");
                         for (Material_DTO mt : dto.getMts()) {
@@ -112,7 +114,7 @@ public class PrinCatalogoXLS extends HttpServlet {
                             Cell Material = fila3.createCell(0);
                             Material.setCellValue(mt.getNombre_Material());
                             Cell Precio = fila3.createCell(1);
-                            Precio.setCellValue(mt.getPrecio());
+                            Precio.setCellValue(mt.getClave());
                             Cell Cantidad = fila3.createCell(2);
                             Cantidad.setCellValue(mt.getCantidad());
                         }

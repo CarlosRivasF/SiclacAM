@@ -103,10 +103,27 @@
                             alert("Elige un Tipo de Estudio a Consultar");
                         }
                     }
+
+                    function verRep(id) {
+                        var IDs = ['CardEstudios', 'CardOrdenes'];
+                        for (var i = 0; i < IDs.length; i++) {
+                            document.getElementById(IDs[i]).style.display = "none";
+                        }
+                        document.getElementById(id).style.display = "block";
+                    }
                 </script>
                 <div class="container-fluid"><br>
                     <h2 style="text-align: center;color: #4e555b"><%=msg%></h2><br>
-                    <div id="CardEstudios">
+                    <div class="form-row" >
+                        <div class="col-md-3 mb-3">
+                            <button onclick="verRep('CardEstudios');" class="btn btn-light">Reportar Estudios</button>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <button onclick="verRep('CardOrdenes');" class="btn btn-light">Reportar Ordenes</button>
+                        </div>
+                        <div class="col-md-3 mb-3"></div>
+                    </div>
+                    <div id="CardEstudios" style="display:none">
                         <div class="form-row" >
                             <div class="card" class="col-md-5 mb-3">
                                 <h5 class="card-header">Catalogo de Esudios de la Unidad</h5>
@@ -163,23 +180,33 @@
                             </div>
                         </div>
                     </div>
-                                    <div id="CardOrdenes">
-                        <div class="form-row" >
-                            <div class="card" class="col-md-5 mb-3">
+                    <div id="CardOrdenes" style="display:none">
+                        <div class="form-row">
+                            <div class=" card col-md-6 mb-3">
                                 <h6 class="card-header">Reporte General de Ordenes de la Unidad</h6>
                                 <div class="card-body">
-                                    <div class="col-md-2 mb-3">
-                                        <input type="date" name="F1" id="F1">
+                                    <div class="form-row">
+                                        <div class="form-group col-6">
+                                            <label style="text-align: center" for="fechaI">Fecha Inicio</label>
+                                            <input type="date" class="form-control" name="fechaI" id="fechaI" required>
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label style="text-align: center" for="fechaF">Fecha Inicio</label>
+                                            <input type="date" class="form-control" name="fechaF" id="fechaF" required>
+                                        </div>
                                     </div>
-                                    <div class="col-md-2 mb-3">
-                                        <input type="date" name="F2" id="F2">
-                                    </div>
-                                    <a href="#" onclick="Open('');" class="btn btn-light">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
-                                    <button onclick="OpenRep('PrintCatPDF');" class="btn btn-light">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></button>
+                                    <br/>
+                                    <div class="form-row align-items-center" style="text-align: center">
+                                        <div class="col-6">
+                                            <a style="text-align: center" href="#" onclick="Open('');" class="btn btn-light">Descargar Excel  <span><img src='images/Excel.png' class="img-fluid" alt="Responsive image"></span></a>
+                                        </div>
+                                        <div class="col-6">
+                                            <button style="text-align: center" onclick="OpenRep('PrintCatPDF');" class="btn btn-light">Descargar PDF  <span><img src='images/Pdf.png' class="img-fluid" alt="Responsive image"></span></button>
+                                        </div>
+                                    </div>                                    
                                 </div>
                             </div>
-                            <div class="offset-1"></div>
-                            <div class="card" class="col-md-6 mb-3">
+                            <div class="card col-md-6 mb-3">
                                 <h5 class="card-header">Catalogo de Esudios a Detalle de la Unidad</h5>
                                 <div class="card-body">
                                     <a href="#" class="btn btn-light">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
