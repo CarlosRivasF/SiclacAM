@@ -1,6 +1,7 @@
 package Servlets.Orden;
 
 import DataAccesObject.Orden_DAO;
+import DataBase.Fecha;
 import DataTransferObject.Det_Orden_DTO;
 import DataTransferObject.Orden_DTO;
 import java.io.IOException;
@@ -120,8 +121,8 @@ public class ShowDetOrdRs extends HttpServlet {
                 pr = true;
             }
         }
-        if (pr) {
-            out.print("<a class='btn btn-success btn-lg btn-block' href='PrintRes?LxOrdSald=" + dto.getId_Orden() + "' >Imprimir Resultados</a><br>");
+        if (pr) {//href=# onclick=OpenRep('PrintCot')
+            out.print("<a class='btn btn-success btn-lg btn-block' href=# onclick=OpenRep('PrintRes?LxOrdSald=" + Fecha.Encriptar(String.valueOf(dto.getId_Orden())) + "') >Imprimir Resultados</a><br>");
         }
         out.println("</div>");
         out.println("</div>");

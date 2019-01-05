@@ -89,7 +89,7 @@ public class UplResults extends HttpServlet {
                 out.println("</tr>");
             });
             out.println("</table>"
-                    + "<a class='btn btn-success btn-lg btn-block' href='PrintRes' >Imprimir Resultados</a><br>");
+                    + "<a class='btn btn-success btn-lg btn-block' href=# onclick=OpenRep('PrintRes') >Imprimir Resultados</a><br>");
         }
     }
 

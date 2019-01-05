@@ -3,6 +3,7 @@ package Servlets.Estudio;
 import DataAccesObject.Estudio_DAO;
 import DataAccesObject.Persona_DAO;
 import DataBase.Fecha;
+import DataTransferObject.Est_Mat_DTO;
 import DataTransferObject.Estudio_DTO;
 import DataTransferObject.Material_DTO;
 import DataTransferObject.Persona_DTO;
@@ -43,6 +44,7 @@ public class PrintCatalogoPDF extends HttpServlet {
     PdfReader cover;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("Entró peticion a PrintCatalogoPDF");
         Date fac = new Date();
         Fecha f = new Fecha();
         f.setHora(fac);
@@ -51,25 +53,24 @@ public class PrintCatalogoPDF extends HttpServlet {
         int Tipo_Estudio = 0;
         Boolean Det = false;
         id_Unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
+        System.out.println("Reporte para la unidad " + id_Unidad);
         if (request.getParameter("ITpoEto") != null) {
             Tipo_Estudio = Integer.parseInt(request.getParameter("ITpoEto").trim());
-        } else {
-//            System.out.println("No hay Tipo de Estudio, El Reporte será general");
         }
+
         if (request.getParameter("DetCat") != null) {
             Det = true;
+            System.out.println("Se añadirá DETALLE de Catalogo");
         }
-//        System.out.println("Unidad " + id_Unidad);
         try {
             List<Estudio_DTO> Catalogo;
             List<Estudio_DTO> Catalogo2 = new ArrayList<>();
             Estudio_DAO E = new Estudio_DAO();
             Catalogo = E.getEstudiosByUnidad(id_Unidad);//recupera lista de estudios por unidad
-//            System.out.println("recupera lista de estudios por unidad");
+            System.out.println("recupera lista de estudios por unidad");
             response.setContentType("application/pdf");
             response.setHeader("Content-disposition", "inline; filename=\"CatalogoEstudios.pdf\"");//nombre de archivo
             String relativePath = getServletContext().getRealPath("/");//ruta real del proyecto
-            //cantidad de registros
 
             for (int i = 1; i <= 8; i++) {
                 for (Estudio_DTO dto : Catalogo) {
@@ -79,7 +80,7 @@ public class PrintCatalogoPDF extends HttpServlet {
                 }
             }
             Catalogo.clear();
-//            System.out.println("Se ordenó la lista de estudios");
+            System.out.println("Se ordenó la lista de estudios");
             if (Tipo_Estudio != 0) {
                 List<Estudio_DTO> Catalogo3 = new ArrayList<>();
                 for (Estudio_DTO dto : Catalogo2) {
@@ -102,7 +103,7 @@ public class PrintCatalogoPDF extends HttpServlet {
 //            System.out.println("Numero de filas: " + r);
             String Source = "";
 //            if (r < 40) {
-                Source = relativePath + "M/MembreteRes1.pdf";
+            Source = relativePath + "M/MembreteRes1.pdf";
 //            } else if (r > 40 & r < 80) {
 //                Source = relativePath + "M/MembreteRes2.pdf";
 //            } else if (r > 80 & r < 120) {
@@ -122,20 +123,22 @@ public class PrintCatalogoPDF extends HttpServlet {
 //            } else if (r > 500 & r < 520) {
 //                Source = relativePath + "M/MembreteRes10White.pdf";
 //            }
+
             int pagecount = 1;
             try {
-            cover = new PdfReader(Source);//PDF extra para posterior modificacion (omitir)
+                cover = new PdfReader(Source);//PDF extra para posterior modificacion (omitir)
+                System.out.println("Se tomará el membrete para COVER: " + Source);
             } catch (IOException ex) {
-                Logger.getLogger(PrintCatalogoPDF.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
             }
-            PdfReader reader = new PdfReader(Source);//
-//            System.out.println("Lee plantilla PDF");
+            PdfReader reader = new PdfReader(Source);
+            System.out.println("Lee membrete PDF "+Source);
             Rectangle pagesize = reader.getPageSize(1);//obtiene tamaño de pagina
             PdfStamper stamper = new PdfStamper(reader, response.getOutputStream());//Crea nuevo documento PDF en base al template y lo manda al navegador con  response.getOutputStream()
-
+            System.out.println("Se inica Stamper");
             Persona_DAO P = new Persona_DAO();
             Persona_DTO persona = P.getPersona(Integer.parseInt(sesion.getAttribute("persona").toString()));
-
+            System.out.println("Encuentra persona quien reporta");
             PdfContentByte cb = stamper.getOverContent(1);//Obtiene contenido PDF donde se incrustaran los datos
 
             BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
@@ -183,6 +186,7 @@ public class PrintCatalogoPDF extends HttpServlet {
             cb.setTextMatrix(380, 722);
             cb.showText(persona.getSexo());
             cb.endText();
+            System.out.println("Imprime Encabezado");
             ////////////////////////// DATOS DOCTOR           
 //            System.out.println("Stamper");// inicia Stamper(Incrustacion de datos)
             /////***************FUENTES PARA FORMATO DEL REPORTE*********************************/////////////////
@@ -203,7 +207,7 @@ public class PrintCatalogoPDF extends HttpServlet {
             table.setWidths(new int[]{5, 10, 4, 4});
             int id_Tipo_Estudio = 0;
             int c = 0;
-
+            System.out.println("recorre catalogo");
             for (Estudio_DTO dto : Catalogo2) {
                 if (id_Tipo_Estudio != dto.getId_Tipo_Estudio()) {
                     id_Tipo_Estudio = dto.getId_Tipo_Estudio();
@@ -296,7 +300,7 @@ public class PrintCatalogoPDF extends HttpServlet {
                     HCantidadMaterial.setHorizontalAlignment(Element.ALIGN_CENTER);
                     HCantidadMaterial.setBackgroundColor(BackGr);
                     table.addCell(HCantidadMaterial);
-                    for (Material_DTO mt : dto.getMts()) {
+                    for (Est_Mat_DTO mt : dto.getMts()) {
                         PdfPCell Material = new PdfPCell(new Paragraph(mt.getNombre_Material(), Content_Font));
                         Material.setHorizontalAlignment(Element.ALIGN_LEFT);
                         Material.setColspan(2);
@@ -304,7 +308,7 @@ public class PrintCatalogoPDF extends HttpServlet {
                         PdfPCell Precio = new PdfPCell(new Paragraph(String.valueOf(mt.getClave()), Content_Font));
                         Precio.setHorizontalAlignment(Element.ALIGN_LEFT);
                         table.addCell(Precio);
-                        PdfPCell Cantidad = new PdfPCell(new Paragraph(String.valueOf(mt.getCantidad()), Content_Font));
+                        PdfPCell Cantidad = new PdfPCell(new Paragraph(String.valueOf(mt.getCantidadE()), Content_Font));
                         Cantidad.setHorizontalAlignment(Element.ALIGN_LEFT);
                         table.addCell(Cantidad);
                     }
@@ -322,7 +326,6 @@ public class PrintCatalogoPDF extends HttpServlet {
             column.setSimpleColumn(rectPage1);//envia propiedades del contenido(tamaño)
             column.addElement(table);//añade la tabla creada
 
-            //Realiza pruebas con este bloque
             Rectangle rectPage2 = new Rectangle(-27, 60, 640, 700);//0,esp-inf,ancho,alto
             int status = column.go();
             while (ColumnText.hasMoreText(status)) {
@@ -341,7 +344,9 @@ public class PrintCatalogoPDF extends HttpServlet {
         Date fac = new Date();
         Fecha f = new Fecha();
         f.setHora(fac);
-        stamper.insertPage(pagecount, reader.getPageSizeWithRotation(1));
+        //stamper.insertPage(1, cover.getPageSizeWithRotation(1));
+        stamper.insertPage(1, reader.getPageSizeWithRotation(1));
+        //pageI = stamper.getOverContent(1);
         PdfContentByte cb = stamper.getOverContent(1);
         column.setCanvas(cb);
         column.setSimpleColumn(rect);
@@ -363,13 +368,11 @@ public class PrintCatalogoPDF extends HttpServlet {
         processRequest(request, response);
     }
 
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
 
     @Override
     public String getServletInfo() {

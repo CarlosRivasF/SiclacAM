@@ -878,11 +878,13 @@ public class Orden_DAO {
 
     public void TerminarOrden(Orden_DTO Orden) {
         String sql = "UPDATE orden "
-                + "set Estado='" + Orden.getEstado() + "' "
-                + "where id_Orden=" + Orden.getId_Orden() + "";
+                + "set Estado=? "
+                + "where id_Orden=?";
         System.out.println(sql);
         try (Connection con = Conexion.getCon();) {
             try (PreparedStatement pstm = con.prepareStatement(sql);) {
+                pstm.setString(1, Orden.getEstado());
+                pstm.setInt(2,Orden.getId_Orden());
                 pstm.executeUpdate();
             }
         } catch (SQLException ex) {

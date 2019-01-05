@@ -123,12 +123,13 @@
                         </div>
                         <div class="col-md-3 mb-3"></div>
                     </div>
+                    <!--CardEstudios-->
                     <div id="CardEstudios" style="display:none">
                         <div class="form-row" >
                             <div class="card" class="col-md-5 mb-3">
                                 <h5 class="card-header">Catalogo de Esudios de la Unidad</h5>
                                 <div class="card-body">
-                                    <a href="#" onclick="Open('');" class="btn btn-light">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
+                                    <a href="#" onclick="OpenRep('PrinCatXLS');" class="btn btn-light">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
                                     <button onclick="OpenRep('PrintCatPDF');" class="btn btn-light">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></button>
                                 </div>
                             </div>
@@ -136,7 +137,7 @@
                             <div class="card" class="col-md-6 mb-3">
                                 <h5 class="card-header">Catalogo de Esudios a Detalle de la Unidad</h5>
                                 <div class="card-body">
-                                    <a href="#" class="btn btn-light">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
+                                    <a href="#" onclick="OpenRep('PrinCatXLS?DetCat=Ys');" class="btn btn-light">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
                                     <a href="#" onclick="OpenRep('PrintCatPDF?DetCat=Ys');" class="btn btn-light">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></a>
                                 </div>
                             </div>      
@@ -156,7 +157,7 @@
                                     <div class="invalid-feedback" style="width: 100%;">
                                         Por favor seleccione un Tipo de Estudio.
                                     </div>
-                                    <a href="#" onclick="" class="btn btn-light">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
+                                    <a href="#" onclick="OpenRep('PrinCatXLS' + ITpoEto());" class="btn btn-light">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
                                     <a href="#" onclick="OpenRep('PrintCatPDF' + ITpoEto());" class="btn btn-light">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></a>
                                 </div>
                             </div>
@@ -174,12 +175,13 @@
                                     <div class="invalid-feedback" style="width: 100%;">
                                         Por favor seleccione un Tipo de Estudio.
                                     </div>
-                                    <a href="#" class="btn btn-light">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
+                                    <a href="#" onclick="OpenRep('PrinCatXLS' + ITpoEto2() + '&DetCat=Ys');" class="btn btn-light">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
                                     <a href="#" onclick="OpenRep('PrintCatPDF' + ITpoEto2() + '&DetCat=Ys');" class="btn btn-light">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></a>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <!--CardOrdenes-->
                     <div id="CardOrdenes" style="display:none">
                         <div class="form-row">
                             <div class=" card col-md-6 mb-3">

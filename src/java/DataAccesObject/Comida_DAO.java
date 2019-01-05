@@ -19,8 +19,11 @@ public class Comida_DAO {
         Fecha f = new Fecha();
         f.setHora(fac);
         String hora = f.getHoraActual();
-        String sql = "INSERT INTO comida VALUES(null," + empleado + ",'" + f.getFechaActual() + "','" + hora + "')";
+        String sql = "INSERT INTO comida VALUES(null,?,?,?)";
         try (Connection con = Conexion.getCon(); PreparedStatement pstm = con.prepareStatement(sql);) {
+            pstm.setInt(1, empleado);
+            pstm.setString(2, f.getFechaActual());
+            pstm.setString(3, hora);
             pstm.executeUpdate();
         } catch (SQLException ex) {
         }

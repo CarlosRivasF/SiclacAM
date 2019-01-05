@@ -40,7 +40,7 @@ public class FinalOrd extends HttpServlet {
         Orden_DAO O = new Orden_DAO();
         Boolean r = true;
         if (request.getParameter("LsIxOrd") != null) {
-            int Id_Orden = Integer.parseInt(request.getParameter("LsIxOrd").trim());
+            int Id_Orden = Integer.parseInt(Fecha.Desencriptar(request.getParameter("LsIxOrd").trim()));
             sesion.setAttribute("Orden", O.getOrden(Id_Orden));
             r = false;
         }

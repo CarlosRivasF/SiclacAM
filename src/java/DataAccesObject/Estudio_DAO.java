@@ -166,6 +166,7 @@ public class Estudio_DAO {
                             ResultSet rs = pstm.executeQuery();) {
                         while (rs.next()) {
                             matE.setNombre_Material(rs.getString("Nombre_Material"));
+                            matE.setClave(rs.getString("Clave_Mat"));
                         }
                     }
                 }
@@ -293,6 +294,7 @@ public class Estudio_DAO {
                             ResultSet rs = pstm.executeQuery();) {
                         while (rs.next()) {
                             matE.setNombre_Material(rs.getString("Nombre_Material"));
+                            matE.setClave(rs.getString("Clave_Mat"));
                         }
                     }
                 }
@@ -420,6 +422,7 @@ public class Estudio_DAO {
                             ResultSet rs = pstm.executeQuery();) {
                         while (rs.next()) {
                             matE.setNombre_Material(rs.getString("Nombre_Material"));
+                            matE.setClave(rs.getString("Clave_Mat"));
                         }
                     }
                 }
@@ -532,6 +535,7 @@ public class Estudio_DAO {
                         ResultSet rs = pstm.executeQuery();) {
                     while (rs.next()) {
                         matE.setNombre_Material(rs.getString("Nombre_Material"));
+                        matE.setClave(rs.getString("Clave_Mat"));
                     }
                 }
             }

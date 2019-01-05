@@ -1,6 +1,7 @@
 package Servlets.Orden;
 
 import DataAccesObject.Orden_DAO;
+import DataBase.Fecha;
 import DataTransferObject.Orden_DTO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -127,7 +128,7 @@ public class ShDetOrd extends HttpServlet {
         out.println("</table>");
         out.println("</div>");
         out.println("</div>"
-                + "<a class='btn btn-primary btn-lg btn-block' href='FinalOrd?LsIxOrd=" + dto.getId_Orden() + "' >Imprimir Orden</a><br>");
+                + "<a class='btn btn-primary btn-lg btn-block' href='FinalOrd?LsIxOrd=" + Fecha.Encriptar(String.valueOf(dto.getId_Orden())) + "' >Imprimir Orden</a><br>");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

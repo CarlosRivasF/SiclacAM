@@ -1,6 +1,7 @@
 package Servlets.Estudio;
 
 import DataAccesObject.Estudio_DAO;
+import DataTransferObject.Est_Mat_DTO;
 import DataTransferObject.Estudio_DTO;
 import DataTransferObject.Material_DTO;
 import java.io.IOException;
@@ -19,7 +20,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
 /**
- *
  * @author CRIVF KODE
  */
 @WebServlet(name = "PrinCatalogoXLS", urlPatterns = {"/PrinCatXLS"})
@@ -36,11 +36,18 @@ public class PrinCatalogoXLS extends HttpServlet {
             Tipo_Estudio = Integer.parseInt(request.getParameter("ITpoEto").trim());
         }
 
-        Boolean Det = true;
+        Boolean Det = false;
 
         id_Unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
         List<Estudio_DTO> Catalogo;
         List<Estudio_DTO> Catalogo2 = new ArrayList<>();
+        if (request.getParameter("DetCat") != null) {
+            Det = true;
+        }
+
+        if (request.getParameter("ITpoEto") != null) {
+            Tipo_Estudio = Integer.parseInt(request.getParameter("ITpoEto").trim());
+        }
 
         Estudio_DAO E = new Estudio_DAO();
         Catalogo = E.getEstudiosByUnidad(id_Unidad);
@@ -108,7 +115,7 @@ public class PrinCatalogoXLS extends HttpServlet {
                         HPrecio.setCellValue("Clave");
                         Cell HCantidad = fila2.createCell(2);
                         HCantidad.setCellValue("Cantidad");
-                        for (Material_DTO mt : dto.getMts()) {
+                        for (Est_Mat_DTO mt : dto.getMts()) {
                             f++;
                             Row fila3 = hoja.createRow(f);
                             Cell Material = fila3.createCell(0);
@@ -116,10 +123,10 @@ public class PrinCatalogoXLS extends HttpServlet {
                             Cell Precio = fila3.createCell(1);
                             Precio.setCellValue(mt.getClave());
                             Cell Cantidad = fila3.createCell(2);
-                            Cantidad.setCellValue(mt.getCantidad());
+                            Cantidad.setCellValue(mt.getCantidadE());
                         }
+                        f += 2;
                     }
-                    f += 2;
                 } catch (Exception e) {
                     e.getMessage();
                 }
@@ -133,5 +140,31 @@ public class PrinCatalogoXLS extends HttpServlet {
         }
         Catalogo2.clear();
     }
+
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
 
 }

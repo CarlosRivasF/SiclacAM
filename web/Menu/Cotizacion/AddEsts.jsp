@@ -63,7 +63,7 @@
             <input style="text-align: center" type="text" class="form-control" onkeypress="return soloNumeros(event)" name="descE" id="descE" placeholder="%" required>
         </div>
         <div class="col-7 col-sm-12 col-md-5 mb-3">            
-            <input style="text-align: center" type="text" class="form-control" name="codeEst" onchange="AddEst(this.value, 'code');" id="codeEst" placeholder="Codigo de Estudio" required>
+            <input style="text-align: center" type="text" class="form-control" name="codeEst" onchange="AddEstCot(this, 'code');" id="codeEst" placeholder="Codigo de Estudio" required>
         </div>
     </div>        
     <form class="needs-validation" novalidate name="fors" action="#" method="post">

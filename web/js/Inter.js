@@ -129,7 +129,7 @@ function validarFormulario(e) {
                 e.disabled = false;
                 break;
             }//
-            if (formulario[i].name === "muestra" || formulario[i].name === "unidad" || formulario[i].name === "desc" || formulario[i].name === "min" || formulario[i].name === "max" || formulario[i].name === "unidades" || formulario[i].name === "telefono" || formulario[i].name === "celular"
+            if (formulario[i].name.substring(0,7) === "muestra" ||formulario[i].name === "muestra" || formulario[i].name.substring(0,7) === "unidad" || formulario[i].name === "unidad" || formulario[i].name === "desc" || formulario[i].name === "min" || formulario[i].name === "max" || formulario[i].name === "unidades" || formulario[i].name === "telefono" || formulario[i].name === "celular"
                     || formulario[i].name === "c_p" || formulario[i].name === "calle" || formulario[i].name === "no_int" || formulario[i].name === "no_ext") {
             } else if (formulario[i].name.substring(0, 4) === "desc" || formulario[i].name.substring(0, 3) === "min" || formulario[i].name.substring(0, 3) === "max" || formulario[i].name.substring(0, 8) === "unidades") {
             } else if (formulario[i].value.trim() === "") {
@@ -1489,8 +1489,39 @@ function AddEst(x, mode) {
 }
 function AddEstCot(x, mode) {
     if (mode === "code") {
-        document.getElementById("codeEst").value = "";
-        document.getElementById("codeEst").focus();
+                var s = false;
+        var ds = document.getElementById("descE").value;
+        var Desc = " &Desc=" + ds;
+        var Tprec;
+        if (document.getElementById("prEsN").checked) {
+            Tprec = " &Tprec=Normal";
+            s = true;
+            document.getElementById("prEsN").checked = false;
+        } else if (document.getElementById("prEsU").checked) {
+            Tprec = " &Tprec=Urgente";
+            s = true;
+            document.getElementById("prEsU").checked = false;
+        } else {
+            alert("Seleccione un tipo de precio");
+            s = false;
+        }
+        var p = Desc + Tprec;
+        document.getElementById("descE").value = "";
+
+        if (x.value !== "" && s) {
+            buscarComentario();
+            xhr.open("POST", "AddEstCot", true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    document.getElementById("EstsAdded").innerHTML = xhr.responseText;
+
+                }
+            };
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            alert("estudio=" + x.value + " &mode=" + mode + p);
+            xhr.send("estudio=" + x.value + " &mode=" + mode + p);
+            x.value = "";
+        }
     } else {
         var s = false;
         var ds = document.getElementById("desc" + x).value;
@@ -2482,3 +2513,5 @@ function verRep(id) {
     }
     document.getElementById(id).style.display = "block";
 }
+
+//CancelOrd(id)

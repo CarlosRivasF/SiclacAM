@@ -6,6 +6,7 @@
 package Servlets.Orden;
 
 import DataAccesObject.Orden_DAO;
+import DataBase.Fecha;
 import DataTransferObject.Orden_DTO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -32,7 +33,7 @@ public class ProcPrintOrd extends HttpServlet {
         }
         HttpSession sesion = request.getSession();
         Orden_DAO O = new Orden_DAO();
-        int Id_Orden = Integer.parseInt(request.getParameter("LsIxOrd").trim());
+        int Id_Orden = Integer.parseInt(Fecha.Desencriptar(request.getParameter("LsIxOrd").trim()));
         Orden_DTO Orden = O.getOrden(Id_Orden);
         sesion.setAttribute("Orden", Orden);
         request.getRequestDispatcher("FinalOrd");

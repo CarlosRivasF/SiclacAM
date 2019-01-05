@@ -56,7 +56,7 @@ public class PrintRes extends HttpServlet {
         HttpSession sesion = request.getSession();
         int id_Orden;
         if (sesion.getAttribute("OrdenSh") == null) {
-            id_Orden = Integer.parseInt(request.getParameter("LxOrdSald"));
+            id_Orden = Integer.parseInt(Fecha.Desencriptar(request.getParameter("LxOrdSald")));
         } else {
             id_Orden = 0;
         }
@@ -89,11 +89,9 @@ public class PrintRes extends HttpServlet {
             });
             System.out.println("DetImage.Size()" + DetImage.size());
             Orden.getDet_Orden().removeAll(DetImage);
-            
-            //aqui se agrupan las configuraciones que tengan el mismo nombre para ponerlas en una sola fila
-            
-            //termina agrupacion de configuraciones
 
+            //aqui se agrupan las configuraciones que tengan el mismo nombre para ponerlas en una sola fila
+            //termina agrupacion de configuraciones
             r = r - (DetImage.size() - 1);
 
             String Source = "";

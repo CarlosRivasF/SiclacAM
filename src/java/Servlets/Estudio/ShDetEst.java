@@ -33,7 +33,7 @@ public class ShDetEst extends HttpServlet {
                 + "    </nav>"
                 + "</div>"
                 + "<div><hr class='mb-1'>"
-                + "<h4 style='text-align: center; color: white'>" + est.getClave_Estudio() + " - " + est.getNombre_Estudio() + " <a href='PrintLabelEstudio?CodeEst=" + est.getClave_Estudio().replace("-", " ") + "-" + est.getId_Est_Uni() + "-" + est.getNombre_Estudio().replace("-", " ") + "-' class='btn btn-warning btn-sm' ><span><img src='images/barcode.png'></span></a></h4>"
+                + "<h4 style='text-align: center; color: white'>" + est.getClave_Estudio() + " - " + est.getNombre_Estudio() + " <a onclick=OpenRep('PrintLabelEstudio?CodeEst=" + est.getClave_Estudio().replace("-", " ").trim() + "-" + est.getId_Est_Uni() + "-" + est.getNombre_Estudio().replace("-", " ").trim() + "-'); href=# class='btn btn-warning btn-sm' ><span><img src='images/barcode.png'></span></a></h4>"
                 + "<hr class='mb-1'>");
         out.println("<div style='color: white' class='table-responsive'>");
         out.println("<div id='metodo'>"

@@ -146,7 +146,7 @@ public class DelEst extends HttpServlet {
 
                         out.println("<p class='offset-8 col-3 col-sm-3 col-md-3'><strong>Pagar " + total + " pesos</strong></p>");
                         if (request.getParameter("shdet") == null) {
-                            out.println("<a class='btn btn-success btn-lg btn-block' href='PrintCot' >Imprimir Cotización</a>");
+                            out.println("<a class='btn btn-success btn-lg btn-block' href=# onclick=OpenRep('PrintCot') >Imprimir Cotización</a>");
                         }
                     } else {
                         out.println("<div id='BEst'></div>");

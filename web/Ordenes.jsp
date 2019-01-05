@@ -96,6 +96,7 @@
             }
         }
         if (r) {
+//sin acceso
             sesion.setAttribute("msg", "Usted no tiene acceso al menú 'Órdenes'.");
             response.sendRedirect("" + request.getContextPath() + "/MainAdmin.jsp");
         }

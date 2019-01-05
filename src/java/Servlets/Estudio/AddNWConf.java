@@ -36,7 +36,7 @@ public class AddNWConf extends HttpServlet {
         conf.setValor_MAX(request.getParameter("max"));
         conf.setUniddes(request.getParameter("unidades"));
         conf.setId_Configuración(CD.registrarConfiguracion(conf));
-        CD.registrarConf_Est(est.getId_Est_Uni(), conf.getId_Configuración());
+        CD.registrarConf_Est(est.getId_Estudio(), conf.getId_Configuración());
         est.getCnfs().add(conf);
 
         out.println("<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
