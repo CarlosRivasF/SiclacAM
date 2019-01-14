@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Servlets.Promocion;
 
 import DataBase.PrintL2;
@@ -20,7 +15,6 @@ import com.itextpdf.text.pdf.PdfStamper;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -35,7 +29,7 @@ import net.sourceforge.jbarcodebean.model.Code39;
  *
  * @author KODE
  */
-@WebServlet(name = "CodePromocion", urlPatterns = {"/CodePromocion"})
+@WebServlet(name = "PrintLabelPromocion", urlPatterns = {"/PrintLabelPromocion"})
 public class CodePromocion extends HttpServlet {
 
     /**
@@ -50,15 +44,14 @@ public class CodePromocion extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            String par = request.getParameter("CodeEst");
+            String par = request.getParameter("CodeProm");
             String[] pars = par.split("-");
             response.setContentType("application/pdf");
             response.setHeader("Content-disposition", "inline; filename=\"" + 1 + ".pdf\"");
-            String cadena = request.getParameter("idPrac");
             String relativePath = getServletContext().getRealPath("/");
             String path = relativePath + "M/templ0.pdf";
 
-            String ca = "Est-" + pars[0] + "";
+            String ca = pars[0] + "" + pars[1];
             response.setHeader("Content-disposition", "inline; filename=\"" + ca + ".pdf\"");
             //PROPIEDADES INICIO
             PdfReader reader = new PdfReader(path);
@@ -70,19 +63,29 @@ public class CodePromocion extends HttpServlet {
             BaseColor blue = new BaseColor(52, 152, 219);
             BaseColor green = new BaseColor(40, 180, 99);
             Font Content_Font = FontFactory.getFont("Arial", 9, BaseColor.BLACK);
-            Font Content_Font2 = FontFactory.getFont("Arial", 7, BaseColor.BLACK);
+            Font Content_FontG = FontFactory.getFont("Arial", 15, BaseColor.BLACK);
+            Font Content_Font2 = FontFactory.getFont("Arial", 8, BaseColor.BLACK);
+            Font Content_Font3 = FontFactory.getFont("Arial", 7, BaseColor.BLACK);
             Image barras1;
             JBarcodeBean barcode = new JBarcodeBean();
+            //barcode.setCodeType(new Interleaved25());
             barcode.setCodeType(new Code39());
-            barcode.setCode(pars[1] + "-2-");
+            barcode.setCode(pars[1] + "-");
             barcode.setCheckDigit(true);
-            barcode.setShowText(false);
-            BufferedImage bi = barcode.draw(new BufferedImage(100, 20, BufferedImage.TYPE_INT_RGB));
+            barcode.setShowText(true);
+            BufferedImage bi = barcode.draw(new BufferedImage(140, 30, BufferedImage.TYPE_INT_RGB));
             barras1 = Image.getInstance(Toolkit.getDefaultToolkit().createImage(bi.getSource()), null);
-            barras1.setAbsolutePosition(72, 20);//x,y
+            barras1.setAbsolutePosition(90, 18);//x,y
             canvas.addImage(barras1, false);
-            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Nombre de la Promoción:", Content_Font), 73, 70, 0);
-            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(pars[2], Content_Font), 15, 53, 0);
+            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Nombre de Promoción:", Content_Font2), 73, 70, 0);
+            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Clave de Promoción:", Content_Font3), 20, 34, 0);
+            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("(" + pars[1] + ")", Content_Font3), 150, 10, 0);
+            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("(" + pars[0] + "" + pars[1] + ")", Content_Font3), 28, 20, 0);
+            if (pars[2].length() <= 30) {
+                ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(pars[2], Content_FontG), 15, 53, 0);
+            } else {
+                ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(pars[2], Content_Font), 15, 53, 0);
+            }
             stamper.close();
         } catch (DocumentException ex) {
             Logger.getLogger(PrintL2.class.getName()).log(Level.SEVERE, null, ex);

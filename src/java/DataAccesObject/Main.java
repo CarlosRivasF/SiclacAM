@@ -1,5 +1,6 @@
 package DataAccesObject;
 
+import DataBase.Fecha;
 import DataTransferObject.Estudio_DTO;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -7,55 +8,58 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
 /**
  *
  * @author ZionSystems
  */
 public class Main {
 
-    private String compararFechasConDate(String fecha1, String fechaActual) {
+    private static String compararFechasConDate(String Solicita, String Termina) {
         String resultado = "";
         try {
-            SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
-            Date fechaDate1 = formateador.parse(fecha1);
-            Date fechaDate2 = formateador.parse(fechaActual);
+            SimpleDateFormat formateador = new SimpleDateFormat("YYYY-MM-dd");
+            Date FechaTerm = formateador.parse(Termina);
+            Date FechaSol = formateador.parse(Solicita);
 
-            if (fechaDate1.before(fechaDate2)) {
-                resultado = "La Fecha " + fecha1 + " es menor ";
-            } else {
-                if (fechaDate2.before(fechaDate1)) {
-                    resultado = "La Fecha " + fecha1 + " es Mayor ";
-                } else {
-                    resultado = "Las Fechas Son iguales ";
-                }
-            }
+            System.out.println("FS: " + FechaSol.getTime() + "," + FechaSol.getDay());
+            System.out.println("FT: " + FechaTerm.getTime() + "," + FechaTerm.getDay());
+//            if (FechaSol.compareTo(FechaTerm) > 0) {
+//                resultado = "1";
+//                System.out.println("'a' Solicita " + Solicita + " Caduca " + Termina);
+//            } else if (FechaSol.compareTo(FechaTerm) < 0) {
+//                resultado = "0";
+//                System.out.println("'b' Solicita " + Solicita + " Caduca " + Termina);
+//            } else if (FechaSol.compareTo(FechaTerm) == 0) {
+//                resultado = "0";
+//                System.out.println("'e' Solicita " + Solicita + " Caduca " + Termina);
+//            } else {
+//                System.out.println("How to get here?");
+//            }
+
+//            if (FechaSol.after(FechaTerm)) {
+//                resultado = "1";
+//                System.out.println("'a' Solicita " + Solicita + " Caduca " + Termina);
+//            } else {
+//                if (FechaSol.before(FechaTerm)) {
+//                    resultado = "0";
+//                    System.out.println("'b' Solicita " + Solicita + " Caduca " + Termina);
+//                } else {
+//                    if (Solicita.equals(Termina)) {
+//                        System.out.println("'e' Solicita " + Solicita + " Caduca " + Termina);
+//                        resultado = "0";
+//                    }
+//                }
+//            }
         } catch (ParseException e) {
-            System.out.println("Se Produjo un Error!!!  " + e.getMessage());
+            e.printStackTrace();
         }
         return resultado;
-    }   
+    }
 
     public static void main(String[] args) {
-        int id_Unidad = 4;
-        List<Estudio_DTO> Catalogo;
-        List<Estudio_DTO> Catalogo2 = new ArrayList<>();
-
-        Estudio_DAO E = new Estudio_DAO();
-        Catalogo = E.getEstudiosByUnidad(id_Unidad);
-        for (int i = 1; i <= 8; i++) {
-            for (Estudio_DTO dto : Catalogo) {
-                if (dto.getId_Tipo_Estudio() == i) {
-                    Catalogo2.add(dto);
-                }
-            }
-        }
-        int id_Tipo_Estudio = 0;
-        for (Estudio_DTO dto : Catalogo2) {
-            if (id_Tipo_Estudio != dto.getId_Tipo_Estudio()) {
-                id_Tipo_Estudio = dto.getId_Tipo_Estudio();
-                System.out.println("Nueva Hoja para: " + dto.getNombre_Tipo_Estudio().toUpperCase());
-            }
-        }
+        Date fac = new Date();
+        Fecha f = new Fecha();
+        f.setHora(fac);
+        System.out.println(Main.compararFechasConDate("2019-01-25", f.getFechaActual()));
     }
 }

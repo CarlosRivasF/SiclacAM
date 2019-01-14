@@ -8,7 +8,6 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.Barcode;
 import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfReader;
@@ -25,7 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import jbarcodebean.JBarcodeBean;
 import net.sourceforge.jbarcodebean.model.Code39;
-import net.sourceforge.jbarcodebean.model.Interleaved25;
 
 /**
  *
@@ -41,7 +39,6 @@ public class PrintCode extends HttpServlet {
             String[] pars = par.split("-");
             response.setContentType("application/pdf");
             response.setHeader("Content-disposition", "inline; filename=\"" + 1 + ".pdf\"");
-            String cadena = request.getParameter("idPrac");
             String relativePath = getServletContext().getRealPath("/");
             String path = relativePath + "M/templ0.pdf";
 
@@ -85,7 +82,6 @@ public class PrintCode extends HttpServlet {
             Logger.getLogger(PrintL2.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

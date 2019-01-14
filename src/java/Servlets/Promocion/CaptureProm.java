@@ -40,7 +40,7 @@ public class CaptureProm extends HttpServlet {
                 Orden_DTO Orden;
                 List<Det_Orden_DTO> Det_Orden;
                 Orden = (Orden_DTO) sesion.getAttribute("Orden");
-                if (Orden.getDet_Orden() == null || Orden.getDet_Orden().isEmpty()) {
+                if (Orden == null ||Orden.getDet_Orden() == null || Orden.getDet_Orden().isEmpty()) {
                     Det_Orden = new ArrayList<>();
                 } else {
                     Det_Orden = Orden.getDet_Orden();

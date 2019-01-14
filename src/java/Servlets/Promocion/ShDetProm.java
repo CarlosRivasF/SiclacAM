@@ -110,8 +110,9 @@ public class ShDetProm extends HttpServlet {
                 + "</tr>");
         out.println("</table>");
         out.println("<p class='offset-8 col-3 col-sm-3 col-md-3'><strong>Precio " + total + " pesos</strong></p>");
-        out.println("</div>");        
-        out.println("<button class='btn btn-outline-secondary btn-block' href='FinalOrd?CodeProm=" + prom + "'><span><img src='images/barcode.png'></span>Imprimir Etiqueta</button>");
+        out.println("</div>");     
+        //('PrintLabelEstudio?CodeEst=" + est.getClave_Estudio().trim().replace(" ","_").replace("-", " ").trim() + "-" + est.getId_Est_Uni() + "-" + est.getNombre_Estudio().trim().replace(" ","_").replace("-", " ").trim() + "-'
+        out.println("<button class='btn btn-outline-secondary btn-block' href=# onclick=OpenRep('PrintLabelPromocion?CodeProm=Paq-" + prom.getId_Promocion()+ "-" + prom.getNombre_Promocion().trim().replace(" ","_").replace("-", " ").trim() + "-');><span><img src='images/barcode.png'></span>Imprimir Etiqueta</button>");
         out.println("<br></div>");
         out.println("</div>");
     }

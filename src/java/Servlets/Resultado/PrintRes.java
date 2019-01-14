@@ -103,6 +103,12 @@ public class PrintRes extends HttpServlet {
                 Source = relativePath + "M/MembreteRes3.pdf";
             } else if (r > 140 & r < 175) {
                 Source = relativePath + "M/MembreteRes4.pdf";
+            } else if (r > 205 & r < 240) {
+                Source = relativePath + "M/MembreteRes5.pdf";
+            } else if (r > 275 & r < 305) {
+                Source = relativePath + "M/MembreteRes6.pdf";
+            } else if (r > 340 & r < 375) {
+                Source = relativePath + "M/MembreteRes7.pdf";
             }
             System.out.println("Source:" + Source);
             int pagecount = 1;
@@ -193,7 +199,13 @@ public class PrintRes extends HttpServlet {
             /*Comienza a recorrer los estudios de tipo Imagen,etc que sean en hoja blanca*/
             BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
             int c = 0;
-            for (Det_Orden_DTO dto : DetImage) {
+            for (Det_Orden_DTO dto : DetImage) {//Validar que el etudio de imagen contenga un resultado
+                //if(){}
+                if (!dto.getEstudio().getAddRes()) {
+                    break;
+                }
+                int IxImage = DetImage.indexOf(dto);
+                System.out.println("IxImage: " + IxImage);
                 c++;
                 PdfContentByte pageI;
                 if (Orden.getDet_Orden().isEmpty() && DetImage.size() == 1) {
@@ -217,6 +229,11 @@ public class PrintRes extends HttpServlet {
                  */
                 BaseFont bf0 = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
                 for (Configuracion_DTO cnf : dto.getEstudio().getCnfs()) {
+                    Boolean cnfRs = false;
+                    if (cnf.getRes().getValor_Obtenido() != null) {
+                        cnfRs = true;
+                    }
+                    System.out.println("Cnf:" + IxImage + "." + dto.getEstudio().getCnfs().indexOf(cnf) + " - " + cnfRs);
                     int idx = 75;
                     String line = cnf.getRes().getValor_Obtenido();
                     int rows = 0;
@@ -243,7 +260,8 @@ public class PrintRes extends HttpServlet {
                     pageI.beginText();
                     pageI.setFontAndSize(bf0, 11);
                     pageI.setTextMatrix(210, 125);
-                    pageI.showText("Doctor Profesor Patricio Estrella");
+                    pageI.showText(Orden.getMedico().getNombre() + " " + Orden.getMedico().getAp_Paterno() + " " + Orden.getMedico().getAp_Materno());
+                    //pageI.showText("Doctor Profesor Patricio Estrella");
                     pageI.endText();
                     pageI.beginText();
                     pageI.setFontAndSize(bf, 10);

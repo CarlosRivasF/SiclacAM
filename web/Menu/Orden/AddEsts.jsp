@@ -65,6 +65,7 @@
     <hr>        
     <h6 style="text-align: center"><strong>Añadir Estudios</strong></h6><br>       
     <div id="FrmSrch">
+        <!--Añadir Estudio por codigo-->
         <div class="form-row">
             <div class=" offset-3 col-6 mb-3" id="Gconvenvio">
                 <label class="sr-only" >Convenio</label>
@@ -92,6 +93,7 @@
             </div>
         </div>            
         <div class="form-row">
+            <!--Añadir Estudio por Busqueda-->
             <div class="col-5 col-sm-5 col-md-5 mb-3">
                 <label for="Tipo_Estudio" class="sr-only">Tipo de Estudio</label>
                 <select class="custom-select d-block w-100 form-control" id="Tipo_Estudio" name="Tipo_Estudio" required>
@@ -111,6 +113,7 @@
                     Ingresa un criterio de busqueda.
                 </div>
             </div>
+                <!--Cambiar busqueda por promociones-->
             <div class="col-12 col-sm-12 col-md-12 mb-3">
                 <button class="btn btn-outline-info btn-sm btn-block" onclick="chOpt('per');" >Buscar Paquetes(perfiles)</button>
             </div>
@@ -151,7 +154,7 @@
                                 <td><%=p%></td>
                                 <td>$<%=pd%></td>
                                 <td><%=e%> días</td>
-                                <td><div id="mat-<%=Orden.getDet_Orden()%>"><button href="#" class="btn btn-danger" onclick="DelEst(<%=Orden.getDet_Orden()%>, 'Ord')"><span><img src="images/trash.png"></span></button></div></td>
+                                <td><div id="mat-<%=Orden.getDet_Orden()%>"><button href="#" class="btn btn-danger" onclick="DelEst(<%=Orden.getDet_Orden().indexOf(dto) %>, 'Ord')"><span><img src="images/trash.png"></span></button></div></td>
                             </tr>
                             <%
                                     total = total + dto.getSubtotal();

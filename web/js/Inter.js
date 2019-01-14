@@ -2191,7 +2191,7 @@ function SrchProm(e, mode) {
     }
 }
 
-function chOpt(mode) {
+function chOpt(mode) {//Añadir validacion para diferir Orden y Cotización
     switch (mode) {
         case 'per':
             document.getElementById("FrmSrch").innerHTML =

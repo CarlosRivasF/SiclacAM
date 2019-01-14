@@ -102,27 +102,27 @@ public class PrintCatalogoPDF extends HttpServlet {
             }
 //            System.out.println("Numero de filas: " + r);
             String Source = "";
-//            if (r < 40) {
-            Source = relativePath + "M/MembreteRes1.pdf";
-//            } else if (r > 40 & r < 80) {
-//                Source = relativePath + "M/MembreteRes2.pdf";
-//            } else if (r > 80 & r < 120) {
-//                Source = relativePath + "M/MembreteRes3.pdf";
-//            } else if (r > 120 & r < 160) {
-//                Source = relativePath + "M/MembreteRes4.pdf";
-//            } else if (r > 160 & r < 200) {
-//                Source = relativePath + "M/MembreteRes5.pdf";
-//            } else if (r > 200 & r < 240) {
-//                Source = relativePath + "M/MembreteRes6.pdf";
-//            } else if (r > 280 & r < 320) {
-//                Source = relativePath + "M/MembreteRes7.pdf";
-//            } else if (r > 360 & r < 400) {
-//                Source = relativePath + "M/MembreteRes8.pdf";
-//            } else if (r > 420 & r < 460) {
-//                Source = relativePath + "M/MembreteRes9.pdf";
-//            } else if (r > 500 & r < 520) {
-//                Source = relativePath + "M/MembreteRes10White.pdf";
-//            }
+            if (r < 40) {
+                Source = relativePath + "M/MembreteRes1.pdf";
+            } else if (r > 40 & r < 80) {
+                Source = relativePath + "M/MembreteRes2.pdf";
+            } else if (r > 80 & r < 120) {
+                Source = relativePath + "M/MembreteRes3.pdf";
+            } else if (r > 120 & r < 160) {
+                Source = relativePath + "M/MembreteRes4.pdf";
+            } else if (r > 160 & r < 200) {
+                Source = relativePath + "M/MembreteRes5.pdf";
+            } else if (r > 200 & r < 240) {
+                Source = relativePath + "M/MembreteRes6.pdf";
+            } else if (r > 280 & r < 320) {
+                Source = relativePath + "M/MembreteRes7.pdf";
+            } else if (r > 360 & r < 400) {
+                Source = relativePath + "M/MembreteRes8.pdf";
+            } else if (r > 420 & r < 460) {
+                Source = relativePath + "M/MembreteRes9.pdf";
+            } else if (r > 500 & r < 520) {
+                Source = relativePath + "M/MembreteRes10White.pdf";
+            }
 
             int pagecount = 1;
             try {
@@ -132,7 +132,7 @@ public class PrintCatalogoPDF extends HttpServlet {
                 ex.printStackTrace();
             }
             PdfReader reader = new PdfReader(Source);
-            System.out.println("Lee membrete PDF "+Source);
+            System.out.println("Lee membrete PDF " + Source);
             Rectangle pagesize = reader.getPageSize(1);//obtiene tamaño de pagina
             PdfStamper stamper = new PdfStamper(reader, response.getOutputStream());//Crea nuevo documento PDF en base al template y lo manda al navegador con  response.getOutputStream()
             System.out.println("Se inica Stamper");
@@ -140,54 +140,7 @@ public class PrintCatalogoPDF extends HttpServlet {
             Persona_DTO persona = P.getPersona(Integer.parseInt(sesion.getAttribute("persona").toString()));
             System.out.println("Encuentra persona quien reporta");
             PdfContentByte cb = stamper.getOverContent(1);//Obtiene contenido PDF donde se incrustaran los datos
-
-            BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
-            BaseFont bf0 = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
-            BaseFont bf1 = BaseFont.createFont(BaseFont.COURIER, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
-            cb.beginText();
-            cb.setFontAndSize(bf, 10);
-            cb.setTextMatrix(270, 758);
-            cb.showText("Fecha de Reporte:");
-            cb.endText();
-            cb.beginText();
-            cb.setFontAndSize(bf1, 12);
-            cb.setTextMatrix(355, 758);
-            cb.showText(f.getFechaActual());
-            cb.endText();
-            ////////////////////////// DATOS PACIENTE
-            cb.beginText();
-            cb.setFontAndSize(bf, 10);
-            cb.setTextMatrix(270, 740);
-            cb.showText("Emitió:");
-            cb.endText();
-            cb.beginText();
-            cb.setFontAndSize(bf1, 12);
-            cb.setTextMatrix(320, 740);
-            cb.showText(persona.getNombre() + " " + persona.getAp_Paterno() + " " + persona.getAp_Materno());
-            cb.endText();
-
-            cb.beginText();
-            cb.setFontAndSize(bf, 10);
-            cb.setTextMatrix(270, 722);
-            cb.showText("Edad:");
-            cb.endText();
-            cb.beginText();
-            cb.setFontAndSize(bf1, 12);
-            cb.setTextMatrix(305, 722);
-            cb.showText(f.getEdad(persona.getFecha_Nac()).getYears() + "");
-            cb.endText();
-            cb.beginText();
-            cb.setFontAndSize(bf, 10);
-            cb.setTextMatrix(340, 722);
-            cb.showText("Sexo:");
-            cb.endText();
-            cb.beginText();
-            cb.setFontAndSize(bf1, 12);
-            cb.setTextMatrix(380, 722);
-            cb.showText(persona.getSexo());
-            cb.endText();
-            System.out.println("Imprime Encabezado");
-            ////////////////////////// DATOS DOCTOR           
+            PrintHead(cb,f,persona);
 //            System.out.println("Stamper");// inicia Stamper(Incrustacion de datos)
             /////***************FUENTES PARA FORMATO DEL REPORTE*********************************/////////////////
             BaseColor orange = new BaseColor(211, 84, 0);
@@ -329,7 +282,7 @@ public class PrintCatalogoPDF extends HttpServlet {
             Rectangle rectPage2 = new Rectangle(-27, 60, 640, 700);//0,esp-inf,ancho,alto
             int status = column.go();
             while (ColumnText.hasMoreText(status)) {
-                status = triggerNewPage(reader, stamper, pagesize, column, rectPage2, ++pagecount);//este metodo ingresa una hoja nueva si el conetido es superior al lo que puede tener la hoja principal
+                status = triggerNewPage(persona,reader, stamper, pagesize, column, rectPage2, ++pagecount);//este metodo ingresa una hoja nueva si el conetido es superior al lo que puede tener la hoja principal
             }
             stamper.setFormFlattening(true);
             stamper.close();
@@ -340,17 +293,67 @@ public class PrintCatalogoPDF extends HttpServlet {
         }
     }
 
-    public int triggerNewPage(PdfReader reader, PdfStamper stamper, Rectangle pagesize, ColumnText column, Rectangle rect, int pagecount) throws DocumentException {
+    public int triggerNewPage(Persona_DTO persona,PdfReader reader, PdfStamper stamper, Rectangle pagesize, ColumnText column, Rectangle rect, int pagecount) throws DocumentException {
         Date fac = new Date();
         Fecha f = new Fecha();
         f.setHora(fac);
-        //stamper.insertPage(1, cover.getPageSizeWithRotation(1));
-        stamper.insertPage(1, reader.getPageSizeWithRotation(1));
-        //pageI = stamper.getOverContent(1);
-        PdfContentByte cb = stamper.getOverContent(1);
+        PdfContentByte cb = stamper.getOverContent(pagecount);
+        PrintHead(cb,f,persona);
         column.setCanvas(cb);
         column.setSimpleColumn(rect);
         return column.go();
+    }
+
+    public void PrintHead(PdfContentByte cb, Fecha f,Persona_DTO persona) {
+        try {
+            BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+            BaseFont bf0 = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+            BaseFont bf1 = BaseFont.createFont(BaseFont.COURIER, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+            cb.beginText();
+            cb.setFontAndSize(bf, 10);
+            cb.setTextMatrix(270, 758);
+            cb.showText("Fecha de Reporte:");
+            cb.endText();
+            cb.beginText();
+            cb.setFontAndSize(bf1, 12);
+            cb.setTextMatrix(355, 758);
+            cb.showText(f.getFechaActual());
+            cb.endText();
+            ////////////////////////// DATOS PACIENTE
+            cb.beginText();
+            cb.setFontAndSize(bf, 10);
+            cb.setTextMatrix(270, 740);
+            cb.showText("Emitió:");
+            cb.endText();
+            cb.beginText();
+            cb.setFontAndSize(bf1, 12);
+            cb.setTextMatrix(320, 740);
+            cb.showText(persona.getNombre() + " " + persona.getAp_Paterno() + " " + persona.getAp_Materno());
+            cb.endText();
+            
+//            cb.beginText();
+//            cb.setFontAndSize(bf, 10);
+//            cb.setTextMatrix(270, 722);
+//            cb.showText("Edad:");
+//            cb.endText();
+//            cb.beginText();
+//            cb.setFontAndSize(bf1, 12);
+//            cb.setTextMatrix(305, 722);
+//            cb.showText(f.getEdad(persona.getFecha_Nac()).getYears() + "");
+//            cb.endText();
+//            cb.beginText();
+//            cb.setFontAndSize(bf, 10);
+//            cb.setTextMatrix(340, 722);
+//            cb.showText("Sexo:");
+//            cb.endText();
+//            cb.beginText();
+//            cb.setFontAndSize(bf1, 12);
+//            cb.setTextMatrix(380, 722);
+//            cb.showText(persona.getSexo());
+//            cb.endText();
+        } catch (DocumentException | IOException ex) {
+            Logger.getLogger(PrintCatalogoPDF.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

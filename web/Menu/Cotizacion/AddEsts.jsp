@@ -86,7 +86,10 @@
                 <div class="invalid-feedback">
                     Ingresa un criterio de busqueda.
                 </div>
-            </div>              
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 mb-3">
+                <button class="btn btn-outline-info btn-sm btn-block" onclick="chOpt('per');" >Buscar Paquetes(perfiles)</button>
+            </div>
         </div>
     </form>
     <div id="EstsAdded">
