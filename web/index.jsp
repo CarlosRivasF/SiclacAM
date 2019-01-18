@@ -20,21 +20,24 @@
         <link rel="stylesheet" href="css/signin.css">
         <link rel="shortcut icon" href="images/favicon.ico">
     </head>
-    <body style="background: lightcyan; text-align: center">
+    <body style="background: lightcyan; text-align: center"><!--lightcyan-->
         <div class="container-fluid">
-            <div>               
-                <form class="form-signin" name="fors" method="POST" action="acces">                                          
+            <div class="form-row col-12">     
+                <form class="form-signin" name="fors" method="POST" action="acces">     
+                    <br>                    
                     <img src="images/Am_Labs.png"  alt="" width="650" class="img-fluid">
                     <br><h1 onclick="fullScreen();" style="text-align: center;" class="h3 mb-3 font-weight-normal"><strong>Acceso al sistema</strong></h1>
                     <p style="text-align: center; color: red"><strong><%=Error%></strong></p>
+                    <p style="text-align: center; color: royalblue" class="font-italic"><font size="3">Sensible a MAYUSCULAS y minusculas</font></p>
                     <label for="inputEmail" class="sr-only">Usuario</label>
                     <input type="text" name="user" id="user" class="form-control" placeholder="Usuario" required autofocus><br>
                     <label for="inputPassword" class="sr-only">Contraseña</label>
                     <input type="password" name="pass" id="pass" class="form-control" placeholder="Contraseña" required><br>
                     <button class="btn btn-lg btn-primary btn-block" type="submit">Aceptar</button>        
-                    <img src="images/adn0.gif"  alt="" width="650" height="100" class="img-fluid">          
+                    <img src="images/adn0.gif"  alt="" width="650" height="100" class="img-fluid">     
+                    <p class="text-muted font-italic"><font size="1"><u>NUEVA</u> Versión 15.01.19</font></p>
                 </form> 
             </div>
-        </div>        
-    </body>
+        </div>   
+    </body>  
 </html>

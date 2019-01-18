@@ -19,7 +19,7 @@ public class Conexion {
 
     public static DataSource dataSource = null;//siclac2 SET GLOBAL max_connections = 300
     private static final String DB = "siclac2";//node74321-amlab.whelastic.net // localhost //node74321-amlab.whelastic.net:11065
-    private static final String URL = "jdbc:mysql://node74321-amlab.whelastic.net:11065/" + DB + "?useServerPrepStmts=true&autoReconnect=true&useSSL=false";
+    private static final String URL = "jdbc:mysql://node74321-amlab.whelastic.net/" + DB + "?useServerPrepStmts=true&autoReconnect=true&useSSL=false";
     private static final String USER = "root";
     private static final String PASS = "NAVngv51153";//NAVngv51153
 
@@ -38,9 +38,7 @@ public class Conexion {
         basicDataSource.setMinEvictableIdleTimeMillis(1500);
         basicDataSource.setNumTestsPerEvictionRun(100);
         basicDataSource.setMaxWait(500);
-        dataSource = basicDataSource;
-        
-        
+        dataSource = basicDataSource;                
     }
 
     public static Connection getCon() {        

@@ -56,7 +56,7 @@ public class Usuario_DAO {
         } catch (SQLException ex) {
             Logger.getLogger(Usuario_DAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if (usuario.getId_Unidad() != 0 & usuario.getRol() != null & usuario.getEstado() != null) {
+        if (usuario.getNombre_Usuario().trim().equals(Usuario.trim()) & usuario.getContraseña().trim().equals(Contraseña.trim()) & usuario.getId_Unidad() != 0 & usuario.getRol() != null & usuario.getEstado() != null) {
             return usuario;
         } else {
             return null;

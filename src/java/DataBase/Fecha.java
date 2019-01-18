@@ -176,7 +176,10 @@ public class Fecha {
     }
 
     public static void main(String[] args) {
-        String str="a";
+        //AmLab - SgBa1Q0kRyE= - 
+        //        5P0Am-74b0r470r1O
+        //GpoAm - HImZqRm+YBw=
+        String str="Vieja";
         String strEncr=Fecha.Encriptar(str);
         System.out.println(strEncr);
         System.out.println(Fecha.Desencriptar(strEncr));

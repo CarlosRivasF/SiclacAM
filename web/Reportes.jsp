@@ -41,14 +41,17 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/offcanvas.css">
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/images/favicon.ico">
     </head>
-    <body>
-        <div id="Main">
-            <nav class="navbar navbar-expand-md fixed-top navbar-Am-Labs bg-light">
-                <strong><a class="navbar-brand" href="MainAdmin.jsp" style="color: black"><%=empresa.getNombre_Empresa()%></a></strong>
-                <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
+    <body style=" background: #666666">
+        <div id="Main" style="color: white">
+            <nav class="navbar navbar-expand-md fixed-top navbar-light bg-light">
+                <strong><a class="navbar-brand"  style="color: #72d0f6" href=""><ins><%=empresa.getNombre_Empresa()%></ins></a></strong>
+                <button class="navbar-toggler p-0 border-0" data-toggle="offcanvas">
                     <span><img src="${pageContext.request.contextPath}/images/tooglebtn.png"></span>
                 </button>
-                <div class="navbar-collapse offcanvas-collapse bg-light" id="navbarsExampleDefault">
+                <div class="navbar-collapse offcanvas-collapse bg-light">
+                    <%if (sesion.getAttribute("nombre_unidad") != null) {%>
+                    <strong><a class="navbar-brand" href="MainAdmin.jsp" style="color: black"><%=sesion.getAttribute("nombre_unidad").toString()%></a></strong>
+                        <%}%> 
                     <ul class="navbar-nav mr-auto">
                         <%for (Permiso_DTO permisos1 : lst) {
                                 if (permisos1.getNombre().equals("Reportes")) {%>
@@ -113,20 +116,20 @@
                     }
                 </script>
                 <div class="container-fluid"><br>
-                    <h2 style="text-align: center;color: #4e555b"><%=msg%></h2><br>
+                    <Strong><h2 style="text-align: center; color: #ffffff"><%=msg%></h2></Strong>
                     <div class="form-row" >
                         <div class="col-md-3 mb-3">
                             <button onclick="verRep('CardEstudios');" class="btn btn-light">Reportar Estudios</button>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <button onclick="verRep('CardOrdenes');" class="btn btn-light">Reportar Ordenes</button>
+                            <!--<button onclick="verRep('CardOrdenes');" class="btn btn-light">Reportar Ordenes</button>-->
                         </div>
                         <div class="col-md-3 mb-3"></div>
                     </div>
                     <!--CardEstudios-->
                     <div id="CardEstudios" style="display:none">
                         <div class="form-row" >
-                            <div class="card" class="col-md-5 mb-3">
+                            <div class="card" class="col-md-5 mb-3" style="background: darkgrey">
                                 <h5 class="card-header">Catalogo de Esudios de la Unidad</h5>
                                 <div class="card-body">
                                     <a href="#" onclick="OpenRep('PrinCatXLS');" class="btn btn-light">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
@@ -134,7 +137,7 @@
                                 </div>
                             </div>
                             <div class="offset-1"></div>
-                            <div class="card" class="col-md-6 mb-3">
+                            <div class="card" class="col-md-6 mb-3" style="background: darkgrey">
                                 <h5 class="card-header">Catalogo de Esudios a Detalle de la Unidad</h5>
                                 <div class="card-body">
                                     <a href="#" onclick="OpenRep('PrinCatXLS?DetCat=Ys');" class="btn btn-light">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
@@ -144,7 +147,7 @@
                         </div>
                         <br>                   
                         <div class="form-row" >
-                            <div class="card" class="col-md-5 mb-3">
+                            <div class="card" class="col-md-5 mb-3" style="background: darkgrey">
                                 <h6 class="card-header">Catalogo de Esudios de la Unidad (Un solo Tipo de Estudio)</h6>
                                 <div class="card-body">
                                     <label for="Tipo_Estudio" class="sr-only">Tipo de Estudio</label><br>
@@ -162,7 +165,7 @@
                                 </div>
                             </div>
                             <div class="offset-1"></div>
-                            <div class="card" class="col-md-6 mb-3">
+                            <div class="card" class="col-md-6 mb-3" style="background: darkgrey">
                                 <h6 class="card-header">Catalogo de Esudios a Detalle de la Unidad (Un solo Tipo de Estudio)</h6>
                                 <div class="card-body">
                                     <label for="Tipo_Estudio" class="sr-only">Tipo de Estudio</label><br>

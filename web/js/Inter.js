@@ -897,7 +897,7 @@ function FormUpCn(index, part, acc) {
         }
     };
     var p = "index=" + index + " &part=" + part + " &acc=" + acc + dta;
-    alert(p);
+    //alert(p);
     Ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     Ajax.send(p);
 }
@@ -1398,7 +1398,7 @@ function AddPac(a) {
     }
 }
 function test2(e) {
-    alert("test2 - " + e.value);
+    //alert("test2 - " + e.value);
     var busq = e.value;
     if (busq.length === 0) {
         Ajax = buscarComentario();
@@ -1518,7 +1518,7 @@ function AddEstCot(x, mode) {
                 }
             };
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            alert("estudio=" + x.value + " &mode=" + mode + p);
+            //alert("estudio=" + x.value + " &mode=" + mode + p);
             xhr.send("estudio=" + x.value + " &mode=" + mode + p);
             x.value = "";
         }
@@ -1880,7 +1880,7 @@ function InsSanc(x) {
     };
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     var p = "index=" + x + " &motivoS=" + motivoS + " &montoS=" + montoS + " &fechaS=" + fechaS;
-    alert(p);
+    //alert(p);
     xhr.send(p);
 }
 
