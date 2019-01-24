@@ -44,29 +44,29 @@
     </div>
     <hr>        
     <h6 style="text-align: center"><strong>Añadir Estudios</strong></h6><br>       
-    <div class="form-row">
-        <div class=" offset-3 col-6 mb-3" id="Gconvenvio">
-            <label class="sr-only" >Convenio</label>
-            <input style="text-align: center" onchange="SaveConv(this.value, 'cot')" type="text" class="form-control" name="Convenio" id="Convenio" placeholder="Convenio" required>          
-        </div> 
-        <div class="offset-1 col-7 col-sm-6 col-md-3 mb-3"> 
-            <div class="col-2 col-sm-2 col-md-2 mb-3 custom-control custom-radio custom-control-inline">
-                <input id="prEsN" class="custom-control-input" name="precE" type="radio" required>
-                <label class="custom-control-label mb-3"  for="prEsN">Normal</label>&nbsp;
-            </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <div class="col-2 col-sm-2 col-md-2 mb-3 custom-control custom-radio custom-control-inline">
-                <input id="prEsU" class="custom-control-input" name="precE" type="radio" required>
-                <label class="custom-control-label" for="prEsU">Urgente</label>&nbsp;
-            </div>  
-        </div>&nbsp;&nbsp;&nbsp;
-        <div class="col-5 col-sm-4 col-md-2 mb-3">            
-            <input style="text-align: center" type="text" class="form-control" onkeypress="return soloNumeros(event)" name="descE" id="descE" placeholder="%" required>
-        </div>
-        <div class="col-7 col-sm-12 col-md-5 mb-3">            
-            <input style="text-align: center" type="text" class="form-control" name="codeEst" onchange="AddEstCot(this, 'code');" id="codeEst" placeholder="Codigo de Estudio" required>
-        </div>
-    </div>        
-    <form class="needs-validation" novalidate name="fors" action="#" method="post">
+    <div id="FrmSrch">
+        <div class="form-row">
+            <div class=" offset-3 col-6 mb-3" id="Gconvenvio">
+                <label class="sr-only" >Convenio</label>
+                <input style="text-align: center" onchange="SaveConv(this.value, 'cot')" type="text" class="form-control" name="Convenio" id="Convenio" placeholder="Convenio" required>          
+            </div> 
+            <div class="offset-1 col-7 col-sm-6 col-md-3 mb-3"> 
+                <div class="col-2 col-sm-2 col-md-2 mb-3 custom-control custom-radio custom-control-inline">
+                    <input id="prEsN" class="custom-control-input" name="precE" type="radio" required>
+                    <label class="custom-control-label mb-3"  for="prEsN">Normal</label>&nbsp;
+                </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="col-2 col-sm-2 col-md-2 mb-3 custom-control custom-radio custom-control-inline">
+                    <input id="prEsU" class="custom-control-input" name="precE" type="radio" required>
+                    <label class="custom-control-label" for="prEsU">Urgente</label>&nbsp;
+                </div>  
+            </div>&nbsp;&nbsp;&nbsp;
+            <div class="col-5 col-sm-4 col-md-2 mb-3">            
+                <input style="text-align: center" type="text" class="form-control" onkeypress="return soloNumeros(event)" name="descE" id="descE" placeholder="%" required>
+            </div>
+            <div class="col-7 col-sm-12 col-md-5 mb-3">            
+                <input style="text-align: center" type="text" class="form-control" name="codeEst" onchange="AddEstCot(this, 'code');" id="codeEst" placeholder="Codigo de Estudio" required>
+            </div>
+        </div>            
         <div class="form-row">
             <div class="col-5 col-sm-5 col-md-5 mb-3">
                 <label for="Tipo_Estudio" class="sr-only">Tipo de Estudio</label>
@@ -88,10 +88,10 @@
                 </div>
             </div>
             <div class="col-12 col-sm-12 col-md-12 mb-3">
-                <button class="btn btn-outline-info btn-sm btn-block" onclick="chOpt('per');" >Buscar Paquetes(perfiles)</button>
+                <button class="btn btn-outline-info btn-sm btn-block" onclick="chOptCot('per');" >Buscar Paquetes(perfiles)</button>
             </div>
         </div>
-    </form>
+    </div>
     <div id="EstsAdded">
         <div id="BEst"></div>
     </div>                

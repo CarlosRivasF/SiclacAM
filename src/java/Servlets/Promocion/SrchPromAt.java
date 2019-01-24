@@ -113,6 +113,80 @@ public class SrchPromAt extends HttpServlet {
                         out.println("</div>");
                     }
                     break;
+                    case "Cotizacion":
+                    if (request.getParameter("busq") != null) {
+                        out.println("<div style='color: white' class='table-responsive'>"
+                                + "<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
+                                + "<tr class='table-active'>"
+                                + "<th >Nombre</th>"
+                                + "<th >Precio</th>"
+                                + "<th >Estado</th>"
+                                + "<th >Agrgar</th>"
+                                + "</tr>");
+                        int n = 0;
+                        String[] prts = null;
+                        boolean f;
+                        String busq = request.getParameter("busq");
+                        if (busq.contains(" ")) {
+                            prts = busq.split(" ");
+                            n = prts.length;
+                            f = true;
+                        } else {
+                            f = false;
+                        }
+                        if (f) {
+                            switch (n) {
+                                case 2:
+                                    for (Promocion_DTO dto : proms) {
+                                        if (dto.getNombre_Promocion().toUpperCase().trim().contains(prts[0].toUpperCase().trim()) & dto.getNombre_Promocion().toUpperCase().trim().contains(prts[1].toUpperCase().trim())) {
+                                            out.println("<tr>"
+                                                    + "<td >" + dto.getNombre_Promocion() + "</td>"
+                                                    + "<td >" + dto.getPrecio_Total() + "</td>"
+                                                    + "<td >" + dto.getEstado() + "</td>"
+                                                    + "<td><button href=# class='btn btn-default btn-sm' onclick=AddProm(" + proms.indexOf(dto) + ",'Cotizacion') ><span><img src='images/mas.png'></span></button></td>"
+                                                    + "</tr>");
+                                        }
+                                    }
+                                    break;
+                                case 3:
+                                    for (Promocion_DTO dto : proms) {
+                                        if (dto.getNombre_Promocion().toUpperCase().trim().contains(prts[0].toUpperCase().trim()) & dto.getNombre_Promocion().toUpperCase().trim().contains(prts[1].toUpperCase().trim()) & dto.getNombre_Promocion().toUpperCase().trim().contains(prts[2].toUpperCase().trim())) {
+                                            out.println("<tr>"
+                                                    + "<td >" + dto.getNombre_Promocion() + "</td>"
+                                                    + "<td >" + dto.getPrecio_Total() + "</td>"
+                                                    + "<td >" + dto.getEstado() + "</td>"
+                                                    + "<td><button href=# class='btn btn-default btn-sm' onclick=AddProm(" + proms.indexOf(dto) + ",'Cotizacion') ><span><img src='images/mas.png'></span></button></td>"
+                                                    + "</tr>");
+                                        }
+                                    }
+                                    break;
+                                default:
+                                    proms.forEach((dto) -> {
+                                        if (dto.getNombre_Promocion().toUpperCase().trim().contains(busq.toUpperCase().trim()) || dto.getEstado().toUpperCase().trim().contains(busq.toUpperCase().trim())) {
+                                            out.println("<tr>"
+                                                    + "<td >" + dto.getNombre_Promocion() + "</td>"
+                                                    + "<td >" + dto.getPrecio_Total() + "</td>"
+                                                    + "<td >" + dto.getEstado() + "</td>"
+                                                    + "<td><button href=# class='btn btn-default btn-sm' onclick=AddProm(" + proms.indexOf(dto) + ",'Cotizacion') ><span><img src='images/mas.png'></span></button></td>"
+                                                    + "</tr>");
+                                        }
+                                    });
+                                    break;
+                            }
+                        } else {
+                            proms.stream().filter((dto) -> (dto.getNombre_Promocion().toUpperCase().trim().contains(busq.toUpperCase().trim()) || dto.getEstado().toUpperCase().trim().contains(busq.toUpperCase().trim()))).forEachOrdered((Promocion_DTO dto) -> {
+                                out.println("<tr>"
+                                        + "<td >" + dto.getNombre_Promocion() + "</td>"
+                                        + "<td >" + dto.getPrecio_Total() + "</td>"
+                                        + "<td >" + dto.getEstado() + "</td>"
+                                        + "<td><button href=# class='btn btn-default btn-sm' onclick=AddProm(" + proms.indexOf(dto) + ",'Cotizacion') ><span><img src='images/mas.png'></span></button></td>"
+                                        + "</tr>");
+                            });
+                        }
+                        out.println("</table>");
+                        out.println("</div>");
+                    }
+                    break;
             }
         }
     }

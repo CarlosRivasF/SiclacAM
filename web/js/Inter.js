@@ -2260,6 +2260,75 @@ function chOpt(mode) {//Añadir validacion para diferir Orden y Cotización
     }
 }
 
+function chOptCot(mode) {//Añadir validacion para diferir Orden y Cotización
+    switch (mode) {
+        case 'per':
+            document.getElementById("FrmSrch").innerHTML =
+                    "<div class='form-row'>" +
+                    "<div class='col-12 col-sm-12 col-md-12 mb-3'>" +
+                    "<label class='sr-only'>Buscar...</label>" +
+                    "<input style='text-align: center' type='text' class='form-control' onkeyup=SrchPromAt(this,'Cotizacion'); name='clave_mat' id='clave_mat' placeholder='Buscar Paquetes(perfiles)...' required=''>" +
+                    "<div class='invalid-feedback'>" +
+                    "Ingresa un criterio de busqueda." +
+                    "</div>" +
+                    "</div><div class='col-12 col-sm-12 col-md-12 mb-3'>" +
+                    "<button class='btn btn-outline-info btn-sm btn-block' onclick=chOptCot('est'); >Buscar Estudios</button>" +
+                    "</div>";
+            break;
+        case 'est':
+            document.getElementById("FrmSrch").innerHTML = "<div class='form-row'>" +
+                    "<div class='offset-3 col-6 mb-3' id='Gconvenvio'>" +
+                    "<label class='sr-only' >Convenio</label>" +
+                    "<input style='text-align: center' onchange=SaveConv(this.value,'ord') type='text' class='form-control' name='Convenio' id='Convenio' placeholder='Convenio' required>" +
+                    "</div>" +
+                    "<div class='offset-1 col-7 col-sm-6 col-md-3 mb-3'>" +
+                    "<div class='col-2 col-sm-2 col-md-2 mb-3 custom-control custom-radio custom-control-inline'>" +
+                    "<input id='prEsN' class='custom-control-input' name='precE' type='radio' required>" +
+                    "<label class='custom-control-label mb-3'  for='prEsN'>Normal</label>&nbsp;" +
+                    "</div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
+                    "<div class='col-2 col-sm-2 col-md-2 mb-3 custom-control custom-radio custom-control-inline'>" +
+                    "<input id='prEsU' class='custom-control-input' name='precE' type='radio' required>" +
+                    "<label class='custom-control-label' for='prEsU'>Urgente</label>&nbsp;" +
+                    "</div>" +
+                    "</div>&nbsp;&nbsp;&nbsp;" +
+                    "<div class='col-5 col-sm-4 col-md-2 mb-3'>" +
+                    "<input style='text-align: center' type='text' class='form-control' onkeypress='return soloNumeros(event)' name='descE' id='descE' placeholder='%' required>" +
+                    "</div>" +
+                    "<div class='col-7 col-sm-12 col-md-5 mb-3'>" +
+                    "<input style='text-align: center' type='text' class='form-control' name='codeEst' onchange=AddEstCot(this,'code'); id='codeEst' placeholder='Codigo de Estudio' required>" +
+                    "</div>" +
+                    "</div>" +
+                    "<div class='form-row'>" +
+                    "<div class='col-5 col-sm-5 col-md-5 mb-3'>" +
+                    "    <label for='Tipo_Estudio' class='sr-only'>Tipo de Estudio</label>" +
+                    "    <select class='custom-select d-block w-100 form-control' id='Tipo_Estudio' name='Tipo_Estudio' required=''>" +
+                    "        <option value='1'>RUTINARIO</option> " +
+                    "        <option value='2'>DE IMAGEN</option> " +
+                    "        <option value='3'>ESPECIALES</option> " +
+                    "        <option value='4'>RAYOS X</option> " +
+                    "        <option value='5'>ESTUDIOS ESPECIALES DE RAYOS X</option> " +
+                    "        <option value='6'>ULTRASONIDOS</option> " +
+                    "        <option value='7'>PERFILES</option> " +
+                    "        <option value='8'>CHECK UP</option> " +
+                    "    </select>" +
+                    "    <div class='invalid-feedback' style='width: 100%;'>" +
+                    "        Por favor seleccione un Tipo de Estudio." +
+                    "    </div>" +
+                    "</div>" +
+                    "<div class='col-7 col-sm-7 col-md-7 mb-3'>" +
+                    "    <label class='sr-only'>Buscar...</label>" +
+                    "    <input style='text-align: center' type='text' class='form-control' onkeyup=test22(this,'Cotizacion'); name='clave_mat' id='clave_mat' placeholder='Buscar...' required=''>" +
+                    "    <div class='invalid-feedback'>" +
+                    "        Ingresa un criterio de busqueda." +
+                    "    </div>" +
+                    "</div><div class='col-12 col-sm-12 col-md-12 mb-3'>" +
+                    "<button class='btn btn-outline-info btn-sm btn-block' onclick=chOptCot('per');>Buscar Paquetes(perfiles)</button>" +
+                    "</div>" +
+                    "</div>";
+            break;
+    }
+}
+
 function ShDetProm(index) {
     Ajax = buscarComentario();
     Ajax.open('POST', "ShDetProm", true);

@@ -157,9 +157,9 @@ public class AddEstCot extends HttpServlet {
                     + "<td><div id='mat-" + Det_Cot.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEst(" + Det_Cot.indexOf(dto) + ",'Cot') ><span><img src='images/trash.png'></span></button></div></td>"
                     + "</tr>");
             total = total + dto.getSubtotal();
-            Cot.setTotal(total);
-            sesion.setAttribute("Cot", Cot);
         }
+        Cot.setTotal(total);
+        sesion.setAttribute("Cot", Cot);
         out.println("</table>");
         out.println("</div>");
         out.println("<p class='offset-8 col-3 col-sm-3 col-md-3'><strong>Pagar " + total + " pesos</strong></p>"

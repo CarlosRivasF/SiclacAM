@@ -179,7 +179,7 @@ public class Fecha {
         //AmLab - SgBa1Q0kRyE= - 
         //        5P0Am-74b0r470r1O
         //GpoAm - HImZqRm+YBw=
-        String str="Vieja";
+        String str="Total";
         String strEncr=Fecha.Encriptar(str);
         System.out.println(strEncr);
         System.out.println(Fecha.Desencriptar(strEncr));
