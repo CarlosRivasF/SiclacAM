@@ -90,17 +90,25 @@ public class DelEst extends HttpServlet {
                         out.println("<p class='offset-8 col-3 col-sm-3 col-md-3'><strong>Pagar" + Orden.getMontoRestante() + " pesos</strong></p>");
 
                         if (request.getParameter("shdet") == null) {
-                            out.println("<button class='btn btn-success btn-lg btn-block' id='ConPay' onclick='contOr();' name='ConPay'>Continuar</button>");
+                            out.println("<button class='btn btn-success btn-lg btn-block' id='ConPay' onclick='contOr(ord);' name='ConPay'>Continuar</button>");
                         }
                     } else {
                         out.println("<div id='BEst'></div>");
                     }
                     break;
-                case "Cot":
-                    Cotizacion_DTO Cot = (Cotizacion_DTO) sesion.getAttribute("Cotizacion");
-                    List<Det_Cot_DTO> Det_Cot = Cot.getDet_Cot();
+                case "Cot":                    
+                    Cotizacion_DTO Cot = (Cotizacion_DTO) sesion.getAttribute("Cotizacion");                    
+                    List<Det_Cot_DTO> Det_Cot = null;
+                    if (Cot.getDet_Cot() == null) {
+                        System.out.println("Det_Cot NULL");
+                    } else if (Cot.getDet_Cot().isEmpty()) {
+                        System.out.println("Det_Cot IS EMPTY");
+                    } else {
+                        Det_Cot = Cot.getDet_Cot();
+                    }
                     int index2 = Integer.parseInt(request.getParameter("index").trim());
                     Det_Cot.remove(index2);
+                    System.out.println("Se elimino el estudio " + index2);
                     if (!Det_Cot.isEmpty()) {
                         out.println("<div id='BEst'></div>"
                                 + "<div style='color: white' class='table-responsive'>"
@@ -208,7 +216,7 @@ public class DelEst extends HttpServlet {
                         out.println("</table>");
                         out.println("</div>");
                         if (request.getParameter("shdet") != null) {
-                            Promocion_DAO P=new Promocion_DAO();
+                            Promocion_DAO P = new Promocion_DAO();
                             P.ActualizarPrecProm(Prom.getPrecio_Total(), Prom.getId_Promocion());
                         }
                         out.println("<p class='offset-8 col-3 col-sm-3 col-md-3'><strong>Precio " + total + " pesos</strong></p>");
