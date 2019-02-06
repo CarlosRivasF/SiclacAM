@@ -43,16 +43,16 @@ public class Fecha {
         return formateador.format(SumarDias(dias));
     }
 
-    public String getHoraFinal() {
+    public String getHoraMas(int h) {
         SimpleDateFormat formateador = new SimpleDateFormat("HH:mm");
-        return formateador.format(SumarHoras());
+        return formateador.format(SumarHoras(h));
     }
 
-    public Date SumarHoras() {
+    public Date SumarHoras(int h) {
         Date nuevaFecha;
         Calendar cal = Calendar.getInstance();
         cal.setTime(hora);
-        cal.add(Calendar.HOUR, 12);
+        cal.add(Calendar.HOUR, h);
         nuevaFecha = cal.getTime();
         return nuevaFecha;
     }

@@ -59,7 +59,7 @@ public class AddPac extends HttpServlet {
                             try {
                                 Orden.setPaciente(dto);
                                 Orden.setFecha(f.getFechaActual());
-                                Orden.setHora(f.getHoraActual());
+                                Orden.setHora(f.getHoraMas(5));
                                 sesion.setAttribute("Orden", Orden);
                                 request.getRequestDispatcher("Menu/Orden/AddEsts.jsp").forward(request, response);
                             } catch (ServletException | IOException ex) {
