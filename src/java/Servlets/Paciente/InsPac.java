@@ -104,7 +104,7 @@ public class InsPac extends HttpServlet {
                             Orden.setEmpleado(por);
                             Orden.setPaciente(paciente);
                             Orden.setFecha(f.getFechaActual());
-                            Orden.setHora(f.getHoraMas(5));
+                            Orden.setHora(f.getHoraMas(6));
                             sesion.setAttribute("Orden", Orden);
                             request.getRequestDispatcher("Menu/Orden/AddEsts.jsp").forward(request, response);
                         } else {

@@ -50,7 +50,7 @@ public class FinalOrd extends HttpServlet {
             Fecha f = new Fecha();
             f.setHora(fac);
             Orden.setFecha(f.getFechaActual());
-            Orden.setHora(f.getHoraMas(5));
+            Orden.setHora(f.getHoraMas(6));
             Orden.setEstado("Pendiente");
             Orden.setFolio_Unidad(O.getNoOrdenByUnidad(Orden.getUnidad().getId_Unidad()) + 1);
             Orden.setId_Orden(O.registrarOrden(Orden));                
