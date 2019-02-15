@@ -77,7 +77,7 @@
             <div id="Interaccion">
                 <div class="nav-scroller bg-white box-shadow">
                     <nav class="nav nav-underline">
-                        <a class="nav-link" href="#/ESTUDIOS">ESTUDIOS</a>
+                        <a onclick="verRep('CardEstudios');" class="nav-link" href="#/ESTUDIOS">ESTUDIOS</a>
                         <a class="nav-link" href="#/ÓRDENES">ÓRDENES </a>
                         <a class="nav-link" href="#/RESULTADOS">RESULTADOS </a>
                         <a class="nav-link" href="#/CORTES">CORTES </a>      
@@ -117,15 +117,6 @@
                 </script>
                 <div class="container-fluid"><br>
                     <Strong><h2 style="text-align: center; color: #ffffff"><%=msg%></h2></Strong>
-                    <div class="form-row" >
-                        <div class="col-md-3 mb-3">
-                            <button onclick="verRep('CardEstudios');" class="btn btn-light">Reportar Estudios</button>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <!--<button onclick="verRep('CardOrdenes');" class="btn btn-light">Reportar Ordenes</button>-->
-                        </div>
-                        <div class="col-md-3 mb-3"></div>
-                    </div>
                     <!--CardEstudios-->
                     <div id="CardEstudios" style="display:none">
                         <div class="form-row" >

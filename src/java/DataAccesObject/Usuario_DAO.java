@@ -38,9 +38,11 @@ public class Usuario_DAO {
     public Usuario_DTO Login(String Usuario, String Contraseña) {
         Usuario_DTO usuario = new Usuario_DTO();
         String sql = "SELECT * FROM usuario WHERE Nombre_Usuario=? AND contrasena=?";
+
         try (Connection con = Conexion.getCon(); PreparedStatement pstm = con.prepareStatement(sql);) {
             pstm.setString(1, Usuario);
             pstm.setString(2, Contraseña);
+            System.out.println("Usuario:" + Usuario + ", Password:" + Contraseña);
             try (ResultSet rs = pstm.executeQuery()) {
                 while (rs.next()) {
                     usuario.setId_Usuario(rs.getInt("id_Usuario"));
@@ -54,10 +56,18 @@ public class Usuario_DAO {
             }
             con.close();
         } catch (SQLException ex) {
-            Logger.getLogger(Usuario_DAO.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
-        if (usuario.getNombre_Usuario().trim().equals(Usuario.trim()) & usuario.getContraseña().trim().equals(Contraseña.trim()) & usuario.getId_Unidad() != 0 & usuario.getRol() != null & usuario.getEstado() != null) {
-            return usuario;
+        if (usuario.getNombre_Usuario() != null & usuario.getContraseña() != null) {
+            if (usuario.getNombre_Usuario().trim().equals(Usuario.trim()) & usuario.getContraseña().trim().equals(Contraseña.trim())) {
+                if (usuario.getId_Unidad() != 0 & usuario.getRol() != null & usuario.getEstado() != null) {
+                    return usuario;
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
         } else {
             return null;
         }
