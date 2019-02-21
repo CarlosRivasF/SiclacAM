@@ -85,7 +85,7 @@ public class Cotizacion_DAO {
                     Det_Cot_DTO det = new Det_Cot_DTO();
                     det.setId_Cotizacion(rs.getInt("id_Cotizacion"));
                     det.setEstudio(E.getEst_Uni(rs.getInt("id_Est_Uni")));
-                    det.setDescuento(rs.getInt("Descuento"));
+                    det.setDescuento(rs.getFloat("Descuento"));
                     det.setT_Entrega(rs.getString("Tipo_Entrega"));
                     dets.add(det);
                 }

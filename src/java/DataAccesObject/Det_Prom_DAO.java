@@ -25,14 +25,14 @@ public class Det_Prom_DAO {
             String sql = "INSERT INTO det_prom VALUES(null,"
                     + "" + id_Promocion + ","
                     + "" + detor.getEstudio().getId_Est_Uni() + ","
-                    + "" + detor.getDescuento() + ","
+                    + "'" + detor.getDescuento() + "',"
                     + "'" + detor.getT_Entrega() + "')";
             System.out.println(sql);
             try (PreparedStatement pstm = con.prepareStatement(sql);) {
                 pstm.executeUpdate();
             }
             sql = "select id_Det_Prom from det_prom where id_Promocion=" + id_Promocion + " and id_Est_Uni=" + detor.getEstudio().getId_Est_Uni() + ""
-                    + " and Descuento=" + detor.getDescuento() + ""
+                    + " and Descuento='" + detor.getDescuento() + "'"
                     + " and Tipo_Entrega='" + detor.getT_Entrega() + "'";
             System.out.println(sql);
             try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery()) {

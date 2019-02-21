@@ -9,7 +9,7 @@ public class Det_Orden_DTO {
     protected int id_det_orden;
     protected int id_orden;
     protected Estudio_DTO estudio;
-    protected int descuento;
+    protected Float descuento;
     protected String Fecha_Entrega;
     protected String T_Entrega;
     protected Float Subtotal;
@@ -38,11 +38,11 @@ public class Det_Orden_DTO {
         this.estudio = estudio;
     }
 
-    public int getDescuento() {
+    public Float getDescuento() {
         return descuento;
     }
 
-    public void setDescuento(int descuento) {
+    public void setDescuento(Float descuento) {
         this.descuento = descuento;
     }
 

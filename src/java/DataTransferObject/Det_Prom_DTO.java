@@ -8,7 +8,7 @@ public class Det_Prom_DTO {
     
     private int id_Det_Prom;    
     private Estudio_DTO estudio;
-    private int descuento;    
+    private Float descuento;    
     private String T_Entrega;
     private Float Subtotal;
 
@@ -43,14 +43,14 @@ public class Det_Prom_DTO {
     /**
      * @return the descuento
      */
-    public int getDescuento() {
+    public Float getDescuento() {
         return descuento;
     }
 
     /**
      * @param descuento the descuento to set
      */
-    public void setDescuento(int descuento) {
+    public void setDescuento(Float descuento) {
         this.descuento = descuento;
     }
 

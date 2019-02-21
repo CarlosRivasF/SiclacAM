@@ -116,7 +116,7 @@ public class Orden_DAO {
                     Det_Orden_DTO det = new Det_Orden_DTO();
                     det.setId_det_orden(rs.getInt("id_Det_Orden"));
                     det.setEstudio(E.getEst_Uni(rs.getInt("id_Est_Uni")));
-                    det.setDescuento(rs.getInt("Descuento"));
+                    det.setDescuento(rs.getFloat("Descuento"));
                     det.setFecha_Entrega(rs.getString("Fecha_Entrega"));
                     det.setT_Entrega(rs.getString("Tipo_Entrega"));
                     det.setSubtotal(rs.getFloat("Subtotal"));
@@ -197,7 +197,7 @@ public class Orden_DAO {
                     det.setId_orden(ord.getId_Orden());
                     det.setId_det_orden(rs.getInt("id_Det_Orden"));
                     det.setEstudio(E.getEst_Uni(rs.getInt("id_Est_Uni")));
-                    det.setDescuento(rs.getInt("Descuento"));
+                    det.setDescuento(rs.getFloat("Descuento"));
                     det.setFecha_Entrega(rs.getString("Fecha_Entrega"));
                     det.setT_Entrega(rs.getString("Tipo_Entrega"));
                     det.setSubtotal(rs.getFloat("Subtotal"));
@@ -281,7 +281,7 @@ public class Orden_DAO {
                         Det_Orden_DTO det = new Det_Orden_DTO();
                         det.setId_det_orden(rs.getInt("id_Det_Orden"));
                         det.setEstudio(E.getEst_Uni(rs.getInt("id_Est_Uni")));
-                        det.setDescuento(rs.getInt("Descuento"));
+                        det.setDescuento(rs.getFloat("Descuento"));
                         det.setFecha_Entrega(rs.getString("Fecha_Entrega"));
                         det.setT_Entrega(rs.getString("Tipo_Entrega"));
                         det.setSubtotal(rs.getFloat("Subtotal"));
@@ -378,7 +378,7 @@ public class Orden_DAO {
                         Det_Orden_DTO det = new Det_Orden_DTO();
                         det.setId_det_orden(rs.getInt("id_Det_Orden"));
                         det.setEstudio(E.getEst_Uni(rs.getInt("id_Est_Uni")));
-                        det.setDescuento(rs.getInt("Descuento"));
+                        det.setDescuento(rs.getFloat("Descuento"));
                         det.setFecha_Entrega(rs.getString("Fecha_Entrega"));
                         det.setT_Entrega(rs.getString("Tipo_Entrega"));
                         det.setSubtotal(rs.getFloat("Subtotal"));
@@ -470,7 +470,7 @@ public class Orden_DAO {
                     Det_Orden_DTO det = new Det_Orden_DTO();
                     det.setId_det_orden(rs.getInt("id_Det_Orden"));
                     det.setEstudio(E.getEst_Uni(rs.getInt("id_Est_Uni")));
-                    det.setDescuento(rs.getInt("Descuento"));
+                    det.setDescuento(rs.getFloat("Descuento"));
                     det.setFecha_Entrega(rs.getString("Fecha_Entrega"));
                     det.setT_Entrega(rs.getString("Tipo_Entrega"));
                     det.setSubtotal(rs.getFloat("Subtotal"));
@@ -566,7 +566,7 @@ public class Orden_DAO {
                         Det_Orden_DTO det = new Det_Orden_DTO();
                         det.setId_det_orden(rs.getInt("id_Det_Orden"));
                         det.setEstudio(E.getEst_Uni(rs.getInt("id_Est_Uni")));
-                        det.setDescuento(rs.getInt("Descuento"));
+                        det.setDescuento(rs.getFloat("Descuento"));
                         det.setFecha_Entrega(rs.getString("Fecha_Entrega"));
                         det.setT_Entrega(rs.getString("Tipo_Entrega"));
                         det.setSubtotal(rs.getFloat("Subtotal"));
@@ -648,7 +648,7 @@ public class Orden_DAO {
                     Det_Orden_DTO det = new Det_Orden_DTO();
                     det.setId_det_orden(rs.getInt("id_Det_Orden"));
                     det.setEstudio(E.getEst_Uni(rs.getInt("id_Est_Uni")));
-                    det.setDescuento(rs.getInt("Descuento"));
+                    det.setDescuento(rs.getFloat("Descuento"));
                     det.setFecha_Entrega(rs.getString("Fecha_Entrega"));
                     det.setT_Entrega(rs.getString("Tipo_Entrega"));
                     det.setSubtotal(rs.getFloat("Subtotal"));
@@ -732,7 +732,7 @@ public class Orden_DAO {
                         Det_Orden_DTO det = new Det_Orden_DTO();
                         det.setId_det_orden(rs.getInt("id_Det_Orden"));
                         det.setEstudio(E.getEst_Uni(rs.getInt("id_Est_Uni")));
-                        det.setDescuento(rs.getInt("Descuento"));
+                        det.setDescuento(rs.getFloat("Descuento"));
                         det.setFecha_Entrega(rs.getString("Fecha_Entrega"));
                         det.setT_Entrega(rs.getString("Tipo_Entrega"));
                         det.setSubtotal(rs.getFloat("Subtotal"));
@@ -814,7 +814,7 @@ public class Orden_DAO {
                     Det_Orden_DTO det = new Det_Orden_DTO();
                     det.setId_det_orden(rs.getInt("id_Det_Orden"));
                     det.setEstudio(E.getEst_Uni(rs.getInt("id_Est_Uni")));
-                    det.setDescuento(rs.getInt("Descuento"));
+                    det.setDescuento(rs.getFloat("Descuento"));
                     det.setFecha_Entrega(rs.getString("Fecha_Entrega"));
                     det.setT_Entrega(rs.getString("Tipo_Entrega"));
                     det.setSubtotal(rs.getFloat("Subtotal"));

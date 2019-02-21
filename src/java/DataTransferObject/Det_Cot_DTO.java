@@ -9,7 +9,7 @@ public class Det_Cot_DTO {
     protected int id_Det_Cot;
     protected int id_Cotizacion;
     protected Estudio_DTO Estudio;
-    protected int Descuento;
+    protected Float Descuento;
     protected String T_Entrega;
     protected Float Subtotal;
 
@@ -37,11 +37,11 @@ public class Det_Cot_DTO {
         this.Estudio = Estudio;
     }
 
-    public int getDescuento() {
+    public Float getDescuento() {
         return Descuento;
     }
 
-    public void setDescuento(int Descuento) {
+    public void setDescuento(Float Descuento) {
         this.Descuento = Descuento;
     }
 

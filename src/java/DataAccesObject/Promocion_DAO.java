@@ -83,7 +83,7 @@ public class Promocion_DAO {
                         Det_Prom_DTO det = new Det_Prom_DTO();
                         det.setId_Det_Prom(rs.getInt("id_Det_Prom"));
                         det.setEstudio(E.getEst_Uni(rs.getInt("id_Est_Uni")));
-                        det.setDescuento(rs.getInt("Descuento"));
+                        det.setDescuento(rs.getFloat("Descuento"));
                         det.setT_Entrega(rs.getString("Tipo_Entrega"));
                         dets.add(det);
                     }

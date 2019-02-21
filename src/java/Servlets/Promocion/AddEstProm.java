@@ -55,14 +55,14 @@ public class AddEstProm extends HttpServlet {
             case "lst":
                 int index = Integer.parseInt(request.getParameter("estudio").trim());
                 Estudio_DTO estudio = ests.get(index);
-                int descuento;
+                Float descuento;
                 if (request.getParameter("Desc").trim().equals("") || request.getParameter("Desc").trim().equals("0")
-                        || Integer.parseInt(request.getParameter("Desc").trim()) < 0) {
-                    descuento = 0;
-                } else if (Integer.parseInt(request.getParameter("Desc").trim()) > 100) {
-                    descuento = 100;
+                        || Float.parseFloat(request.getParameter("Desc").trim()) < 0) {
+                    descuento = Float.parseFloat("0");
+                } else if (Float.parseFloat(request.getParameter("Desc").trim()) > 100) {
+                    descuento = Float.parseFloat("100");
                 } else {
-                    descuento = Integer.parseInt(request.getParameter("Desc").trim());
+                    descuento = Float.parseFloat(request.getParameter("Desc").trim());
                 }
                 String tpr = request.getParameter("Tprec").trim();
                 Det_Prom_DTO detprom = new Det_Prom_DTO();

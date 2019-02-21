@@ -62,7 +62,7 @@ public class AddEstCot extends HttpServlet {
         }
 
         Estudio_DTO estudio = null;
-        int descuento;
+        Float descuento;
         String tpr;
         Det_Cot_DTO detcot;
         Float p;
@@ -70,12 +70,12 @@ public class AddEstCot extends HttpServlet {
             case "lst":
                 estudio = ests.get(index);
                 if (request.getParameter("Desc").trim().equals("") || request.getParameter("Desc").trim().equals("0")
-                        || Integer.parseInt(request.getParameter("Desc").trim()) < 0) {
-                    descuento = 0;
-                } else if (Integer.parseInt(request.getParameter("Desc").trim()) > 100) {
-                    descuento = 100;
+                        || Float.parseFloat(request.getParameter("Desc").trim()) < 0) {
+                    descuento =Float.parseFloat("0");
+                } else if (Float.parseFloat(request.getParameter("Desc").trim()) > 100) {
+                    descuento = Float.parseFloat("100");
                 } else {
-                    descuento = Integer.parseInt(request.getParameter("Desc").trim());
+                    descuento = Float.parseFloat(request.getParameter("Desc").trim());
                 }
                 tpr = request.getParameter("Tprec").trim();
                 detcot = new Det_Cot_DTO();
@@ -103,11 +103,11 @@ public class AddEstCot extends HttpServlet {
                 }
                 if (request.getParameter("Desc").trim().equals("") || request.getParameter("Desc").trim().equals("0")
                         || Integer.parseInt(request.getParameter("Desc").trim()) < 0) {
-                    descuento = 0;
-                } else if (Integer.parseInt(request.getParameter("Desc").trim()) > 100) {
-                    descuento = 100;
+                    descuento = Float.parseFloat("0");
+                } else if (Float.parseFloat(request.getParameter("Desc").trim()) > 100) {
+                    descuento = Float.parseFloat("100");
                 } else {
-                    descuento = Integer.parseInt(request.getParameter("Desc").trim());
+                    descuento = Float.parseFloat(request.getParameter("Desc").trim());
                 }
                 tpr = request.getParameter("Tprec").trim();
                 detcot = new Det_Cot_DTO();
