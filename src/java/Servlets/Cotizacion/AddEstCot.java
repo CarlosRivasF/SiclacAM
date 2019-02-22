@@ -89,6 +89,7 @@ public class AddEstCot extends HttpServlet {
                     p = estudio.getPrecio().getPrecio_U();
                 }
                 detcot.setSubtotal(p - ((detcot.getDescuento() * p) / 100));
+                
                 Det_Cot.add(detcot);
                 Cot.setDet_Cot(Det_Cot);
                 break;

@@ -175,13 +175,26 @@ public class Fecha {
         return base64EncryptedString;
     }
 
+    public static Float redondearDecimales(Float valorInicial) {
+        double parteEntera, parteDec, resultado;
+        resultado = valorInicial;
+        parteEntera = Math.floor(valorInicial);
+        resultado = (resultado - parteEntera) * Math.pow(10, 1);
+        parteDec = Math.round(resultado);
+        if (parteDec <= Double.parseDouble("3")) {
+            parteDec = 0;
+        } else if (parteDec >= Double.parseDouble("4") && parteDec <= Double.parseDouble("6")) {
+            parteDec = 5;
+        } else if (parteDec >= Double.parseDouble("7")) {
+            parteDec = 10;
+        }
+        resultado = (parteDec / Math.pow(10, 1)) + parteEntera;
+
+        return Float.parseFloat(String.valueOf(resultado));
+    }
+
     public static void main(String[] args) {
-        //AmLab - SgBa1Q0kRyE= - 
-        //        5P0Am-74b0r470r1O
-        //GpoAm - HImZqRm+YBw=
-        String str="Total";
-        String strEncr=Fecha.Encriptar(str);
-        System.out.println(strEncr);
-        System.out.println(Fecha.Desencriptar(strEncr));
+        System.out.println(Fecha.redondearDecimales(Float.parseFloat("5.389")));
+
     }
 }
