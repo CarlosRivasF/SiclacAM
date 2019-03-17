@@ -1,10 +1,14 @@
 /* global google */
-
-function test() {
-    alert("e.value");
+var DataC = new Array();
+function paint(arr) {
+    google.load("visualization", "1", {packages: ["corechart"]});
+    google.setOnLoadCallback(DibujaGrafico(arr));
+    $(window).resize(function () {
+        DibujaGrafico(arr);
+    });
 }
 
-google.load()("visualization", "1", {packages: ["corechart"]});
+google.load("visualization", "1", {packages: ["corechart"]});
 google.setOnLoadCallback(drawChart1);
 
 var xhr;
@@ -22,25 +26,45 @@ function buscarComentario() {
     return xhr;
 }
 
-function verGrafico(url) {
-    Ajax = buscarComentario();
-    var divRes = document.getElementById('filtros');
-    Ajax = buscarComentario();
-    Ajax.open('GET', url);
+function verGrafico(id) {
+    //alert("Consultando");
+    var arrData = new Array();
+    var data;
+    var Ajax = buscarComentario();
+    //var divRes = document.getElementById('dataChart');
+    Ajax.open('GET', '../GetDataEstadisticStudies?IdU=' + id);
     Ajax.onreadystatechange = function () {
-        if (Ajax.readyState === 4) {
-            divRes.innerHTML = Ajax.responseText;
+        if (Ajax.readyState === 4) {            
+            data = Ajax.responseText;
+            //divRes.innerHTML = data;
+            var rs = data.split(",");
+            arrData = new Array(rs.length);
+            arrData[0] = ['Estudios', '# de Ventas'];
+            for (var i = 0; i < rs.length - 1; i++) {
+                var str;
+                str = rs[i];
+                var d = str.split("_");
+                arrData[i + 1] = [d[0], Number(d[1])];
+            }
+            paint(arrData);
+            for (var i = 0; i < arrData.length; i++) {
+                //alert(arrData[i]);
+            } 
         }
     };
     Ajax.send(null);
 }
 
-function DibujaGrafico(arrParams, arrOpts) {
+function DibujaGrafico(arrParams) {
+    //alert("Dibujando");
     var data = google.visualization.arrayToDataTable(arrParams);
 
-    var options = arrOpts;
+    var options = {
+        title: 'Estadistica de ventas de estudios por unidad', hAxis: {title: '', titleTextStyle: {color: 'red'}
+        }
+    };
 
-    var chart = new google.visualization.ColumnChart(document.getElementById('chart_div1'));
+    var chart = new google.visualization.ColumnChart(document.getElementById('chDyn1'));
     chart.draw(data, options);
 }
 

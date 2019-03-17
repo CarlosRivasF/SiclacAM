@@ -498,7 +498,6 @@ public class Orden_DAO {
                                             cnf.setValor_MAX(rs2.getString("Valor_MAX"));
                                             cnf.setUniddes(rs2.getString("Unidades"));
                                         }
-
                                     }
                                     cnf.setRes(res);
                                     confs.add(cnf);
@@ -534,6 +533,7 @@ public class Orden_DAO {
     public List<Estadistica_DTO> getEstadisticadeOrdenesByEstudios(int id_Unidad) {
         List<Estadistica_DTO> Estadistica = new ArrayList<>();
         String nameEG = "";
+        String claveEG = "";
         int idE = 0;
         int c = 0;
         int ct = 0;
@@ -544,6 +544,7 @@ public class Orden_DAO {
                 while (rs.next()) {
                     int id = rs.getInt("id_Est_Uni");
                     String name = rs.getString("Nombre_Estudio");
+                    claveEG = rs.getString("Clave_Estudio");
                     if (idE == id) {
                         c++;
                     } else {
@@ -552,19 +553,22 @@ public class Orden_DAO {
                             estaAdd.setCantidad(c);
                             estaAdd.setId_Est_Uni(esta.getId_Est_Uni());
                             estaAdd.setNombre_Estudio(esta.getNombre_Estudio());
-                            Estadistica.add(estaAdd);                           
+                            estaAdd.setClave_Estudio(esta.getClave_Estudio());
+                            Estadistica.add(estaAdd);
                         }
                         idE = id;
                         nameEG = name;
                         c = 1;
                         esta.setId_Est_Uni(idE);
                         esta.setNombre_Estudio(nameEG);
+                        esta.setClave_Estudio(claveEG);
                     }
                 }
                 Estadistica_DTO estaAdd = new Estadistica_DTO();
                 estaAdd.setCantidad(c);
                 estaAdd.setId_Est_Uni(esta.getId_Est_Uni());
                 estaAdd.setNombre_Estudio(esta.getNombre_Estudio());
+                estaAdd.setClave_Estudio(esta.getClave_Estudio());
                 Estadistica.add(estaAdd);
             }
         } catch (SQLException e) {
