@@ -13,7 +13,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -532,8 +531,8 @@ public class Orden_DAO {
 
     public List<Estadistica_DTO> getEstadisticadeOrdenesByEstudios(int id_Unidad) {
         List<Estadistica_DTO> Estadistica = new ArrayList<>();
-        String nameEG = "";
-        String claveEG = "";
+        String nameEG;
+        String claveEG;
         int idE = 0;
         int c = 0;
         int ct = 0;
@@ -1131,9 +1130,6 @@ public class Orden_DAO {
     }
 
     public static void main(String[] args) {
-        Orden_DAO O = new Orden_DAO();
-        for (Estadistica_DTO dto : O.getEstadisticadeOrdenesByEstudios(1)) {
-            System.out.println(dto.getNombre_Estudio() + " - " + dto.getCantidad());
-        }
+        
     }
 }

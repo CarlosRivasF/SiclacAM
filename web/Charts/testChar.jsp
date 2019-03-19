@@ -56,9 +56,6 @@
                 <h1>Google Chart Responsive Dynamic</h1>
                 <p>Using JS, Java & MySQL</p>
             </div>            
-            <button class="btn-default btn-block" onclick="">Auto</button>
-            <button class="btn-default btn-block" onclick="verGrafico(1);">Query</button>
-            <button class="btn-default btn-block" onclick="paint();">Paint</button>
             <div class="col-md-4 col-md-offset-4">
                 <hr />
             </div>
