@@ -27,7 +27,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -129,7 +128,6 @@ public class PrintCatalogoPDF extends HttpServlet {
                 cover = new PdfReader(Source);//PDF extra para posterior modificacion (omitir)
                 System.out.println("Se tomará el membrete para COVER: " + Source);
             } catch (IOException ex) {
-                ex.printStackTrace();
             }
             PdfReader reader = new PdfReader(Source);
             System.out.println("Lee membrete PDF " + Source);
@@ -356,30 +354,5 @@ public class PrintCatalogoPDF extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }

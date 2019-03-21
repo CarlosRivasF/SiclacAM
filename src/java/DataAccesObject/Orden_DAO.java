@@ -535,7 +535,6 @@ public class Orden_DAO {
         String claveEG;
         int idE = 0;
         int c = 0;
-        int ct = 0;
         try (Connection con = Conexion.getCon()) {
             String sql = "select dt.id_Est_Uni,est.Clave_Estudio,est.Nombre_Estudio from det_orden dt,orden ord,est_uni eu,estudio est where ord.id_Unidad=" + id_Unidad + " and dt.id_Orden=ord.id_Orden and dt.id_Est_Uni=eu.id_Est_Uni and eu.id_Estudio=est.id_Estudio order by eu.id_Est_Uni asc;";
             try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery();) {
@@ -674,6 +673,8 @@ public class Orden_DAO {
     }
 
     public Orden_DTO getOrdenPendiente(int folio_unidad, int id_Unidad) {
+        /*las Ordenes son 'PENDIENTES' cuando aún no se completan los resultados
+        [*puede estar liquidada(montoRes==0) pero SIN resultados]*/
         Orden_DTO ord = new Orden_DTO();
         Estudio_DAO E = new Estudio_DAO();
         Unidad_DAO U = new Unidad_DAO();
@@ -852,6 +853,7 @@ public class Orden_DAO {
     }
 
     public Orden_DTO getOrdenSaldo(int folio_unidad, int id_Unidad) {
+         /*las Ordenes con 'SALDO' son cuando aún no se termina de pagar aún cuando ya tenga resltados*/
         Orden_DTO ord = new Orden_DTO();
         Estudio_DAO E = new Estudio_DAO();
         Unidad_DAO U = new Unidad_DAO();
