@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Servlets.Orden;
 
 import DataAccesObject.Estudio_DAO;
@@ -45,7 +40,7 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "PrintReporteOrders", urlPatterns = {"/PrintReporteOrders"})
 public class PrintReporteOrders extends HttpServlet {
 
-PdfReader cover;
+    PdfReader cover;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
         System.out.println("Entró peticion a PrintReporteOrders");
@@ -57,9 +52,9 @@ PdfReader cover;
         int Tipo_Estudio = 0;
         Boolean Det = false;
         id_Unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
-        String f1=request.getParameter("fI").trim();
-        String f2=request.getParameter("fF").trim();
-        System.out.println("Reporte para la unidad " + id_Unidad +". Desde "+ f1+", hasta "+f2);
+        String f1 = request.getParameter("fI").trim();
+        String f2 = request.getParameter("fF").trim();
+        System.out.println("Reporte para la unidad " + id_Unidad + ". Desde " + f1 + ", hasta " + f2);
         if (request.getParameter("ITpoEto") != null) {
             Tipo_Estudio = Integer.parseInt(request.getParameter("ITpoEto").trim());
         }
@@ -69,44 +64,15 @@ PdfReader cover;
         }
         try {
             List<Orden_DTO> Reporte;
-            List<Estudio_DTO> Catalogo2 = new ArrayList<>();
             Estudio_DAO E = new Estudio_DAO();
-            Orden_DAO O=new Orden_DAO();
-            Reporte = O.getReporteGeneralOrdenes(id_Unidad, f2, f2);//recupera lista de estudios por unidad
+            Orden_DAO O = new Orden_DAO();
+            Reporte = O.getReporteGeneralOrdenes(id_Unidad, f2, f2);//recupera lista de ordenes
             System.out.println("recupera lista de estudios por unidad");
             response.setContentType("application/pdf");
             response.setHeader("Content-disposition", "inline; filename=\"CatalogoEstudios.pdf\"");//nombre de archivo
             String relativePath = getServletContext().getRealPath("/");//ruta real del proyecto
 
-            for (int i = 1; i <= 8; i++) {
-                for (Estudio_DTO dto : Catalogo) {
-                    if (dto.getId_Tipo_Estudio() == i) {
-                        Catalogo2.add(dto);
-                    }
-                }
-            }
-            Catalogo.clear();
-            System.out.println("Se ordenó la lista de estudios");
-            if (Tipo_Estudio != 0) {
-                List<Estudio_DTO> Catalogo3 = new ArrayList<>();
-                for (Estudio_DTO dto : Catalogo2) {
-                    if (Tipo_Estudio != dto.getId_Tipo_Estudio()) {
-//                        System.out.println("Borrando Estudio: " + dto.getNombre_Estudio());
-                        Catalogo3.add(dto);
-                    }
-                }
-                Catalogo2.removeAll(Catalogo3);
-            }
-            int r = Catalogo2.size() + 23;
-            if (Det) {
-                for (Estudio_DTO dto : Catalogo2) {
-                    for (Material_DTO mt : dto.getMts()) {
-                        r = r + 1;
-                    }
-                }
-                r = r + (Catalogo2.size() * 4);
-            }
-//            System.out.println("Numero de filas: " + r);
+            int r = Reporte.size();
             String Source = "";
             if (r < 40) {
                 Source = relativePath + "M/MembreteRes1.pdf";
@@ -129,7 +95,7 @@ PdfReader cover;
             } else if (r > 500 & r < 520) {
                 Source = relativePath + "M/MembreteRes10White.pdf";
             }
-            
+
             int pagecount = 1;
             try {
                 cover = new PdfReader(Source);//PDF extra para posterior modificacion (omitir)
@@ -140,12 +106,13 @@ PdfReader cover;
             System.out.println("Lee membrete PDF " + Source);
             Rectangle pagesize = reader.getPageSize(1);//obtiene tamaño de pagina
             PdfStamper stamper = new PdfStamper(reader, response.getOutputStream());//Crea nuevo documento PDF en base al template y lo manda al navegador con  response.getOutputStream()
+            
             System.out.println("Se inica Stamper");
             Persona_DAO P = new Persona_DAO();
             Persona_DTO persona = P.getPersona(Integer.parseInt(sesion.getAttribute("persona").toString()));
             System.out.println("Encuentra persona quien reporta");
             PdfContentByte cb = stamper.getOverContent(1);//Obtiene contenido PDF donde se incrustaran los datos
-            PrintHead(cb,f,persona);
+            PrintHead(cb, f, persona);
 //            System.out.println("Stamper");// inicia Stamper(Incrustacion de datos)
             /////***************FUENTES PARA FORMATO DEL REPORTE*********************************/////////////////
             BaseColor orange = new BaseColor(211, 84, 0);
@@ -160,12 +127,13 @@ PdfReader cover;
 
             //COMIENZA TABLA DE CATALOGO
             PdfPTable table = new PdfPTable(4);
+            
             table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
             table.getDefaultCell().setBorder(1);
             table.setWidths(new int[]{5, 10, 4, 4});
             int id_Tipo_Estudio = 0;
             int c = 0;
-            System.out.println("recorre catalogo");
+            System.out.println("recorre reporte");
             for (Estudio_DTO dto : Catalogo2) {
                 if (id_Tipo_Estudio != dto.getId_Tipo_Estudio()) {
                     id_Tipo_Estudio = dto.getId_Tipo_Estudio();
@@ -287,7 +255,7 @@ PdfReader cover;
             Rectangle rectPage2 = new Rectangle(-27, 60, 640, 700);//0,esp-inf,ancho,alto
             int status = column.go();
             while (ColumnText.hasMoreText(status)) {
-                status = triggerNewPage(persona,reader, stamper, pagesize, column, rectPage2, ++pagecount);//este metodo ingresa una hoja nueva si el conetido es superior al lo que puede tener la hoja principal
+                status = triggerNewPage(persona, reader, stamper, pagesize, column, rectPage2, ++pagecount);//este metodo ingresa una hoja nueva si el conetido es superior al lo que puede tener la hoja principal
             }
             stamper.setFormFlattening(true);
             stamper.close();
@@ -298,18 +266,18 @@ PdfReader cover;
         }
     }
 
-    public int triggerNewPage(Persona_DTO persona,PdfReader reader, PdfStamper stamper, Rectangle pagesize, ColumnText column, Rectangle rect, int pagecount) throws DocumentException {
+    public int triggerNewPage(Persona_DTO persona, PdfReader reader, PdfStamper stamper, Rectangle pagesize, ColumnText column, Rectangle rect, int pagecount) throws DocumentException {
         Date fac = new Date();
         Fecha f = new Fecha();
         f.setHora(fac);
         PdfContentByte cb = stamper.getOverContent(pagecount);
-        PrintHead(cb,f,persona);
+        PrintHead(cb, f, persona);
         column.setCanvas(cb);
         column.setSimpleColumn(rect);
         return column.go();
     }
 
-    public void PrintHead(PdfContentByte cb, Fecha f,Persona_DTO persona) {
+    public void PrintHead(PdfContentByte cb, Fecha f, Persona_DTO persona) {
         try {
             BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
             BaseFont bf0 = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
@@ -335,7 +303,7 @@ PdfReader cover;
             cb.setTextMatrix(320, 740);
             cb.showText(persona.getNombre() + " " + persona.getAp_Paterno() + " " + persona.getAp_Materno());
             cb.endText();
-            
+
 //            cb.beginText();
 //            cb.setFontAndSize(bf, 10);
 //            cb.setTextMatrix(270, 722);
