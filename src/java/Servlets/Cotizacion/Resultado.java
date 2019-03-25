@@ -37,7 +37,7 @@ public class Resultado extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("application/pdf");
         response.setHeader("Content-disposition", "inline; filename=\"report" + 1 + ".pdf\"");
-        String relativePath = getServletContext().getRealPath("/");
+        String relativePath = getServletContext().getRealPath("/")+"/";//ruta real del proyecto
         String Source = relativePath + "M/MembreteRes2.pdf";
         try {
             pdfs(Source, response);

@@ -49,7 +49,7 @@ public class PrintCot extends HttpServlet {
             String CodeCot = Cot.getId_Cotizacion() + "-";
             response.setContentType("application/pdf");
             response.setHeader("Content-disposition", "inline; filename=\"Cot_" + Cot.getPaciente().getCodPac().substring(0, 4) + "-" + Cot.getId_Cotizacion() + ".pdf\"");
-            String relativePath = getServletContext().getRealPath("/");
+            String relativePath = getServletContext().getRealPath("/")+"/";//ruta real del proyecto
 
             String Source = relativePath + "M/MembreteRes.pdf";
             Image barras1;

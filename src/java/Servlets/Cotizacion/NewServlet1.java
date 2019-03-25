@@ -39,7 +39,7 @@ public class NewServlet1 extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("application/pdf");
         response.setHeader("Content-disposition", "inline; filename=\"report" + 1 + ".pdf\"");
-        String relativePath = getServletContext().getRealPath("/");
+        String relativePath = getServletContext().getRealPath("/")+"/";//ruta real del proyecto
         String Source = relativePath + "M/MembreteRes1.pdf";        //MembreteRes MembrOrden
         try {
             Image barras1;

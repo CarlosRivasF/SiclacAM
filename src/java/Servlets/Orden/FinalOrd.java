@@ -61,7 +61,7 @@ public class FinalOrd extends HttpServlet {
             System.out.println("Órden: " + CodeOrd);
             response.setContentType("application/pdf");
             response.setHeader("Content-disposition", "inline; filename=\"Órd_" + CodeOrd + ".pdf\"");
-            String relativePath = getServletContext().getRealPath("/");
+            String relativePath = getServletContext().getRealPath("/")+"/";//ruta real del proyecto
             
             String Source = relativePath + "M/MembrOrden.pdf";
             Image barras1;

@@ -74,7 +74,7 @@ public class PrintRes extends HttpServlet {
             System.out.println("Det_Orden.Size():" + Orden.getDet_Orden().size());
             response.setContentType("application/pdf");
             response.setHeader("Content-disposition", "inline; filename=\"" + Orden.getPaciente().getCodPac() + "_" + Orden.getId_Orden() + ".pdf\"");
-            String relativePath = getServletContext().getRealPath("/");
+            String relativePath = getServletContext().getRealPath("/")+"/";//ruta real del proyecto
             int r = 0;
             for (Det_Orden_DTO d : Orden.getDet_Orden()) {
                 if (d.getEstudio().getAddRes()) {

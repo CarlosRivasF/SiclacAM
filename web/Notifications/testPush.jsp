@@ -13,15 +13,24 @@
         <script src="js/push.min.js"></script>
     </head>
     <body>
+
         <script>
-            Push.create("Notificación",{
-                body:"Esta es una notificación desde SICLAC",
-                icon:"${pageContext.request.contextPath}/images/iconNotification.png",
-                timeout:8000,
-                onclick:function(){
-                    window.location="https://www.youtube.com/watch?v=kA2C2DGVnWY";
-                }                    
-            });
+            new Notification("Notificación",{
+                     body:"Esta es una notificación desde SICLAC",
+                     icon:"${pageContext.request.contextPath}/images/iconNotification.png"
+                     }                    
+                     });
+                    /*
+                     Push.create("Notificación",{
+                     body:"Esta es una notificación desde SICLAC",
+                     icon:"${pageContext.request.contextPath}/images/iconNotification.png",
+                     timeout:8000,
+                     onclick:function(){
+                     window.location="https://www.youtube.com/watch?v=kA2C2DGVnWY";
+                     }                    
+                     });
+                     */
         </script>        
-    </body>
+
+    </body>        
 </html>

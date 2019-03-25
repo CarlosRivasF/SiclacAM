@@ -50,7 +50,7 @@ public class NewServlet extends HttpServlet {
         try {
             response.setContentType("application/pdf");
             response.setHeader("Content-disposition", "inline; filename=\"report" + 1 + ".pdf\"");
-            String relativePath = getServletContext().getRealPath("/");
+            String relativePath = getServletContext().getRealPath("/")+"/";//ruta real del proyecto
             int r = 50;
             String Source = "";
             if (r < 35) {

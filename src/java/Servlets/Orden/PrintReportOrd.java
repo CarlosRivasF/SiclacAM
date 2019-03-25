@@ -77,7 +77,7 @@ public class PrintReportOrd extends HttpServlet {
 //            System.out.println("recupera lista de estudios por unidad");
             response.setContentType("application/pdf");
             response.setHeader("Content-disposition", "inline; filename=\"CatalogoEstudiosOrderByTipoEstudios.pdf\"");//nombre de archivo
-            String relativePath = getServletContext().getRealPath("/");//ruta real del proyecto
+            String relativePath = getServletContext().getRealPath("/")+"/";//ruta real del proyecto
             //cantidad de registros
 
             for (int i = 1; i <= 8; i++) {

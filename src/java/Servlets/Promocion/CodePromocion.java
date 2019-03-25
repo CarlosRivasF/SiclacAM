@@ -48,7 +48,7 @@ public class CodePromocion extends HttpServlet {
             String[] pars = par.split("-");
             response.setContentType("application/pdf");
             response.setHeader("Content-disposition", "inline; filename=\"" + 1 + ".pdf\"");
-            String relativePath = getServletContext().getRealPath("/");
+            String relativePath = getServletContext().getRealPath("/")+"/";//ruta real del proyecto
             String path = relativePath + "M/templ0.pdf";
 
             String ca = pars[0] + "" + pars[1];

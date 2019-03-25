@@ -69,7 +69,7 @@ public class PrintL2 extends HttpServlet {
             response.setContentType("application/pdf");
             response.setHeader("Content-disposition", "inline; filename=\"" + Orden.getPaciente().getCodPac() + "_" + IxDtOrd + "." + IxDtOrdMt + ".pdf\"");
             String cadena = request.getParameter("idPrac");
-            String relativePath = getServletContext().getRealPath("/");
+            String relativePath = getServletContext().getRealPath("/")+"/";//ruta real del proyecto
             String path = relativePath + "M/templ.pdf";//Am_LabsWM
 
             String ca = "Formato-" + cadena + "";
