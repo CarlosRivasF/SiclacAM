@@ -125,17 +125,23 @@
                 <div class="invalid-feedback" style="width: 100%;">
                     Empresa obligatoria.
                 </div>
-            </div>
-            <div class="col mb-3">
+            </div>            
+            <div class="col mb-3  input-group">
                 <label class="sr-only">Participación</label>
                 <input style="text-align: center" type="number" step="any" class="form-control" name="participacion" id="participacion" placeholder="Participación" required>
+                <div class="input-group-postpend">
+                    <span class="input-group-text">%</span>
+                </div>
                 <div class="invalid-feedback">
                     Participación requerdia.
                 </div>
             </div>
-            <div class="col mb-3">
+            <div class="col mb-3 input-group">
                 <label class="sr-only">Descuento</label>
                 <input style="text-align: center" type="number" class="form-control" name="descuento" id="descuento" placeholder="Descuento" >
+                <div class="input-group-postpend">
+                    <span class="input-group-text">%</span>
+                </div>
                 <div class="invalid-feedback">
                     Descuento requerido.
                 </div>
