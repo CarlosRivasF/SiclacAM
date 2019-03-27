@@ -279,5 +279,6 @@ public class AddCover2 {
         File file = new File(DEST);
         file.getParentFile().mkdirs();
         new AddCover2().manipulatePdf(SRC, DEST);
+        System.out.println(DEST);
     }
 }
