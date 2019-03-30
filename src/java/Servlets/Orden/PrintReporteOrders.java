@@ -37,9 +37,10 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "PrintReporteOrders", urlPatterns = {"/PrintReporteOrders"})
 public class PrintReporteOrders extends HttpServlet {
 
-    PdfReader cover;
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
+        Float montoTotalPagado = Float.parseFloat(String.valueOf("0"));
+        Float montoTotalRestante = Float.parseFloat(String.valueOf("0"));;
+        PdfReader cover = null;
         System.out.println("Entró peticion a PrintReporteOrders");
         Date fac = new Date();
         Fecha f = new Fecha();
@@ -48,41 +49,23 @@ public class PrintReporteOrders extends HttpServlet {
         int id_Unidad;
         Boolean Det = false;
         //id_Unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
-//        String f1 = request.getParameter("fI").trim();
-//        String f2 = request.getParameter("fF").trim();
-//        System.out.println("Reporte para la unidad " + id_Unidad + ". Desde " + f1 + ", hasta " + f2);
+        id_Unidad = Integer.parseInt(request.getParameter("udd"));
+        String f1 = request.getParameter("fI").trim();
+        String f2 = request.getParameter("fF").trim();
+        System.out.println("Reporte para la unidad " + id_Unidad + ". Desde " + f1 + ", hasta " + f2);
+
         try {
             List<Orden_DTO> Reporte;
             Orden_DAO O = new Orden_DAO();
-            //Reporte = O.getReporteGeneralOrdenes(id_Unidad, f1, f2);//recupera lista de ordenes
+            Reporte = O.getReporteGeneralOrdenes(id_Unidad, f1, f2);//recupera lista de ordenes
             System.out.println("recupera lista de estudios por unidad");
             response.setContentType("application/pdf");
             response.setHeader("Content-disposition", "inline; filename=\"CatalogoEstudios.pdf\"");//nombre de archivo
             String relativePath = getServletContext().getRealPath("/");//ruta real del proyecto
 
-//            int r = Reporte.size();
             String Source = "";
-//            if (r < 40) {
+
             Source = relativePath + "M/MembreteHtl.pdf";
-//            } else if (r > 40 & r < 80) {
-//                Source = relativePath + "M/MembreteRes2.pdf";
-//            } else if (r > 80 & r < 120) {
-//                Source = relativePath + "M/MembreteRes3.pdf";
-//            } else if (r > 120 & r < 160) {
-//                Source = relativePath + "M/MembreteRes4.pdf";
-//            } else if (r > 160 & r < 200) {
-//                Source = relativePath + "M/MembreteRes5.pdf";
-//            } else if (r > 200 & r < 240) {
-//                Source = relativePath + "M/MembreteRes6.pdf";
-//            } else if (r > 280 & r < 320) {
-//                Source = relativePath + "M/MembreteRes7.pdf";
-//            } else if (r > 360 & r < 400) {
-//                Source = relativePath + "M/MembreteRes8.pdf";
-//            } else if (r > 420 & r < 460) {
-//                Source = relativePath + "M/MembreteRes9.pdf";
-//            } else if (r > 500 & r < 520) {
-//                Source = relativePath + "M/MembreteRes10White.pdf";
-//            }
 
             int pagecount = 1;
             try {
@@ -152,79 +135,105 @@ public class PrintReporteOrders extends HttpServlet {
             HMontoRestante.setBorderColor(BaseColor.RED);
             HMontoRestante.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(HMontoRestante);
-            for (int i = 1; i <= 8789; i++) {
-                //for (Orden_DTO dto : Reporte) {
-
-//                    PdfPCell TipoEstudio = new PdfPCell(new Paragraph("Folio"));
-//                    TipoEstudio.setHorizontalAlignment(Element.ALIGN_LEFT);
-//                    TipoEstudio.setColspan(4);
-//                    TipoEstudio.setBorder(0);
-//                    TipoEstudio.setBackgroundColor(BackGr);
-//                    table.addCell(TipoEstudio);
+            //for (int i = 1; i <= 8789; i++) {
+            for (Orden_DTO dto : Reporte) {
                 //CONTENIDO DE LA TABLA EN EL REPORTE            
-                PdfPCell Folio = new PdfPCell(new Paragraph(String.valueOf(i), Content_Font));
-                //PdfPCell Folio = new PdfPCell(new Paragraph(String.valueOf(dto.getFolio_Unidad()), Content_Font));
+                //PdfPCell Folio = new PdfPCell(new Paragraph(String.valueOf(i), Content_Font));
+                PdfPCell Folio = new PdfPCell(new Paragraph(String.valueOf(dto.getFolio_Unidad()), Content_Font));
                 Folio.setHorizontalAlignment(Element.ALIGN_CENTER);
                 Folio.setBorder(PdfPCell.BOTTOM);
                 table.addCell(Folio);
 
-                PdfPCell Fecha = new PdfPCell(new Paragraph("fecha", Content_Font));
-                //PdfPCell Fecha = new PdfPCell(new Paragraph(dto.getFecha(), Content_Font));
+                //PdfPCell Fecha = new PdfPCell(new Paragraph("fecha", Content_Font));
+                PdfPCell Fecha = new PdfPCell(new Paragraph(dto.getFecha(), Content_Font));
                 Fecha.setHorizontalAlignment(Element.ALIGN_CENTER);
                 Fecha.setBorder(PdfPCell.BOTTOM);
                 table.addCell(Fecha);
 
-//                if (dto.getMedico().getNombre() != null) {
-//                    PdfPCell Medico = new PdfPCell(new Paragraph(dto.getMedico().getNombre().toLowerCase().trim() + " " + dto.getMedico().getAp_Paterno().toLowerCase().trim() + " " + dto.getMedico().getAp_Materno().trim().toLowerCase(), Content_Font));
-//                    Medico.setHorizontalAlignment(Element.ALIGN_CENTER);
-//                    Medico.setBorder(PdfPCell.BOTTOM);
-//                    table.addCell(Medico);
-//                } else {
-                PdfPCell Medico = new PdfPCell(new Paragraph("-----", Content_Font));
-                Medico.setHorizontalAlignment(Element.ALIGN_CENTER);
-                Medico.setBorder(PdfPCell.BOTTOM);
-                table.addCell(Medico);
-                //}
+                if (dto.getMedico().getNombre() != null) {
+                    PdfPCell Medico = new PdfPCell(new Paragraph(dto.getMedico().getNombre().toLowerCase().trim() + " " + dto.getMedico().getAp_Paterno().toLowerCase().trim() + " " + dto.getMedico().getAp_Materno().trim().toLowerCase(), Content_Font));
+                    Medico.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    Medico.setBorder(PdfPCell.BOTTOM);
+                    table.addCell(Medico);
+                } else {
+                    PdfPCell Medico = new PdfPCell(new Paragraph("-----", Content_Font));
+                    Medico.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    Medico.setBorder(PdfPCell.BOTTOM);
+                    table.addCell(Medico);
+                }
 
-//                if (dto.getPaciente().getNombre() != null) {
-//                    PdfPCell Paciente = new PdfPCell(new Paragraph(dto.getPaciente().getNombre().toLowerCase().trim() + " " + dto.getPaciente().getAp_Paterno().toLowerCase().trim() + " " + dto.getPaciente().getAp_Materno().toLowerCase().trim(), Content_Font));
-//                    Paciente.setHorizontalAlignment(Element.ALIGN_CENTER);
-//                    Paciente.setBorder(PdfPCell.BOTTOM);
-//                    table.addCell(Paciente);
-//                } else {
-                PdfPCell Paciente = new PdfPCell(new Paragraph("-----", Content_Font));
-                Paciente.setHorizontalAlignment(Element.ALIGN_CENTER);
-                Paciente.setBorder(PdfPCell.BOTTOM);
-                table.addCell(Paciente);
-//                }
-//
-//                String strEstudios = "";
-//                for (Det_Orden_DTO deto : dto.getDet_Orden()) {
-//                    if (deto.getEstudio().getClave_Estudio() != null) {
-//                        strEstudios = strEstudios + deto.getEstudio().getClave_Estudio().trim() + ",";
-//                    }
-//                }
+                if (dto.getPaciente().getNombre() != null) {
+                    PdfPCell Paciente = new PdfPCell(new Paragraph(dto.getPaciente().getNombre().toLowerCase().trim() + " " + dto.getPaciente().getAp_Paterno().toLowerCase().trim() + " " + dto.getPaciente().getAp_Materno().toLowerCase().trim(), Content_Font));
+                    Paciente.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    Paciente.setBorder(PdfPCell.BOTTOM);
+                    table.addCell(Paciente);
+                } else {
+                    PdfPCell Paciente = new PdfPCell(new Paragraph("-----", Content_Font));
+                    Paciente.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    Paciente.setBorder(PdfPCell.BOTTOM);
+                    table.addCell(Paciente);
+                }
 
-                //PdfPCell Estudios = new PdfPCell(new Paragraph(strEstudios.toLowerCase(), Content_Font));
-                PdfPCell Estudios = new PdfPCell(new Paragraph("Estudios", Content_Font));
+                String strEstudios = "";
+                for (Det_Orden_DTO deto : dto.getDet_Orden()) {
+                    if (deto.getEstudio().getClave_Estudio() != null) {
+                        strEstudios = strEstudios + deto.getEstudio().getClave_Estudio().trim() + ",";
+                    }
+                }
+
+                PdfPCell Estudios = new PdfPCell(new Paragraph(strEstudios.toLowerCase(), Content_Font));
+                //PdfPCell Estudios = new PdfPCell(new Paragraph("Estudios", Content_Font));
                 Estudios.setHorizontalAlignment(Element.ALIGN_CENTER);
                 Estudios.setBorder(PdfPCell.BOTTOM);
                 table.addCell(Estudios);
 
-                PdfPCell MontoPagado = new PdfPCell(new Paragraph(String.valueOf(300 + i), Content_Font));
-                //PdfPCell MontoPagado = new PdfPCell(new Paragraph(String.valueOf(dto.getMontoPagado()), Content_Font));
+                //PdfPCell MontoPagado = new PdfPCell(new Paragraph(String.valueOf(300 + i), Content_Font));
+                PdfPCell MontoPagado = new PdfPCell(new Paragraph(String.valueOf(dto.getMontoPagado()), Content_Font));
                 MontoPagado.setHorizontalAlignment(Element.ALIGN_CENTER);
                 MontoPagado.setBorder(PdfPCell.BOTTOM);
                 table.addCell(MontoPagado);
+                montoTotalPagado += dto.getMontoPagado();
 
-                PdfPCell MontoRestante = new PdfPCell(new Paragraph(String.valueOf(20 + i), Content_Font));
-                //PdfPCell MontoRestante = new PdfPCell(new Paragraph(String.valueOf(dto.getMontoRestante()), Content_Font));
+                //PdfPCell MontoRestante = new PdfPCell(new Paragraph(String.valueOf(20 + i), Content_Font));
+                PdfPCell MontoRestante = new PdfPCell(new Paragraph(String.valueOf(dto.getMontoRestante()), Content_Font));
                 MontoRestante.setHorizontalAlignment(Element.ALIGN_CENTER);
                 MontoRestante.setBorder(PdfPCell.BOTTOM);
                 table.addCell(MontoRestante);
-
+                montoTotalRestante += dto.getMontoRestante();
             }
             //FINALZA CONTENIDO
+
+            PdfPCell Espacio1 = new PdfPCell(new Paragraph("       "));
+            Espacio1.setHorizontalAlignment(Element.ALIGN_LEFT);
+            Espacio1.setColspan(7);
+            Espacio1.setBorder(0);
+            table.addCell(Espacio1);
+
+            PdfPCell Espacio2 = new PdfPCell(new Paragraph("       "));
+            Espacio2.setHorizontalAlignment(Element.ALIGN_LEFT);
+            Espacio2.setBorder(0);
+            table.addCell(Espacio2);
+
+            PdfPCell TitMontoTotalPagado = new PdfPCell(new Paragraph("Monto Total Pagado"));
+            TitMontoTotalPagado.setBorderColor(BaseColor.RED);
+            TitMontoTotalPagado.setHorizontalAlignment(Element.ALIGN_CENTER);
+            TitMontoTotalPagado.setColspan(2);
+            table.addCell(TitMontoTotalPagado);
+            PdfPCell CellMontoTotalPagado = new PdfPCell(new Paragraph(String.valueOf(montoTotalPagado)));
+            CellMontoTotalPagado.setBorderColor(BaseColor.RED);
+            CellMontoTotalPagado.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(CellMontoTotalPagado);
+
+            PdfPCell TitMontoTotalRest = new PdfPCell(new Paragraph("Monto Total Restante"));
+            TitMontoTotalRest.setBorderColor(BaseColor.RED);
+            TitMontoTotalRest.setHorizontalAlignment(Element.ALIGN_CENTER);
+            TitMontoTotalRest.setColspan(2);
+            table.addCell(TitMontoTotalRest);
+            PdfPCell CellMontoTotalRest = new PdfPCell(new Paragraph(String.valueOf(montoTotalRestante)));
+            CellMontoTotalRest.setBorderColor(BaseColor.RED);
+            CellMontoTotalRest.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(CellMontoTotalRest);
+
             ColumnText column = new ColumnText(stamper.getOverContent(1));
             Rectangle rectPage1 = new Rectangle(-32, 60, 830, 520);//izq,esp-inf,ancho,alto (SON COORDENADAS EN LA HOJA DEL PDF Y EL TAMAÑO DEL ELEMENTO A AGREGAR)
             //(SANGRIA IZQ,Espacio que queda al final de la hoja,Ancho de Elemento,(no recuerdo))
@@ -250,7 +259,6 @@ public class PrintReporteOrders extends HttpServlet {
                 column.setSimpleColumn(rectPage1);
                 status = column.go();
 
-                //status = triggerNewPage(cover,persona, reader, stamper, pagesize, column, rectPage2, ++pagecount);
                 //este metodo ingresa una hoja nueva si el conetido es superior al lo que puede tener la hoja principal
             }
             stamper.setFormFlattening(true);
@@ -262,21 +270,6 @@ public class PrintReporteOrders extends HttpServlet {
         }
     }
 
-//    public int triggerNewPage(PdfReader cover, Persona_DTO persona, PdfReader reader, PdfStamper stamper, Rectangle pagesize, ColumnText column, Rectangle rect, int pagecount) throws DocumentException {
-//        Date fac = new Date();
-//        Fecha f = new Fecha();
-//        f.setHora(fac);
-//
-//        PdfContentByte pageI;
-//        stamper.insertPage(pagecount, cover.getPageSize(1));
-//        pageI = stamper.getOverContent(pagecount);
-//
-//        PdfContentByte cb = pageI;
-//        //        PrintHead(cb, f, persona);
-//        column.setCanvas(cb);
-//        column.setSimpleColumn(rect);
-//        return column.go();
-//    }
 //    public void PrintHead(PdfContentByte cb, Fecha f, Persona_DTO persona) {
 //        try {
 //            BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);

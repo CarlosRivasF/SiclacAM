@@ -347,11 +347,11 @@ public class Orden_DAO {
         Paciente_DAO P = new Paciente_DAO();
         Medico_DAO M = new Medico_DAO();
         Persona_DAO Pr = new Persona_DAO();
-        int c=0;
+        int c = 0;
         try (Connection con = Conexion.getCon()) {//id_Unidad=" + id_Unidad + " AND
-            String sql = "SELECT * FROM orden  WHERE  Fecha_Orden BETWEEN '" + fechaInicio + "' AND '" + fechaFinal + "'";
+            String sql = "SELECT * FROM orden  WHERE id_Unidad=" + id_Unidad + " AND  Fecha_Orden BETWEEN '" + fechaInicio + "' AND '" + fechaFinal + "'";
             System.out.println(sql.toUpperCase());
-            try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery();) {                
+            try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery();) {
                 while (rs.next()) {
                     c++;
                     Orden_DTO ord = new Orden_DTO();
@@ -381,7 +381,7 @@ public class Orden_DAO {
                         Det_Orden_DTO det = new Det_Orden_DTO();
                         det.setId_det_orden(rs.getInt("id_Det_Orden"));
                         det.setEstudio(E.getEst_Uni(rs.getInt("id_Est_Uni")));
-                        System.out.println("-*-*-*-*-*-*-*-*-*-*-*Nombre de Estudio: "+det.getEstudio().getNombre_Estudio()+" - Clave:"+det.getEstudio().getClave_Estudio());
+                        System.out.println("-*-*-*-*-*-*-*-*-*-*-*Nombre de Estudio: " + det.getEstudio().getNombre_Estudio() + " - Clave:" + det.getEstudio().getClave_Estudio());
                         det.setDescuento(rs.getFloat("Descuento"));
                         det.setFecha_Entrega(rs.getString("Fecha_Entrega"));
                         det.setT_Entrega(rs.getString("Tipo_Entrega"));
