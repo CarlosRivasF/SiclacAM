@@ -1,7 +1,7 @@
 <%@page import="DataTransferObject.Det_Orden_DTO"%>
 <%@page import="java.time.Period"%>
 <%@page import="DataTransferObject.Orden_DTO"%>
-<%@page import="DataBase.Fecha"%>
+<%@page import="DataBase.Util"%>
 <%@page import="DataTransferObject.Paciente_DTO"%>
 <%@page import="DataTransferObject.Tipo_Estudio_DTO"%>
 <%@page import="java.util.List"%>
@@ -13,7 +13,7 @@
         List<Tipo_Estudio_DTO> tipos = TE.getTipo_Estudios();
         Orden_DTO Orden = (Orden_DTO) sesion.getAttribute("Orden");
         Paciente_DTO pac = Orden.getPaciente();
-        Fecha f = new Fecha();
+        Util f = new Util();
 %>
 <div class="nav-scroller bg-white box-shadow">
     <nav class="nav nav-underline">        
@@ -113,65 +113,65 @@
                     Ingresa un criterio de busqueda.
                 </div>
             </div>
-                <!--Cambiar busqueda por promociones-->
+            <!--Cambiar busqueda por promociones-->
             <div class="col-12 col-sm-12 col-md-12 mb-3">
                 <button class="btn btn-outline-info btn-sm btn-block" onclick="chOpt('per');" >Buscar Paquetes(perfiles)</button>
             </div>
         </div>    
+    </div>
+    <div id="EstsAdded">
+        <div id="BEst"></div>
+        <%if (Orden.getDet_Orden() != null) {%>     
+        <%if (!Orden.getDet_Orden().isEmpty()) {%>
+        <div style="color: white" class="table-responsive">
+            <table style=" text-align: center" class="table table-bordered table-hover table-sm">
+                <tbody>
+                    <tr class="bg-warning" style="color: black">
+                        <th>Nombre de Estudio</th>
+                        <th>Entrega</th>
+                        <th>Precio</th>
+                        <th>Descuento</th>
+                        <th>Espera</th>
+                        <th>Quitar</th>
+                    </tr>
+                    <%
+                        Float total = Float.parseFloat("0");
+                        for (Det_Orden_DTO dto : Orden.getDet_Orden()) {
+                            Float p = Float.parseFloat("0");
+                            int e = 0;
+                            if (dto.getT_Entrega().equals("Normal")) {
+                                p = dto.getEstudio().getPrecio().getPrecio_N();
+                                e = dto.getEstudio().getPrecio().getT_Entrega_N();
+                            } else if (dto.getT_Entrega().equals("Urgente")) {
+                                p = dto.getEstudio().getPrecio().getPrecio_U();
+                                e = dto.getEstudio().getPrecio().getT_Entrega_U();
+                            }
+                            Float pd = ((dto.getDescuento() * p) / 100);
+                    %>
+                    <tr>
+                        <td><%=dto.getEstudio().getNombre_Estudio()%></td>
+                        <td><%=dto.getT_Entrega()%></td>
+                        <td><%=p%></td>
+                        <td>$<%=pd%></td>
+                        <td><%=e%> días</td>
+                        <td><div id="mat-<%=Orden.getDet_Orden()%>"><button href="#" class="btn btn-danger" onclick="DelEst(<%=Orden.getDet_Orden().indexOf(dto)%>, 'Ord')"><span><img src="images/trash.png"></span></button></div></td>
+                    </tr>
+                    <%
+                            total = total + dto.getSubtotal();
+                        }
+                        Orden.setMontoRestante(total);
+                        sesion.setAttribute("Orden", Orden);
+                    %>
+                </tbody>
+            </table>
         </div>
-            <div id="EstsAdded">
-                <div id="BEst"></div>
-                <%if (Orden.getDet_Orden() != null) {%>     
-                <%if (!Orden.getDet_Orden().isEmpty()) {%>
-                <div style="color: white" class="table-responsive">
-                    <table style=" text-align: center" class="table table-bordered table-hover table-sm">
-                        <tbody>
-                            <tr class="bg-warning" style="color: black">
-                                <th>Nombre de Estudio</th>
-                                <th>Entrega</th>
-                                <th>Precio</th>
-                                <th>Descuento</th>
-                                <th>Espera</th>
-                                <th>Quitar</th>
-                            </tr>
-                            <%
-                                Float total = Float.parseFloat("0");
-                                for (Det_Orden_DTO dto : Orden.getDet_Orden()) {
-                                    Float p = Float.parseFloat("0");
-                                    int e = 0;
-                                    if (dto.getT_Entrega().equals("Normal")) {
-                                        p = dto.getEstudio().getPrecio().getPrecio_N();
-                                        e = dto.getEstudio().getPrecio().getT_Entrega_N();
-                                    } else if (dto.getT_Entrega().equals("Urgente")) {
-                                        p = dto.getEstudio().getPrecio().getPrecio_U();
-                                        e = dto.getEstudio().getPrecio().getT_Entrega_U();
-                                    }
-                                    Float pd = ((dto.getDescuento() * p) / 100);
-                            %>
-                            <tr>
-                                <td><%=dto.getEstudio().getNombre_Estudio()%></td>
-                                <td><%=dto.getT_Entrega()%></td>
-                                <td><%=p%></td>
-                                <td>$<%=pd%></td>
-                                <td><%=e%> días</td>
-                                <td><div id="mat-<%=Orden.getDet_Orden()%>"><button href="#" class="btn btn-danger" onclick="DelEst(<%=Orden.getDet_Orden().indexOf(dto) %>, 'Ord')"><span><img src="images/trash.png"></span></button></div></td>
-                            </tr>
-                            <%
-                                    total = total + dto.getSubtotal();
-                                }
-                                Orden.setMontoRestante(total);
-                                sesion.setAttribute("Orden", Orden);
-                            %>
-                        </tbody>
-                    </table>
-                </div>
-                <p class="offset-8 col-3 col-sm-3 col-md-3"><strong>Pagar <%=Orden.getMontoRestante()%> pesos</strong></p>
-                <button class="btn btn-success btn-lg btn-block" id="ConPay" onclick="contOr('ord');" name="ConPay">Continuar</button>                
-                <%}%>                
-                <%}%>
-            </div>                
-        </div>
-        <hr>
-        <%} else {
-                out.print("<h1 style='color:white'>La sesión ha caducado, Actualice el sistema y realice nuevamente el proceso necesario</h1>");
-            }%>   
+        <p class="offset-8 col-3 col-sm-3 col-md-3"><strong>Pagar <%=Util.redondearDecimales(Orden.getMontoRestante())%> pesos</strong></p>
+        <button class="btn btn-success btn-lg btn-block" id="ConPay" onclick="contOr('ord');" name="ConPay">Continuar</button>                
+        <%}%>                
+        <%}%>
+    </div>                
+</div>
+<hr>
+<%} else {
+        out.print("<h1 style='color:white'>La sesión ha caducado, Actualice el sistema y realice nuevamente el proceso necesario</h1>");
+    }%>   

@@ -3,7 +3,7 @@ package Servlets.Orden;
 import DataAccesObject.Paciente_DAO;
 import DataAccesObject.Persona_DAO;
 import DataAccesObject.Unidad_DAO;
-import DataBase.Fecha;
+import DataBase.Util;
 import DataTransferObject.Orden_DTO;
 import DataTransferObject.Paciente_DTO;
 import DataTransferObject.Persona_DTO;
@@ -31,7 +31,7 @@ public class AddPac extends HttpServlet {
         HttpSession sesion = request.getSession();
         PrintWriter out = response.getWriter();
         Date fac = new Date();
-        Fecha f = new Fecha();
+        Util f = new Util();
         f.setHora(fac);
         Unidad_DAO U = new Unidad_DAO();
         int id_unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());

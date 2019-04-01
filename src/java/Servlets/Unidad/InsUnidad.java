@@ -5,7 +5,7 @@ import DataAccesObject.Permiso_DAO;
 import DataAccesObject.Persona_DAO;
 import DataAccesObject.Unidad_DAO;
 import DataAccesObject.Usuario_DAO;
-import DataBase.Fecha;
+import DataBase.Util;
 import DataTransferObject.Direccion_DTO;
 import DataTransferObject.Empresa_DTO;
 import DataTransferObject.Persona_DTO;
@@ -50,7 +50,7 @@ public class InsUnidad extends HttpServlet {
             Direccion_DTO dir = new Direccion_DTO();
             Usuario_DTO usuario = new Usuario_DTO();
             Date fac = new Date();
-            Fecha f = new Fecha();
+            Util f = new Util();
             f.setHora(fac);
             Direccion_DAO D = new Direccion_DAO();
             Persona_DAO P = new Persona_DAO();

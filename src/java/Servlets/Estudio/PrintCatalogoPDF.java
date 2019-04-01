@@ -2,7 +2,7 @@ package Servlets.Estudio;
 
 import DataAccesObject.Estudio_DAO;
 import DataAccesObject.Persona_DAO;
-import DataBase.Fecha;
+import DataBase.Util;
 import DataTransferObject.Est_Mat_DTO;
 import DataTransferObject.Estudio_DTO;
 import DataTransferObject.Material_DTO;
@@ -17,6 +17,7 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfImportedPage;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfReader;
@@ -46,31 +47,28 @@ public class PrintCatalogoPDF extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
         System.out.println("Entró peticion a PrintCatalogoPDF");
         Date fac = new Date();
-        Fecha f = new Fecha();
+        Util f = new Util();
         f.setHora(fac);
         HttpSession sesion = request.getSession();
         int id_Unidad;
         int Tipo_Estudio = 0;
         Boolean Det = false;
         id_Unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
-        System.out.println("Reporte para la unidad " + id_Unidad);
         if (request.getParameter("ITpoEto") != null) {
             Tipo_Estudio = Integer.parseInt(request.getParameter("ITpoEto").trim());
         }
 
         if (request.getParameter("DetCat") != null) {
             Det = true;
-            System.out.println("Se añadirá DETALLE de Catalogo");
         }
         try {
             List<Estudio_DTO> Catalogo;
             List<Estudio_DTO> Catalogo2 = new ArrayList<>();
             Estudio_DAO E = new Estudio_DAO();
-            Catalogo = E.getEstudiosByUnidad(id_Unidad);//recupera lista de estudios por unidad
-            System.out.println("recupera lista de estudios por unidad");
+            Catalogo = E.getEstudiosByUnidad(id_Unidad);//recupera lista de estudios por unidad  
             response.setContentType("application/pdf");
             response.setHeader("Content-disposition", "inline; filename=\"CatalogoEstudios.pdf\"");//nombre de archivo
-            String relativePath = getServletContext().getRealPath("/")+"/";//ruta real del proyecto
+            String relativePath = getServletContext().getRealPath("/") + "/";//ruta real del proyecto
 
             for (int i = 1; i <= 8; i++) {
                 for (Estudio_DTO dto : Catalogo) {
@@ -91,55 +89,18 @@ public class PrintCatalogoPDF extends HttpServlet {
                 }
                 Catalogo2.removeAll(Catalogo3);
             }
-            int r = Catalogo2.size() + 23;
-            if (Det) {
-                for (Estudio_DTO dto : Catalogo2) {
-                    for (Material_DTO mt : dto.getMts()) {
-                        r = r + 1;
-                    }
-                }
-                r = r + (Catalogo2.size() * 4);
-            }
-//            System.out.println("Numero de filas: " + r);
-            String Source = "";
-            if (r < 40) {
-                Source = relativePath + "M/MembreteRes1.pdf";
-            } else if (r > 40 & r < 80) {
-                Source = relativePath + "M/MembreteRes2.pdf";
-            } else if (r > 80 & r < 120) {
-                Source = relativePath + "M/MembreteRes3.pdf";
-            } else if (r > 120 & r < 160) {
-                Source = relativePath + "M/MembreteRes4.pdf";
-            } else if (r > 160 & r < 200) {
-                Source = relativePath + "M/MembreteRes5.pdf";
-            } else if (r > 200 & r < 240) {
-                Source = relativePath + "M/MembreteRes6.pdf";
-            } else if (r > 280 & r < 320) {
-                Source = relativePath + "M/MembreteRes7.pdf";
-            } else if (r > 360 & r < 400) {
-                Source = relativePath + "M/MembreteRes8.pdf";
-            } else if (r > 420 & r < 460) {
-                Source = relativePath + "M/MembreteRes9.pdf";
-            } else if (r > 500 & r < 520) {
-                Source = relativePath + "M/MembreteRes10White.pdf";
-            }
+            String Source = relativePath + "M/MembreteRes1.pdf";
 
             int pagecount = 1;
-            try {
                 cover = new PdfReader(Source);//PDF extra para posterior modificacion (omitir)
-                System.out.println("Se tomará el membrete para COVER: " + Source);
-            } catch (IOException ex) {
-            }
+
             PdfReader reader = new PdfReader(Source);
-            System.out.println("Lee membrete PDF " + Source);
             Rectangle pagesize = reader.getPageSize(1);//obtiene tamaño de pagina
             PdfStamper stamper = new PdfStamper(reader, response.getOutputStream());//Crea nuevo documento PDF en base al template y lo manda al navegador con  response.getOutputStream()
-            System.out.println("Se inica Stamper");
             Persona_DAO P = new Persona_DAO();
-            Persona_DTO persona = P.getPersona(Integer.parseInt(sesion.getAttribute("persona").toString()));
-            System.out.println("Encuentra persona quien reporta");
+            Persona_DTO persona = P.getPersona(Integer.parseInt(sesion.getAttribute("persona").toString()));          
             PdfContentByte cb = stamper.getOverContent(1);//Obtiene contenido PDF donde se incrustaran los datos
-            PrintHead(cb,f,persona);
+            PrintHead(cb, f, persona);
 //            System.out.println("Stamper");// inicia Stamper(Incrustacion de datos)
             /////***************FUENTES PARA FORMATO DEL REPORTE*********************************/////////////////
             BaseColor orange = new BaseColor(211, 84, 0);
@@ -278,10 +239,20 @@ public class PrintCatalogoPDF extends HttpServlet {
             column.setSimpleColumn(rectPage1);//envia propiedades del contenido(tamaño)
             column.addElement(table);//añade la tabla creada
 
-            Rectangle rectPage2 = new Rectangle(-27, 60, 640, 700);//0,esp-inf,ancho,alto
             int status = column.go();
             while (ColumnText.hasMoreText(status)) {
-                status = triggerNewPage(persona,reader, stamper, pagesize, column, rectPage2, ++pagecount);//este metodo ingresa una hoja nueva si el conetido es superior al lo que puede tener la hoja principal
+                pagecount++;
+                f.setHora(fac);
+
+                PdfContentByte pageI;
+                stamper.insertPage(pagecount, cover.getPageSizeWithRotation(1));
+                pageI = stamper.getOverContent(pagecount);
+                PrintHead(cb, f, persona);
+                PdfImportedPage pageA = stamper.getImportedPage(cover, 1);
+                pageI.addTemplate(pageA, 0, 0);
+                column.setCanvas(pageI);
+                column.setSimpleColumn(rectPage1);
+                status = column.go();
             }
             stamper.setFormFlattening(true);
             stamper.close();
@@ -292,21 +263,9 @@ public class PrintCatalogoPDF extends HttpServlet {
         }
     }
 
-    public int triggerNewPage(Persona_DTO persona,PdfReader reader, PdfStamper stamper, Rectangle pagesize, ColumnText column, Rectangle rect, int pagecount) throws DocumentException {
-        Date fac = new Date();
-        Fecha f = new Fecha();
-        f.setHora(fac);
-        PdfContentByte cb = stamper.getOverContent(pagecount);
-        PrintHead(cb,f,persona);
-        column.setCanvas(cb);
-        column.setSimpleColumn(rect);
-        return column.go();
-    }
-
-    public void PrintHead(PdfContentByte cb, Fecha f,Persona_DTO persona) {
+    public void PrintHead(PdfContentByte cb, Util f, Persona_DTO persona) {
         try {
             BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
-            BaseFont bf0 = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
             BaseFont bf1 = BaseFont.createFont(BaseFont.COURIER, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
             cb.beginText();
             cb.setFontAndSize(bf, 10);
@@ -329,7 +288,7 @@ public class PrintCatalogoPDF extends HttpServlet {
             cb.setTextMatrix(320, 740);
             cb.showText(persona.getNombre() + " " + persona.getAp_Paterno() + " " + persona.getAp_Materno());
             cb.endText();
-            
+
 //            cb.beginText();
 //            cb.setFontAndSize(bf, 10);
 //            cb.setTextMatrix(270, 722);
@@ -355,7 +314,7 @@ public class PrintCatalogoPDF extends HttpServlet {
         }
     }
 
-        // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -393,5 +352,5 @@ public class PrintCatalogoPDF extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-    
+
 }

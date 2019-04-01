@@ -1,6 +1,6 @@
 package Servlets.Pago;
 
-import DataBase.Fecha;
+import DataBase.Util;
 import DataTransferObject.Det_Orden_DTO;
 import DataTransferObject.Orden_DTO;
 import DataTransferObject.Pago_DTO;
@@ -27,7 +27,7 @@ public class InsPago extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         Date fac = new Date();
-        Fecha f = new Fecha();
+        Util f = new Util();
         f.setHora(fac);
         HttpSession sesion = request.getSession();
         Orden_DTO Orden = (Orden_DTO) sesion.getAttribute("Orden");
@@ -46,11 +46,11 @@ public class InsPago extends HttpServlet {
         pago.setFecha(f.getFechaActual());
         pago.setHora(f.getHoraMas(6));
 
-        Float MontoPagado = Orden.getMontoPagado();
-        Float MontoRestante = Orden.getMontoRestante();
+        Float MontoPagado = Util.redondearDecimales(Orden.getMontoPagado());
+        Float MontoRestante = Util.redondearDecimales(Orden.getMontoRestante());
 
-        Orden.setMontoPagado(MontoPagado + pago.getMonto());
-        Orden.setMontoRestante(MontoRestante - pago.getMonto());
+        Orden.setMontoPagado(Util.redondearDecimales(MontoPagado + pago.getMonto()));
+        Orden.setMontoRestante(Util.redondearDecimales(MontoRestante - pago.getMonto()));
         Pagos.add(pago);
         Orden.setPagos(Pagos);
         try (PrintWriter out = response.getWriter()) {
@@ -69,20 +69,20 @@ public class InsPago extends HttpServlet {
                         + "</tr>");
             });
             out.println("</table></div>");
-            
+
             out.print("<div class='offset-7 col'>"
                     + "<table>"
                     + "<tr>"
                     + "<td>Total : </td>"
-                    + "<td>" + (Orden.getMontoRestante() + Orden.getMontoPagado()) + "</td>"
+                    + "<td>" + Util.redondearDecimales(Orden.getMontoRestante() + Orden.getMontoPagado()) + "</td>"
                     + "</tr>"
                     + "<tr>"
                     + "<td>A/C : </td>"
-                    + "<td>" + Orden.getMontoPagado() + "</td>"
+                    + "<td>" + Util.redondearDecimales(Orden.getMontoPagado()) + "</td>"
                     + "</tr>"
                     + "<tr>"
                     + "<td>Por Pagar : </td>"
-                    + "<td>" + Orden.getMontoRestante() + "</td>"
+                    + "<td>" + Util.redondearDecimales(Orden.getMontoRestante()) + "</td>"
                     + "</tr>"
                     + "</table>"
                     + "</div>");

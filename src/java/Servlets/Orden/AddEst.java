@@ -1,7 +1,7 @@
 package Servlets.Orden;
 
 import DataAccesObject.Estudio_DAO;
-import DataBase.Fecha;
+import DataBase.Util;
 import DataTransferObject.Det_Orden_DTO;
 import DataTransferObject.Estudio_DTO;
 import DataTransferObject.Orden_DTO;
@@ -49,7 +49,7 @@ public class AddEst extends HttpServlet {
         }
 
         Date fac = new Date();
-        Fecha f = new Fecha();
+        Util f = new Util();
         f.setHora(fac);
         String mode = request.getParameter("mode").trim();
         int index;
@@ -166,7 +166,8 @@ public class AddEst extends HttpServlet {
         sesion.setAttribute("Orden", Orden);
         out.println("</table>");
         out.println("</div>");
-        out.println("<p class='offset-8 col-3 col-sm-3 col-md-3'><strong>Pagar " + Orden.getMontoRestante() + " pesos</strong></p>"
+        out.println("<p class='offset-8 col-3 col-sm-3 col-md-3'><strong>Pagar " + Util.redondearDecimales(Orden.getMontoRestante())
+                + " pesos</strong></p>"
                 + "<button class='btn btn-success btn-lg btn-block' id='ConPay' onclick=contOr('ord'); name='ConPay'>Continuar</button>");
     }
 

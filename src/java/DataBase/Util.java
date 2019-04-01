@@ -15,7 +15,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import org.apache.commons.codec.binary.Base64;
 
-public class Fecha {
+public class Util {
 
     private static Date hora;
 
@@ -86,7 +86,7 @@ public class Fecha {
         try {
             fechaF = getFecha_X(f.parse(fecha));
         } catch (ParseException ex) {
-            Logger.getLogger(Fecha.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Util.class.getName()).log(Level.SEVERE, null, ex);
         }
         return fechaF;
     }
@@ -97,7 +97,7 @@ public class Fecha {
         try {
             fechaF = getFecha_X(f.parse(fecha));
         } catch (ParseException ex) {
-            Logger.getLogger(Fecha.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Util.class.getName()).log(Level.SEVERE, null, ex);
         }
         return fechaF;
     }
@@ -194,7 +194,7 @@ public class Fecha {
     }
 
     public static void main(String[] args) {
-        System.out.println(Fecha.redondearDecimales(Float.parseFloat("5.389")));
+        System.out.println(Util.redondearDecimales(Float.parseFloat("5.5")));
 
     }
 }

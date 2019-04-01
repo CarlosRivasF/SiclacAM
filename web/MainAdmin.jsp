@@ -10,7 +10,7 @@
 <%@page import="DataAccesObject.Comida_DAO"%>
 <%@page import="DataAccesObject.Entrada_DAO"%>
 <%@page import="java.util.Date"%>
-<%@page import="DataBase.Fecha"%>
+<%@page import="DataBase.Util"%>
 <%@page import="DataTransferObject.Empresa_DTO"%>
 <%@page import="DataAccesObject.Empresa_DAO"%>
 <%@page import="java.util.ArrayList"%>

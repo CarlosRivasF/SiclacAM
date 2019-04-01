@@ -1,7 +1,7 @@
 package DataAccesObject;
 
 import DataBase.Conexion;
-import DataBase.Fecha;
+import DataBase.Util;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +16,7 @@ public class Salida_DAO {
 
     public String registrarHrSal(int empleado) {
         Date fac = new Date();
-        Fecha f = new Fecha();
+        Util f = new Util();
         f.setHora(fac);
         String hora = f.getHoraMas(6);
         String sql = "INSERT INTO salida VALUES(null," + empleado + ",'" + f.getFechaActual() + "','" + hora + "')";
@@ -29,7 +29,7 @@ public class Salida_DAO {
 
     public String getHrSal(int empleado) {
         Date fac = new Date();
-        Fecha f = new Fecha();
+        Util f = new Util();
         f.setHora(fac);
         String id_hr = null;
         String sql = "SELECT hora from salida WHERE id_Empleado=" + empleado + " and fecha='" + f.getFechaActual() + "'";

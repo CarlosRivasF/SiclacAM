@@ -3,7 +3,7 @@ package Servlets.Medico;
 import DataAccesObject.Medico_DAO;
 import DataAccesObject.Persona_DAO;
 import DataAccesObject.Unidad_DAO;
-import DataBase.Fecha;
+import DataBase.Util;
 import DataTransferObject.Cotizacion_DTO;
 import DataTransferObject.Medico_DTO;
 import DataTransferObject.Persona_DTO;
@@ -33,7 +33,7 @@ public class NewMedord extends HttpServlet {
         HttpSession sesion = request.getSession();
         Cotizacion_DTO Cotizacion = (Cotizacion_DTO) sesion.getAttribute("Cotizacion");
         Date fac = new Date();
-        Fecha f = new Fecha();
+        Util f = new Util();
         f.setHora(fac);
         int id_unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
         String mode = request.getParameter("mode").trim();

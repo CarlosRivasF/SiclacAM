@@ -1,7 +1,7 @@
 package DataAccesObject;
 
 import DataBase.Conexion;
-import DataBase.Fecha;
+import DataBase.Util;
 import DataTransferObject.Observacion_DTO;
 import DataTransferObject.Resultado_DTO;
 import java.sql.Connection;
@@ -19,7 +19,7 @@ public class Resultado_DAO {
     public int RegistrarResultado(int id_Det_Ord, int id_Configuracion, String Valor_Obtenido) {
         int id_resultado = 0;
         Date fac = new Date();
-        Fecha f = new Fecha();
+        Util f = new Util();
         f.setHora(fac);
         String sql = "INSERT INTO resultado VALUES(null,"
                 + "" + id_Det_Ord + ","

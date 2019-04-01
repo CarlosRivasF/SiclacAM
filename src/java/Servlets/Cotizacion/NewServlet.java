@@ -1,7 +1,7 @@
 package Servlets.Cotizacion;
 
 import DataAccesObject.Orden_DAO;
-import DataBase.Fecha;
+import DataBase.Util;
 import DataTransferObject.Det_Orden_DTO;
 import DataTransferObject.Orden_DTO;
 import com.itextpdf.text.BadElementException;
@@ -44,7 +44,7 @@ public class NewServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
         Orden_DTO Orden = new Orden_DTO();
         Date fac = new Date();
-        Fecha f = new Fecha();
+        Util f = new Util();
         f.setHora(fac);
 
         try {
@@ -255,7 +255,7 @@ public class NewServlet extends HttpServlet {
 
     public int triggerNewPage(Orden_DTO Orden, PdfReader reader, PdfStamper stamper, Rectangle pagesize, ColumnText column, Rectangle rect, int pagecount) throws DocumentException {
         Date fac = new Date();
-        Fecha f = new Fecha();
+        Util f = new Util();
         f.setHora(fac);
         try {
             BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);

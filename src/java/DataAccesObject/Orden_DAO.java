@@ -1,6 +1,7 @@
 package DataAccesObject;
 
 import DataBase.Conexion;
+import DataBase.Util;
 import DataTransferObject.Configuracion_DTO;
 import DataTransferObject.Det_Orden_DTO;
 import DataTransferObject.Estadistica_DTO;
@@ -30,8 +31,8 @@ public class Orden_DAO {
                     + "" + orden.getEmpleado().getId_Persona() + ","
                     + "'" + orden.getFecha() + "',"
                     + "'" + orden.getHora() + "',"
-                    + "'" + orden.getMontoPagado() + "',"
-                    + "'" + orden.getMontoRestante() + "',"
+                    + "'" + Util.redondearDecimales(orden.getMontoPagado()) + "',"
+                    + "'" + Util.redondearDecimales(orden.getMontoRestante()) + "',"
                     + "'" + orden.getEstado() + "',"
                     + "'" + orden.getConvenio() + "',"
                     + "" + orden.getFolio_Unidad() + ")";
@@ -41,7 +42,7 @@ public class Orden_DAO {
             }
             sql = "select id_Orden from orden where id_unidad=" + orden.getUnidad().getId_Unidad() + " and id_paciente=" + orden.getPaciente().getId_Paciente() + ""
                     + " and id_medico=" + orden.getMedico().getId_Medico() + " and id_Persona=" + orden.getEmpleado().getId_Persona() + ""
-                    + " and Fecha_Orden='" + orden.getFecha() + "'  and Hora_Orden='" + orden.getHora() + "' and Precio_Total='" + orden.getMontoPagado() + "' and montoRes='" + orden.getMontoRestante() + "' and convenio='" + orden.getConvenio() + "' and folio_unidad=" + orden.getFolio_Unidad() + "";
+                    + " and Fecha_Orden='" + orden.getFecha() + "'  and Hora_Orden='" + orden.getHora() + "' and Precio_Total='" + Util.redondearDecimales(orden.getMontoPagado()) + "' and montoRes='" + Util.redondearDecimales(orden.getMontoRestante()) + "' and convenio='" + orden.getConvenio() + "' and folio_unidad=" + orden.getFolio_Unidad() + "";
             System.out.println(sql);
             try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery()) {
                 while (rs.next()) {
@@ -1108,8 +1109,8 @@ public class Orden_DAO {
 
     public void updateSaldo(Float MontoPagado, Float MontoRestante, Pago_DTO pago) {
         String sql = "UPDATE orden "
-                + "set Precio_Total='" + (MontoPagado + pago.getMonto()) + "',"
-                + " montoRes='" + (MontoRestante - pago.getMonto()) + "' "
+                + "set Precio_Total='" + Util.redondearDecimales(MontoPagado + pago.getMonto()) + "',"
+                + " montoRes='" + Util.redondearDecimales(MontoRestante - pago.getMonto()) + "' "
                 + "where id_Orden=" + pago.getId_Orden() + "";
         System.out.println(sql);
         try (Connection con = Conexion.getCon();) {
