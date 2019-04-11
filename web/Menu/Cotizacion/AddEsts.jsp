@@ -1,6 +1,6 @@
 <%@page import="DataTransferObject.Cotizacion_DTO"%>
 <%@page import="DataTransferObject.Orden_DTO"%>
-<%@page import="DataBase.Fecha"%>
+<%@page import="DataBase.Util"%>
 <%@page import="DataTransferObject.Paciente_DTO"%>
 <%@page import="DataTransferObject.Tipo_Estudio_DTO"%>
 <%@page import="java.util.List"%>
@@ -12,7 +12,7 @@
         List<Tipo_Estudio_DTO> tipos = TE.getTipo_Estudios();
         Cotizacion_DTO Cotizacion = (Cotizacion_DTO) sesion.getAttribute("Cotizacion");
         Paciente_DTO pac = Cotizacion.getPaciente();
-        Fecha f = new Fecha();
+        Util f = new Util();
 %>
 <div class="nav-scroller bg-white box-shadow">
     <nav class="nav nav-underline">        

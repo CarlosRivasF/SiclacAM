@@ -2,7 +2,7 @@ package Servlets.Orden;
 
 import DataAccesObject.Estudio_DAO;
 import DataAccesObject.Persona_DAO;
-import DataBase.Fecha;
+import DataBase.Util;
 import DataTransferObject.Estudio_DTO;
 import DataTransferObject.Material_DTO;
 import DataTransferObject.Persona_DTO;
@@ -53,7 +53,7 @@ public class PrintReportOrd extends HttpServlet {
     PdfReader cover;
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
         Date fac = new Date();
-        Fecha f = new Fecha();
+        Util f = new Util();
         f.setHora(fac);
         HttpSession sesion = request.getSession();
         int id_Unidad;
@@ -348,7 +348,7 @@ public class PrintReportOrd extends HttpServlet {
 
     public int triggerNewPage(PdfReader reader, PdfStamper stamper, Rectangle pagesize, ColumnText column, Rectangle rect, int pagecount) throws DocumentException {
         Date fac = new Date();
-        Fecha f = new Fecha();
+        Util f = new Util();
         f.setHora(fac);
         PdfContentByte cb = stamper.getOverContent(pagecount);
         column.setCanvas(cb);

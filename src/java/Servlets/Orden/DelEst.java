@@ -2,7 +2,7 @@ package Servlets.Orden;
 
 import DataAccesObject.Det_Prom_DAO;
 import DataAccesObject.Promocion_DAO;
-import DataBase.Fecha;
+import DataBase.Util;
 import DataTransferObject.Cotizacion_DTO;
 import DataTransferObject.Det_Cot_DTO;
 import DataTransferObject.Det_Orden_DTO;
@@ -33,7 +33,7 @@ public class DelEst extends HttpServlet {
         HttpSession sesion = request.getSession();
         PrintWriter out = response.getWriter();
         Date fac = new Date();
-        Fecha f = new Fecha();
+        Util f = new Util();
         f.setHora(fac);
         if (request.getParameter("modulo") != null) {
             String Modulo = request.getParameter("modulo").trim();
@@ -87,7 +87,7 @@ public class DelEst extends HttpServlet {
                         }
                         out.println("</table>");
                         out.println("</div>");
-                        out.println("<p class='offset-8 col-3 col-sm-3 col-md-3'><strong>Pagar" + Orden.getMontoRestante() + " pesos</strong></p>");
+                        out.println("<p class='offset-8 col-3 col-sm-3 col-md-3'><strong>Pagar" + Util.redondearDecimales(Orden.getMontoRestante()) + " pesos</strong></p>");
 
                         if (request.getParameter("shdet") == null) {
                             out.println("<button class='btn btn-success btn-lg btn-block' id='ConPay' onclick='contOr(ord);' name='ConPay'>Continuar</button>");

@@ -1,5 +1,7 @@
 package DataTransferObject;
 
+import DataBase.Util;
+
 /**
  *
  * @author ZionSystems
@@ -10,7 +12,7 @@ public class Sancion_DTO {
     protected Persona_DTO por;
     protected Float Monto;
     protected String Motivo;
-    protected String Fecha;
+    protected String FechaSanc;
 
     public int getId_Sancion() {
         return id_Sancion;
@@ -29,11 +31,11 @@ public class Sancion_DTO {
     }
 
     public Float getMonto() {
-        return Monto;
+        return Util.redondearDecimales(Monto);
     }
 
     public void setMonto(Float Monto) {
-        this.Monto = Monto;
+        this.Monto = Util.redondearDecimales(Monto);
     }
 
     public String getMotivo() {
@@ -45,10 +47,10 @@ public class Sancion_DTO {
     }
 
     public String getFecha() {
-        return Fecha;
+        return FechaSanc;
     }
 
     public void setFecha(String Fecha) {
-        this.Fecha = Fecha;
+        this.FechaSanc = Fecha;
     }
 }

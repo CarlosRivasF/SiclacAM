@@ -3,7 +3,7 @@ package Servlets.Orden;
 import DataAccesObject.Cotizacion_DAO;
 import DataAccesObject.Paciente_DAO;
 import DataAccesObject.Persona_DAO;
-import DataBase.Fecha;
+import DataBase.Util;
 import DataTransferObject.Cotizacion_DTO;
 import DataTransferObject.Det_Orden_DTO;
 import DataTransferObject.Orden_DTO;
@@ -33,7 +33,7 @@ public class CastToOrden extends HttpServlet {
         HttpSession sesion = request.getSession();
 
         Date fac = new Date();
-        Fecha f = new Fecha();
+        Util f = new Util();
         f.setHora(fac);
         String codeBar = request.getParameter("Id_Cot").trim();
         String[] bar = codeBar.split("-");

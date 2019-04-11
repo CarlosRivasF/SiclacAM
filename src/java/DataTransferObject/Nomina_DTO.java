@@ -1,15 +1,17 @@
 package DataTransferObject;
 
+import DataBase.Util;
+
 /**
  *
  * @author ZionSystems
  */
 public class Nomina_DTO {
-    
-     protected int id_Sancion;
+
+    protected int id_Sancion;
     protected Persona_DTO por;
-    protected Float Monto;    
-    protected String Fecha;
+    protected Float Monto;
+    protected String FechaN;
 
     public int getId_Sancion() {
         return id_Sancion;
@@ -28,19 +30,19 @@ public class Nomina_DTO {
     }
 
     public Float getMonto() {
-        return Monto;
+        return Util.redondearDecimales(Monto);
     }
 
     public void setMonto(Float Monto) {
-        this.Monto = Monto;
+        this.Monto = Util.redondearDecimales(Monto);
     }
 
     public String getFecha() {
-        return Fecha;
+        return FechaN;
     }
 
     public void setFecha(String Fecha) {
-        this.Fecha = Fecha;
+        this.FechaN = Fecha;
     }
-    
+
 }

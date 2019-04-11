@@ -1,5 +1,7 @@
 package DataTransferObject;
 
+import DataBase.Util;
+
 /**
  *
  * @author ZionSystems
@@ -22,11 +24,11 @@ public class Precio_DTO {
     }
 
     public Float getPrecio_N() {
-        return Precio_N;
+        return Util.redondearDecimales(Precio_N);
     }
 
     public void setPrecio_N(Float Precio_N) {
-        this.Precio_N = Precio_N;
+        this.Precio_N = Util.redondearDecimales(Precio_N);
     }
 
     public int getT_Entrega_N() {
@@ -38,11 +40,11 @@ public class Precio_DTO {
     }
 
     public Float getPrecio_U() {
-        return Precio_U;
+        return Util.redondearDecimales(Precio_U);
     }
 
     public void setPrecio_U(Float Precio_U) {
-        this.Precio_U = Precio_U;
+        this.Precio_U = Util.redondearDecimales(Precio_U);
     }
 
     public int getT_Entrega_U() {

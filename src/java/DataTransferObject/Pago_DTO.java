@@ -1,5 +1,7 @@
 package DataTransferObject;
 
+import DataBase.Util;
+
 /**
  *
  * @author ZionSystems
@@ -38,11 +40,11 @@ public class Pago_DTO {
     }
 
     public Float getMonto() {
-        return monto;
+        return Util.redondearDecimales(monto);
     }
 
     public void setMonto(Float monto) {
-        this.monto = monto;
+        this.monto = Util.redondearDecimales(monto);
     }
 
     public String getFecha() {

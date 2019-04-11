@@ -1,5 +1,6 @@
 package DataTransferObject;
 
+import DataBase.Util;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ public class Orden_DTO {
     protected Paciente_DTO Paciente;
     protected Medico_DTO Medico;
     protected Persona_DTO Empleado;
-    protected String Fecha;
+    protected String FechaOr;
     protected String Hora;
     protected Float montoRestante;
     protected Float montoPagado;
@@ -64,11 +65,11 @@ public class Orden_DTO {
     }
 
     public String getFecha() {
-        return Fecha;
+        return FechaOr;
     }
 
     public void setFecha(String Fecha) {
-        this.Fecha = Fecha;
+        this.FechaOr = Fecha;
     }
 
     public String getHora() {
@@ -80,19 +81,19 @@ public class Orden_DTO {
     }
 
     public Float getMontoRestante() {
-        return montoRestante;
+        return Util.redondearDecimales(montoRestante);
     }
 
     public void setMontoRestante(Float montoRestante) {
-        this.montoRestante = montoRestante;
+        this.montoRestante = Util.redondearDecimales(montoRestante);
     }
 
     public Float getMontoPagado() {
-        return montoPagado;
+        return Util.redondearDecimales(montoPagado);
     }
 
     public void setMontoPagado(Float montoPagado) {
-        this.montoPagado = montoPagado;
+        this.montoPagado = Util.redondearDecimales(montoPagado);
     }
 
     public List<Det_Orden_DTO> getDet_Orden() {

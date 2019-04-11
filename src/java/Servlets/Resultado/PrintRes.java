@@ -1,7 +1,7 @@
 package Servlets.Resultado;
 
 import DataAccesObject.Orden_DAO;
-import DataBase.Fecha;
+import DataBase.Util;
 import DataTransferObject.Configuracion_DTO;
 import DataTransferObject.Det_Orden_DTO;
 import DataTransferObject.Orden_DTO;
@@ -49,14 +49,14 @@ public class PrintRes extends HttpServlet {
     PdfReader cover;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("ProcessRequest");
+        System.out.println("ProcessRequest of PrintRes");
         Date fac = new Date();
-        Fecha f = new Fecha();
+        Util f = new Util();
         f.setHora(fac);
         HttpSession sesion = request.getSession();
         int id_Orden;
         if (sesion.getAttribute("OrdenSh") == null) {
-            id_Orden = Integer.parseInt(Fecha.Desencriptar(request.getParameter("LxOrdSald")));
+            id_Orden = Integer.parseInt(Util.Desencriptar(request.getParameter("LxOrdSald")));
         } else {
             id_Orden = 0;
         }
@@ -70,11 +70,9 @@ public class PrintRes extends HttpServlet {
                 Orden_DAO O = new Orden_DAO();
                 Orden = O.getOrden(id_Orden);
             }
-            System.out.println("Orden " + Orden.getId_Orden() + " Recuperada");
-            System.out.println("Det_Orden.Size():" + Orden.getDet_Orden().size());
             response.setContentType("application/pdf");
             response.setHeader("Content-disposition", "inline; filename=\"" + Orden.getPaciente().getCodPac() + "_" + Orden.getId_Orden() + ".pdf\"");
-            String relativePath = getServletContext().getRealPath("/")+"/";//ruta real del proyecto
+            String relativePath = getServletContext().getRealPath("/") + "/";//ruta real del proyecto
             int r = 0;
             for (Det_Orden_DTO d : Orden.getDet_Orden()) {
                 if (d.getEstudio().getAddRes()) {
@@ -91,25 +89,10 @@ public class PrintRes extends HttpServlet {
             Orden.getDet_Orden().removeAll(DetImage);
 
             //aqui se agrupan las configuraciones que tengan el mismo nombre para ponerlas en una sola fila
+            //****Programar****
             //termina agrupacion de configuraciones
-            r = r - (DetImage.size() - 1);
+            String Source = relativePath + "M/MembreteRes1.pdf";
 
-            String Source = "";
-            if (r < 35) {
-                Source = relativePath + "M/MembreteRes1.pdf";
-            } else if (r > 35 & r < 70) {
-                Source = relativePath + "M/MembreteRes2.pdf";
-            } else if (r > 70 & r < 105) {
-                Source = relativePath + "M/MembreteRes3.pdf";
-            } else if (r > 140 & r < 175) {
-                Source = relativePath + "M/MembreteRes4.pdf";
-            } else if (r > 205 & r < 240) {
-                Source = relativePath + "M/MembreteRes5.pdf";
-            } else if (r > 275 & r < 305) {
-                Source = relativePath + "M/MembreteRes6.pdf";
-            } else if (r > 340 & r < 375) {
-                Source = relativePath + "M/MembreteRes7.pdf";
-            }
             System.out.println("Source:" + Source);
             int pagecount = 1;
             cover = new PdfReader(Source);
@@ -193,7 +176,18 @@ public class PrintRes extends HttpServlet {
             Rectangle rectPage2 = new Rectangle(-27, 40, 640, 690);//0,esp-inf,ancho,alto
             int status = column.go();
             while (ColumnText.hasMoreText(status)) {
-                status = triggerNewPage(Orden, reader, stamper, pagesize, column, rectPage2, ++pagecount);
+                pagecount++;
+                f.setHora(fac);
+
+                PdfContentByte pageI;
+                stamper.insertPage(pagecount, cover.getPageSizeWithRotation(1));
+                pageI = stamper.getOverContent(pagecount);
+                PrintDataHead(cb, Orden, false);
+                PdfImportedPage pageA = stamper.getImportedPage(cover, 1);
+                pageI.addTemplate(pageA, 0, 0);
+                column.setCanvas(pageI);
+                column.setSimpleColumn(rectPage1);
+                status = column.go();
             }
 
             /*Comienza a recorrer los estudios de tipo Imagen,etc que sean en hoja blanca*/
@@ -224,8 +218,8 @@ public class PrintRes extends HttpServlet {
                 PrintDataHead(pageI, Orden, false);
                 int y = 680;
                 /*
-            Maximo de caracteres por linea: 76
-            Lineas por página: MAX(32) Recomend: 28
+                 Maximo de caracteres por linea: 76
+                 Lineas por página: MAX(32) Recomend: 28
                  */
                 BaseFont bf0 = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
                 for (Configuracion_DTO cnf : dto.getEstudio().getCnfs()) {
@@ -285,20 +279,9 @@ public class PrintRes extends HttpServlet {
         }
     }
 
-    public int triggerNewPage(Orden_DTO Orden, PdfReader reader, PdfStamper stamper, Rectangle pagesize, ColumnText column, Rectangle rect, int pagecount) throws DocumentException {
-        Date fac = new Date();
-        Fecha f = new Fecha();
-        f.setHora(fac);
-        PdfContentByte cb = stamper.getOverContent(pagecount);
-        PrintDataHead(cb, Orden, false);
-        column.setCanvas(cb);
-        column.setSimpleColumn(rect);
-        return column.go();
-    }
-
     public PdfContentByte PrintDataHead(PdfContentByte cb, Orden_DTO Orden, Boolean footer) {
         Date fac = new Date();
-        Fecha f = new Fecha();
+        Util f = new Util();
         f.setHora(fac);
         try {
             Image barras1;

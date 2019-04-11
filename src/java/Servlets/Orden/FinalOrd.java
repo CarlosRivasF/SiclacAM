@@ -1,7 +1,7 @@
 package Servlets.Orden;
 
 import DataAccesObject.Orden_DAO;
-import DataBase.Fecha;
+import DataBase.Util;
 import DataTransferObject.Orden_DTO;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Image;
@@ -40,14 +40,14 @@ public class FinalOrd extends HttpServlet {
         Orden_DAO O = new Orden_DAO();
         Boolean r = true;
         if (request.getParameter("LsIxOrd") != null) {
-            int Id_Orden = Integer.parseInt(Fecha.Desencriptar(request.getParameter("LsIxOrd").trim()));
+            int Id_Orden = Integer.parseInt(Util.Desencriptar(request.getParameter("LsIxOrd").trim()));
             sesion.setAttribute("Orden", O.getOrden(Id_Orden));
             r = false;
         }
         Orden_DTO Orden = (Orden_DTO) sesion.getAttribute("Orden");
         if (r) {
             Date fac = new Date();
-            Fecha f = new Fecha();
+            Util f = new Util();
             f.setHora(fac);
             Orden.setFecha(f.getFechaActual());
             Orden.setHora(f.getHoraMas(6));
@@ -178,7 +178,7 @@ public class FinalOrd extends HttpServlet {
             cb.beginText();
             cb.setFontAndSize(bf, 12);
             cb.setTextMatrix(500, 567);
-            cb.showText((Orden.getMontoPagado()) + "");
+            cb.showText(Util.redondearDecimales(Orden.getMontoPagado()) + "");
             cb.endText();
 
             cb.beginText();
@@ -189,7 +189,7 @@ public class FinalOrd extends HttpServlet {
             cb.beginText();
             cb.setFontAndSize(bf, 12);
             cb.setTextMatrix(500, 553);
-            cb.showText((Orden.getMontoRestante()) + "");
+            cb.showText(Util.redondearDecimales(Orden.getMontoRestante()) + "");
             cb.endText();
 
             cb.beginText();
@@ -200,7 +200,7 @@ public class FinalOrd extends HttpServlet {
             cb.beginText();
             cb.setFontAndSize(bf, 12);
             cb.setTextMatrix(500, 539);
-            cb.showText((Orden.getMontoPagado()+ Orden.getMontoRestante()) + "");
+            cb.showText(Util.redondearDecimales(Orden.getMontoPagado()+ Orden.getMontoRestante()) + "");
             cb.endText();
 
             ColumnText column = new ColumnText(stamper.getOverContent(1));

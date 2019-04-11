@@ -36,83 +36,87 @@ public class PrintL2 extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         System.out.println("ProcessRequest");
-        Date fac = new Date();
-        Fecha f = new Fecha();
-        f.setHora(fac);
         HttpSession sesion = request.getSession();
+        if (sesion.getAttribute("permisos") != null && sesion.getAttribute("user") != null && sesion.getAttribute("unidad") != null) {
+            Date fac = new Date();
+            Util f = new Util();
+            f.setHora(fac);
 
-        int id_Orden;
-        if (sesion.getAttribute("OrdenSh") == null) {
-            id_Orden = Integer.parseInt(Fecha.Desencriptar(request.getParameter("LxOrdSald")));
+            int id_Orden;
+            if (sesion.getAttribute("OrdenSh") == null) {
+                id_Orden = Integer.parseInt(Util.Desencriptar(request.getParameter("LxOrdSald")));
+            } else {
+                id_Orden = 0;
+            }
+            Orden_DTO Orden;
+            try {
+                if (sesion.getAttribute("OrdenSh") != null) {
+                    Orden = (Orden_DTO) sesion.getAttribute("OrdenSh");
+                    sesion.removeAttribute("OrdenSh");
+                } else {
+                    Orden_DAO O = new Orden_DAO();
+                    Orden = O.getOrden(id_Orden);
+                }
+                int IxDtOrd;
+                int IxDtOrdMt;
+                if (request.getParameter("IxDtOrd") == null || request.getParameter("IxDtOrdMt") == null) {
+                    IxDtOrd = 0;
+                    IxDtOrdMt = 0;
+                } else {
+                    IxDtOrd = Integer.parseInt(request.getParameter("IxDtOrd"));
+                    IxDtOrdMt = Integer.parseInt(request.getParameter("IxDtOrdMt"));
+                }
+
+                response.setContentType("application/pdf");
+                response.setHeader("Content-disposition", "inline; filename=\"" + Orden.getPaciente().getCodPac() + "_" + IxDtOrd + "." + IxDtOrdMt + ".pdf\"");
+                String cadena = request.getParameter("idPrac");
+                String relativePath = getServletContext().getRealPath("/") + "/";//ruta real del proyecto
+                String path = relativePath + "M/templ.pdf";//Am_LabsWM
+
+                String ca = "Formato-" + cadena + "";
+                response.setHeader("Content-disposition", "inline; filename=\"filenameLabel.pdf\"");
+                //PROPIEDADES INICIO
+                PdfReader reader = new PdfReader(path);
+
+                PdfStamper stamper = new PdfStamper(reader, response.getOutputStream());
+                PdfContentByte canvas = stamper.getOverContent(1);
+
+                BaseColor orange = new BaseColor(211, 84, 0);
+                BaseColor blue = new BaseColor(52, 152, 219);
+                BaseColor green = new BaseColor(40, 180, 99);
+                BaseColor BackGr = new BaseColor(234, 236, 238);
+                Font Title_Font_Est = FontFactory.getFont("Times Roman", 12, blue);
+                Font Title_Font_Prec = FontFactory.getFont("Times Roman", 12, orange);
+                Font Title_Font_Prep = FontFactory.getFont("Times Roman", 12, green);
+                Font Content_Font = FontFactory.getFont("Arial", 8, BaseColor.BLACK);
+                Font Content_Font2 = FontFactory.getFont("Arial", 9, BaseColor.BLACK);
+
+                Period edad = f.getEdad(Orden.getPaciente().getFecha_Nac().trim());
+                ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(Orden.getPaciente().getNombre().toLowerCase() + " " + Orden.getPaciente().getAp_Paterno().toLowerCase() + " " + Orden.getPaciente().getAp_Materno().toLowerCase(), Content_Font), 12, 65, 0);
+                ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(edad.getYears() + " años", Content_Font), 136, 65, 0);
+                ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(Orden.getPaciente().getSexo(), Content_Font), 172, 65, 0);
+                ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(Orden.getDet_Orden().get(IxDtOrd).getEstudio().getNombre_Estudio(), Content_Font2), 40, 50, 0);
+                ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(Orden.getFecha(), Content_Font), 15, 36, 0);
+                ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(Orden.getDet_Orden().get(IxDtOrd).getEstudio().getMts().get(IxDtOrdMt).getClave(), Content_Font), 15, 25, 0);
+                ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Datos adicionales en etiqueta", Content_Font), 15, 13, 0);
+                Image barras1;
+                JBarcodeBean barcode = new JBarcodeBean();
+                barcode.setCodeType(new Code39());
+                barcode.setCode(1 + "-2");
+                barcode.setCheckDigit(true);
+                barcode.setShowText(true);
+                BufferedImage bi = barcode.draw(new BufferedImage(100, 15, BufferedImage.TYPE_INT_RGB));
+                barras1 = Image.getInstance(Toolkit.getDefaultToolkit().createImage(bi.getSource()), null);
+
+                barras1.setAbsolutePosition(110, 25);
+                canvas.addImage(barras1, false);
+                ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("(1-2)", Content_Font), 160, 13, 0);
+                stamper.close();
+            } catch (DocumentException ex) {
+                Logger.getLogger(PrintL2.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else {
-            id_Orden = 0;
-        }
-        Orden_DTO Orden;
-        try {
-            if (sesion.getAttribute("OrdenSh") != null) {
-                Orden = (Orden_DTO) sesion.getAttribute("OrdenSh");
-                sesion.removeAttribute("OrdenSh");
-            } else {
-                Orden_DAO O = new Orden_DAO();
-                Orden = O.getOrden(id_Orden);
-            }
-            int IxDtOrd;
-            int IxDtOrdMt;
-            if (request.getParameter("IxDtOrd") == null ||  request.getParameter("IxDtOrdMt") == null) {
-                IxDtOrd = 0;
-                IxDtOrdMt = 0;
-            } else {
-                IxDtOrd = Integer.parseInt(request.getParameter("IxDtOrd"));
-                IxDtOrdMt = Integer.parseInt(request.getParameter("IxDtOrdMt"));
-            }
-            
-            response.setContentType("application/pdf");
-            response.setHeader("Content-disposition", "inline; filename=\"" + Orden.getPaciente().getCodPac() + "_" + IxDtOrd + "." + IxDtOrdMt + ".pdf\"");
-            String cadena = request.getParameter("idPrac");
-            String relativePath = getServletContext().getRealPath("/")+"/";//ruta real del proyecto
-            String path = relativePath + "M/templ.pdf";//Am_LabsWM
-
-            String ca = "Formato-" + cadena + "";
-            response.setHeader("Content-disposition", "inline; filename=\"filenameLabel.pdf\"");
-            //PROPIEDADES INICIO
-            PdfReader reader = new PdfReader(path);
-
-            PdfStamper stamper = new PdfStamper(reader, response.getOutputStream());
-            PdfContentByte canvas = stamper.getOverContent(1);
-
-            BaseColor orange = new BaseColor(211, 84, 0);
-            BaseColor blue = new BaseColor(52, 152, 219);
-            BaseColor green = new BaseColor(40, 180, 99);
-            BaseColor BackGr = new BaseColor(234, 236, 238);
-            Font Title_Font_Est = FontFactory.getFont("Times Roman", 12, blue);
-            Font Title_Font_Prec = FontFactory.getFont("Times Roman", 12, orange);
-            Font Title_Font_Prep = FontFactory.getFont("Times Roman", 12, green);
-            Font Content_Font = FontFactory.getFont("Arial", 8, BaseColor.BLACK);
-            Font Content_Font2 = FontFactory.getFont("Arial", 9, BaseColor.BLACK);
-
-            Period edad = f.getEdad(Orden.getPaciente().getFecha_Nac().trim());
-            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(Orden.getPaciente().getNombre().toLowerCase() + " " + Orden.getPaciente().getAp_Paterno().toLowerCase() + " " + Orden.getPaciente().getAp_Materno().toLowerCase(), Content_Font), 12, 65, 0);
-            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(edad.getYears() + " años", Content_Font), 136, 65, 0);
-            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(Orden.getPaciente().getSexo(), Content_Font), 172, 65, 0);
-            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(Orden.getDet_Orden().get(IxDtOrd).getEstudio().getNombre_Estudio(), Content_Font2), 40, 50, 0);
-            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(Orden.getFecha(), Content_Font), 15, 36, 0);
-            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(Orden.getDet_Orden().get(IxDtOrd).getEstudio().getMts().get(IxDtOrdMt).getClave(), Content_Font), 15, 25, 0);
-            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Datos adicionales en etiqueta", Content_Font), 15, 13, 0);
-            Image barras1;
-            JBarcodeBean barcode = new JBarcodeBean();
-            barcode.setCodeType(new Code39());
-            barcode.setCode(1 + "-2");
-            barcode.setCheckDigit(true);
-            barcode.setShowText(true);
-            BufferedImage bi = barcode.draw(new BufferedImage(100, 15, BufferedImage.TYPE_INT_RGB));
-            barras1 = Image.getInstance(Toolkit.getDefaultToolkit().createImage(bi.getSource()), null);
-
-            barras1.setAbsolutePosition(110, 25);
-            canvas.addImage(barras1, false);
-            ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("(1-2)", Content_Font), 160, 13, 0);
-            stamper.close();
-        } catch (DocumentException ex) {
-            Logger.getLogger(PrintL2.class.getName()).log(Level.SEVERE, null, ex);
+            response.sendRedirect("" + request.getContextPath() + "");
         }
     }
 

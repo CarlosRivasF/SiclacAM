@@ -1,7 +1,7 @@
 package Servlets.Cotizacion;
 
 import DataAccesObject.Estudio_DAO;
-import DataBase.Fecha;
+import DataBase.Util;
 import DataTransferObject.Det_Cot_DTO;
 import DataTransferObject.Estudio_DTO;
 import DataTransferObject.Cotizacion_DTO;
@@ -49,7 +49,7 @@ public class AddEstCot extends HttpServlet {
             Det_Cot = Cot.getDet_Cot();
         }
         Date fac = new Date();
-        Fecha f = new Fecha();
+        Util f = new Util();
         f.setHora(fac);
         String mode = request.getParameter("mode").trim();
         int index;

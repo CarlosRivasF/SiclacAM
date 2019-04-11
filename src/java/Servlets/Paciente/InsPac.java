@@ -4,7 +4,7 @@ import DataAccesObject.Direccion_DAO;
 import DataAccesObject.Paciente_DAO;
 import DataAccesObject.Persona_DAO;
 import DataAccesObject.Unidad_DAO;
-import DataBase.Fecha;
+import DataBase.Util;
 import DataTransferObject.Direccion_DTO;
 import DataTransferObject.Orden_DTO;
 import DataTransferObject.Paciente_DTO;
@@ -38,7 +38,7 @@ public class InsPac extends HttpServlet {
             Persona_DTO persona = new Persona_DTO();
             Direccion_DTO dir = new Direccion_DTO();
             Date fac = new Date();
-            Fecha f = new Fecha();
+            Util f = new Util();
             f.setHora(fac);
             Direccion_DAO D = new Direccion_DAO();
             Persona_DAO P = new Persona_DAO();

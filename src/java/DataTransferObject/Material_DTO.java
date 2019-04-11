@@ -1,5 +1,6 @@
 package DataTransferObject;
 
+import DataBase.Util;
 import java.io.Serializable;
 
 /**
@@ -75,11 +76,11 @@ public class Material_DTO implements Serializable{
     }
 
     public Float getPrecio() {
-        return Precio;
+        return Util.redondearDecimales(Precio);
     }
 
     public void setPrecio(Float Precio) {
-        this.Precio = Precio;
+        this.Precio = Util.redondearDecimales(Precio);
     }
 
     public int getCantidad() {

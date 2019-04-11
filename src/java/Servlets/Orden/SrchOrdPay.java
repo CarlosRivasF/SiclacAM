@@ -1,6 +1,7 @@
 package Servlets.Orden;
 
 import DataAccesObject.Orden_DAO;
+import DataBase.Util;
 import DataTransferObject.Orden_DTO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -77,7 +78,7 @@ public class SrchOrdPay extends HttpServlet {
                                                             + "<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=ShDetOrdenRS(" + ords.indexOf(dto) + ") ><span><img src='images/fill.png'></span></button></div></td>");
                                                     break;
                                                 case "sald":
-                                                    out.println("<td >" + dto.getMontoRestante() + "</td>");
+                                                    out.println("<td >" + Util.redondearDecimales(dto.getMontoRestante()) + "</td>");
                                                     out.print("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-success' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Pago/formAddPay.jsp?id_Orden=" + dto.getId_Orden() + "');><span><img src='images/pay.png'></span></button></div></td>");
                                                     break;
                                             }
@@ -98,7 +99,7 @@ public class SrchOrdPay extends HttpServlet {
                                                             + "<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=ShDetOrdenRS(" + ords.indexOf(dto) + ") ><span><img src='images/fill.png'></span></button></div></td>");
                                                     break;
                                                 case "sald":
-                                                    out.println("<td >" + dto.getMontoRestante() + "</td>");
+                                                    out.println("<td >" + Util.redondearDecimales(dto.getMontoRestante()) + "</td>");
                                                     out.print("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-success' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Pago/formAddPay.jsp?id_Orden=" + dto.getId_Orden() + "');><span><img src='images/pay.png'></span></button></div></td>");
                                                     break;
                                             }
@@ -118,7 +119,7 @@ public class SrchOrdPay extends HttpServlet {
                                                         + "<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=ShDetOrdenRS(" + ords.indexOf(dto) + ") ><span><img src='images/fill.png'></span></button></div></td>");
                                                 break;
                                             case "sald":
-                                                out.println("<td >" + dto.getMontoRestante() + "</td>");
+                                                out.println("<td >" + Util.redondearDecimales(dto.getMontoRestante()) + "</td>");
                                                 out.print("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-success' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Pago/formAddPay.jsp?id_Orden=" + dto.getId_Orden() + "');><span><img src='images/pay.png'></span></button></div></td>");
                                                 break;
                                         }
@@ -138,7 +139,7 @@ public class SrchOrdPay extends HttpServlet {
                                                 + "<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=ShDetOrdenRS(" + ords.indexOf(dto) + ") ><span><img src='images/fill.png'></span></button></div></td>");
                                         break;
                                     case "sald":
-                                        out.println("<td >" + dto.getMontoRestante() + "</td>");
+                                        out.println("<td >" + Util.redondearDecimales(dto.getMontoRestante()) + "</td>");
                                         out.print("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-success' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Pago/formAddPay.jsp?id_Orden=" + dto.getId_Orden() + "');><span><img src='images/pay.png'></span></button></div></td>");
                                         break;
                                 }
@@ -159,7 +160,7 @@ public class SrchOrdPay extends HttpServlet {
                                             + "<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=ShDetOrdenRS(" + ords.indexOf(dto) + ") ><span><img src='images/fill.png'></span></button></div></td>");
                                     break;
                                 case "sald":
-                                    out.println("<td >" + dto.getMontoRestante() + "</td>");
+                                    out.println("<td >" + Util.redondearDecimales(dto.getMontoRestante()) + "</td>");
                                     out.print("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-success' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Pago/formAddPay.jsp?id_Orden=" + dto.getId_Orden() + "');><span><img src='images/pay.png'></span></button></div></td>");
                                     break;
                             }

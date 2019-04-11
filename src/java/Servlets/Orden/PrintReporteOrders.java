@@ -2,7 +2,7 @@ package Servlets.Orden;
 
 import DataAccesObject.Orden_DAO;
 import DataAccesObject.Persona_DAO;
-import DataBase.Fecha;
+import DataBase.Util;
 import DataTransferObject.Det_Orden_DTO;
 import DataTransferObject.Orden_DTO;
 import DataTransferObject.Persona_DTO;
@@ -38,20 +38,19 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "PrintReporteOrders", urlPatterns = {"/PrintReporteOrders"})
 public class PrintReporteOrders extends HttpServlet {
 
-    PdfReader cover;
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
+        Float montoTotalPagado = Float.parseFloat(String.valueOf("0"));
+        Float montoTotalRestante = Float.parseFloat(String.valueOf("0"));
+        PdfReader cover = null;
         System.out.println("Entró peticion a PrintReporteOrders");
         Date fac = new Date();
-        Fecha f = new Fecha();
+        Util f = new Util();
         f.setHora(fac);
         HttpSession sesion = request.getSession();
         int id_Unidad;
-        Boolean Det = false;
         id_Unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
         String f1 = request.getParameter("fI").trim();
         String f2 = request.getParameter("fF").trim();
-        System.out.println("Reporte para la unidad " + id_Unidad + ". Desde " + f1 + ", hasta " + f2);
         try {
             List<Orden_DTO> Reporte;
             Orden_DAO O = new Orden_DAO();
@@ -59,23 +58,20 @@ public class PrintReporteOrders extends HttpServlet {
             System.out.println("recupera lista de estudios por unidad");
             response.setContentType("application/pdf");
             response.setHeader("Content-disposition", "inline; filename=\"CatalogoEstudios.pdf\"");//nombre de archivo
-            String relativePath = getServletContext().getRealPath("/");//ruta real del proyecto
+            String relativePath = getServletContext().getRealPath("/") + "/";//ruta real del proyecto
 
             String Source = relativePath + "M/MembreteHtl.pdf";
 
             int pagecount = 1;
             cover = new PdfReader(Source);
             PdfReader reader = new PdfReader(Source);
-            System.out.println("Lee membrete PDF " + Source);
-            Rectangle pagesize = reader.getPageSize(1);//obtiene tamaño de pagina
             PdfStamper stamper = new PdfStamper(reader, response.getOutputStream());//Crea nuevo documento PDF en base al template y lo manda al navegador con  response.getOutputStream()
 
-            System.out.println("Se inica Stamper");
             Persona_DAO P = new Persona_DAO();
             Persona_DTO persona = P.getPersona(Integer.parseInt(sesion.getAttribute("persona").toString()));
             System.out.println("Encuentra persona quien reporta");
             PdfContentByte cb = stamper.getOverContent(1);//Obtiene contenido PDF donde se incrustaran los datos
-            PrintHead(cb, f, persona);
+//            PrintHead(cb, f, persona);
             System.out.println("Stamper");// inicia Stamper(Incrustacion de datos)
             /////***************FUENTES PARA FORMATO DEL REPORTE*********************************/////////////////
             BaseColor orange = new BaseColor(211, 84, 0);
@@ -94,9 +90,6 @@ public class PrintReporteOrders extends HttpServlet {
             table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
             table.getDefaultCell().setBorder(1);
             table.setWidths(new int[]{3, 5, 12, 12, 10, 7, 8});
-            int id_Tipo_Estudio = 0;
-            int c = 0;
-            System.out.println("recorre reporte");
             //HEADERS DEL REPORTE
             PdfPCell HFolio = new PdfPCell(new Paragraph("Folio"));
             HFolio.setBorderColor(BaseColor.RED);
@@ -191,15 +184,48 @@ public class PrintReporteOrders extends HttpServlet {
                 MontoPagado.setHorizontalAlignment(Element.ALIGN_CENTER);
                 MontoPagado.setBorder(PdfPCell.BOTTOM);
                 table.addCell(MontoPagado);
+                montoTotalPagado += dto.getMontoPagado();
 
 //                PdfPCell MontoRestante = new PdfPCell(new Paragraph(String.valueOf(20 + i), Content_Font));
                 PdfPCell MontoRestante = new PdfPCell(new Paragraph(String.valueOf(dto.getMontoRestante()), Content_Font));
                 MontoRestante.setHorizontalAlignment(Element.ALIGN_CENTER);
                 MontoRestante.setBorder(PdfPCell.BOTTOM);
                 table.addCell(MontoRestante);
-
+                montoTotalRestante += Util.redondearDecimales(dto.getMontoRestante());
             }
             //FINALZA CONTENIDO
+
+            PdfPCell Espacio1 = new PdfPCell(new Paragraph("       "));
+            Espacio1.setHorizontalAlignment(Element.ALIGN_LEFT);
+            Espacio1.setColspan(7);
+            Espacio1.setBorder(0);
+            table.addCell(Espacio1);
+
+            PdfPCell Espacio2 = new PdfPCell(new Paragraph("       "));
+            Espacio2.setHorizontalAlignment(Element.ALIGN_LEFT);
+            Espacio2.setBorder(0);
+            table.addCell(Espacio2);
+
+            PdfPCell TitMontoTotalPagado = new PdfPCell(new Paragraph("Monto Total Pagado"));
+            TitMontoTotalPagado.setBorderColor(BaseColor.RED);
+            TitMontoTotalPagado.setHorizontalAlignment(Element.ALIGN_CENTER);
+            TitMontoTotalPagado.setColspan(2);
+            table.addCell(TitMontoTotalPagado);
+            PdfPCell CellMontoTotalPagado = new PdfPCell(new Paragraph(String.valueOf(montoTotalPagado)));
+            CellMontoTotalPagado.setBorderColor(BaseColor.RED);
+            CellMontoTotalPagado.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(CellMontoTotalPagado);
+
+            PdfPCell TitMontoTotalRest = new PdfPCell(new Paragraph("Monto Total Restante"));
+            TitMontoTotalRest.setBorderColor(BaseColor.RED);
+            TitMontoTotalRest.setHorizontalAlignment(Element.ALIGN_CENTER);
+            TitMontoTotalRest.setColspan(2);
+            table.addCell(TitMontoTotalRest);
+            PdfPCell CellMontoTotalRest = new PdfPCell(new Paragraph(String.valueOf(montoTotalRestante)));
+            CellMontoTotalRest.setBorderColor(BaseColor.RED);
+            CellMontoTotalRest.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(CellMontoTotalRest);
+
             ColumnText column = new ColumnText(stamper.getOverContent(1));
             Rectangle rectPage1 = new Rectangle(-32, 60, 830, 520);//izq,esp-inf,ancho,alto (SON COORDENADAS EN LA HOJA DEL PDF Y EL TAMAÑO DEL ELEMENTO A AGREGAR)
             //(SANGRIA IZQ,Espacio que queda al final de la hoja,Ancho de Elemento,(no recuerdo))
@@ -208,13 +234,9 @@ public class PrintReporteOrders extends HttpServlet {
 
             Rectangle rectPage2 = new Rectangle(-32, 60, 830, 520);//0,esp-inf,ancho,alto
             int status = column.go();
-            System.out.println("ESTATUS DE PAGINA: " + status);
             while (ColumnText.hasMoreText(status)) {
-                System.out.println("ESTATUS DE PAGINA: " + status);
-                System.out.println("NUMERO DE PAGINA: " + pagecount);
-                ++pagecount;
+                pagecount++;
                 f.setHora(fac);
-
                 PdfContentByte pageI;
                 stamper.insertPage(pagecount, cover.getPageSizeWithRotation(1));
                 pageI = stamper.getOverContent(pagecount);
@@ -224,7 +246,6 @@ public class PrintReporteOrders extends HttpServlet {
                 column.setCanvas(pageI);
                 column.setSimpleColumn(rectPage1);
                 status = column.go();
-                //este metodo ingresa una hoja nueva si el conetido es superior al lo que puede tener la hoja principal
             }
             stamper.setFormFlattening(true);
             stamper.close();
@@ -235,33 +256,11 @@ public class PrintReporteOrders extends HttpServlet {
         }
     }
 
-    public void PrintHead(PdfContentByte cb, Fecha f, Persona_DTO persona) {
-        try {
-            BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
-            BaseFont bf0 = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
-            BaseFont bf1 = BaseFont.createFont(BaseFont.COURIER, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
-            cb.beginText();
-            cb.setFontAndSize(bf, 10);
-            cb.setTextMatrix(270, 570);
-            cb.showText("Fecha de Reporte:");
-            cb.endText();
-            cb.beginText();
-            cb.setFontAndSize(bf1, 12);
-            cb.setTextMatrix(355, 570);
-            cb.showText(f.getFechaActual());
-            cb.endText();
-            ////////////////////////// DATOS PACIENTE
-            cb.beginText();
-            cb.setFontAndSize(bf, 10);
-            cb.setTextMatrix(270, 540);
-            cb.showText("Emitió:");
-            cb.endText();
-            cb.beginText();
-            cb.setFontAndSize(bf1, 12);
-            cb.setTextMatrix(320, 740);
-            cb.showText(persona.getNombre() + " " + persona.getAp_Paterno() + " " + persona.getAp_Materno());
-            cb.endText();
-
+//    public void PrintHead(PdfContentByte cb, Util f, Persona_DTO persona) {
+//        try {
+//            BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+//            BaseFont bf0 = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+//            BaseFont bf1 = BaseFont.createFont(BaseFont.COURIER, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
 //            cb.beginText();
 //            cb.setFontAndSize(bf, 10);
 //            cb.setTextMatrix(270, 722);
@@ -282,10 +281,9 @@ public class PrintReporteOrders extends HttpServlet {
 //            cb.setTextMatrix(380, 722);
 //            cb.showText(persona.getSexo());
 //            cb.endText();
-        } catch (DocumentException | IOException ex) {
-            System.out.println("");
-        }
-    }
+//        } catch (DocumentException | IOException ex) {
+//            System.out.println("");
+//        }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

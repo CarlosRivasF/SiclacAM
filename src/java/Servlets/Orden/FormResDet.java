@@ -1,6 +1,6 @@
 package Servlets.Orden;
 
-import DataBase.Fecha;
+import DataBase.Util;
 import DataTransferObject.Configuracion_DTO;
 import DataTransferObject.Det_Orden_DTO;
 import DataTransferObject.Orden_DTO;
@@ -33,7 +33,7 @@ public class FormResDet extends HttpServlet {
                 Orden_DTO Orden = (Orden_DTO) sesion.getAttribute("OrdenSh");
                 int index = Integer.parseInt(request.getParameter("index").trim());
                 Det_Orden_DTO det = Orden.getDet_Orden().get(index);
-                Fecha f = new Fecha();
+                Util f = new Util();
                 Period edad = f.getEdad(Orden.getPaciente().getFecha_Nac().trim());
                 String sexo = Orden.getPaciente().getSexo().toUpperCase();
                 List<Configuracion_DTO> cnfRs = new ArrayList<>();

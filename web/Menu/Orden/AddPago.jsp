@@ -1,7 +1,7 @@
 <%@page import="DataTransferObject.Det_Orden_DTO"%>
 <%@page import="DataTransferObject.Medico_DTO"%>
 <%@page import="DataTransferObject.Orden_DTO"%>
-<%@page import="DataBase.Fecha"%>
+<%@page import="DataBase.Util"%>
 <%@page import="DataTransferObject.Paciente_DTO"%>
 <%@page import="DataTransferObject.Tipo_Estudio_DTO"%>
 <%@page import="java.util.List"%>
@@ -13,7 +13,7 @@
         Paciente_DTO pac = Orden.getPaciente();
         Medico_DTO med = Orden.getMedico();
         List<Det_Orden_DTO> Det_Orden = Orden.getDet_Orden();
-        Fecha f = new Fecha();
+        Util f = new Util();
 %>
 <div class="nav-scroller bg-white box-shadow">
     <nav class="nav nav-underline">        
@@ -72,15 +72,15 @@
             <table>
                 <tr>
                     <td>Total : </td>
-                    <td><%=Orden.getMontoRestante() + Orden.getMontoPagado()%></td>
+                    <td><%=Util.redondearDecimales(Orden.getMontoRestante() + Orden.getMontoPagado())%></td>
                 </tr>
                 <tr>
                     <td>A/C : </td>
-                    <td><%=Orden.getMontoPagado()%></td>
+                    <td><%=Util.redondearDecimales(Orden.getMontoPagado())%></td>
                 </tr>
                 <tr>
                     <td>Por Pagar : </td>
-                    <td><%=Orden.getMontoRestante()%></td>
+                    <td><%=Util.redondearDecimales(Orden.getMontoRestante())%></td>
                 </tr>
             </table>
         </div>

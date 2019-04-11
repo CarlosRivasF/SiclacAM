@@ -1,6 +1,6 @@
 package Servlets.Resultado;
 
-import DataBase.Fecha;
+import DataBase.Util;
 import DataTransferObject.Orden_DTO;
 import Servlets.Cotizacion.NewServlet1;
 import com.itextpdf.text.BadElementException;
@@ -54,7 +54,7 @@ public class TEST extends HttpServlet {
         System.out.println("1");
         Orden_DTO Orden = new Orden_DTO();
         Date fac = new Date();
-        Fecha f = new Fecha();
+        Util f = new Util();
         f.setHora(fac);
         System.out.println("2");
         try {
@@ -265,7 +265,7 @@ public class TEST extends HttpServlet {
 
     public int triggerNewPage(Orden_DTO Orden, PdfReader reader, PdfStamper stamper, Rectangle pagesize, ColumnText column, Rectangle rect, int pagecount) throws DocumentException {
         Date fac = new Date();
-        Fecha f = new Fecha();
+        Util f = new Util();
         f.setHora(fac);
         try {
             BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);

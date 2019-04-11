@@ -1,6 +1,6 @@
 package DataAccesObject;
 
-import DataBase.Fecha;
+import DataBase.Util;
 import DataTransferObject.Estudio_DTO;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -58,7 +58,7 @@ public class Main {
 
     public static void main(String[] args) {
         Date fac = new Date();
-        Fecha f = new Fecha();
+        Util f = new Util();
         f.setHora(fac);
         System.out.println(Main.compararFechasConDate("2019-01-25", f.getFechaActual()));
     }

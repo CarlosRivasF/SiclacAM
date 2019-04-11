@@ -1,5 +1,6 @@
 package DataTransferObject;
 
+import DataBase.Util;
 import java.util.List;
 
 /**
@@ -121,14 +122,14 @@ public class Promocion_DTO {
      * @return the Precio_Total
      */
     public Float getPrecio_Total() {
-        return Precio_Total;
+        return Util.redondearDecimales(Precio_Total);
     }
 
     /**
      * @param Precio_Total the Precio_Total to set
      */
     public void setPrecio_Total(Float Precio_Total) {
-        this.Precio_Total = Precio_Total;
+        this.Precio_Total = Util.redondearDecimales(Precio_Total);
     }
 
     /**

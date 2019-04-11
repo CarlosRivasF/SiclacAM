@@ -2,7 +2,7 @@ package Servlets.Pago;
 
 import DataAccesObject.Orden_DAO;
 import DataAccesObject.Pago_DAO;
-import DataBase.Fecha;
+import DataBase.Util;
 import DataTransferObject.Orden_DTO;
 import DataTransferObject.Pago_DTO;
 import java.io.IOException;
@@ -26,7 +26,7 @@ public class AddPay extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         Date fac = new Date();
-        Fecha f = new Fecha();
+        Util f = new Util();
         f.setHora(fac);
         HttpSession sesion = request.getSession();        
         int id_Orden = Integer.parseInt(sesion.getAttribute("id_Orden").toString().trim());

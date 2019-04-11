@@ -1,7 +1,7 @@
 package Servlets.Orden;
 
 import DataAccesObject.Orden_DAO;
-import DataBase.Fecha;
+import DataBase.Util;
 import DataTransferObject.Det_Orden_DTO;
 import DataTransferObject.Est_Mat_DTO;
 import DataTransferObject.Orden_DTO;
@@ -86,9 +86,9 @@ public class ShowDetOrdRs extends HttpServlet {
                 + "<th >Precio Total</th>"
                 + "</tr>");
         out.println("<tr>"
-                + "<td >" + dto.getMontoPagado() + " Pesos</td>"
-                + "<td >" + dto.getMontoRestante() + " Pesos</td>"
-                + "<td >" + (dto.getMontoPagado() + dto.getMontoRestante()) + " Pesos</td>"
+                + "<td >" + Util.redondearDecimales(dto.getMontoPagado()) + " Pesos</td>"
+                + "<td >" + Util.redondearDecimales(dto.getMontoRestante()) + " Pesos</td>"
+                + "<td >" + Util.redondearDecimales(dto.getMontoPagado() + dto.getMontoRestante()) + " Pesos</td>"
                 + "</tr></table>");
         out.println("</div>");
 
@@ -136,13 +136,13 @@ public class ShowDetOrdRs extends HttpServlet {
                     out.println("<tr>"
                             + "<td >" + detor.getEstudio().getNombre_Estudio() + "</td>"
                             + "<td >" + mt.getClave() + "</td>"
-                            + "<td ><a class='btn btn-outline-light btm-sm' href=# onclick=OpenRep('PrintL2?LxOrdSald=" + Fecha.Encriptar(String.valueOf(dto.getId_Orden())) + "&IxDtOrd="+dto.getDet_Orden().indexOf(detor)+"&IxDtOrdMt="+detor.getEstudio().getMts().indexOf(mt)+"') >Imprimir Etiqueta</a></td>"
+                            + "<td ><a class='btn btn-outline-light btm-sm' href=# onclick=OpenRep('PrintL2?LxOrdSald=" + Util.Encriptar(String.valueOf(dto.getId_Orden())) + "&IxDtOrd="+dto.getDet_Orden().indexOf(detor)+"&IxDtOrdMt="+detor.getEstudio().getMts().indexOf(mt)+"') >Imprimir Etiqueta</a></td>"
                             + "</tr>");
                 });
             });
             out.println("</table></div>");
 
-            out.print("<a class='btn btn-success btn-lg btn-block' href=# onclick=OpenRep('PrintRes?LxOrdSald=" + Fecha.Encriptar(String.valueOf(dto.getId_Orden())) + "') >Imprimir Resultados</a><br>");
+            out.print("<a class='btn btn-success btn-lg btn-block' href=# onclick=OpenRep('PrintRes?LxOrdSald=" + Util.Encriptar(String.valueOf(dto.getId_Orden())) + "') >Imprimir Resultados</a><br>");
         } else {
             out.println("<div id='precio'>"
                     + "<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
@@ -156,13 +156,13 @@ public class ShowDetOrdRs extends HttpServlet {
                     out.println("<tr>"
                             + "<td >" + detor.getEstudio().getNombre_Estudio() + "</td>"
                             + "<td >" + mt.getClave() + " Pesos</td>"
-                            + "<td ><a class='btn btn-outline-light btm-sm' href=# onclick=OpenRep('PrintL2?LxOrdSald=" + Fecha.Encriptar(String.valueOf(dto.getId_Orden())) + "&IxDtOrd="+dto.getDet_Orden().indexOf(detor)+"&IxDtOrdMt="+detor.getEstudio().getMts().indexOf(mt)+"') >Imprimir Etiqueta</a></td>"
+                            + "<td ><a class='btn btn-outline-light btm-sm' href=# onclick=OpenRep('PrintL2?LxOrdSald=" + Util.Encriptar(String.valueOf(dto.getId_Orden())) + "&IxDtOrd="+dto.getDet_Orden().indexOf(detor)+"&IxDtOrdMt="+detor.getEstudio().getMts().indexOf(mt)+"') >Imprimir Etiqueta</a></td>"
                             + "</tr>");
                 });
             });
             out.println("</table></div>");
 
-            out.print("<a class='btn btn-success btn-lg btn-block' href=# onclick=OpenRep('PrintRes?LxOrdSald=" + Fecha.Encriptar(String.valueOf(dto.getId_Orden())) + "') >Imprimir Resultados</a><br>");
+            out.print("<a class='btn btn-success btn-lg btn-block' href=# onclick=OpenRep('PrintRes?LxOrdSald=" + Util.Encriptar(String.valueOf(dto.getId_Orden())) + "') >Imprimir Resultados</a><br>");
         }
         out.println("</div>");
         out.println("</div>");

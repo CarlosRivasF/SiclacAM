@@ -1,7 +1,7 @@
 package DataAccesObject;
 
 import DataBase.Conexion;
-import DataBase.Fecha;
+import DataBase.Util;
 import DataTransferObject.Pago_DTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,12 +18,12 @@ public class Pago_DAO {
     public int registrarPago(Pago_DTO pago) {
         int id_Pago = 0;
         Date fac = new Date();
-        Fecha f = new Fecha();
+        Util f = new Util();
         f.setHora(fac);
         String sql = "INSERT INTO pago VALUES(null,"
                 + "" + pago.getId_Orden() + ","
                 + "'" + pago.getT_Pago() + "',"
-                + "'" + pago.getMonto() + "',"
+                + "'" + Util.redondearDecimales(pago.getMonto()) + "',"
                 + "'" + pago.getFecha() + "',"
                 + "'" + pago.getHora() + "')";
         int rp;
@@ -35,7 +35,7 @@ public class Pago_DAO {
             }
             if (rp == 1) {
                 sql = "SELECT id_Pago from pago WHERE id_Orden=" + pago.getId_Orden() + " "
-                        + "and T_Pago='" + pago.getT_Pago() + "' AND monto='" + pago.getMonto() + "' AND fecha='" + pago.getFecha() + "' AND hora='" + pago.getHora() + "'";
+                        + "and T_Pago='" + pago.getT_Pago() + "' AND monto='" + Util.redondearDecimales(pago.getMonto()) + "' AND fecha='" + pago.getFecha() + "' AND hora='" + pago.getHora() + "'";
                 System.out.println(sql);
                 try (PreparedStatement pstm1 = con.prepareStatement(sql);
                         ResultSet rs = pstm1.executeQuery();) {
