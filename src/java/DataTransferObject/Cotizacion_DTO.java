@@ -4,9 +4,7 @@ import java.util.List;
 
 /**
  *
- * @author ZionSystems 
-Precio_Total
-Estado
+ * @author ZionSystems Precio_Total Estado
  */
 public class Cotizacion_DTO {
 
@@ -18,9 +16,9 @@ public class Cotizacion_DTO {
     protected String convenio;
     protected String Fecha_Cot;
     protected String Fecha_Exp;
-    protected Float Total;    
+    protected Float Total;
     protected List<Det_Cot_DTO> Det_Cot;
-    protected String Estado;    
+    protected String Estado;
 
     public int getId_Cotizacion() {
         return id_Cotizacion;
@@ -91,7 +89,11 @@ public class Cotizacion_DTO {
     }
 
     public void setTotal(Float Total) {
-        this.Total = Total;
+        if (Total < 0) {
+            this.Total=Float.parseFloat("0");
+        } else {
+            this.Total = Total;
+        }
     }
 
     public List<Det_Cot_DTO> getDet_Cot() {

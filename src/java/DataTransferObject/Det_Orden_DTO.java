@@ -43,7 +43,11 @@ public class Det_Orden_DTO {
     }
 
     public void setDescuento(Float descuento) {
-        this.descuento = descuento;
+        if (descuento < 0) {
+            this.descuento = Float.parseFloat("0");
+        } else {
+            this.descuento = descuento;
+        }
     }
 
     public String getFecha_Entrega() {
@@ -67,6 +71,10 @@ public class Det_Orden_DTO {
     }
 
     public void setSubtotal(Float Subtotal) {
-        this.Subtotal = Subtotal;
+        if (Subtotal < 0) {
+            this.Subtotal = Float.parseFloat("0");
+        } else {
+            this.Subtotal = Subtotal;
+        }
     }
 }

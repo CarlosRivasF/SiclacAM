@@ -42,7 +42,11 @@ public class Det_Cot_DTO {
     }
 
     public void setDescuento(Float Descuento) {
+        if (Descuento < 0) {
+            this.Descuento=Float.parseFloat("0");
+        } else {
         this.Descuento = Descuento;
+        }
     }
 
     public String getT_Entrega() {
@@ -58,7 +62,11 @@ public class Det_Cot_DTO {
     }
 
     public void setSubtotal(Float Subtotal) {
+         if (Subtotal < 0) {
+            this.Subtotal=Float.parseFloat("0");
+        } else {
         this.Subtotal = Subtotal;
+         }
     }
 
 }
