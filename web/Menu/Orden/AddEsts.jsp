@@ -75,26 +75,31 @@
                 <input style="text-align: center" type="text"  value="<%=Orden.getConvenio()%>"class="form-control" name="Convenio" id="Convenio" placeholder="Convenio" required>          
                 <%}%>            
             </div>
-            <div class="offset-1 col-7 col-sm-6 col-md-3 mb-3">
-                <div class="col-2 col-sm-2 col-md-2 mb-3 custom-control custom-radio custom-control-inline">
+        </div>
+        <div class="form-row">
+            <div class="offset-md-1 col-6 col-sm-6 col-md-3 mb-3">
+                <div class="col-6 col-sm-3 col-md-1 mb-3 custom-control custom-radio custom-control-inline">
                     <input id="prEsN" class="custom-control-input" name="precE" type="radio" required>
-                    <label class="custom-control-label mb-3"  for="prEsN">Normal</label>&nbsp;
-                </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <div class="col-2 col-sm-2 col-md-2 mb-3 custom-control custom-radio custom-control-inline">
+                    <label class="custom-control-label mb-3"  for="prEsN">Normal</label>
+                </div>
+                <div class="offset-md-1 col-6 col-sm-3 col-md-1 mb-3 custom-control custom-radio custom-control-inline">
                     <input id="prEsU" class="custom-control-input" name="precE" type="radio" required>
-                    <label class="custom-control-label" for="prEsU">Urgente</label>&nbsp;
+                    <label class="custom-control-label" for="prEsU">Urgente</label>
                 </div>  
-            </div>&nbsp;&nbsp;&nbsp;
-            <div class="col-5 col-sm-4 col-md-2 mb-3">
-                <input style="text-align: center" type="text" class="form-control" onkeypress="return soloNumeros(event)" name="descE" id="descE" placeholder="%" required>
             </div>
-            <div class="col-7 col-sm-12 col-md-5 mb-3">
+            <div class="col-6 col-sm-6 col-md-2 mb-3">
+                <input style="text-align: center" type="text" class="form-control" onkeypress="return soloNumeros(event)" name="descE" id="descE" placeholder="% Descuento" required>
+            </div>
+            <div class="col-6 col-sm-6 col-md-2 mb-3">
+                <input style="text-align: center" type="text" class="form-control" onkeypress="return soloNumeros(event)" name="scaE" id="scaE" placeholder="% Cargo Adicional" required>
+            </div>
+            <div class="col-6 col-sm-6 col-md-4 mb-3">
                 <input style="text-align: center" type="text" class="form-control" name="codeEst" onchange="AddEst(this, 'code');" id="codeEst" placeholder="Codigo de Estudio" required>
             </div>
         </div>            
         <div class="form-row">
             <!--Añadir Estudio por Busqueda-->
-            <div class="col-5 col-sm-5 col-md-5 mb-3">
+            <div class="col-12 col-sm-12 col-md-5 mb-3">
                 <label for="Tipo_Estudio" class="sr-only">Tipo de Estudio</label>
                 <select class="custom-select d-block w-100 form-control" id="Tipo_Estudio" name="Tipo_Estudio" required>
                     <option value="">Tipo de Estudio</option>   
@@ -106,7 +111,7 @@
                     Por favor seleccione un Tipo de Estudio.
                 </div>
             </div>
-            <div class="col-7 col-sm-7 col-md-7 mb-3">
+            <div class="col-12 col-sm-12 col-md-7 mb-3">
                 <label class="sr-only" >Buscar...</label>
                 <input style="text-align: center" type="text" class="form-control" onkeyup="test22(this, 'Orden');" name="clave_mat" id="clave_mat" placeholder="Buscar..." required>
                 <div class="invalid-feedback">

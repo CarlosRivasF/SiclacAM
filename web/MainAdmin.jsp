@@ -45,16 +45,23 @@
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/images/favicon.ico">
         <script src="${pageContext.request.contextPath}/js/Inter.js"></script>                
     </head>
-    <body style=" background: #666666">
+    <body class="bg-Labs">
         <div id="Main" style="color: white">
-            <nav class="navbar navbar-expand-md fixed-top navbar-light bg-light">
-                <strong><a class="navbar-brand"  style="color: #72d0f6" href=""><ins><%=empresa.getNombre_Empresa()%></ins></a></strong>
+            <nav class="navbar navbar-expand-md fixed-top navbar-light bg-light">                
                 <button class="navbar-toggler p-0 border-0" data-toggle="offcanvas">
                     <span><img src="${pageContext.request.contextPath}/images/tooglebtn.png"></span>
                 </button>
                 <div class="navbar-collapse offcanvas-collapse bg-light">
-                    <%if (sesion.getAttribute("nombre_unidad") != null) {%>
-                    <strong><a class="navbar-brand" href="MainAdmin.jsp" style="color: black"><%=sesion.getAttribute("nombre_unidad").toString()%></a></strong>
+                   <%if (sesion.getAttribute("clave_unidad") != null) {
+                            String clave = sesion.getAttribute("clave_unidad").toString().trim().toLowerCase();
+                            if (clave.length() > 3) {
+                                clave = clave.substring(0, 3);
+                            }
+                            clave = clave.substring(0, 1).toUpperCase() + clave.substring(1);
+                    %>
+                    <strong><a class="navbar-brand" href="MainAdmin.jsp" style="color: black"><%=clave%></a></strong>
+                        <%} else {%>
+                    <strong><a class="navbar-brand" href="MainAdmin.jsp" style="color: black"><%=empresa.getNombre_Empresa()%></a></strong>  
                         <%}%> 
                     <ul class="navbar-nav mr-auto">
                         <%for (Permiso_DTO permisos : lst) {%>

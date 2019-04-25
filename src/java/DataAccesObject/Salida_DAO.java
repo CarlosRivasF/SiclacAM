@@ -18,7 +18,7 @@ public class Salida_DAO {
         Date fac = new Date();
         Util f = new Util();
         f.setHora(fac);
-        String hora = f.getHoraMas(18);
+        String hora = f.getHoraMas(6);
         String sql = "INSERT INTO salida VALUES(null," + empleado + ",'" + f.getFechaActual() + "','" + hora + "')";
         try (Connection con = Conexion.getCon(); PreparedStatement pstm = con.prepareStatement(sql);) {
             pstm.executeUpdate();

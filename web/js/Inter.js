@@ -1427,7 +1427,7 @@ function test2(e) {
 function AddEst(x, mode) {
     if (mode === "code") {
         var s = false;
-        var ds = document.getElementById("descE").value;
+        var ds = document.getElementById("descE").value; 
         var Desc = " &Desc=" + ds;
         var Tprec;
         if (document.getElementById("prEsN").checked) {

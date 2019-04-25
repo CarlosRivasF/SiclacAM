@@ -63,6 +63,7 @@ public class AddEst extends HttpServlet {
 
         Estudio_DTO estudio = null;
         Float descuento;
+        Float sobrecargo;
         String tpr;
         Det_Orden_DTO detor;
         Float p;

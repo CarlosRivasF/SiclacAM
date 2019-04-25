@@ -81,6 +81,7 @@ public class Login extends HttpServlet {
                                 sesion.setAttribute("persona", usuario.getId_Persona());
                                 sesion.setAttribute("unidad", usuario.getId_Unidad());
                                 sesion.setAttribute("nombre_unidad", Un.getUnidad(usuario.getId_Unidad()).getNombre_Unidad());
+                                sesion.setAttribute("clave_unidad", Un.getUnidad(usuario.getId_Unidad()).getClave());
                                 sesion.setAttribute("rol", usuario.getRol());
                                 Empresa_DAO E = new Empresa_DAO();
                                 Empresa_DTO empresa = E.getEmpresaByUnidad(Integer.parseInt(sesion.getAttribute("unidad").toString()));
@@ -94,6 +95,7 @@ public class Login extends HttpServlet {
                             sesion.setAttribute("persona", usuario.getId_Persona());
                             sesion.setAttribute("unidad", usuario.getId_Unidad());
                             sesion.setAttribute("nombre_unidad", Un.getUnidad(usuario.getId_Unidad()).getNombre_Unidad());
+                            sesion.setAttribute("clave_unidad", Un.getUnidad(usuario.getId_Unidad()).getClave());
                             sesion.setAttribute("rol", usuario.getRol());
                             Empresa_DAO E = new Empresa_DAO();
                             Empresa_DTO empresa = E.getEmpresaByUnidad(Integer.parseInt(sesion.getAttribute("unidad").toString()));

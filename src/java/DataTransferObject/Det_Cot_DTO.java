@@ -6,12 +6,13 @@ package DataTransferObject;
  */
 public class Det_Cot_DTO {
 
-    protected int id_Det_Cot;
-    protected int id_Cotizacion;
-    protected Estudio_DTO Estudio;
-    protected Float Descuento;
-    protected String T_Entrega;
-    protected Float Subtotal;
+    private int id_Det_Cot;
+    private int id_Cotizacion;
+    private Estudio_DTO Estudio;
+    private Float Descuento;
+    private Float Sobrecargo;
+    private String T_Entrega;
+    private Float Subtotal;
 
     public int getId_Det_Cot() {
         return id_Det_Cot;
@@ -42,11 +43,15 @@ public class Det_Cot_DTO {
     }
 
     public void setDescuento(Float Descuento) {
-        if (Descuento < 0) {
-            this.Descuento=Float.parseFloat("0");
-        } else {
         this.Descuento = Descuento;
-        }
+    }
+
+    public Float getSobrecargo() {
+        return Sobrecargo;
+    }
+
+    public void setSobrecargo(Float Sobrecargo) {
+        this.Sobrecargo = Sobrecargo;
     }
 
     public String getT_Entrega() {
@@ -62,11 +67,6 @@ public class Det_Cot_DTO {
     }
 
     public void setSubtotal(Float Subtotal) {
-         if (Subtotal < 0) {
-            this.Subtotal=Float.parseFloat("0");
-        } else {
         this.Subtotal = Subtotal;
-         }
     }
-
 }

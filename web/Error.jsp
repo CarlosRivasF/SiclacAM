@@ -14,7 +14,7 @@
     <body style=" background: #666666">
         <div id="Main" style="color: white">
             <nav class="navbar navbar-expand-md fixed-top navbar-light bg-light">
-                <strong><a class="navbar-brand"  style="color: #72d0f6" href=""><ins>Ha ocurrido algo mal...</ins></a></strong>                
+                <strong><a class="navbar-brand"  style="color: #72d0f6" href="${pageContext.request.contextPath}"><ins>Ha ocurrido algo mal...</ins></a> (Volver a  iniciar)</strong>                
             </nav>                        
             <div><br>                  
                 <Strong><h2 style="text-align: center; color: #ffffff"><%exception.printStackTrace(response.getWriter()); %></h2></Strong>                                 

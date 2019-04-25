@@ -51,21 +51,20 @@ public class SearchEst extends HttpServlet {
                     + "<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
                     + "<tr class='bg-primary' style='color: black'>"
                     + "<th >Nombre de Estudio</th>"
-                    + "<th >Precio Normal</th>"
-                    + "<th >Precio Urgente</th>"
-                    + "<th >% de Desc.</th>"
+                    + "<th >$ Normal</th>"
+                    + "<th >$ Urgente</th>"
+                    + "<th >% de Desc</th>"
+                    + "<th >% de Carg</th>"
                     + "<th >Añadir</th>"
                     + "</tr>");
             String busq = request.getParameter("busq");
             int tipoE = Integer.parseInt(request.getParameter("tipoE").trim());
-            Boolean res=false;
             for (Estudio_DTO dto : ests) {
                 if (dto.getId_Tipo_Estudio() == tipoE) {
                     String[] parts = dto.getNombre_Estudio().split(" ");
                     if (parts[0].toUpperCase().contains(busq.toUpperCase().trim()) || dto.getClave_Estudio().toUpperCase().trim().contains(busq.toUpperCase().trim())
                             || dto.getNombre_Estudio().toUpperCase().trim().contains(busq.toUpperCase().trim())
                             || dto.getUtilidad().toUpperCase().trim().contains(busq.toUpperCase().trim())) {
-                        res=true;
                         out.println("<tr>"
                                 + "<td >" + dto.getNombre_Estudio() + "</td>"
                                 + "<td ><div class='col mb-3 custom-control custom-radio custom-control-inline'>"
@@ -76,13 +75,13 @@ public class SearchEst extends HttpServlet {
                                 + "<input id='PreU" + ests.indexOf(dto) + "' class='custom-control-input' name='prec' type='radio' required>"
                                 + "<label class='custom-control-label mb-3'for='PreU" + ests.indexOf(dto) + "'>" + dto.getPrecio().getPrecio_U() + "</label>"
                                 + "</div></td>"
-                                + "<td><input style='text-align: center' type='number' class='form-control' onkeypress='return soloNumeros(event)' name='desc" + ests.indexOf(dto) + "' id='desc" + ests.indexOf(dto) + "' placeholder='%' required=''></td>"
+                                + "<td><input style='text-align: center' type='number' class='form-control' onkeypress='return soloNumeros(event)' name='desc" + ests.indexOf(dto) + "' id='desc" + ests.indexOf(dto) + "' placeholder='Descuento' required=''></td>"
+                                + "<td><input style='text-align: center' type='number' class='form-control' onkeypress='return soloNumeros(event)' name='desc" + ests.indexOf(dto) + "' id='sca" + ests.indexOf(dto) + "' placeholder='Sobrecargo' required=''></td>"
                                 + "<td><button href=# class='btn btn-default btn-sm' onclick=" + function + "(" + ests.indexOf(dto) + ",'lst') ><span><img src='images/mas.png'></span></button></td>"
                                 + "</tr>");
                     }
                 }
-            }
-            
+            }            
             out.println("</table>");
             out.println("</div>");
         }
