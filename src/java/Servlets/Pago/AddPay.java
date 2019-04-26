@@ -40,7 +40,7 @@ public class AddPay extends HttpServlet {
         pago.setT_Pago(request.getParameter("Tipo_Pago").trim());
         pago.setMonto(Float.parseFloat(request.getParameter("monto").trim()));
         pago.setFecha(f.getFechaActual());
-        pago.setHora(f.getHoraMas(6));
+        pago.setHora(f.getHoraMas(Util.getHrBD()));
         P.registrarPago(pago);        
 
         Float MontoPagado = Orden.getMontoPagado();

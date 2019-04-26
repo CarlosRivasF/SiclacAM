@@ -53,7 +53,7 @@ public class CastToOrden extends HttpServlet {
             Persona_DTO por = P.getPersona(Integer.parseInt(sesion.getAttribute("persona").toString().trim()));
             Orden.setEmpleado(por);
             Orden.setFecha(f.getFechaActual());
-            Orden.setHora(f.getHoraMas(6));
+            Orden.setHora(f.getHoraMas(Util.getHrBD()));
             Orden.setMontoRestante(Float.parseFloat("0"));
             Orden.setMontoPagado(Float.parseFloat("0"));
             Orden.setEstado("Pendiente");

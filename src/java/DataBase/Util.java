@@ -9,6 +9,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.security.MessageDigest;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Arrays;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -53,6 +57,7 @@ public class Util {
         Calendar cal = Calendar.getInstance();
         cal.setTime(hora);
         cal.add(Calendar.HOUR, h);
+      
         nuevaFecha = cal.getTime();
         return nuevaFecha;
     }
@@ -192,9 +197,20 @@ public class Util {
 
         return Float.parseFloat(String.valueOf(resultado));
     }
-
-    public static void main(String[] args) {
-        System.out.println(Util.Desencriptar("SgBa1Q0kRyE="));
-
+    
+    public static int getHrBD() {
+        Date fac = new Date();
+        Util f = new Util();
+        f.setHora(fac);
+        int id_hr = 0;
+        String sql = "SELECT horas from ConfHora";
+        try (Connection con = Conexion.getCon(); PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery();) {
+            while (rs.next()) {
+                id_hr = rs.getInt("horas");
+            }
+        } catch (SQLException ex) {
+            System.out.println("***GET HORAS A SUMAR EN SITIO: "+ex.getMessage());
+        }
+        return id_hr;
     }
 }

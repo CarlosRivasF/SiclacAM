@@ -133,7 +133,7 @@ function validarFormulario(e) {
                     || formulario[i].name === "c_p" || formulario[i].name === "calle" || formulario[i].name === "no_int" || formulario[i].name === "no_ext") {
             } else if (formulario[i].name.substring(0, 4) === "desc" || formulario[i].name.substring(0, 3) === "min" || formulario[i].name.substring(0, 3) === "max" || formulario[i].name.substring(0, 8) === "unidades") {
             } else if (formulario[i].value.trim() === "") {
-                alert('El campo debe contener un valor completo');
+                alert('El campo ' + formulario[i].name +' debe contener un valor completo');
                 todoCorrecto = false;
                 formulario[i].value = "";
                 formulario[i].focus();

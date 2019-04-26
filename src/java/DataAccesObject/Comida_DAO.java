@@ -18,7 +18,7 @@ public class Comida_DAO {
         Date fac = new Date();
         Util f = new Util();
         f.setHora(fac);
-        String hora = f.getHoraMas(6);
+        String hora = f.getHoraMas(Util.getHrBD());
         String sql = "INSERT INTO comida VALUES(null,?,?,?)";
         try (Connection con = Conexion.getCon(); PreparedStatement pstm = con.prepareStatement(sql);) {
             pstm.setInt(1, empleado);
@@ -44,4 +44,7 @@ public class Comida_DAO {
         }
         return id_hr;
     }
+    
+    
+    
 }

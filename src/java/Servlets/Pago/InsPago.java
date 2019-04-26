@@ -44,7 +44,7 @@ public class InsPago extends HttpServlet {
         pago.setT_Pago(request.getParameter("Tipo_Pago").trim());
         pago.setMonto(Float.parseFloat(request.getParameter("monto").trim()));
         pago.setFecha(f.getFechaActual());
-        pago.setHora(f.getHoraMas(6));
+        pago.setHora(f.getHoraMas(Util.getHrBD()));
 
         Float MontoPagado = Util.redondearDecimales(Orden.getMontoPagado());
         Float MontoRestante = Util.redondearDecimales(Orden.getMontoRestante());
