@@ -3,7 +3,6 @@
     Created on : 21/02/2018, 04:07:14 PM
     Author     : ZionS
 --%>
-<%@ page errorPage = "Error.jsp" %>
 <%@page import="DataTransferObject.Tipo_Estudio_DTO"%>
 <%@page import="DataAccesObject.Tipo_Estudio_DAO"%>
 <%@page import="DataTransferObject.Empresa_DTO"%>
@@ -42,13 +41,13 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/offcanvas.css">
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/images/favicon.ico">
     </head>
-    <body class="bg-Labs">
+    <body style=" background: #666666">
         <div id="Main" style="color: white">
             <nav class="navbar navbar-expand-md fixed-top navbar-light bg-light">                
-                <button class="navbar-toggler p-0 border-0" data-toggle="offcanvas">
+                <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
                     <span><img src="${pageContext.request.contextPath}/images/tooglebtn.png"></span>
                 </button>
-                <div class="navbar-collapse offcanvas-collapse bg-light">
+                <div class="navbar-collapse offcanvas-collapse bg-light" id="navbarsExampleDefault">
                     <%if (sesion.getAttribute("clave_unidad") != null) {
                             String clave = sesion.getAttribute("clave_unidad").toString().trim().toLowerCase();
                             if (clave.length() > 3) {
@@ -87,187 +86,147 @@
                     <nav class="nav nav-underline">
                         <a onclick="verRep('CardEstudios');" class="nav-link" href="#/ESTUDIOS">ESTUDIOS</a>
                         <a onclick="verRep('CardOrdenes');" class="nav-link" href="#/ÓRDENES">ÓRDENES </a>
-                        <a class="nav-link" href="#/RESULTADOS">RESULTADOS </a>
+                        <a onclick="verRep('CardResultados');" class="nav-link" href="#/RESULTADOS">RESULTADOS </a>
                         <a class="nav-link" href="#/CORTES">CORTES </a>      
                         <a class="nav-link" href="#/PARTICIPACIONES">PARTICIPACIONES </a>
                     </nav>
                 </div>
                 <script>
-                    var vITpoEto = "0";
-                    function ITpoEto() {
-                        if (document.getElementById("Tipo_Estudio1").value !== "0") {
-                            vITpoEto = "?ITpoEto=" + document.getElementById("Tipo_Estudio1").value;
-                        }
-                        return vITpoEto;
-                    }
-                    function ITpoEto2() {
-                        if (document.getElementById("Tipo_Estudio2").value !== "0") {
-                            vITpoEto = "?ITpoEto=" + document.getElementById("Tipo_Estudio2").value;
-                        }
-                        return vITpoEto;
-                    }
-
-                    function OpenRep(url) {
-                        if (vITpoEto !== "0") {
-                            window.open(url);
-                        } else {
-                            alert("Elige un Tipo de Estudio a Consultar");
-                        }
-                    }
-
-                    function verRep(id) {
-                        var IDs = ['CardEstudios', 'CardOrdenes'];
-                        for (var i = 0; i < IDs.length; i++) {
-                            document.getElementById(IDs[i]).style.display = "none";
-                        }
-                        document.getElementById(id).style.display = "block";
-                    }
+                    
                 </script>
                 <div class="container-fluid"><br>
                     <Strong><h2 style="text-align: center; color: #ffffff"><%=msg%></h2></Strong>
-                    <!--CardEstudios-->
-                    <div id="CardEstudios" class="col-sm-12 col-md-12 col-lg-12 mb-3" style="display:none">
-                        <div class="form-row">
-                            <div class="card col-sm-12 col-md-5 mb-3" style="background: #6c757d">
+                    <!--CardEstudios-->                    
+                    <div id="CardEstudios" class="form-row" style="display:none">                        
+                        <div class="form-row col-md-12">
+                            <div class="card col-md-5 mb-3" style="background: darkgrey">
                                 <h5 class="card-header">Catalogo de Esudios de la Unidad</h5>
-                                <div class="card-body form-row col-md-12 mb-3">
-                                    <div class="col-12 col-sm-12 col-md-6 mb-3">
-                                        <a href="#" onclick="OpenRep('PrinCatXLS');" class="btn btn-light">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
+                                <div class="card-body form-row col-md-12">
+                                    <div class="col-md-6 mb-3">
+                                        <a href="#" onclick="OpenRep('PrinCatXLS');" class="btn btn-light btn-block">Reporte en Excel  <span><img src='images/Excel.png'></span></a>    
                                     </div>
-                                    <div class="col-12 col-sm-12 col-md-6  mb-3">
-                                        <button onclick="OpenRep('PrintCatPDF');" class="btn btn-light">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></button>
+                                    <div class="col-md-6 mb-3">
+                                        <a href="#" onclick="OpenRep('PrintCatPDF' + ITpoEto());" class="btn btn-light btn-block">Reporte en PDF<span><img src='images/Pdf.png'></span></a>
                                     </div>
                                 </div>
                             </div>
                             <div class="offset-md-1"></div>
-                            <div class="card col-sm-12 col-md-6 mb-3" style="background: #6c757d">
+                            <div class="card col-md-6 mb-3" style="background: darkgrey">
                                 <h5 class="card-header">Catalogo de Esudios a Detalle de la Unidad</h5>
-                                <div class="card-body form-row col-md-12 mb-3">
-                                    <div class="col-12 col-sm-12 col-md-6 mb-3">
-                                        <a href="#" onclick="OpenRep('PrinCatXLS?DetCat=Ys');" class="btn btn-light">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
+                                <div class="card-body form-row col-md-12">                                    
+                                    <div class="col-md-6 mb-3">
+                                        <a href="#" onclick="OpenRep('PrinCatXLS?DetCat=Ys');" class="btn btn-light btn-block">Reporte en Excel<span><img src='images/Excel.png'/></span></a>
                                     </div>
-                                    <div class="col-12 col-sm-12 col-md-6 mb-3"></div>
-                                    <a href="#" onclick="OpenRep('PrintCatPDF?DetCat=Ys');" class="btn btn-light">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></a>
-                                </div>     
+                                    <div class="col-md-6 mb-3">
+                                        <a href="#" onclick="OpenRep('PrintCatPDF?DetCat=Ys');" class="btn btn-light btn-block">Reporte en PDF<span><img src='images/Pdf.png'/></span></a>
+                                    </div>                                    
+                                </div>    
                             </div>
-                            <div class="form-row" >
-                                <div class="card col-sm-12 col-md-5 mb-3" style="background: #6c757d">
-                                    <h6 class="card-header">Catalogo de Esudios de la Unidad (Un solo Tipo de Estudio)</h6>
-                                    <div class="card-body form-row col-md-12 mb-3">
-                                        <div class="card-body form-row col-md-12 mb-3">
-                                            <label for="Tipo_Estudio" class="sr-only">Tipo de Estudio</label><br>
-                                            <select class="custom-select d-block w-100 form-control-sm" id="Tipo_Estudio1" name="Tipo_Estudio1" required>
-                                                <option value="0">Tipo de Estudio</option>   
-                                                <%for (Tipo_Estudio_DTO dto : tipos) {%>
-                                                <option value="<%=dto.getId_Tipo_Estudio()%>"><%=dto.getNombre_Tipo_Estudio().toUpperCase()%></option> 
-                                                <%}%>
-                                            </select>                      
+                            <div class="card col-md-5 mb-3" style="background: darkgrey">
+                                <h6 class="card-header">Catalogo de Esudios de la Unidad (Un solo Tipo de Estudio)</h6>
+                                <div class="card-body form-row col-md-12 mb-3">
+                                    <div class="form-group col-md-12 mb-3">
+                                        <label for="Tipo_Estudio1" class="sr-only">Tipo de Estudio</label><br>
+                                        <select class="custom-select d-block w-100 form-control-sm" id="Tipo_Estudio1" name="Tipo_Estudio1" required>
+                                            <option value="0">Tipo de Estudio</option>   
+                                            <%for (Tipo_Estudio_DTO dto : tipos) {%>
+                                            <option value="<%=dto.getId_Tipo_Estudio()%>"><%=dto.getNombre_Tipo_Estudio().toUpperCase()%></option> 
+                                            <%}%>
+                                        </select>                                   
+                                    </div>
+                                    <div class="form-row col-md-12 mb-3">
+                                        <div class="col-md-6 mb-3">
+                                            <a href="#" onclick="OpenRep('PrinCatXLS' + ITpoEto());" class="btn btn-light btn-block">Reporte en Excel<span><img src='images/Excel.png'></span></a>
                                         </div>
-                                        <a href="#" onclick="OpenRep('PrinCatXLS' + ITpoEto());" class="btn btn-light">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
-                                        <a href="#" onclick="OpenRep('PrintCatPDF' + ITpoEto());" class="btn btn-light">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></a>
+                                        <div class="col-md-6 mb-3">
+                                            <a href="#" onclick="OpenRep('PrintCatPDF' + ITpoEto());" class="btn btn-light btn-block">Reporte en PDF<span><img src='images/Pdf.png'></span></a>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="offset-1"></div>
-                                <div class="card" class="col-md-6 mb-3" style="background: #6c757d">
-                                    <h6 class="card-header">Catalogo de Esudios a Detalle de la Unidad (Un solo Tipo de Estudio)</h6>
-                                    <div class="card-body">
-                                        <label for="Tipo_Estudio" class="sr-only">Tipo de Estudio</label><br>
+                            </div>
+                            <div class="offset-1"></div>
+                            <div class="card col-md-6 mb-3" style="background: darkgrey">
+                                <h6 class="card-header">Catalogo de Esudios a Detalle de la Unidad (Un solo Tipo de Estudio)</h6>
+                                <div class="card-body form-row col-md-12 mb-3">
+                                    <div class="form-group col-md-12 mb-3">
+                                        <label for="Tipo_Estudio2" class="sr-only">Tipo de Estudio</label><br>
                                         <select class="custom-select d-block w-100 form-control-sm" id="Tipo_Estudio2" name="Tipo_Estudio2" required>
                                             <option value="0">Tipo de Estudio</option>   
                                             <%for (Tipo_Estudio_DTO dto : tipos) {%>
                                             <option value="<%=dto.getId_Tipo_Estudio()%>"><%=dto.getNombre_Tipo_Estudio().toUpperCase()%></option> 
                                             <%}%>
                                         </select>
-                                        <div class="invalid-feedback" style="width: 100%;">
-                                            Por favor seleccione un Tipo de Estudio.
+                                    </div>
+                                    <div class="form-row col-md-12 mb-3">
+                                        <div class="col-md-6 mb-3">
+                                            <a href="#" onclick="OpenRep('PrinCatXLS' + ITpoEto2() + '&DetCat=Ys');" class="btn btn-light btn-block">Reporte en Excel<span><img src='images/Excel.png'></span></a>
                                         </div>
-                                        <a href="#" onclick="OpenRep('PrinCatXLS' + ITpoEto2() + '&DetCat=Ys');" class="btn btn-light">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
-                                        <a href="#" onclick="OpenRep('PrintCatPDF' + ITpoEto2() + '&DetCat=Ys');" class="btn btn-light">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></a>
+                                        <div class="col-md-6 mb-3">
+                                            <a href="#" onclick="OpenRep('PrintCatPDF' + ITpoEto2() + '&DetCat=Ys');" class="btn btn-light btn-block">Reporte en PDF<span><img src='images/Pdf.png'></span></a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!--CardOrdenes-->
-                    <div id="CardOrdenes" class="col-sm-12 col-md-12 col-lg-12 mb-3" style="display:none">
-                        <div class="form-row" class="col-sm-11 col-md-11 col-lg-11 mb-3">
-                            <div class="card col-sm-12 col-md-5 mb-3" style="background: #6c757d">
-                                <h5 class="card-header">Catalogo de Esudios de la Unidad</h5>
+                    <div id="CardOrdenes" class="form-row" style="display:none">
+                        <div class="form-row  col-md-12">
+                            <div class="card form-row col-md-6  mb-3" style="background: darkgrey">
+                                <h6 class="card-header">Reporte General de Ordenes de la Unidad</h6>
                                 <div class="card-body">
-                                    <div class="form-row">   
-                                        <div class="col mb-3">
-                                            <label>Fecha de Ingreso</label>
-                                            <input style="text-align: center" type="date" class="form-control" name="fechaIng" id="fechaIng" required>            
-                                            <div class="invalid-feedback" style="width: 100%;">
-                                                Fecha no valida.
-                                            </div>
+                                    <div class="form-row col-md-12 mb-3">
+                                        <div class="form-group col-md-6 mb-3">
+                                            <label style="text-align: center" for="fechaI">Fecha Inicio</label>
+                                            <input type="date" class="form-control" name="fechaI1Ord" id="fechaI1Ord" required>
                                         </div>
-                                        <div class="col mb-3">
-                                            <label>Fecha de Ingreso</label>
-                                            <input style="text-align: center" type="date" class="form-control" name="fechaIng" id="fechaIng" required>            
-                                            <div class="invalid-feedback" style="width: 100%;">
-                                                Fecha no valida.
-                                            </div>
+                                        <div class="form-group col-md-6 mb-3">
+                                            <label style="text-align: center" for="fechaF">Fecha Inicio</label>
+                                            <input type="date" class="form-control" name="fechaF1Ord" id="fechaF1Ord" required>
                                         </div>
-                                    </div><div class="form-row">   
-                                        <div class="col mb-3">  
-                                            <a href="#" onclick="OpenRep('PrinCatXLS');" class="btn btn-sm btn-light btn-block">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
+                                    </div>                                    
+                                    <div class="form-row col-md-12" >
+                                        <div class="form col-md-6 mb-3">
+                                            <button style="text-align: center" disabled="" onclick="OpenRep('');" class="btn btn-light btn-block">Reporte Excel  <span><img src='images/Excel.png' class="img-fluid" alt="Responsive image"></span></button>
                                         </div>
-                                        <div class="col mb-3">
-                                            <button onclick="OpenRep('PrintCatPDF');" class="btn btn-sm btn-light btn-block">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></button>
+                                        <div class="form col-md-6 mb-3">
+                                            <button style="text-align: center" onclick="OpenRep('PrintReporteOrders' + fchROrdGrl());" class="btn btn-light btn-block">Reporte PDF  <span><img src='images/Pdf.png' class="img-fluid" alt="Responsive image"></span></button>
                                         </div>
-                                    </div>
+                                    </div>                                    
                                 </div>
                             </div>
-                            <div class="offset-md-1"></div>
-                            <!--***********************************************************************************-->
-                            <div class="card col-sm-12 col-md-5 mb-3" style="background: #6c757d">
-                                <h5 class="card-header">Catalogo de Esudios a Detalle de la Unidad</h5>
-                                <div class="card-body">
-                                    <a href="#" onclick="OpenRep('PrinCatXLS?DetCat=Ys');" class="btn btn-light">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
-                                    <a href="#" onclick="OpenRep('PrintCatPDF?DetCat=Ys');" class="btn btn-light">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></a>
+                            <div class="offset-md-1"></div>                                              
+                            <div class="card col-md-5 mb-3" style="background: darkgrey">
+                                    <h6 class="card-header">Estadistica de Estudios en Ordenes <button><span><img src='images/UpdChart.png'></span></button></h6>
+                                        <div class="card-body form-row col-md-12 mb-3">
+                                            <!-- Grafica de Estudios-->
+                                        </div>
                                 </div>
-                            </div>      
-                        </div>              
-
-                        <div class="form-row" class="col-sm-12 col-md-6 col-lg-6 mb-3">
-                            <div class="card" style="background: #6c757d">
-                                <h6 class="card-header">Catalogo de Esudios de la Unidad (Un solo Tipo de Estudio)</h6>
+                        </div>
+                    </div>         
+                    <!--CardResultados-->
+                    <div id="CardResultados" class="form-row" style="display:none">
+                        <div class="form-row  col-12">
+                            <div class="card form-row col-12  mb-3" style="background: darkgrey">
+                                <h6 class="card-header">Buscar Resultados De Órden</h6>
                                 <div class="card-body">
-                                    <label for="Tipo_Estudio" class="sr-only">Tipo de Estudio</label><br>
-                                    <select class="custom-select d-block w-100 form-control-sm" id="Tipo_Estudio1" name="Tipo_Estudio1" required>
-                                        <option value="0">Tipo de Estudio</option>   
-                                        <%for (Tipo_Estudio_DTO dto : tipos) {%>
-                                        <option value="<%=dto.getId_Tipo_Estudio()%>"><%=dto.getNombre_Tipo_Estudio().toUpperCase()%></option> 
-                                        <%}%>
-                                    </select>
-                                    <div class="invalid-feedback" style="width: 100%;">
-                                        Por favor seleccione un Tipo de Estudio.
-                                    </div>
-                                    <a href="#" onclick="OpenRep('PrinCatXLS' + ITpoEto());" class="btn btn-light">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
-                                    <a href="#" onclick="OpenRep('PrintCatPDF' + ITpoEto());" class="btn btn-light">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></a>
-                                </div>
-                            </div>
-                            <div class="offset-1"></div>
-                            <div class="card" class="col-md-6 mb-3" style="background: #6c757d">
-                                <h6 class="card-header">Catalogo de Esudios a Detalle de la Unidad (Un solo Tipo de Estudio)</h6>
-                                <div class="card-body">
-                                    <label for="Tipo_Estudio" class="sr-only">Tipo de Estudio</label><br>
-                                    <select class="custom-select d-block w-100 form-control-sm" id="Tipo_Estudio2" name="Tipo_Estudio2" required>
-                                        <option value="0">Tipo de Estudio</option>   
-                                        <%for (Tipo_Estudio_DTO dto : tipos) {%>
-                                        <option value="<%=dto.getId_Tipo_Estudio()%>"><%=dto.getNombre_Tipo_Estudio().toUpperCase()%></option> 
-                                        <%}%>
-                                    </select>
-                                    <div class="invalid-feedback" style="width: 100%;">
-                                        Por favor seleccione un Tipo de Estudio.
-                                    </div>
-                                    <a href="#" onclick="OpenRep('PrinCatXLS' + ITpoEto2() + '&DetCat=Ys');" class="btn btn-light">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
-                                    <a href="#" onclick="OpenRep('PrintCatPDF' + ITpoEto2() + '&DetCat=Ys');" class="btn btn-light">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></a>
+                                    <div class="form-row col-12 col-md-12 mb-3">
+                                        <div class="form-group col-12 col-md-6 mb-3">                                            
+                                            <input type="text" class="form-control" name="fechaI1Ord" id="fechaI1Ord" placeholder="Folio de Órden" required>
+                                        </div>
+                                        <div class="form-group col-12 col-md-6 mb-3">
+                                            <button style="text-align: center" disabled="" onclick="OpenRep('PrintReporteOrders' + fchROrdGrl());" class="btn btn-light btn-block">Reporte PDF  <span><img src='images/Pdf.png' class="img-fluid" alt="Responsive image"></span></button>
+                                        </div>
+                                    </div>                                    
+                                    <div class="form-row col-12" >
+                                        <div class="form col-12 mb-3" style="align-items:  center">
+                                            Espacio de Respuesta
+                                        </div>                                       
+                                    </div>                                    
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>         
                 </div>
             </div>
         </div>

@@ -129,11 +129,11 @@ function validarFormulario(e) {
                 e.disabled = false;
                 break;
             }//
-            if (formulario[i].name.substring(0,7) === "muestra" ||formulario[i].name === "muestra" || formulario[i].name.substring(0,7) === "unidad" || formulario[i].name === "unidad" || formulario[i].name === "desc" || formulario[i].name === "min" || formulario[i].name === "max" || formulario[i].name === "unidades" || formulario[i].name === "telefono" || formulario[i].name === "celular"
+            if (formulario[i].name.substring(0, 7) === "muestra" || formulario[i].name === "muestra" || formulario[i].name.substring(0, 7) === "unidad" || formulario[i].name === "unidad" || formulario[i].name === "desc" || formulario[i].name === "min" || formulario[i].name === "max" || formulario[i].name === "unidades" || formulario[i].name === "telefono" || formulario[i].name === "celular"
                     || formulario[i].name === "c_p" || formulario[i].name === "calle" || formulario[i].name === "no_int" || formulario[i].name === "no_ext") {
             } else if (formulario[i].name.substring(0, 4) === "desc" || formulario[i].name.substring(0, 3) === "min" || formulario[i].name.substring(0, 3) === "max" || formulario[i].name.substring(0, 8) === "unidades") {
             } else if (formulario[i].value.trim() === "") {
-                alert('El campo ' + formulario[i].name +' debe contener un valor completo');
+                alert('El campo ' + formulario[i].name + ' debe contener un valor completo');
                 todoCorrecto = false;
                 formulario[i].value = "";
                 formulario[i].focus();
@@ -1427,7 +1427,7 @@ function test2(e) {
 function AddEst(x, mode) {
     if (mode === "code") {
         var s = false;
-        var ds = document.getElementById("descE").value; 
+        var ds = document.getElementById("descE").value;
         var Desc = " &Desc=" + ds;
         var Tprec;
         if (document.getElementById("prEsN").checked) {
@@ -1489,7 +1489,7 @@ function AddEst(x, mode) {
 }
 function AddEstCot(x, mode) {
     if (mode === "code") {
-                var s = false;
+        var s = false;
         var ds = document.getElementById("descE").value;
         var Desc = " &Desc=" + ds;
         var Tprec;
@@ -2560,27 +2560,35 @@ function UplResbydFolio(e) {
 
 
 
+var vITpoEto = "";
+var fechasRep = "";
 function ITpoEto() {
-    var ITpoEto = "";
-    if (document.getElementById("Tipo_Estudio1").value !== 0) {
-        ITpoEto = "?ITpoEto=" + document.getElementById("Tipo_Estudio1").value;
-    } else {
-        alert("Elige un Tipo de Estudio a Consultar");
-        document.getElementById("Tipo_Estudio1").focus();
+    if (document.getElementById("Tipo_Estudio1").value !== "0") {
+        vITpoEto = "?ITpoEto=" + document.getElementById("Tipo_Estudio1").value;
     }
-    return ITpoEto;
+    return vITpoEto;
 }
-
-function OpenRep(url) {
-    window.open(url);
+function ITpoEto2() {
+    if (document.getElementById("Tipo_Estudio2").value !== "0") {
+        vITpoEto = "?ITpoEto=" + document.getElementById("Tipo_Estudio2").value;
+    }
+    return vITpoEto;
 }
-
+function fchROrdGrl() {
+    if (document.getElementById("fechaI1Ord").value !== "" & document.getElementById("fechaF1Ord").value !== "") {
+        fechasRep = "?fchaI=" + document.getElementById("fechaI1Ord").value + " &fchaF=" + document.getElementById("fechaF1Ord").value;
+        ;
+    }
+    return fechasRep;
+}
+function OpenRep(url) {    
+        window.open(url);
+}
 function verRep(id) {
-    var IDs = ['CardEstudios', 'CardOrdenes'];
+    var IDs = ['CardEstudios', 'CardOrdenes', 'CardResultados'];
     for (var i = 0; i < IDs.length; i++) {
         document.getElementById(IDs[i]).style.display = "none";
     }
     document.getElementById(id).style.display = "block";
 }
-
 //CancelOrd(id)

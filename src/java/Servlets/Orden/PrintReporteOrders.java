@@ -48,8 +48,8 @@ public class PrintReporteOrders extends HttpServlet {
         HttpSession sesion = request.getSession();
         int id_Unidad;
         id_Unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
-        String f1 = request.getParameter("fI").trim();
-        String f2 = request.getParameter("fF").trim();
+        String f1 = request.getParameter("fchaI").trim();
+        String f2 = request.getParameter("fchaF").trim();
         try {
             List<Orden_DTO> Reporte;
             Orden_DAO O = new Orden_DAO();

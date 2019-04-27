@@ -28,6 +28,7 @@ public class Util {
     }
 
     public String getFechaActual() {
+        Date hora =new Date();
         SimpleDateFormat formateador = new SimpleDateFormat("YYYY-MM-dd");
         return formateador.format(hora);
     }
