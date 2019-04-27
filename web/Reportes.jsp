@@ -187,95 +187,96 @@
                                 </div>
                             </div>
                         </div>
-                        <!--CardOrdenes-->
-                        <div id="CardOrdenes" class="col-sm-12 col-md-12 col-lg-12 mb-3" style="display:none">
-                            <div class="form-row" class="col-sm-11 col-md-11 col-lg-11 mb-3">
-                                <div class="card col-sm-12 col-md-5 mb-3" style="background: #6c757d">
-                                    <h5 class="card-header">Catalogo de Esudios de la Unidad</h5>
-                                    <div class="card-body">
-                                        <div class="form-row">   
-                                            <div class="col mb-3">
-                                                <label>Fecha de Ingreso</label>
-                                                <input style="text-align: center" type="date" class="form-control" name="fechaIng" id="fechaIng" required>            
-                                                <div class="invalid-feedback" style="width: 100%;">
-                                                    Fecha no valida.
-                                                </div>
+                    </div>
+                    <!--CardOrdenes-->
+                    <div id="CardOrdenes" class="col-sm-12 col-md-12 col-lg-12 mb-3" style="display:none">
+                        <div class="form-row" class="col-sm-11 col-md-11 col-lg-11 mb-3">
+                            <div class="card col-sm-12 col-md-5 mb-3" style="background: #6c757d">
+                                <h5 class="card-header">Catalogo de Esudios de la Unidad</h5>
+                                <div class="card-body">
+                                    <div class="form-row">   
+                                        <div class="col mb-3">
+                                            <label>Fecha de Ingreso</label>
+                                            <input style="text-align: center" type="date" class="form-control" name="fechaIng" id="fechaIng" required>            
+                                            <div class="invalid-feedback" style="width: 100%;">
+                                                Fecha no valida.
                                             </div>
-                                            <div class="col mb-3">
-                                                <label>Fecha de Ingreso</label>
-                                                <input style="text-align: center" type="date" class="form-control" name="fechaIng" id="fechaIng" required>            
-                                                <div class="invalid-feedback" style="width: 100%;">
-                                                    Fecha no valida.
-                                                </div>
+                                        </div>
+                                        <div class="col mb-3">
+                                            <label>Fecha de Ingreso</label>
+                                            <input style="text-align: center" type="date" class="form-control" name="fechaIng" id="fechaIng" required>            
+                                            <div class="invalid-feedback" style="width: 100%;">
+                                                Fecha no valida.
                                             </div>
-                                        </div><div class="form-row">   
-                                            <div class="col mb-3">  
-                                                <a href="#" onclick="OpenRep('PrinCatXLS');" class="btn btn-sm btn-light btn-block">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
-                                            </div>
-                                            <div class="col mb-3">
-                                                <button onclick="OpenRep('PrintCatPDF');" class="btn btn-sm btn-light btn-block">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></button>
-                                            </div>
+                                        </div>
+                                    </div><div class="form-row">   
+                                        <div class="col mb-3">  
+                                            <a href="#" onclick="OpenRep('PrinCatXLS');" class="btn btn-sm btn-light btn-block">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
+                                        </div>
+                                        <div class="col mb-3">
+                                            <button onclick="OpenRep('PrintCatPDF');" class="btn btn-sm btn-light btn-block">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></button>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="offset-md-1"></div>
-                                <!--***********************************************************************************-->
-                                <div class="card col-sm-12 col-md-5 mb-3" style="background: #6c757d">
-                                    <h5 class="card-header">Catalogo de Esudios a Detalle de la Unidad</h5>
-                                    <div class="card-body">
-                                        <a href="#" onclick="OpenRep('PrinCatXLS?DetCat=Ys');" class="btn btn-light">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
-                                        <a href="#" onclick="OpenRep('PrintCatPDF?DetCat=Ys');" class="btn btn-light">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></a>
-                                    </div>
-                                </div>      
-                            </div>              
+                            </div>
+                            <div class="offset-md-1"></div>
+                            <!--***********************************************************************************-->
+                            <div class="card col-sm-12 col-md-5 mb-3" style="background: #6c757d">
+                                <h5 class="card-header">Catalogo de Esudios a Detalle de la Unidad</h5>
+                                <div class="card-body">
+                                    <a href="#" onclick="OpenRep('PrinCatXLS?DetCat=Ys');" class="btn btn-light">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
+                                    <a href="#" onclick="OpenRep('PrintCatPDF?DetCat=Ys');" class="btn btn-light">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></a>
+                                </div>
+                            </div>      
+                        </div>              
 
-                            <div class="form-row" class="col-sm-12 col-md-6 col-lg-6 mb-3">
-                                <div class="card" style="background: #6c757d">
-                                    <h6 class="card-header">Catalogo de Esudios de la Unidad (Un solo Tipo de Estudio)</h6>
-                                    <div class="card-body">
-                                        <label for="Tipo_Estudio" class="sr-only">Tipo de Estudio</label><br>
-                                        <select class="custom-select d-block w-100 form-control-sm" id="Tipo_Estudio1" name="Tipo_Estudio1" required>
-                                            <option value="0">Tipo de Estudio</option>   
-                                            <%for (Tipo_Estudio_DTO dto : tipos) {%>
-                                            <option value="<%=dto.getId_Tipo_Estudio()%>"><%=dto.getNombre_Tipo_Estudio().toUpperCase()%></option> 
-                                            <%}%>
-                                        </select>
-                                        <div class="invalid-feedback" style="width: 100%;">
-                                            Por favor seleccione un Tipo de Estudio.
-                                        </div>
-                                        <a href="#" onclick="OpenRep('PrinCatXLS' + ITpoEto());" class="btn btn-light">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
-                                        <a href="#" onclick="OpenRep('PrintCatPDF' + ITpoEto());" class="btn btn-light">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></a>
+                        <div class="form-row" class="col-sm-12 col-md-6 col-lg-6 mb-3">
+                            <div class="card" style="background: #6c757d">
+                                <h6 class="card-header">Catalogo de Esudios de la Unidad (Un solo Tipo de Estudio)</h6>
+                                <div class="card-body">
+                                    <label for="Tipo_Estudio" class="sr-only">Tipo de Estudio</label><br>
+                                    <select class="custom-select d-block w-100 form-control-sm" id="Tipo_Estudio1" name="Tipo_Estudio1" required>
+                                        <option value="0">Tipo de Estudio</option>   
+                                        <%for (Tipo_Estudio_DTO dto : tipos) {%>
+                                        <option value="<%=dto.getId_Tipo_Estudio()%>"><%=dto.getNombre_Tipo_Estudio().toUpperCase()%></option> 
+                                        <%}%>
+                                    </select>
+                                    <div class="invalid-feedback" style="width: 100%;">
+                                        Por favor seleccione un Tipo de Estudio.
                                     </div>
+                                    <a href="#" onclick="OpenRep('PrinCatXLS' + ITpoEto());" class="btn btn-light">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
+                                    <a href="#" onclick="OpenRep('PrintCatPDF' + ITpoEto());" class="btn btn-light">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></a>
                                 </div>
-                                <div class="offset-1"></div>
-                                <div class="card" class="col-md-6 mb-3" style="background: #6c757d">
-                                    <h6 class="card-header">Catalogo de Esudios a Detalle de la Unidad (Un solo Tipo de Estudio)</h6>
-                                    <div class="card-body">
-                                        <label for="Tipo_Estudio" class="sr-only">Tipo de Estudio</label><br>
-                                        <select class="custom-select d-block w-100 form-control-sm" id="Tipo_Estudio2" name="Tipo_Estudio2" required>
-                                            <option value="0">Tipo de Estudio</option>   
-                                            <%for (Tipo_Estudio_DTO dto : tipos) {%>
-                                            <option value="<%=dto.getId_Tipo_Estudio()%>"><%=dto.getNombre_Tipo_Estudio().toUpperCase()%></option> 
-                                            <%}%>
-                                        </select>
-                                        <div class="invalid-feedback" style="width: 100%;">
-                                            Por favor seleccione un Tipo de Estudio.
-                                        </div>
-                                        <a href="#" onclick="OpenRep('PrinCatXLS' + ITpoEto2() + '&DetCat=Ys');" class="btn btn-light">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
-                                        <a href="#" onclick="OpenRep('PrintCatPDF' + ITpoEto2() + '&DetCat=Ys');" class="btn btn-light">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></a>
+                            </div>
+                            <div class="offset-1"></div>
+                            <div class="card" class="col-md-6 mb-3" style="background: #6c757d">
+                                <h6 class="card-header">Catalogo de Esudios a Detalle de la Unidad (Un solo Tipo de Estudio)</h6>
+                                <div class="card-body">
+                                    <label for="Tipo_Estudio" class="sr-only">Tipo de Estudio</label><br>
+                                    <select class="custom-select d-block w-100 form-control-sm" id="Tipo_Estudio2" name="Tipo_Estudio2" required>
+                                        <option value="0">Tipo de Estudio</option>   
+                                        <%for (Tipo_Estudio_DTO dto : tipos) {%>
+                                        <option value="<%=dto.getId_Tipo_Estudio()%>"><%=dto.getNombre_Tipo_Estudio().toUpperCase()%></option> 
+                                        <%}%>
+                                    </select>
+                                    <div class="invalid-feedback" style="width: 100%;">
+                                        Por favor seleccione un Tipo de Estudio.
                                     </div>
+                                    <a href="#" onclick="OpenRep('PrinCatXLS' + ITpoEto2() + '&DetCat=Ys');" class="btn btn-light">Descargar Reporte en Excel<span><img src='images/Excel.png'></span></a>
+                                    <a href="#" onclick="OpenRep('PrintCatPDF' + ITpoEto2() + '&DetCat=Ys');" class="btn btn-light">Descargar Reporte en PDF<span><img src='images/Pdf.png'></span></a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
-            <script src="${pageContext.request.contextPath}/js/popper.min.js"></script>        
-            <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
-            <script src="${pageContext.request.contextPath}/js/holder.min.js"></script>
-            <script src="${pageContext.request.contextPath}/js/offcanvas.js"></script>
-            <script src="${pageContext.request.contextPath}/js/Inter.js"></script>
+        </div>
+        <script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
+        <script src="${pageContext.request.contextPath}/js/popper.min.js"></script>        
+        <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+        <script src="${pageContext.request.contextPath}/js/holder.min.js"></script>
+        <script src="${pageContext.request.contextPath}/js/offcanvas.js"></script>
+        <script src="${pageContext.request.contextPath}/js/Inter.js"></script>
     </body>
 </html>
 <%

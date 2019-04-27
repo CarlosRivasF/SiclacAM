@@ -19,10 +19,11 @@ public class Regreso_DAO {
         Util f = new Util();
         f.setHora(fac);
         String hora = f.getHoraMas(Util.getHrBD());
-        String sql = "INSERT INTO regreso VALUES(null," + empleado + ",'" + f.getFechaActual() + "','" + hora + "')";      
+        String sql = "INSERT INTO regreso VALUES(null," + empleado + ",'" + f.getFechaActual() + "','" + hora + "')";   
         try (Connection con = Conexion.getCon(); PreparedStatement pstm = con.prepareStatement(sql);) {
             pstm.executeUpdate();
         } catch (SQLException ex) {
+            System.out.println("**HORA REGRESO: "+ex.getMessage());
         }
         return hora;
     }
@@ -38,6 +39,7 @@ public class Regreso_DAO {
                 id_hr = rs.getString("hora");
             }
         } catch (SQLException ex) {
+            System.out.println("**HORA REGRESO: "+ex.getMessage());
         }
         return id_hr;
     }
