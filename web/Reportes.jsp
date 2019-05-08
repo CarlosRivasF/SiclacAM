@@ -34,6 +34,10 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+        <script src='https://www.google.com/jsapi'></script>     
+        <script  src="${pageContext.request.contextPath}/Charts/js/index.js"></script>         
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"> 
         <title><%=empresa.getNombre_Empresa()%> | Reportes</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -41,7 +45,7 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/offcanvas.css">
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/images/favicon.ico">
     </head>
-    <body style=" background: #666666">
+    <body style=" background: #666666" onload="verGrafico(1);">
         <div id="Main" style="color: white">
             <nav class="navbar navbar-expand-md fixed-top navbar-light bg-light">                
                 <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
@@ -92,7 +96,7 @@
                     </nav>
                 </div>
                 <script>
-                    
+
                 </script>
                 <div class="container-fluid"><br>
                     <Strong><h2 style="text-align: center; color: #ffffff"><%=msg%></h2></Strong>
@@ -197,11 +201,13 @@
                             </div>
                             <div class="offset-md-1"></div>                                              
                             <div class="card col-md-5 mb-3" style="background: darkgrey">
-                                    <h6 class="card-header">Estadistica de Estudios en Ordenes <button><span><img src='images/UpdChart.png'></span></button></h6>
-                                        <div class="card-body form-row col-md-12 mb-3">
-                                            <!-- Grafica de Estudios-->
-                                        </div>
+                                <h6 class="card-header">Estadistica de Estudios en Ordenes</h6>
+                                <div class="card-body form-row col-md-12 mb-3" id="EstadisticarepChrt">
+                                    <div class="form col-md-12 mb-3">
+                                        <button style="text-align: center" onclick="OpenRep('${pageContext.request.contextPath}/Charts/EstadisticaEstudiosByOrder.jsp');" class="btn btn-light btn-block">Ver Grafica de Estadistica</button>
+                                    </div>
                                 </div>
+                            </div>
                         </div>
                     </div>         
                     <!--CardResultados-->

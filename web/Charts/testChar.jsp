@@ -33,8 +33,6 @@
         </script>
     </head>
     <body onload="window.setInterval(hello, 3000);">
-        <div id="dataChart">
-        </div>
         <div class="row">
             <div class="col-md-12 text-center">
                 <h1>Google Chart Responsive Static</h1>

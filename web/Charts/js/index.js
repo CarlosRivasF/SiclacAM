@@ -60,7 +60,7 @@ function DibujaGrafico(arrParams) {
     var data = google.visualization.arrayToDataTable(arrParams);
 
     var options = {
-        title: 'Estadistica de ventas de estudios por unidad', hAxis: {title: '', titleTextStyle: {color: 'red'}
+        title: 'Estadistica de ventas de estudios', hAxis: {title: '', titleTextStyle: {color: 'red'}
         }
     };
 
@@ -106,10 +106,5 @@ function drawChart2() {
     var chart = new google.visualization.AreaChart(document.getElementById('chart_div2'));
     chart.draw(data, options);
 }
-
-$(window).resize(function () {
-    drawChart1();
-    drawChart2();
-});
 
 // Reminder: you need to put https://www.google.com/jsapi in the head of your document or as an external resource on codepen //

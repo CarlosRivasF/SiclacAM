@@ -2585,10 +2585,28 @@ function OpenRep(url) {
         window.open(url);
 }
 function verRep(id) {
-    var IDs = ['CardEstudios', 'CardOrdenes', 'CardResultados'];
+    var IDs = ['CardEstudios', 'CardOrdenes', 'CardResultados']; 
     for (var i = 0; i < IDs.length; i++) {
         document.getElementById(IDs[i]).style.display = "none";
     }
     document.getElementById(id).style.display = "block";
+}
+
+function GetEstadisticaEstudiosByOrder() {
+    alert("GetEstadisticaEstudiosByOrder");
+    var response="";
+   var Ajax = buscarComentario();
+    var divRes = document.getElementById('EstadisticarepChrt');
+    Ajax = buscarComentario();
+    Ajax.open('GET', 'Charts/EstadisticaEstudiosByOrder.jsp?unidad=1');
+    //alert(url);
+    Ajax.onreadystatechange = function () {
+        if (Ajax.readyState === 4) {
+            response=Ajax.responseText;
+            alert(response);
+            divRes.innerHTML = response;
+        }
+    };
+    Ajax.send(null);
 }
 //CancelOrd(id)

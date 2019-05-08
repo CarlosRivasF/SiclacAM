@@ -111,7 +111,6 @@ public class InsUnidad extends HttpServlet {
                     }
                 }
             }
-
         } else {
             response.sendRedirect("" + request.getContextPath() + "");
         }
