@@ -73,13 +73,6 @@ public class PrintRes extends HttpServlet {
             response.setContentType("application/pdf");
             response.setHeader("Content-disposition", "inline; filename=\"" + Orden.getPaciente().getCodPac() + "_" + Orden.getId_Orden() + ".pdf\"");
             String relativePath = getServletContext().getRealPath("/") + "/";//ruta real del proyecto
-            int r = 0;
-            for (Det_Orden_DTO d : Orden.getDet_Orden()) {
-                if (d.getEstudio().getAddRes()) {
-                    r = r + 2;
-                    r = d.getEstudio().getCnfs().stream().filter((c) -> (c.getRes() != null)).map((_item) -> 1).reduce(r, Integer::sum);
-                }
-            }
 
             List<Det_Orden_DTO> DetImage = new ArrayList<>();
             Orden.getDet_Orden().stream().filter((d) -> (d.getEstudio().getId_Tipo_Estudio() == 2 || d.getEstudio().getId_Tipo_Estudio() == 4 || d.getEstudio().getId_Tipo_Estudio() == 5 || d.getEstudio().getId_Tipo_Estudio() == 6)).forEachOrdered((d) -> {
