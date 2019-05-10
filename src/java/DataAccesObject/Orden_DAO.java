@@ -350,7 +350,7 @@ public class Orden_DAO {
         Persona_DAO Pr = new Persona_DAO();
         int c = 0;
         try (Connection con = Conexion.getCon()) {//id_Unidad=" + id_Unidad + " AND
-            String sql = "SELECT * FROM orden  WHERE id_Unidad=" + id_Unidad + " AND  Fecha_Orden BETWEEN '" + fechaInicio + "' AND '" + fechaFinal + "'";
+            String sql = "SELECT * FROM orden  WHERE id_Unidad=" + id_Unidad + " AND  Fecha_Orden BETWEEN '" + fechaInicio + "' AND '" + fechaFinal + "' order by id_Persona";
             System.out.println(sql.toUpperCase());
             try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery();) {
                 while (rs.next()) {

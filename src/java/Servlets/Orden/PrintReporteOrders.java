@@ -4,6 +4,7 @@ import DataAccesObject.Orden_DAO;
 import DataAccesObject.Persona_DAO;
 import DataBase.Util;
 import DataTransferObject.Det_Orden_DTO;
+import DataTransferObject.Empleado_DTO;
 import DataTransferObject.Orden_DTO;
 import DataTransferObject.Persona_DTO;
 import com.itextpdf.text.BaseColor;
@@ -21,6 +22,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -50,10 +52,41 @@ public class PrintReporteOrders extends HttpServlet {
         id_Unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
         String f1 = request.getParameter("fchaI").trim();
         String f2 = request.getParameter("fchaF").trim();
+        String Crte = request.getParameter("Crte").trim();//Crte=Ys
+        String Emps = request.getParameter("Emps").trim();//Emps=Ys
+        Boolean Corte = false;
+        Boolean Empls = false;
+        if (Crte.equals("Ys")) {
+            Corte = true;
+        }
+        if (Emps.equals("Ys")) {
+            Empls = true;
+        }
         try {
             List<Orden_DTO> Reporte;
+            List<Empleado_DTO> ReporteEmpleado;
             Orden_DAO O = new Orden_DAO();
             Reporte = O.getReporteGeneralOrdenes(id_Unidad, f1, f2);//recupera lista de ordenes
+            if (Empls) {
+                ReporteEmpleado = new ArrayList<>();
+                int c = 0;
+                int TEMPid_Empleado = 0;
+                Empleado_DTO empleado = null;
+                for (Orden_DTO dto : Reporte) {
+                    if (dto.getEmpleado().getId_Persona() != TEMPid_Empleado) {
+                        if (c != 1) {
+                            ReporteEmpleado.add(empleado);
+                        }
+                        TEMPid_Empleado = dto.getEmpleado().getId_Persona();
+                        empleado = new Empleado_DTO();
+                        empleado = (Empleado_DTO) dto.getEmpleado();
+                        empleado.getOrdenes().add(dto);
+                    } else {
+                        empleado.getOrdenes().add(dto);
+                    }
+                }
+            }
+
             response.setContentType("application/pdf");
             response.setHeader("Content-disposition", "inline; filename=\"CatalogoEstudios.pdf\"");//nombre de archivo
             String relativePath = getServletContext().getRealPath("/") + "/";//ruta real del proyecto
@@ -80,12 +113,21 @@ public class PrintReporteOrders extends HttpServlet {
             Font Title_Font_Prep = FontFactory.getFont("Times Roman", 12, green);
             Font Content_Font = FontFactory.getFont("Arial", 10, BaseColor.BLACK);
 
-            //COMIENZA TABLA DE CATALOGO
-            PdfPTable table = new PdfPTable(7);
+            PdfPTable table = null;
+            if (Corte) {
+                table = new PdfPTable(7);
+            } else {
+                table = new PdfPTable(5);
+            }
 
+            //COMIENZA TABLA DE CATALOGO
             table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
             table.getDefaultCell().setBorder(1);
-            table.setWidths(new int[]{3, 5, 12, 12, 10, 7, 8});
+            if (Corte) {
+                table.setWidths(new int[]{3, 5, 12, 12, 10, 7, 8});
+            } else {
+                table.setWidths(new int[]{3, 5, 12, 12, 10});
+            }
             //HEADERS DEL REPORTE
             PdfPCell HFolio = new PdfPCell(new Paragraph("Folio"));
             HFolio.setBorderColor(BaseColor.RED);
@@ -107,14 +149,18 @@ public class PrintReporteOrders extends HttpServlet {
             HEstudios.setBorderColor(BaseColor.RED);
             HEstudios.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(HEstudios);
-            PdfPCell HMontoPagado = new PdfPCell(new Paragraph("MontoPagado"));
-            HMontoPagado.setBorderColor(BaseColor.RED);
-            HMontoPagado.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(HMontoPagado);
-            PdfPCell HMontoRestante = new PdfPCell(new Paragraph("MontoRestante"));
-            HMontoRestante.setBorderColor(BaseColor.RED);
-            HMontoRestante.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(HMontoRestante);
+
+            if (Corte) {
+                PdfPCell HMontoPagado = new PdfPCell(new Paragraph("MontoPagado"));
+                HMontoPagado.setBorderColor(BaseColor.RED);
+                HMontoPagado.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(HMontoPagado);
+                PdfPCell HMontoRestante = new PdfPCell(new Paragraph("MontoRestante"));
+                HMontoRestante.setBorderColor(BaseColor.RED);
+                HMontoRestante.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(HMontoRestante);
+            }
+
             //for (int i = 1; i <= 8789; i++) {
             for (Orden_DTO dto : Reporte) {
                 //CONTENIDO DE LA TABLA EN EL REPORTE            
@@ -183,36 +229,38 @@ public class PrintReporteOrders extends HttpServlet {
             }
             //FINALZA CONTENIDO
 
-            PdfPCell Espacio1 = new PdfPCell(new Paragraph("       "));
-            Espacio1.setHorizontalAlignment(Element.ALIGN_LEFT);
-            Espacio1.setColspan(7);
-            Espacio1.setBorder(0);
-            table.addCell(Espacio1);
+            if (Corte) {
+                PdfPCell Espacio1 = new PdfPCell(new Paragraph("       "));
+                Espacio1.setHorizontalAlignment(Element.ALIGN_LEFT);
+                Espacio1.setColspan(7);
+                Espacio1.setBorder(0);
+                table.addCell(Espacio1);
 
-            PdfPCell Espacio2 = new PdfPCell(new Paragraph("       "));
-            Espacio2.setHorizontalAlignment(Element.ALIGN_LEFT);
-            Espacio2.setBorder(0);
-            table.addCell(Espacio2);
+                PdfPCell Espacio2 = new PdfPCell(new Paragraph("       "));
+                Espacio2.setHorizontalAlignment(Element.ALIGN_LEFT);
+                Espacio2.setBorder(0);
+                table.addCell(Espacio2);
 
-            PdfPCell TitMontoTotalPagado = new PdfPCell(new Paragraph("Monto Total Pagado"));
-            TitMontoTotalPagado.setBorderColor(BaseColor.RED);
-            TitMontoTotalPagado.setHorizontalAlignment(Element.ALIGN_CENTER);
-            TitMontoTotalPagado.setColspan(2);
-            table.addCell(TitMontoTotalPagado);
-            PdfPCell CellMontoTotalPagado = new PdfPCell(new Paragraph(String.valueOf(montoTotalPagado)));
-            CellMontoTotalPagado.setBorderColor(BaseColor.RED);
-            CellMontoTotalPagado.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(CellMontoTotalPagado);
+                PdfPCell TitMontoTotalPagado = new PdfPCell(new Paragraph("Monto Total Pagado"));
+                TitMontoTotalPagado.setBorderColor(BaseColor.RED);
+                TitMontoTotalPagado.setHorizontalAlignment(Element.ALIGN_CENTER);
+                TitMontoTotalPagado.setColspan(2);
+                table.addCell(TitMontoTotalPagado);
+                PdfPCell CellMontoTotalPagado = new PdfPCell(new Paragraph(String.valueOf(montoTotalPagado)));
+                CellMontoTotalPagado.setBorderColor(BaseColor.RED);
+                CellMontoTotalPagado.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(CellMontoTotalPagado);
 
-            PdfPCell TitMontoTotalRest = new PdfPCell(new Paragraph("Monto Total Restante"));
-            TitMontoTotalRest.setBorderColor(BaseColor.RED);
-            TitMontoTotalRest.setHorizontalAlignment(Element.ALIGN_CENTER);
-            TitMontoTotalRest.setColspan(2);
-            table.addCell(TitMontoTotalRest);
-            PdfPCell CellMontoTotalRest = new PdfPCell(new Paragraph(String.valueOf(montoTotalRestante)));
-            CellMontoTotalRest.setBorderColor(BaseColor.RED);
-            CellMontoTotalRest.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(CellMontoTotalRest);
+                PdfPCell TitMontoTotalRest = new PdfPCell(new Paragraph("Monto Total Restante"));
+                TitMontoTotalRest.setBorderColor(BaseColor.RED);
+                TitMontoTotalRest.setHorizontalAlignment(Element.ALIGN_CENTER);
+                TitMontoTotalRest.setColspan(2);
+                table.addCell(TitMontoTotalRest);
+                PdfPCell CellMontoTotalRest = new PdfPCell(new Paragraph(String.valueOf(montoTotalRestante)));
+                CellMontoTotalRest.setBorderColor(BaseColor.RED);
+                CellMontoTotalRest.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(CellMontoTotalRest);
+            }
 
             ColumnText column = new ColumnText(stamper.getOverContent(1));
             Rectangle rectPage1 = new Rectangle(-32, 60, 830, 520);//izq,esp-inf,ancho,alto (SON COORDENADAS EN LA HOJA DEL PDF Y EL TAMAÑO DEL ELEMENTO A AGREGAR)
