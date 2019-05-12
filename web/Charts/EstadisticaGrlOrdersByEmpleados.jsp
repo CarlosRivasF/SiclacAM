@@ -45,7 +45,7 @@
         <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
         <link rel="stylesheet" href="css/style.css"> 
     </head>
-    <body onload="verGraficoEstadisticStudies('Estadistica de Ventas de Estudios en la Unidad',<%=sesion.getAttribute("unidad").toString().trim()%>);">
+    <body onload="verGraficoEsadisticGrlByEmpls('Estadistica de Ordenes por Empleado en la Unidad',<%=sesion.getAttribute("unidad").toString().trim()%>);">
         <div class="row">
             <div class="col-md-12 text-center">
                 <h1>Unidad <%=sesion.getAttribute("nombre_unidad").toString()%></h1>

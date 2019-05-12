@@ -45,7 +45,7 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/offcanvas.css">
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/images/favicon.ico">
     </head>
-    <body style=" background: #666666" onload="verGrafico(1);">
+    <body style=" background: #666666">
         <div id="Main" style="color: white">
             <nav class="navbar navbar-expand-md fixed-top navbar-light bg-light">                
                 <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
@@ -91,7 +91,7 @@
                         <a onclick="verRep('CardEstudios');" class="nav-link" href="#/ESTUDIOS">ESTUDIOS</a>
                         <a onclick="verRep('CardOrdenes');" class="nav-link" href="#/ÓRDENES">ÓRDENES </a>
                         <a onclick="verRep('CardResultados');" class="nav-link" href="#/RESULTADOS">RESULTADOS </a>
-                        <a class="nav-link" href="#/CORTES">CORTES </a>      
+                        <a onclick="verRep('CardCortes');" class="nav-link" href="#/CORTES">CORTES </a>      
                         <a class="nav-link" href="#/PARTICIPACIONES">PARTICIPACIONES </a>
                     </nav>
                 </div>
@@ -189,11 +189,8 @@
                                             <input type="date" class="form-control" name="fechaF1Ord" id="fechaF1Ord" required>
                                         </div>
                                     </div>                                    
-                                    <div class="form-row col-md-12" >
-                                        <div class="form col-md-6 mb-3">
-                                            <button style="text-align: center" disabled="" onclick="OpenRep('');" class="btn btn-light btn-block">Reporte Excel  <span><img src='images/Excel.png' class="img-fluid" alt="Responsive image"></span></button>
-                                        </div>
-                                        <div class="form col-md-6 mb-3">
+                                    <div class="form-row col-md-12" >                     
+                                        <div class="form offset-3 col-md-6 mb-3">
                                             <button style="text-align: center" onclick="OpenRep('PrintReporteOrders' + fchROrdGrl());" class="btn btn-light btn-block">Reporte PDF  <span><img src='images/Pdf.png' class="img-fluid" alt="Responsive image"></span></button>
                                         </div>
                                     </div>                                    
@@ -209,6 +206,37 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-row  col-md-12">
+                            <div class="card form-row col-md-6  mb-3" style="background: darkgrey">
+                                <h6 class="card-header">Reporte General de Ordenes de la Unidad  por Empleado</h6>
+                                <div class="card-body">
+                                    <div class="form-row col-md-12 mb-3">
+                                        <div class="form-group col-md-6 mb-3">
+                                            <label style="text-align: center" for="fechaI">Fecha Inicio</label>
+                                            <input type="date" class="form-control" name="fechaI1Ord" id="fechaI1OrdEmp" required>
+                                        </div>
+                                        <div class="form-group col-md-6 mb-3">
+                                            <label style="text-align: center" for="fechaF">Fecha Inicio</label>
+                                            <input type="date" class="form-control" name="fechaF1Ord" id="fechaF1OrdEmp" required>
+                                        </div>
+                                    </div>                                    
+                                    <div class="form-row col-md-12" >
+                                        <div class="form offset-3 col-md-6 mb-3">
+                                            <button style="text-align: center" onclick="OpenRep('PrintReporteOrders' + fchROrdGrlEmp()+'&Emps=Ys');" class="btn btn-light btn-block">Reporte PDF  <span><img src='images/Pdf.png' class="img-fluid" alt="Responsive image"></span></button>
+                                        </div>
+                                    </div>                                    
+                                </div>
+                            </div>
+                            <div class="offset-md-1"></div>                                              
+                            <div class="card col-md-5 mb-3" style="background: darkgrey">
+                                <h6 class="card-header">Estadistica de Ordenes por Empleado</h6>
+                                <div class="card-body form-row col-md-12 mb-3" id="EstadisticarepChrt">
+                                    <div class="form col-md-12 mb-3">
+                                        <button style="text-align: center" onclick="OpenRep('${pageContext.request.contextPath}/Charts/EstadisticaGrlOrdersByEmpleados.jsp');" class="btn btn-light btn-block">Ver Grafica de Estadistica</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>         
                     <!--CardResultados-->
                     <div id="CardResultados" class="form-row" style="display:none">
@@ -217,11 +245,14 @@
                                 <h6 class="card-header">Buscar Resultados De Órden</h6>
                                 <div class="card-body">
                                     <div class="form-row col-12 col-md-12 mb-3">
-                                        <div class="form-group col-12 col-md-6 mb-3">                                            
-                                            <input type="text" class="form-control" name="fechaI1Ord" id="fechaI1Ord" placeholder="Folio de Órden" required>
+                                        <div class="form-group offset-3 col-6 col-md-6 mb-3">                                            
+                                            <input type="text" class="form-control" name="ScannOrderRes" onchange="ScannOrderRes(this)" id="ScannOrderRes" placeholder="Scannear Orden" required>
                                         </div>
+                                        <div class="form-group col-12 col-md-6 mb-3">                                            
+                                            <input type="text" class="form-control" name="FolioOrdenRs" id="FolioOrdenRs" placeholder="Folio de Órden" required>
+                                        </div>                                        
                                         <div class="form-group col-12 col-md-6 mb-3">
-                                            <button style="text-align: center" disabled="" onclick="OpenRep('PrintReporteOrders' + fchROrdGrl());" class="btn btn-light btn-block">Reporte PDF  <span><img src='images/Pdf.png' class="img-fluid" alt="Responsive image"></span></button>
+                                            <button style="text-align: center"  onclick="OpenRep('PrintRes' + FolioOrderRep());" class="btn btn-light btn-block">Reporte PDF  <span><img src='images/Pdf.png' class="img-fluid" alt="Responsive image"></span></button>
                                         </div>
                                     </div>                                    
                                     <div class="form-row col-12" >
@@ -232,7 +263,53 @@
                                 </div>
                             </div>
                         </div>
-                    </div>         
+                    </div>    
+                    <!--CardCortes-->
+                    <div id="CardCortes" class="form-row" style="display:none">
+                        <div class="form-row  col-md-12">
+                            <div class="card form-row col-md-6  mb-3" style="background: darkgrey">
+                                <h6 class="card-header">Corte General de Ordenes de la Unidad</h6>
+                                <div class="card-body">
+                                    <div class="form-row col-md-12 mb-3">
+                                        <div class="form-group col-md-6 mb-3">
+                                            <label style="text-align: center" for="fechaI">Fecha Inicio</label>
+                                            <input type="date" class="form-control" name="fechaI1OrdCrt" id="fechaI1OrdCrt" required>
+                                        </div>
+                                        <div class="form-group col-md-6 mb-3">
+                                            <label style="text-align: center" for="fechaF">Fecha Inicio</label>
+                                            <input type="date" class="form-control" name="fechaF1OrdCrt" id="fechaF1OrdCrt" required>
+                                        </div>
+                                    </div>                                    
+                                    <div class="form-row col-md-12" >
+                                        <div class="form offset-3 col-md-6 mb-3">
+                                            <button style="text-align: center" onclick="OpenRep('PrintReporteOrders' + fchROrdGrlCrt()+'&Crte=Ys');" class="btn btn-light btn-block">Reporte PDF  <span><img src='images/Pdf.png' class="img-fluid" alt="Responsive image"></span></button>
+                                        </div>
+                                    </div>                                    
+                                </div>
+                            </div>
+                            <div class="offset-md-1"></div>  
+                            <div class="card form-row col-md-5  mb-3" style="background: darkgrey">
+                                <h6 class="card-header">Corte de Ordenes de la Unidad  por Empleado</h6>
+                                <div class="card-body">
+                                    <div class="form-row col-md-12 mb-3">
+                                        <div class="form-group col-md-6 mb-3">
+                                            <label style="text-align: center" for="fechaI">Fecha Inicio</label>
+                                            <input type="date" class="form-control" name="fechaI1OrdEmp" id="fechaI1OrdEmpCrt" required>
+                                        </div>
+                                        <div class="form-group col-md-6 mb-3">
+                                            <label style="text-align: center" for="fechaF">Fecha Inicio</label>
+                                            <input type="date" class="form-control" name="fechaF1OrdEmp" id="fechaF1OrdEmpCrt" required>
+                                        </div>
+                                    </div>                                    
+                                    <div class="form-row col-md-12" >
+                                        <div class="form offset-3 col-md-6 mb-3">
+                                            <button style="text-align: center" onclick="OpenRep('PrintReporteOrders' + fchROrdGrlEmpCrt()+'&Crte=Ys &Emps=Ys');" class="btn btn-light btn-block">Reporte PDF  <span><img src='images/Pdf.png' class="img-fluid" alt="Responsive image"></span></button>
+                                        </div>
+                                    </div>                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
                 </div>
             </div>
         </div>

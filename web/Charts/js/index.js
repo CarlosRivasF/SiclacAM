@@ -1,10 +1,10 @@
 /* global google */
 var DataC = new Array();
-function paint(arr) {
+function paint(title,arr) {
     google.load("visualization", "1", {packages: ["corechart"]});
-    google.setOnLoadCallback(DibujaGrafico(arr));
+    google.setOnLoadCallback(DibujaGrafico(title,arr));
     $(window).resize(function () {
-        DibujaGrafico(arr);
+        DibujaGrafico(title,arr);
     });
 }
 
@@ -26,7 +26,7 @@ function buscarComentario() {
     return xhr;
 }
 
-function verGrafico(id) {
+function verGraficoEstadisticStudies(title,id) {
     //alert("Consultando");
     var arrData = new Array();
     var data;
@@ -46,7 +46,7 @@ function verGrafico(id) {
                 var d = str.split("_");
                 arrData[i + 1] = [d[0], Number(d[1])];
             }
-            paint(arrData);
+            paint(title,arrData);
             for (var i = 0; i < arrData.length; i++) {
                 //alert(arrData[i]);
             } 
@@ -55,12 +55,41 @@ function verGrafico(id) {
     Ajax.send(null);
 }
 
-function DibujaGrafico(arrParams) {
+function verGraficoEsadisticGrlByEmpls(title,id) {
+    //alert("Consultando");
+    var arrData = new Array();
+    var data;
+    var Ajax = buscarComentario();
+    //var divRes = document.getElementById('dataChart');
+    Ajax.open('GET', '../GetEsadisticGrlByEmpls?IdU=' + id);
+    Ajax.onreadystatechange = function () {
+        if (Ajax.readyState === 4) {            
+            data = Ajax.responseText;
+            //divRes.innerHTML = data;
+            var rs = data.split(",");
+            arrData = new Array(rs.length);
+            arrData[0] = ['Empleado', '# de Ordenes'];
+            for (var i = 0; i < rs.length - 1; i++) {
+                var str;
+                str = rs[i];
+                var d = str.split("_");
+                arrData[i + 1] = [d[0], Number(d[1])];
+            }
+            paint(title,arrData);
+            for (var i = 0; i < arrData.length; i++) {
+                //alert(arrData[i]);
+            } 
+        }
+    };
+    Ajax.send(null);
+}
+
+function DibujaGrafico(title,arrParams) {
     //alert("Dibujando");
     var data = google.visualization.arrayToDataTable(arrParams);
 
     var options = {
-        title: 'Estadistica de ventas de estudios', hAxis: {title: '', titleTextStyle: {color: 'red'}
+        title: title, hAxis: {title: '', titleTextStyle: {color: 'red'}
         }
     };
 

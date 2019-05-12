@@ -55,18 +55,37 @@ public class PrintRes extends HttpServlet {
         f.setHora(fac);
         HttpSession sesion = request.getSession();
         int id_Orden;
-        if (sesion.getAttribute("OrdenSh") == null) {
-            id_Orden = Integer.parseInt(Util.Desencriptar(request.getParameter("LxOrdSald")));
+        if (request.getParameter("LxOrdSald") != null) {
+            id_Orden = Integer.parseInt(Util.Desencriptar(request.getParameter("LxOrdSald").trim()));
+            System.out.println("LxOrdSald");
+        } else if (request.getParameter("OrdFol") != null) {
+            id_Orden = Integer.parseInt(request.getParameter("OrdFol").trim());
+            System.out.println("OrdFol");
+        } else if (request.getParameter("ScannBarr") != null) {
+            id_Orden = Integer.parseInt(request.getParameter("ScannBarr").trim());
+            System.out.println("ScannBarr");
         } else {
-            id_Orden = 0;
+            id_Orden = 1;
+            System.out.println("null");
         }
 
         try {
             Orden_DTO Orden;
             if (sesion.getAttribute("OrdenSh") != null) {
+                System.out.println("GETOrdenSh");
                 Orden = (Orden_DTO) sesion.getAttribute("OrdenSh");
                 sesion.removeAttribute("OrdenSh");
+            } else if (request.getParameter("OrdFol") != null) {
+                System.out.println("GETOrdFol");
+                Orden_DAO O = new Orden_DAO();
+                int id_Unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
+                Orden = O.getOrdenByFolio(id_Orden, id_Unidad);
+            } else if (request.getParameter("ScannBarr") != null) {
+                System.out.println("GETScannBarr");
+                Orden_DAO O = new Orden_DAO();
+                Orden = O.getOrden(id_Orden);
             } else {
+                System.out.println("GETElse");
                 Orden_DAO O = new Orden_DAO();
                 Orden = O.getOrden(id_Orden);
             }

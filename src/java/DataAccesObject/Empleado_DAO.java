@@ -361,6 +361,45 @@ public class Empleado_DAO {
         }
     }
 
+    public Empleado_DTO getOnlyEmpleado(int id_Persona) {
+        try {
+            Empleado_DTO empleado;
+            try (Connection con = Conexion.getCon()) {
+                String sql = "SELECT id_Empleado,id_Unidad FROM empleado WHERE id_Persona=" + id_Persona + "";
+                PreparedStatement pstm = con.prepareStatement(sql);
+                ResultSet rs = pstm.executeQuery();
+                empleado = new Empleado_DTO();
+                empleado.setId_Persona(id_Persona);
+                while (rs.next()) {
+                    empleado.setId_Empleado(rs.getInt("id_Empleado"));
+                    empleado.setId_Unidad(rs.getInt("id_Unidad"));                    
+                }
+                rs.close();
+                pstm.close();
+                sql = "SELECT Nombre,Ap_Paterno,Ap_Materno FROM persona WHERE id_Persona=" + empleado.getId_Persona() + "";                
+                pstm = con.prepareStatement(sql);
+                rs = pstm.executeQuery();
+                while (rs.next()) {
+                    empleado.setNombre(rs.getString("Nombre"));
+                    empleado.setAp_Paterno(rs.getString("Ap_Paterno"));
+                    empleado.setAp_Materno(rs.getString("Ap_Materno"));
+                }                
+                rs.close();
+                pstm.close();                                
+            }
+            if (empleado.getId_Persona() != 0) {
+                List<Orden_DTO> Ordenes=new ArrayList<>();
+                empleado.setOrdenes(Ordenes);
+                return empleado;
+            } else {
+                return null;
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public Empleado_DTO getEmpleadoE(int id_Empleado) {
         try {
             Empleado_DTO empleado;

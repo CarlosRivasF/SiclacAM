@@ -13,7 +13,7 @@ public class Orden_DTO {
     protected Unidad_DTO unidad;
     protected Paciente_DTO Paciente;
     protected Medico_DTO Medico;
-    protected Persona_DTO Empleado;
+    protected Empleado_DTO Empleado;
     protected String FechaOr;
     protected String Hora;
     protected Float montoRestante;
@@ -56,11 +56,11 @@ public class Orden_DTO {
         this.Medico = Medico;
     }
 
-    public Persona_DTO getEmpleado() {
+    public Empleado_DTO getEmpleado() {
         return Empleado;
     }
 
-    public void setEmpleado(Persona_DTO Empleado) {
+    public void setEmpleado(Empleado_DTO Empleado) {
         this.Empleado = Empleado;
     }
 

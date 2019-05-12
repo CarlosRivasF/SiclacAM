@@ -1,13 +1,15 @@
-package Servlets.Estudio;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Servlets.Orden;
 
 import DataAccesObject.Estudio_DAO;
-import DataBase.Util;
 import DataTransferObject.Est_Mat_DTO;
 import DataTransferObject.Estudio_DTO;
-import DataTransferObject.Material_DTO;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,27 +24,35 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
 /**
- * @author CRIVF KODE
+ *
+ * @author Carlos Rivas
  */
-@WebServlet(name = "PrinCatalogoXLS", urlPatterns = {"/PrinCatXLS"})
-public class PrinCatalogoXLS extends HttpServlet {
+@WebServlet(name = "PrintRepOrderXls", urlPatterns = {"/PrintRepOrderXls"})
+public class PrintRepOrderXls extends HttpServlet {
 
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/vnd.ms-excel");
-
+        response.setHeader("Content-Disposition", "attachment; filename=CatExcel.xls");
         HttpSession sesion = request.getSession();
         int id_Unidad;
         int Tipo_Estudio = 0;
         if (request.getParameter("ITpoEto") != null) {
             Tipo_Estudio = Integer.parseInt(request.getParameter("ITpoEto").trim());
         }
-        Date fac = new Date();
-        Util f0 = new Util();
-        f0.setHora(fac);
+
         Boolean Det = false;
+
         id_Unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
-        response.setHeader("Content-Disposition", "attachment; filename=CatExcel_" + id_Unidad +"_"+ f0.getFechaActual().replace("-", "") + ".xls");
         List<Estudio_DTO> Catalogo;
         List<Estudio_DTO> Catalogo2 = new ArrayList<>();
         if (request.getParameter("DetCat") != null) {
@@ -160,12 +170,25 @@ public class PrinCatalogoXLS extends HttpServlet {
         processRequest(request, response);
     }
 
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
     @Override
     public String getServletInfo() {
         return "Short description";

@@ -1,3 +1,4 @@
+
 package Servlets.Charts;
 
 import DataAccesObject.Orden_DAO;
@@ -13,11 +14,20 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author c
+ * @author Carlos Rivas
  */
-@WebServlet(name = "GetDataEstadisticStudies", urlPatterns = {"/GetDataEstadisticStudies"})
-public class GetDataEstadisticStudies extends HttpServlet {
+@WebServlet(name = "GetEsadisticGrlByEmpls", urlPatterns = {"/GetEsadisticGrlByEmpls"})
+public class GetEsadisticGrlByEmpls extends HttpServlet {
 
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -25,7 +35,7 @@ public class GetDataEstadisticStudies extends HttpServlet {
             String data = "";
             int id = Integer.parseInt(request.getParameter("IdU").trim());
             Orden_DAO O = new Orden_DAO();
-            List<Estadistica_DTO> datos = O.getEstadisticadeOrdenesByEstudios(id);
+            List<Estadistica_DTO> datos = O.getEstadisticadeOrdenesByEmpl(id);
             for (Estadistica_DTO e : datos) {
                 data = data + "" + e.getEjeX().trim() + "_" + e.getEjeY()+ ",";
             }

@@ -135,7 +135,8 @@
                         <th>Nombre de Estudio</th>
                         <th>Entrega</th>
                         <th>Precio</th>
-                        <th>Descuento</th>
+                        <th>Desc.</th>
+                        <th>Cargo</th>
                         <th>Espera</th>
                         <th>Quitar</th>
                     </tr>
@@ -152,12 +153,14 @@
                                 e = dto.getEstudio().getPrecio().getT_Entrega_U();
                             }
                             Float pd = ((dto.getDescuento() * p) / 100);
+                            Float ps = ((dto.getSobrecargo()* p) / 100);
                     %>
                     <tr>
                         <td><%=dto.getEstudio().getNombre_Estudio()%></td>
                         <td><%=dto.getT_Entrega()%></td>
                         <td><%=p%></td>
                         <td>$<%=pd%></td>
+                        <td>$<%=ps%></td>
                         <td><%=e%> días</td>
                         <td><div id="mat-<%=Orden.getDet_Orden()%>"><button href="#" class="btn btn-danger" onclick="DelEst(<%=Orden.getDet_Orden().indexOf(dto)%>, 'Ord')"><span><img src="images/trash.png"></span></button></div></td>
                     </tr>

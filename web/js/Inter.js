@@ -1428,6 +1428,8 @@ function AddEst(x, mode) {
     if (mode === "code") {
         var s = false;
         var ds = document.getElementById("descE").value;
+        var sc = document.getElementById("scaE").value;
+        var Sco = " &Sco=" + sc;
         var Desc = " &Desc=" + ds;
         var Tprec;
         if (document.getElementById("prEsN").checked) {
@@ -1442,8 +1444,9 @@ function AddEst(x, mode) {
             alert("Seleccione un tipo de precio");
             s = false;
         }
-        var p = Desc + Tprec;
+        var p = Desc + Tprec + Sco;
         document.getElementById("descE").value = "";
+        document.getElementById("scaE").value = "";
 
         if (x.value !== "" && s) {
             buscarComentario();
@@ -1461,6 +1464,8 @@ function AddEst(x, mode) {
     } else {
         var s = false;
         var ds = document.getElementById("desc" + x).value;
+        var sc = document.getElementById("sca" + x).value;
+        var Sco = " &Sco=" + sc;
         var Desc = " &Desc=" + ds;
         var Tprec;
         if (document.getElementById("PreN" + x).checked) {
@@ -1473,7 +1478,7 @@ function AddEst(x, mode) {
             alert("Seleccione un tipo de precio");
             s = false;
         }
-        var p = Desc + Tprec;
+        var p = Desc + Tprec + Sco;
         if (s) {
             buscarComentario();
             xhr.open("POST", "AddEst", true);
@@ -1491,6 +1496,8 @@ function AddEstCot(x, mode) {
     if (mode === "code") {
         var s = false;
         var ds = document.getElementById("descE").value;
+        var sc = document.getElementById("scaE").value;
+        var Sco = " &Sco=" + sc;
         var Desc = " &Desc=" + ds;
         var Tprec;
         if (document.getElementById("prEsN").checked) {
@@ -1505,7 +1512,7 @@ function AddEstCot(x, mode) {
             alert("Seleccione un tipo de precio");
             s = false;
         }
-        var p = Desc + Tprec;
+        var p = Desc + Tprec + Sco;
         document.getElementById("descE").value = "";
 
         if (x.value !== "" && s) {
@@ -1525,6 +1532,8 @@ function AddEstCot(x, mode) {
     } else {
         var s = false;
         var ds = document.getElementById("desc" + x).value;
+        var sc = document.getElementById("sca" + x).value;
+        var Sco = " &Sco=" + sc;
         var Desc = " &Desc=" + ds;
         var Tprec;
         if (document.getElementById("PreN" + x).checked) {
@@ -1537,7 +1546,7 @@ function AddEstCot(x, mode) {
             alert("Seleccione un tipo de precio");
             s = false;
         }
-        var p = Desc + Tprec;
+        var p = Desc + Tprec + Sco;
         if (s) {
             buscarComentario();
             xhr.open("POST", "AddEstCot", true);
@@ -1935,6 +1944,8 @@ function AddEstProm(x, mode) {
     } else {
         var s = false;
         var ds = document.getElementById("desc" + x).value;
+        var sc = document.getElementById("scaE").value;
+        var Sco = " &Sco=" + sc;
         var Desc = " &Desc=" + ds;
         var Tprec;
         if (document.getElementById("PreN" + x).checked) {
@@ -1947,7 +1958,7 @@ function AddEstProm(x, mode) {
             alert("Seleccione un tipo de precio");
             s = false;
         }
-        var p = Desc + Tprec;
+        var p = Desc + Tprec + Sco;
         if (document.getElementById("shdet") !== null) {
             var shd = " &shdet=xxxx";
             p = p + shd;
@@ -2577,36 +2588,58 @@ function ITpoEto2() {
 function fchROrdGrl() {
     if (document.getElementById("fechaI1Ord").value !== "" & document.getElementById("fechaF1Ord").value !== "") {
         fechasRep = "?fchaI=" + document.getElementById("fechaI1Ord").value + " &fchaF=" + document.getElementById("fechaF1Ord").value;
-        ;
     }
     return fechasRep;
 }
-function OpenRep(url) {    
-        window.open(url);
+
+function fchROrdGrlEmp() {
+    if (document.getElementById("fechaI1OrdEmp").value !== "" & document.getElementById("fechaF1OrdEmp").value !== "") {
+        fechasRep = "?fchaI=" + document.getElementById("fechaI1OrdEmp").value + " &fchaF=" + document.getElementById("fechaF1OrdEmp").value;
+    }
+    return fechasRep;
+}
+
+function ScannOrderRes(elemt) {
+    if (elemt.value !== "") {
+        var val = elemt.value;
+        elemt.value = "";
+        OpenRep('PrintRes?ScannBarr=' + val);
+    } else {
+        alert("Escanea un Orden");
+    }
+}
+
+function FolioOrderRep() {
+    if (document.getElementById("FolioOrdenRs").value !== "") {
+        var val = document.getElementById("FolioOrdenRs").value;
+        document.getElementById("FolioOrdenRs").value = "";
+        fechasRep = "?OrdFol=" + val;
+    }
+    return fechasRep;
+}
+
+function fchROrdGrlCrt() {
+    if (document.getElementById("fechaI1OrdCrt").value !== "" & document.getElementById("fechaF1OrdCrt").value !== "") {
+        fechasRep = "?fchaI=" + document.getElementById("fechaI1OrdCrt").value + " &fchaF=" + document.getElementById("fechaF1OrdCrt").value;
+    }
+    return fechasRep;
+}
+
+function fchROrdGrlEmpCrt() {
+    if (document.getElementById("fechaI1OrdEmpCrt").value !== "" & document.getElementById("fechaF1OrdEmpCrt").value !== "") {
+        fechasRep = "?fchaI=" + document.getElementById("fechaI1OrdEmpCrt").value + " &fchaF=" + document.getElementById("fechaF1OrdEmpCrt").value;
+    }
+    return fechasRep;
+}
+
+function OpenRep(url) {
+    window.open(url);
 }
 function verRep(id) {
-    var IDs = ['CardEstudios', 'CardOrdenes', 'CardResultados']; 
+    var IDs = ['CardEstudios', 'CardOrdenes', 'CardResultados','CardCortes'];
     for (var i = 0; i < IDs.length; i++) {
         document.getElementById(IDs[i]).style.display = "none";
     }
     document.getElementById(id).style.display = "block";
-}
-
-function GetEstadisticaEstudiosByOrder() {
-    alert("GetEstadisticaEstudiosByOrder");
-    var response="";
-   var Ajax = buscarComentario();
-    var divRes = document.getElementById('EstadisticarepChrt');
-    Ajax = buscarComentario();
-    Ajax.open('GET', 'Charts/EstadisticaEstudiosByOrder.jsp?unidad=1');
-    //alert(url);
-    Ajax.onreadystatechange = function () {
-        if (Ajax.readyState === 4) {
-            response=Ajax.responseText;
-            alert(response);
-            divRes.innerHTML = response;
-        }
-    };
-    Ajax.send(null);
 }
 //CancelOrd(id)

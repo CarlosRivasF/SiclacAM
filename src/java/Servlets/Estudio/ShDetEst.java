@@ -26,6 +26,7 @@ public class ShDetEst extends HttpServlet {
         List<Estudio_DTO> ests = (List<Estudio_DTO>) sesion.getAttribute("ests");
         int index = Integer.parseInt(request.getParameter("index").trim());
         Estudio_DTO est = ests.get(index);
+        String label=est.getClave_Estudio() + " - " + est.getNombre_Estudio() + " <a onclick=OpenRep('PrintLabelEstudio?CodeEst=" + est.getClave_Estudio().trim().replace(" ","_").replace("-", "_").trim() + "-" + est.getId_Est_Uni() + "-" + est.getNombre_Estudio().trim().replace(" ","_").replace("-", "_").trim();
         out.print("<div class='nav-scroller bg-white box-shadow'>"
                 + "    <nav class='nav nav-underline'>"
                 + "        <a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Estudio/Registro.jsp');>Nuevo Estudio</a>"
@@ -33,7 +34,7 @@ public class ShDetEst extends HttpServlet {
                 + "    </nav>"
                 + "</div>"
                 + "<div><hr class='mb-1'>"
-                + "<h4 style='text-align: center; color: white'>" + est.getClave_Estudio() + " - " + est.getNombre_Estudio() + " <a onclick=OpenRep('PrintLabelEstudio?CodeEst=" + est.getClave_Estudio().trim().replace(" ","_").replace("-", " ").trim() + "-" + est.getId_Est_Uni() + "-" + est.getNombre_Estudio().trim().replace(" ","_").replace("-", " ").trim() + "-'); href=# class='btn btn-warning btn-sm' ><span><img src='images/barcode.png'></span></a></h4>"
+                + "<h4 style='text-align: center; color: white'>" + label + "-'); href=# class='btn btn-warning btn-sm' ><span><img src='images/barcode.png'></span></a></h4>"
                 + "<hr class='mb-1'>");
         out.println("<div style='color: white' class='table-responsive'>");
         out.println("<div id='metodo'>"

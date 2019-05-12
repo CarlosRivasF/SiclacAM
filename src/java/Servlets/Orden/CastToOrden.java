@@ -1,11 +1,13 @@
 package Servlets.Orden;
 
 import DataAccesObject.Cotizacion_DAO;
+import DataAccesObject.Empleado_DAO;
 import DataAccesObject.Paciente_DAO;
 import DataAccesObject.Persona_DAO;
 import DataBase.Util;
 import DataTransferObject.Cotizacion_DTO;
 import DataTransferObject.Det_Orden_DTO;
+import DataTransferObject.Empleado_DTO;
 import DataTransferObject.Orden_DTO;
 import DataTransferObject.Paciente_DTO;
 import DataTransferObject.Persona_DTO;
@@ -49,8 +51,8 @@ public class CastToOrden extends HttpServlet {
             Orden.setUnidad(cot.getUnidad());
             Orden.setPaciente(cot.getPaciente());
             Orden.setMedico(cot.getMedico());
-            Persona_DAO P = new Persona_DAO();
-            Persona_DTO por = P.getPersona(Integer.parseInt(sesion.getAttribute("persona").toString().trim()));
+            Empleado_DAO P = new Empleado_DAO();
+            Empleado_DTO por = P.getOnlyEmpleado(Integer.parseInt(sesion.getAttribute("persona").toString().trim()));
             Orden.setEmpleado(por);
             Orden.setFecha(f.getFechaActual());
             Orden.setHora(f.getHoraMas(Util.getHrBD()));
@@ -89,7 +91,7 @@ public class CastToOrden extends HttpServlet {
                 int index = 0;
                 for (Paciente_DTO pac : pacs) {
                     if (pac.getId_Paciente() == cot.getPaciente().getId_Paciente()) {
-                        index=pacs.indexOf(pac);
+                        index = pacs.indexOf(pac);
                     }
                 }
                 request.getRequestDispatcher("ShDetPac?index=" + index + " &modeP=rellenar").forward(request, response);

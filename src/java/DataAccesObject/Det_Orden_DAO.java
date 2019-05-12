@@ -28,6 +28,7 @@ public class Det_Orden_DAO {
                     + "" + id_Orden + ","
                     + "" + detor.getEstudio().getId_Est_Uni() + ","
                     + "'" + detor.getDescuento() + "',"
+                    + "'" + detor.getSobrecargo()+ "',"
                     + "'" + detor.getFecha_Entrega() + "',"
                     + "'" + detor.getT_Entrega() + "',"
                     + "'" + detor.getSubtotal() + "')";
@@ -36,7 +37,7 @@ public class Det_Orden_DAO {
                 pstm.executeUpdate();
             }
             sql = "select id_Det_Orden from det_orden where id_Orden=" + id_Orden + " and id_Est_Uni=" + detor.getEstudio().getId_Est_Uni() + ""
-                    + " and Descuento='" + detor.getDescuento() + "' and Fecha_Entrega='" + detor.getFecha_Entrega() + "'"
+                    + " and Descuento='" + detor.getDescuento() + "' and Sobrecargo='" + detor.getSobrecargo() + "' and Fecha_Entrega='" + detor.getFecha_Entrega() + "'"
                     + " and Tipo_Entrega='" + detor.getT_Entrega() + "'  and montoRe='" + detor.getSubtotal() + "'";
             System.out.println(sql);
             try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery()) {

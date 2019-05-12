@@ -76,7 +76,7 @@ public class SearchEst extends HttpServlet {
                                 + "<label class='custom-control-label mb-3'for='PreU" + ests.indexOf(dto) + "'>" + dto.getPrecio().getPrecio_U() + "</label>"
                                 + "</div></td>"
                                 + "<td><input style='text-align: center' type='number' class='form-control' onkeypress='return soloNumeros(event)' name='desc" + ests.indexOf(dto) + "' id='desc" + ests.indexOf(dto) + "' placeholder='Descuento' required=''></td>"
-                                + "<td><input style='text-align: center' type='number' class='form-control' onkeypress='return soloNumeros(event)' name='desc" + ests.indexOf(dto) + "' id='sca" + ests.indexOf(dto) + "' placeholder='Sobrecargo' required=''></td>"
+                                + "<td><input style='text-align: center' type='number' class='form-control' onkeypress='return soloNumeros(event)' name='sca" + ests.indexOf(dto) + "' id='sca" + ests.indexOf(dto) + "' placeholder='Sobrecargo' required=''></td>"
                                 + "<td><button href=# class='btn btn-default btn-sm' onclick=" + function + "(" + ests.indexOf(dto) + ",'lst') ><span><img src='images/mas.png'></span></button></td>"
                                 + "</tr>");
                     }

@@ -78,10 +78,20 @@ public class AddEst extends HttpServlet {
                 } else {
                     descuento = Float.parseFloat(request.getParameter("Desc").trim());
                 }
+                
+                if (request.getParameter("Sco").trim().equals("") || request.getParameter("Sco").trim().equals("0")
+                        || Float.parseFloat(request.getParameter("Sco").trim()) < 0) {
+                    sobrecargo = Float.parseFloat("0");
+                } else if (Float.parseFloat(request.getParameter("Sco").trim()) > 100) {
+                    sobrecargo = Float.parseFloat("100");
+                } else {
+                    sobrecargo = Float.parseFloat(request.getParameter("Sco").trim());
+                }
                 tpr = request.getParameter("Tprec").trim();
                 detor = new Det_Orden_DTO();
                 detor.setEstudio(estudio);
                 detor.setDescuento(descuento);
+                detor.setSobrecargo(sobrecargo);
                 p = Float.parseFloat("0");
                 detor.setT_Entrega(tpr);
                 if (detor.getT_Entrega().equals("Normal")) {
@@ -92,6 +102,7 @@ public class AddEst extends HttpServlet {
                     p = estudio.getPrecio().getPrecio_U();
                 }
                 detor.setSubtotal(p - ((detor.getDescuento() * p) / 100));
+                detor.setSubtotal(p + ((detor.getSobrecargo()* p) / 100));
                 Det_Orden.add(detor);
                 Orden.setDet_Orden(Det_Orden);
                 break;
@@ -112,10 +123,19 @@ public class AddEst extends HttpServlet {
                 } else {
                     descuento = Float.parseFloat(request.getParameter("Desc").trim());
                 }
+                if (request.getParameter("Sco").trim().equals("") || request.getParameter("Sco").trim().equals("0")
+                        || Float.parseFloat(request.getParameter("Sco").trim()) < 0) {
+                    sobrecargo = Float.parseFloat("0");
+                } else if (Float.parseFloat(request.getParameter("Sco").trim()) > 100) {
+                    sobrecargo = Float.parseFloat("100");
+                } else {
+                    sobrecargo = Float.parseFloat(request.getParameter("Sco").trim());
+                }
                 tpr = request.getParameter("Tprec").trim();
                 detor = new Det_Orden_DTO();
                 detor.setEstudio(estudio);
                 detor.setDescuento(descuento);
+                detor.setSobrecargo(sobrecargo);
                 p = Float.parseFloat("0");
                 detor.setT_Entrega(tpr);
                 if (detor.getT_Entrega().equals("Normal")) {
@@ -126,6 +146,7 @@ public class AddEst extends HttpServlet {
                     p = estudio.getPrecio().getPrecio_U();
                 }
                 detor.setSubtotal(p - ((detor.getDescuento() * p) / 100));
+                detor.setSubtotal(detor.getSubtotal() + ((detor.getSobrecargo()* p) / 100));
                 Det_Orden.add(detor);
                 Orden.setDet_Orden(Det_Orden);
                 break;
@@ -137,14 +158,15 @@ public class AddEst extends HttpServlet {
                 + "<th >Nombre de Estudio</th>"
                 + "<th >Entrega</th>"
                 + "<th >Precio</th>"
-                + "<th >Descuento</th>"
+                + "<th >Desc.</th>"
+                + "<th >Cargo</th>"
                 + "<th >Espera</th>"
                 + "<th >Quitar</th>"
                 + "</tr>");
         Float total = Float.parseFloat("0");
         for (Det_Orden_DTO dto : Det_Orden) {
             p = Float.parseFloat("0");
-            int e = 0;
+            int e = 0; 
             if (dto.getT_Entrega().equals("Normal")) {
                 p = dto.getEstudio().getPrecio().getPrecio_N();
                 e = dto.getEstudio().getPrecio().getT_Entrega_N();
@@ -153,11 +175,13 @@ public class AddEst extends HttpServlet {
                 e = dto.getEstudio().getPrecio().getT_Entrega_U();
             }
             Float pd = ((dto.getDescuento() * p) / 100);
+            Float ps = ((dto.getSobrecargo()* p) / 100);
             out.println("<tr>"
                     + "<td >" + dto.getEstudio().getNombre_Estudio() + "</td>"
                     + "<td >" + dto.getT_Entrega() + "</td>"
                     + "<td >" + p + "</td>"
                     + "<td >$" + pd + "</td>"
+                    + "<td >$" + ps + "</td>"
                     + "<td >" + e + " días</td>"
                     + "<td><div id='mat-" + Det_Orden.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEst(" + Det_Orden.indexOf(dto) + ",'Ord') ><span><img src='images/trash.png'></span></button></div></td>"
                     + "</tr>");

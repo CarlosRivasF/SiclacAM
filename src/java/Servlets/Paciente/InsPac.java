@@ -1,11 +1,13 @@
 package Servlets.Paciente;
 
 import DataAccesObject.Direccion_DAO;
+import DataAccesObject.Empleado_DAO;
 import DataAccesObject.Paciente_DAO;
 import DataAccesObject.Persona_DAO;
 import DataAccesObject.Unidad_DAO;
 import DataBase.Util;
 import DataTransferObject.Direccion_DTO;
+import DataTransferObject.Empleado_DTO;
 import DataTransferObject.Orden_DTO;
 import DataTransferObject.Paciente_DTO;
 import DataTransferObject.Persona_DTO;
@@ -42,6 +44,7 @@ public class InsPac extends HttpServlet {
             f.setHora(fac);
             Direccion_DAO D = new Direccion_DAO();
             Persona_DAO P = new Persona_DAO();
+            Empleado_DAO P2 = new Empleado_DAO();
             Paciente_DAO Pa = new Paciente_DAO();
 
             int Id_Unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
@@ -100,7 +103,8 @@ public class InsPac extends HttpServlet {
                             Orden_DTO Orden = new Orden_DTO();
                             Orden.setMontoPagado(Float.parseFloat("0"));
                             Orden.setUnidad(U.getUnidadAll(id_unidad));
-                            Persona_DTO por = P.getPersona(Integer.parseInt(sesion.getAttribute("persona").toString().trim()));
+                            
+                            Empleado_DTO por = P2.getOnlyEmpleado(Integer.parseInt(sesion.getAttribute("persona").toString().trim()));
                             Orden.setEmpleado(por);
                             Orden.setPaciente(paciente);
                             Orden.setFecha(f.getFechaActual());

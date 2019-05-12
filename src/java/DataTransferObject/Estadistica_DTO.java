@@ -2,40 +2,40 @@ package DataTransferObject;
 
 public class Estadistica_DTO {
 
-    private int id_Est_Uni;
-    private String Clave_Estudio;
-    private String Nombre_Estudio;
-    private int Cantidad;
+    private int id;
+    private String EjeX;
+    private String Descr;
+    private int EjeY;
 
-    public int getId_Est_Uni() {
-        return id_Est_Uni;
+    public int getId() {
+        return id;
     }
 
-    public void setId_Est_Uni(int id_Est_Uni) {
-        this.id_Est_Uni = id_Est_Uni;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getNombre_Estudio() {
-        return Nombre_Estudio;
+    public String getEjeX() {
+        return EjeX;
     }
 
-    public void setNombre_Estudio(String Nombre_Estudio) {
-        this.Nombre_Estudio = Nombre_Estudio;
+    public void setEjeX(String EjeX) {
+        this.EjeX = EjeX;
     }
 
-    public int getCantidad() {
-        return Cantidad;
+    public String getDescr() {
+        return Descr;
     }
 
-    public void setCantidad(int Cantidad) {
-        this.Cantidad = Cantidad;
+    public void setDescr(String Descr) {
+        this.Descr = Descr;
     }
 
-    public String getClave_Estudio() {
-        return Clave_Estudio;
+    public int getEjeY() {
+        return EjeY;
     }
 
-    public void setClave_Estudio(String Clave_Estudio) {
-        this.Clave_Estudio = Clave_Estudio;
+    public void setEjeY(int EjeY) {
+        this.EjeY = EjeY;
     }
 }

@@ -1,9 +1,11 @@
 package Servlets.Orden;
 
+import DataAccesObject.Empleado_DAO;
 import DataAccesObject.Paciente_DAO;
 import DataAccesObject.Persona_DAO;
 import DataAccesObject.Unidad_DAO;
 import DataBase.Util;
+import DataTransferObject.Empleado_DTO;
 import DataTransferObject.Orden_DTO;
 import DataTransferObject.Paciente_DTO;
 import DataTransferObject.Persona_DTO;
@@ -46,8 +48,8 @@ public class AddPac extends HttpServlet {
         Orden_DTO Orden = new Orden_DTO();
         Orden.setMontoPagado(Float.parseFloat("0"));
         Orden.setUnidad(U.getUnidadAll(id_unidad));
-        Persona_DAO P = new Persona_DAO();
-        Persona_DTO por = P.getPersona(Integer.parseInt(sesion.getAttribute("persona").toString().trim()));
+        Empleado_DAO P = new Empleado_DAO();
+        Empleado_DTO por = P.getOnlyEmpleado(Integer.parseInt(sesion.getAttribute("persona").toString().trim()));
         Orden.setEmpleado(por);
         String mode = request.getParameter("mode").trim();
         if (mode.equals("code")) {
