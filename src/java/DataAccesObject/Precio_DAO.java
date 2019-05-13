@@ -18,7 +18,7 @@ public class Precio_DAO {
         int id_Precio = 0;
         String sql = "INSERT INTO precio VALUES(null," + id_Est_Uni + ",'" + dto.getPrecio_N() + "',"
                 + "" + dto.getT_Entrega_N() + ",'" + dto.getPrecio_U() + "'," + dto.getT_Entrega_U() + ")";
-        System.out.println(sql);
+        
         try (Connection con = Conexion.getCon(); PreparedStatement pstm = con.prepareStatement(sql);) {
             if (pstm.executeUpdate() == 1) {
                 pstm.close();

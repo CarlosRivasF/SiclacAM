@@ -29,14 +29,14 @@ public class Pago_DAO {
         int rp;
         try (Connection con = Conexion.getCon();) {
             try (PreparedStatement pstm = con.prepareStatement(sql);) {
-                System.out.println(sql);
+                
                 rp = pstm.executeUpdate();
                 System.out.println(rp);
             }
             if (rp == 1) {
                 sql = "SELECT id_Pago from pago WHERE id_Orden=" + pago.getId_Orden() + " "
                         + "and T_Pago='" + pago.getT_Pago() + "' AND monto='" + Util.redondearDecimales(pago.getMonto()) + "' AND fecha='" + pago.getFecha() + "' AND hora='" + pago.getHora() + "'";
-                System.out.println(sql);
+                
                 try (PreparedStatement pstm1 = con.prepareStatement(sql);
                         ResultSet rs = pstm1.executeQuery();) {
                     while (rs.next()) {

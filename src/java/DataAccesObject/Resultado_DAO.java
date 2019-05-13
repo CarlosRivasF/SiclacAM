@@ -25,13 +25,13 @@ public class Resultado_DAO {
                 + "" + id_Det_Ord + ","
                 + "" + id_Configuracion + ","
                 + "'" + Valor_Obtenido + "')";
-        System.out.println(sql);
+        
         try (Connection con = Conexion.getCon();) {
             try (PreparedStatement pstm = con.prepareStatement(sql);) {
                 pstm.executeUpdate();
             }
             sql = "SELECT id_resultado from resultado WHERE id_Det_Orden=" + id_Det_Ord + " and id_Configuracion=" + id_Configuracion + " AND Valor_Obtenido='" + Valor_Obtenido + "' ";
-            System.out.println(sql);
+            
             try (PreparedStatement pstm1 = con.prepareStatement(sql);
                     ResultSet rs = pstm1.executeQuery();) {
                 while (rs.next()) {
@@ -61,13 +61,13 @@ public class Resultado_DAO {
         String sql = "INSERT INTO observacion VALUES(null,"
                 + "" + id_Det_Ord + ","
                 + "'" + Observacion + "')";
-        System.out.println(sql);
+        
         try (Connection con = Conexion.getCon();) {
             try (PreparedStatement pstm = con.prepareStatement(sql);) {
                 pstm.executeUpdate();
             }
             sql = "SELECT id_Observacion from Observacion WHERE id_Det_Orden=" + id_Det_Ord + "";
-            System.out.println(sql);
+            
             try (PreparedStatement pstm1 = con.prepareStatement(sql);
                     ResultSet rs = pstm1.executeQuery();) {
                 while (rs.next()) {

@@ -13,12 +13,12 @@ import java.util.List;
  *
  * @author ZionSystems
  */
-public class Paciente_DAO {    
+public class Paciente_DAO {
 
     public int RegistrarPaciente(Paciente_DTO dto) {
         int id_Paciente = 0;
         try (Connection con = Conexion.getCon();) {
-            String sql = "SELECT id_Paciente from  paciente WHERE id_Persona=" + dto.getId_Persona() + "";            
+            String sql = "SELECT id_Paciente from  paciente WHERE id_Persona=" + dto.getId_Persona() + "";
             try (PreparedStatement pstm1 = con.prepareStatement(sql);
                     ResultSet rs = pstm1.executeQuery();) {
                 while (rs.next()) {
@@ -28,11 +28,11 @@ public class Paciente_DAO {
             if (id_Paciente != 0) {
                 return id_Paciente;
             } else {
-                sql = "INSERT INTO  paciente VALUES(NULL," + dto.getId_Unidad() + "," + dto.getId_Persona() + ",'" + dto.getCodPac() + "','" + dto.getSendMail() + "')";                
+                sql = "INSERT INTO  paciente VALUES(NULL," + dto.getId_Unidad() + "," + dto.getId_Persona() + ",'" + dto.getCodPac() + "','" + dto.getSendMail() + "')";
                 PreparedStatement pstm = con.prepareStatement(sql);
                 if (pstm.executeUpdate() == 1) {
                     pstm.close();
-                    sql = "SELECT id_Paciente from  paciente WHERE id_Unidad=" + dto.getId_Unidad() + " AND id_Persona=" + dto.getId_Persona() + " AND CodPac='" + dto.getCodPac() + "'";                    
+                    sql = "SELECT id_Paciente from  paciente WHERE id_Unidad=" + dto.getId_Unidad() + " AND id_Persona=" + dto.getId_Persona() + " AND CodPac='" + dto.getCodPac() + "'";
                     try (PreparedStatement pstm1 = con.prepareStatement(sql);
                             ResultSet rs = pstm1.executeQuery();) {
                         while (rs.next()) {
@@ -261,7 +261,7 @@ public class Paciente_DAO {
                     dto.setId_Paciente(rs.getInt("id_Paciente"));
                     dto.setId_Unidad(rs.getInt("id_Unidad"));
                     dto.setId_Persona(rs.getInt("id_Persona"));
-                    dto.setCodPac(rs.getString("CodPac"));
+                    dto.setCodPac(rs.getString("CodPac").toUpperCase());
                     dto.setSenMail(Boolean.valueOf(rs.getString("SendMail")));
                 }
                 rs.close();
@@ -340,13 +340,27 @@ public class Paciente_DAO {
     public int EliminarPac(Paciente_DTO dto) {
         int rp = 0;
         try (Connection con = Conexion.getCon();) {
-            String sql = "DELETE from paciente WHERE id_Paciente=" + dto.getId_Paciente()+ "";
+            String sql = "DELETE from paciente WHERE id_Paciente=" + dto.getId_Paciente() + "";
             try (PreparedStatement pstm = con.prepareStatement(sql);) {
                 if (pstm.executeUpdate() != 1) {
                     String sql1 = "DELETE from persona WHERE id_Persona=" + dto.getId_Persona() + "";
                     try (PreparedStatement pstm1 = con.prepareStatement(sql1);) {
                         rp = pstm1.executeUpdate();
                         pstm.close();
+                        if (rp != 1) {
+                            String sql2 = "DELETE from orden WHERE id_Paciente=" + dto.getId_Paciente() + "";
+                            try (PreparedStatement pstm2 = con.prepareStatement(sql2);) {
+                                rp = pstm2.executeUpdate();
+                                pstm.close();
+                                if (rp != 1) {
+                                    String sql3 = "DELETE from cotizacion WHERE id_Paciente=" + dto.getId_Paciente() + "";
+                                    try (PreparedStatement pstm3 = con.prepareStatement(sql3);) {
+                                        rp = pstm3.executeUpdate();
+                                        pstm.close();
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

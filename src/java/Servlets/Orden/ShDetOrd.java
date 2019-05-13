@@ -32,16 +32,47 @@ public class ShDetOrd extends HttpServlet {
             List<Orden_DTO> ords;
             String part = request.getParameter("part").trim();
             switch (part) {
-                case "ord":
+            case "ord":
+                if (sesion.getAttribute("OrdsPend") != null) {
+                    ords = (List<Orden_DTO>) sesion.getAttribute("OrdsPend");
+                } else {
                     ords = O.getOrdenesPendientes(id_unidad);
-                    break;
-                case "sald":
+                    sesion.setAttribute("OrdsPend", ords);
+                }
+                break;
+            case "sald":
+                if (sesion.getAttribute("OrdsSald") != null) {
+                    ords = (List<Orden_DTO>) sesion.getAttribute("OrdsSald");
+                } else {
                     ords = O.getOrdenesSaldo(id_unidad);
-                    break;
-                default:
+                    sesion.setAttribute("OrdsSald", ords);
+                }
+                break;
+            case "results":
+                if (sesion.getAttribute("OrdsRess") != null) {
+                    ords = (List<Orden_DTO>) sesion.getAttribute("OrdsRess");
+                } else {
+                    ords = O.getOrdenesTerminadas(id_unidad);
+                    sesion.setAttribute("OrdsRess", ords);
+                }
+                break;
+            case "uplRs":
+                if (sesion.getAttribute("OrdsPend") != null) {
+                    ords = (List<Orden_DTO>) sesion.getAttribute("OrdsPend");
+                } else {
+                    ords = O.getOrdenesPendientes(id_unidad);
+                    sesion.setAttribute("OrdsPend", ords);
+                }
+                break;
+            default:
+                if (sesion.getAttribute("OrdsAll") != null) {
+                    ords = (List<Orden_DTO>) sesion.getAttribute("OrdsAll");
+                } else {
                     ords = O.getOrdenes(id_unidad);
-                    break;
-            }
+                    sesion.setAttribute("OrdsAll", ords);
+                }
+                break;
+        }
 
             int index = Integer.parseInt(request.getParameter("index").trim());
             dto = ords.get(index);

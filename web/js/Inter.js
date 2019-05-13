@@ -2047,6 +2047,7 @@ function AddNWConf(x) {
 
 function SrchOrd(e, mode, part) {
     var busq = e.value;
+    var Ajax;
     if (busq.length === 0) {
         Ajax = buscarComentario();
         Ajax.open('POST', "SrchOrd", true);
@@ -2061,7 +2062,6 @@ function SrchOrd(e, mode, part) {
     } else {
         Ajax = buscarComentario();
         Ajax.open('POST', "SrchOrd", true);
-
         Ajax.onreadystatechange = function () {
             if (Ajax.readyState === 4) {
                 document.getElementById("SerchOrd").innerHTML = Ajax.responseText;

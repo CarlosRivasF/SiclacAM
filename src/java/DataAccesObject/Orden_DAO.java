@@ -37,14 +37,14 @@ public class Orden_DAO {
                     + "'" + orden.getEstado() + "',"
                     + "'" + orden.getConvenio() + "',"
                     + "" + orden.getFolio_Unidad() + ")";
-            System.out.println(sql);
+            
             try (PreparedStatement pstm = con.prepareStatement(sql);) {
                 pstm.executeUpdate();
             }
             sql = "select id_Orden from orden where id_unidad=" + orden.getUnidad().getId_Unidad() + " and id_paciente=" + orden.getPaciente().getId_Paciente() + ""
                     + " and id_medico=" + orden.getMedico().getId_Medico() + " and id_Persona=" + orden.getEmpleado().getId_Persona() + ""
                     + " and Fecha_Orden='" + orden.getFecha() + "'  and Hora_Orden='" + orden.getHora() + "' and Precio_Total='" + Util.redondearDecimales(orden.getMontoPagado()) + "' and montoRes='" + Util.redondearDecimales(orden.getMontoRestante()) + "' and convenio='" + orden.getConvenio() + "' and folio_unidad=" + orden.getFolio_Unidad() + "";
-            System.out.println(sql);
+            
             try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery()) {
                 while (rs.next()) {
                     orden.setId_Orden(rs.getInt("id_Orden"));
@@ -95,7 +95,7 @@ public class Orden_DAO {
         Empleado_DAO Pr = new Empleado_DAO();
         try (Connection con = Conexion.getCon()) {
             String sql = "SELECT * FROM orden  WHERE id_Orden=" + id_Orden + "";
-            System.out.println(sql);
+            
             try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery();) {
                 while (rs.next()) {
                     ord.setId_Orden(rs.getInt("id_Orden"));
@@ -176,7 +176,7 @@ public class Orden_DAO {
         Empleado_DAO Pr = new Empleado_DAO();
         try (Connection con = Conexion.getCon()) {
             String sql = "SELECT * FROM orden  WHERE id_Unidad=" + id_Unidad + " AND folio_unidad=" + folio_unidad + "";
-            System.out.println(sql);            
+            
             try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery();) {
                 while (rs.next()) {
                     ord.setId_Orden(rs.getInt("id_Orden"));
@@ -594,7 +594,7 @@ public class Orden_DAO {
                 Estadistica_DTO esta = new Estadistica_DTO();
                 while (rs.next()) {
                     int id = rs.getInt("id_Persona");
-                    String name = rs.getString("Nombre").toUpperCase()+" "+rs.getString("Ap_Paterno").toUpperCase();                    
+                    String name = rs.getString("Nombre").toUpperCase() + " " + rs.getString("Ap_Paterno").toUpperCase();
                     claveEG = "";
                     if (idE == id) {
                         c++;
@@ -637,10 +637,13 @@ public class Orden_DAO {
         Paciente_DAO P = new Paciente_DAO();
         Medico_DAO M = new Medico_DAO();
         Empleado_DAO Pr = new Empleado_DAO();
+        int C=0;
         try (Connection con = Conexion.getCon()) {
             String sql = "SELECT * FROM orden  WHERE Estado='Pendiente' AND id_Unidad=" + id_Unidad + "";
             try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery();) {
                 while (rs.next()) {
+                    C++;
+                    System.out.println(C);
                     Orden_DTO ord = new Orden_DTO();
                     ord.setId_Orden(rs.getInt("id_Orden"));
                     ord.setUnidad(U.getUnidadAll(rs.getInt("id_Unidad")));
@@ -1158,7 +1161,7 @@ public class Orden_DAO {
                 + "set Precio_Total='" + Util.redondearDecimales(MontoPagado + pago.getMonto()) + "',"
                 + " montoRes='" + Util.redondearDecimales(MontoRestante - pago.getMonto()) + "' "
                 + "where id_Orden=" + pago.getId_Orden() + "";
-        System.out.println(sql);
+        
         try (Connection con = Conexion.getCon();) {
             try (PreparedStatement pstm = con.prepareStatement(sql);) {
                 pstm.executeUpdate();
@@ -1172,7 +1175,7 @@ public class Orden_DAO {
         String sql = "UPDATE orden "
                 + "set Estado=? "
                 + "where id_Orden=?";
-        System.out.println(sql);
+        
         try (Connection con = Conexion.getCon();) {
             try (PreparedStatement pstm = con.prepareStatement(sql);) {
                 pstm.setString(1, Orden.getEstado());
@@ -1184,14 +1187,14 @@ public class Orden_DAO {
         }
     }
 
-    public static void main(String[] args) {
-        Orden_DAO O = new Orden_DAO();
-        for (Orden_DTO dto : O.getReporteGeneralOrdenes(1, "2018-07-31", "2019-03-17")) {
-            String strEstudios = "";
-            for (Det_Orden_DTO deto : dto.getDet_Orden()) {
-                strEstudios = strEstudios + deto.getEstudio().getClave_Estudio().trim() + ",";
-            }
-            System.out.println(strEstudios);
-        }
-    }
+//    public static void main(String[] args) {
+//        Orden_DAO O = new Orden_DAO();
+//        for (Orden_DTO dto : O.getReporteGeneralOrdenes(1, "2018-07-31", "2019-03-17")) {
+//            String strEstudios = "";
+//            for (Det_Orden_DTO deto : dto.getDet_Orden()) {
+//                strEstudios = strEstudios + deto.getEstudio().getClave_Estudio().trim() + ",";
+//            }
+//            System.out.println(strEstudios);
+//        }
+//    }
 }

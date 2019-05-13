@@ -56,10 +56,10 @@ public class Main {
         return resultado;
     }
 
-    public static void main(String[] args) {
-        Date fac = new Date();
-        Util f = new Util();
-        f.setHora(fac);
-        System.out.println(Main.compararFechasConDate("2019-01-25", f.getFechaActual()));
-    }
+//    public static void main(String[] args) {
+//        Date fac = new Date();
+//        Util f = new Util();
+//        f.setHora(fac);
+//        System.out.println(Main.compararFechasConDate("2019-01-25", f.getFechaActual()));
+//    }
 }

@@ -29,14 +29,14 @@ public class Promocion_DAO {
                     + "'" + Prom.getFecha_F() + "',"
                     + "'" + Prom.getPrecio_Total() + "',"
                     + "'" + Prom.getEstado() + "')";
-            System.out.println(sql);
+            
             try (PreparedStatement pstm = con.prepareStatement(sql);) {
                 pstm.executeUpdate();
             }
             sql = "select id_Promocion from promocion where id_unidad=" + Prom.getId_Unidad() + " and id_Persona=" + Prom.getEmpleado().getId_Persona() + ""
                     + " and Nombre_Promocion='" + Prom.getNombre_Promocion() + "' and Descripcion='" + Prom.getDescripcion() + "'"
                     + " and Fecha_I='" + Prom.getFecha_I() + "'  and Fecha_F='" + Prom.getFecha_F() + "' and Precio_Total='" + Prom.getPrecio_Total() + "'";
-            System.out.println(sql);
+            
             try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery()) {
                 while (rs.next()) {
                     Prom.setId_Promocion(rs.getInt("id_Promocion"));
@@ -177,6 +177,6 @@ public class Promocion_DAO {
 //        String Nombre_Promocion = "NameProm";
 //        int id_Promocion = 1;
 //        String sql = "UPDATE promocion SET Nombre_Promocion='" + Nombre_Promocion + "' WHERE id_Promocion=" + id_Promocion + "";
-//        System.out.println(sql);
+//        
 //    }
 }

@@ -55,7 +55,7 @@ public class Estudio_DAO {
         int id_Est_Uni = 0;
         try (Connection con = Conexion.getCon();) {
             String sql = "INSERT INTO est_uni VALUES(NULL," + Est + "," + Unid + ")";
-            System.out.println(sql);
+            
             PreparedStatement pstm = con.prepareStatement(sql);
             pstm.executeUpdate();
             pstm.close();
@@ -562,7 +562,7 @@ public class Estudio_DAO {
         int rp;
         try (Connection con = Conexion.getCon();) {
             String sql = "UPDATE estudio SET id_Tipo_Estudio=" + id_Tipo_Estudio + ", metodo='" + metodo + "' WHERE id_Estudio=" + id + "";
-            System.out.println(sql);
+            
             try (PreparedStatement pstm = con.prepareStatement(sql);) {
                 rp = pstm.executeUpdate();
             }
@@ -617,7 +617,7 @@ public class Estudio_DAO {
         try (Connection con = Conexion.getCon();) {
             String sql = "UPDATE configuracion SET Descripcion='" + dto.getDescripcion() + "',Valor_min='" + dto.getValor_min() + "',Valor_MAX='" + dto.getValor_MAX() + "'"
                     + ",Unidades='" + dto.getUniddes() + "',sexo='" + dto.getSexo() + "' WHERE id_Configuracion=" + dto.getId_Configuración() + "";
-            System.out.println(sql);
+            
             try (PreparedStatement pstm = con.prepareStatement(sql);) {
                 rp = pstm.executeUpdate();
             }

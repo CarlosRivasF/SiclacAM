@@ -51,7 +51,7 @@ public class Permiso_DAO {
         List<String> lst = new ArrayList<>();
         try (Connection con = Conexion.getCon()) {
             String sql = "SELECT id_Permiso FROM  use_per WHERE id_Usuario=" + id_Usuario + " order by id_Permiso";
-            System.out.println(sql);
+            
             try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery()) {
                 while (rs.next()) {
                     System.out.println(rs.getString("id_Permiso"));

@@ -17,11 +17,12 @@ import org.apache.commons.dbcp.BasicDataSource;
 
 public class Conexion {
 
+    private static int c=0;
     public static DataSource dataSource = null;//siclac2 SET GLOBAL max_connections = 300
     private static final String DB = "siclac2";//node74321-amlab.whelastic.net // localhost //node74321-amlab.whelastic.net:11065
-    private static final String URL = "jdbc:mysql://localhost/" + DB + "?useServerPrepStmts=true&autoReconnect=true&useSSL=false";
+    private static final String URL = "jdbc:mysql://node74321-amlab.whelastic.net/" + DB + "?useServerPrepStmts=true&autoReconnect=true&useSSL=false";
     private static final String USER = "root";
-    private static final String PASS = "";//NAVngv51153
+    private static final String PASS = "NAVngv51153";//NAVngv51153
 
     private Conexion() {
         BasicDataSource basicDataSource = new BasicDataSource();
@@ -44,18 +45,26 @@ public class Conexion {
     public static Connection getCon() {        
         try {
             if (Conexion.dataSource == null) {
-                Conexion co = new Conexion();
-                return Conexion.getCon();
+                Conexion co = new Conexion();                    
+                c++;
+                System.out.println("Conexiónes: "+c);
+                return Conexion.getCon();                
             } else {
                 if (Conexion.dataSource.getConnection() == null) {
                     Conexion co = new Conexion();
+                    c++;
+                    System.out.println("Conexiónes: "+c);
                     return Conexion.getCon();
                 } else {
+                    c++;
+                    System.out.println("Conexiónes: "+c);
                     return Conexion.dataSource.getConnection();
                 }
             }
         } catch (SQLException ex) {
             dataSource = null;
+            c=0;
+            System.out.println("REINICIO: "+c);
             throw new RuntimeException(ex);
         }
     }

@@ -17,7 +17,7 @@ public class Est_Mat_DAO {
         int r = 0;
         String sql = "INSERT INTO mat_est VALUES(" + id_Est_Uni + "," + dto.getId_Unid_Mat() + ","
                 + "" + dto.getCantidadE() + ",'" + dto.getUnidadE()+ "','" + dto.getT_Muestra() + "')";
-        System.out.println(sql);
+        
         try (Connection con = Conexion.getCon(); PreparedStatement pstm = con.prepareStatement(sql);) {
             r = pstm.executeUpdate();
         } catch (SQLException ex) {
