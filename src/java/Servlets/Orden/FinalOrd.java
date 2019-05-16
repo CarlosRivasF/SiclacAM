@@ -1,8 +1,10 @@
 package Servlets.Orden;
 
 import DataAccesObject.Orden_DAO;
+import DataAccesObject.Participacion_DAO;
 import DataBase.Util;
 import DataTransferObject.Orden_DTO;
+import DataTransferObject.Participacion_DTO;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Rectangle;
@@ -53,7 +55,17 @@ public class FinalOrd extends HttpServlet {
             Orden.setHora(f.getHoraMas(Util.getHrBD()));
             Orden.setEstado("Pendiente");
             Orden.setFolio_Unidad(O.getNoOrdenByUnidad(Orden.getUnidad().getId_Unidad()) + 1);
-            Orden.setId_Orden(O.registrarOrden(Orden));                
+            Orden.setId_Orden(O.registrarOrden(Orden));   
+            Participacion_DTO participacion=new Participacion_DTO();
+            participacion.setId_Orden(Orden.getId_Orden());
+            participacion.setId_Unidad(Orden.getUnidad().getId_Unidad());
+            participacion.setId_Medico(Orden.getMedico().getId_Medico());
+            participacion.setConvenio(Orden.getConvenio());
+            Float p=Orden.getMontoPagado()+Orden.getMontoRestante();
+            Float mp = ((Orden.getMedico().getParticipacion()* p) / 100);
+            participacion.setMonto(mp);
+            Participacion_DAO P=new Participacion_DAO();
+            P.registrarParticipacion(participacion);
         }
         sesion.removeAttribute("Orden");
         try {

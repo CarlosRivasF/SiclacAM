@@ -12,6 +12,7 @@ import DataTransferObject.Unidad_DTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -79,6 +80,9 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
                     medico.setId_Persona(persona.getId_Persona());
                     medico.setId_Medico(M.RegistrarMedico(medico));                    
                     if (medico.getId_Medico() != 0) {
+                        List<Medico_DTO> meds = (List<Medico_DTO>) sesion.getAttribute("meds");   
+                        meds.add(medico);
+                        sesion.setAttribute("meds", meds);
                         String msg = "Médico registrado correctamente";
                         sesion.setAttribute("msg", msg);
                         response.sendRedirect("Medicos.jsp");
