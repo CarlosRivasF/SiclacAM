@@ -53,12 +53,12 @@ public class AddEst extends HttpServlet {
         f.setHora(fac);
         String mode = request.getParameter("mode").trim();
         int index;
-        String est = request.getParameter("estudio").trim();        
+        String est = request.getParameter("estudio").trim();
         if (est.contains("-")) {
             String[] ixs = est.split("-");
-             index = Integer.parseInt(ixs[0]);
+            index = Integer.parseInt(ixs[0]);
         } else {
-             index = Integer.parseInt(request.getParameter("estudio").trim());
+            index = Integer.parseInt(request.getParameter("estudio").trim());
         }
 
         Estudio_DTO estudio = null;
@@ -67,6 +67,8 @@ public class AddEst extends HttpServlet {
         String tpr;
         Det_Orden_DTO detor;
         Float p;
+        Float pd;
+        Float ps;
         switch (mode) {
             case "lst":
                 estudio = ests.get(index);
@@ -78,7 +80,7 @@ public class AddEst extends HttpServlet {
                 } else {
                     descuento = Float.parseFloat(request.getParameter("Desc").trim());
                 }
-                
+
                 if (request.getParameter("Sco").trim().equals("") || request.getParameter("Sco").trim().equals("0")
                         || Float.parseFloat(request.getParameter("Sco").trim()) < 0) {
                     sobrecargo = Float.parseFloat("0");
@@ -87,6 +89,7 @@ public class AddEst extends HttpServlet {
                 } else {
                     sobrecargo = Float.parseFloat(request.getParameter("Sco").trim());
                 }
+
                 tpr = request.getParameter("Tprec").trim();
                 detor = new Det_Orden_DTO();
                 detor.setEstudio(estudio);
@@ -94,6 +97,7 @@ public class AddEst extends HttpServlet {
                 detor.setSobrecargo(sobrecargo);
                 p = Float.parseFloat("0");
                 detor.setT_Entrega(tpr);
+
                 if (detor.getT_Entrega().equals("Normal")) {
                     detor.setFecha_Entrega(f.SumarDias(detor.getEstudio().getPrecio().getT_Entrega_N()));
                     p = estudio.getPrecio().getPrecio_N();
@@ -101,8 +105,15 @@ public class AddEst extends HttpServlet {
                     detor.setFecha_Entrega(f.SumarDias(detor.getEstudio().getPrecio().getT_Entrega_U()));
                     p = estudio.getPrecio().getPrecio_U();
                 }
-                detor.setSubtotal(p - ((detor.getDescuento() * p) / 100));
-                detor.setSubtotal(p + ((detor.getSobrecargo()* p) / 100));
+
+                pd = ((detor.getDescuento() * p) / 100);
+                ps = ((detor.getSobrecargo() * p) / 100);
+
+                detor.setSubtotal(p - pd);
+                p = detor.getSubtotal();
+
+                detor.setSubtotal(p + ps);
+
                 Det_Orden.add(detor);
                 Orden.setDet_Orden(Det_Orden);
                 break;
@@ -145,8 +156,13 @@ public class AddEst extends HttpServlet {
                     detor.setFecha_Entrega(f.SumarDias(detor.getEstudio().getPrecio().getT_Entrega_U()));
                     p = estudio.getPrecio().getPrecio_U();
                 }
-                detor.setSubtotal(p - ((detor.getDescuento() * p) / 100));
-                detor.setSubtotal(detor.getSubtotal() + ((detor.getSobrecargo()* p) / 100));
+                pd = ((detor.getDescuento() * p) / 100);
+                ps = ((detor.getSobrecargo() * p) / 100);
+
+                detor.setSubtotal(p - pd);
+                p = detor.getSubtotal();
+
+                detor.setSubtotal(p + ps);
                 Det_Orden.add(detor);
                 Orden.setDet_Orden(Det_Orden);
                 break;
@@ -166,7 +182,7 @@ public class AddEst extends HttpServlet {
         Float total = Float.parseFloat("0");
         for (Det_Orden_DTO dto : Det_Orden) {
             p = Float.parseFloat("0");
-            int e = 0; 
+            int e = 0;
             if (dto.getT_Entrega().equals("Normal")) {
                 p = dto.getEstudio().getPrecio().getPrecio_N();
                 e = dto.getEstudio().getPrecio().getT_Entrega_N();
@@ -174,8 +190,8 @@ public class AddEst extends HttpServlet {
                 p = dto.getEstudio().getPrecio().getPrecio_U();
                 e = dto.getEstudio().getPrecio().getT_Entrega_U();
             }
-            Float pd = ((dto.getDescuento() * p) / 100);
-            Float ps = ((dto.getSobrecargo()* p) / 100);
+            pd = ((dto.getDescuento() * p) / 100);
+            ps = ((dto.getSobrecargo() * p) / 100);
             out.println("<tr>"
                     + "<td >" + dto.getEstudio().getNombre_Estudio() + "</td>"
                     + "<td >" + dto.getT_Entrega() + "</td>"

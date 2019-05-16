@@ -51,7 +51,8 @@ public class DelEst extends HttpServlet {
                                 + "<th >Nombre de Estudio</th>"
                                 + "<th >Entrega</th>"
                                 + "<th >Precio</th>"
-                                + "<th >Descuento</th>"
+                                + "<th >Desc.</th>"
+                                + "<th >Cargo</th>"
                                 + "<th >Espera</th>"
                                 + "<th >Entrega</th>"
                                 + "<th >Quitar</th>"
@@ -68,11 +69,13 @@ public class DelEst extends HttpServlet {
                                 e = dto.getEstudio().getPrecio().getT_Entrega_U();
                             }
                             Float pd = ((dto.getDescuento() * p) / 100);
+                            Float ps = ((dto.getSobrecargo() * p) / 100);
                             out.println("<tr>"
                                     + "<td >" + dto.getEstudio().getNombre_Estudio() + "</td>"
                                     + "<td >" + dto.getT_Entrega() + "</td>"
                                     + "<td >" + p + "</td>"
                                     + "<td >$" + pd + "</td>"
+                                    + "<td >$" + ps + "</td>"
                                     + "<td >" + e + " días</td>"
                                     + "<td >" + f.SumarDias(e) + "</td>");
                             if (request.getParameter("shdet") == null) {
@@ -96,8 +99,8 @@ public class DelEst extends HttpServlet {
                         out.println("<div id='BEst'></div>");
                     }
                     break;
-                case "Cot":                    
-                    Cotizacion_DTO Cot = (Cotizacion_DTO) sesion.getAttribute("Cotizacion");                    
+                case "Cot":
+                    Cotizacion_DTO Cot = (Cotizacion_DTO) sesion.getAttribute("Cotizacion");
                     List<Det_Cot_DTO> Det_Cot = null;
                     if (Cot.getDet_Cot() == null) {
                         System.out.println("Det_Cot NULL");
@@ -117,7 +120,8 @@ public class DelEst extends HttpServlet {
                                 + "<th >Nombre de Estudio</th>"
                                 + "<th >Entrega</th>"
                                 + "<th >Precio</th>"
-                                + "<th >Descuento</th>"
+                                + "<th >Desc.</th>"
+                                + "<th >Cargo</th>"
                                 + "<th >Espera</th>"
                                 + "<th >Quitar</th>"
                                 + "</tr>");
@@ -133,11 +137,13 @@ public class DelEst extends HttpServlet {
                                 e = dto.getEstudio().getPrecio().getT_Entrega_U();
                             }
                             Float pd = ((dto.getDescuento() * p) / 100);
+                            Float ps = ((dto.getSobrecargo() * p) / 100);
                             out.println("<tr>"
                                     + "<td >" + dto.getEstudio().getNombre_Estudio() + "</td>"
                                     + "<td >" + dto.getT_Entrega() + "</td>"
                                     + "<td >" + p + "</td>"
                                     + "<td >$" + pd + "</td>"
+                                    + "<td >$" + ps + "</td>"
                                     + "<td >" + e + " días</td>");
                             if (request.getParameter("shdet") == null) {
                                 out.println("<td><div id='mat-" + Det_Cot.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEst(" + Det_Cot.indexOf(dto) + ",'Cot') ><span><img src='images/trash.png'></span></button></div></td>");
@@ -178,7 +184,8 @@ public class DelEst extends HttpServlet {
                                 + "<th >Nombre de Estudio</th>"
                                 + "<th >Entrega</th>"
                                 + "<th >Precio</th>"
-                                + "<th >Descuento</th>"
+                                + "<th >Desc.</th>"
+                                + "<th >Cargo</th>"
                                 + "<th >Quitar</th>"
                                 + "</tr>");
                         Float total = Float.parseFloat("0");
@@ -193,11 +200,13 @@ public class DelEst extends HttpServlet {
                                 e = dto.getEstudio().getPrecio().getT_Entrega_U();
                             }
                             Float pd = ((dto.getDescuento() * p) / 100);
+                            Float ps = ((dto.getSobrecargo()* p) / 100);
                             out.println("<tr>"
                                     + "<td >" + dto.getEstudio().getNombre_Estudio() + "</td>"
                                     + "<td >" + dto.getT_Entrega() + "</td>"
                                     + "<td >" + p + "</td>"
-                                    + "<td >$" + pd + "</td>");
+                                    + "<td >$" + pd + "</td>"
+                                    + "<td >$" + ps + "</td>");
                             if (request.getParameter("shdet") == null) {
                                 out.println("<td><div id='mat-" + Det_Prom.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEst(" + Det_Prom.indexOf(dto) + ",'Prom') ><span><img src='images/trash.png'></span></button></div></td>");
                             } else {
