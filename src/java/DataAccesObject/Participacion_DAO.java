@@ -16,7 +16,7 @@ import java.util.Date;
  */
 public class Participacion_DAO {
     
-    public Participacion_DTO registrarParticipacion(Participacion_DTO part) {
+    public int registrarParticipacion(Participacion_DTO part) {
         Date fac = new Date();
         Util f = new Util();
         f.setHora(fac);
@@ -30,7 +30,7 @@ public class Participacion_DAO {
         } catch (SQLException ex) {
             System.out.println("* INSERT *PARTICIPACION: "+ex.getMessage());
         }
-        return part;
+        return part.getId_participacion();
     }
 
     public int GetIDParticipacion(Participacion_DTO part) {

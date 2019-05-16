@@ -27,7 +27,7 @@ public class SrchMed extends HttpServlet {
         Medico_DAO M = new Medico_DAO();
         List<Medico_DTO> meds;
         if (sesion.getAttribute("meds") != null) {
-            meds = (List<Medico_DTO>) sesion.getAttribute("meds");
+            meds = (List<Medico_DTO>) sesion.getAttribute("meds");            
         } else {
             meds = M.getMedicos();
             sesion.setAttribute("meds", meds);

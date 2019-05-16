@@ -9,6 +9,7 @@ import DataTransferObject.Estadistica_DTO;
 import DataTransferObject.Observacion_DTO;
 import DataTransferObject.Orden_DTO;
 import DataTransferObject.Pago_DTO;
+import DataTransferObject.Participacion_DTO;
 import DataTransferObject.Resultado_DTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -37,6 +38,7 @@ public class Orden_DAO {
                     + "'" + orden.getEstado() + "',"
                     + "'" + orden.getConvenio() + "',"
                     + "" + orden.getFolio_Unidad() + ")";
+            
             
             try (PreparedStatement pstm = con.prepareStatement(sql);) {
                 pstm.executeUpdate();
