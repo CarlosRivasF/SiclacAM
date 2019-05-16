@@ -55,7 +55,7 @@ public class Estudio_DAO {
         int id_Est_Uni = 0;
         try (Connection con = Conexion.getCon();) {
             String sql = "INSERT INTO est_uni VALUES(NULL," + Est + "," + Unid + ")";
-            
+
             PreparedStatement pstm = con.prepareStatement(sql);
             pstm.executeUpdate();
             pstm.close();
@@ -72,10 +72,11 @@ public class Estudio_DAO {
         return id_Est_Uni;
     }
 
-    public List<Estudio_DTO> getEstudios() {
+    public List<Estudio_DTO> getEstudios() {        
         List<Estudio_DTO> ests = new ArrayList<>();
         try (Connection con = Conexion.getCon()) {
             String sql = "SELECT id_Estudio,id_Tipo_Estudio,Nombre_Estudio,Clave_Estudio, Preparacion,Utilidad,metodo FROM estudio";
+            
             try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery();) {
                 while (rs.next()) {
                     Estudio_DTO est = new Estudio_DTO();
@@ -89,9 +90,19 @@ public class Estudio_DAO {
                     ests.add(est);
                 }
             }
+            for (Estudio_DTO est : ests) {
+                sql = "SELECT id_Est_Uni FROM est_uni  WHERE id_Estudio=" + est.getId_Estudio() + "";
+                
+                try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery();) {                    
+                    while (rs.next()) {
+                        est.setId_Est_Uni(rs.getInt("id_Est_Uni"));
+                    }
+                }
+            }
 
             for (Estudio_DTO est : ests) {
                 sql = "SELECT Nombre_Tipo_Estudio FROM tipo_estudio WHERE id_Tipo_Estudio=" + est.getId_Tipo_Estudio() + "";
+                
                 try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery();) {
                     while (rs.next()) {
                         est.setNombre_Tipo_Estudio(rs.getString("Nombre_Tipo_Estudio"));
@@ -102,6 +113,7 @@ public class Estudio_DAO {
             for (Estudio_DTO est : ests) {
                 List<Configuracion_DTO> confs = new ArrayList<>();
                 sql = "SELECT id_Configuracion FROM conf_est WHERE id_Estudio=" + est.getId_Estudio() + "";
+                
                 try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery();) {
                     while (rs.next()) {
                         Configuracion_DTO conf = new Configuracion_DTO();
@@ -114,6 +126,7 @@ public class Estudio_DAO {
             for (Estudio_DTO est : ests) {
                 for (Configuracion_DTO conf : est.getCnfs()) {
                     sql = "SELECT * FROM configuracion WHERE id_Configuracion=" + conf.getId_Configuración() + "";
+                    
                     try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery();) {
                         while (rs.next()) {
                             conf.setDescripcion(rs.getString("Descripcion"));
@@ -128,6 +141,7 @@ public class Estudio_DAO {
             for (Estudio_DTO est : ests) {
                 List<Est_Mat_DTO> matsE = new ArrayList<>();
                 sql = "SELECT * FROM mat_est WHERE id_Est_Uni=" + est.getId_Est_Uni() + "";
+                
                 try (PreparedStatement pstm = con.prepareStatement(sql);
                         ResultSet rs = pstm.executeQuery();) {
                     while (rs.next()) {
@@ -144,6 +158,7 @@ public class Estudio_DAO {
             for (Estudio_DTO est : ests) {
                 for (Est_Mat_DTO matE : est.getMts()) {
                     sql = "SELECT id_Unidad,id_Empr_Mat,Cantidad FROM unid_mat WHERE id_Unid_Mat=" + matE.getId_Unid_Mat() + "";
+                    
                     try (PreparedStatement pstm = con.prepareStatement(sql);
                             ResultSet rs = pstm.executeQuery();) {
                         while (rs.next()) {
@@ -153,6 +168,7 @@ public class Estudio_DAO {
                         }
                     }
                     sql = "SELECT id_Empresa,id_Material,Precio FROM empr_mat WHERE id_Empr_Mat=" + matE.getId_Empr_Mat() + "";
+                    
                     try (PreparedStatement pstm = con.prepareStatement(sql);
                             ResultSet rs = pstm.executeQuery();) {
                         while (rs.next()) {
@@ -162,6 +178,7 @@ public class Estudio_DAO {
                         }
                     }
                     sql = "SELECT * FROM material WHERE id_Material=" + matE.getId_Material() + "";
+                    
                     try (PreparedStatement pstm = con.prepareStatement(sql);
                             ResultSet rs = pstm.executeQuery();) {
                         while (rs.next()) {
@@ -189,7 +206,24 @@ public class Estudio_DAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        //System.out.println("enu size: " + ests.size());
         return ests;
+    }
+
+    public List<Estudio_DTO> GetEstudiosNoRegisterInUnidad(int id_Unidad) {
+        System.out.println("GetEstudiosNoRegisterInUnidad");
+        List<Estudio_DTO> eu = getEstudiosByUnidad(id_Unidad);
+        List<Estudio_DTO> enu = getEstudios();
+        for (int i = 0; i < eu.size(); i++) {
+            for (int j = 0; j < enu.size(); j++) {
+                if (eu.get(i).getId_Estudio() == enu.get(j).getId_Estudio()) {
+                    enu.remove(enu.get(j));
+                    System.out.println("remueve: " + enu.get(j).getNombre_Estudio());
+                }
+            }
+        }
+
+        return enu;
     }
 
     public List<Estudio_DTO> getEstudiosNotRegUnidad(int id_Unidad) {
@@ -320,7 +354,7 @@ public class Estudio_DAO {
         return ests;
     }
 
-    public List<Estudio_DTO> getEstudiosByUnidad(int id_Unidad) {
+    public List<Estudio_DTO> getEstudiosByUnidad(int id_Unidad) {        
         List<Estudio_DTO> ests = new ArrayList<>();
         try (Connection con = Conexion.getCon()) {
             String sql = "SELECT id_Est_Uni,id_Estudio FROM est_uni  WHERE id_Unidad=" + id_Unidad + "";
@@ -446,7 +480,7 @@ public class Estudio_DAO {
             throw new RuntimeException(e);
         }
         return ests;
-    }        
+    }
 
     public Estudio_DTO getEst_Uni(int id_Est_Uni) {
         Estudio_DTO est = new Estudio_DTO();
@@ -562,7 +596,7 @@ public class Estudio_DAO {
         int rp;
         try (Connection con = Conexion.getCon();) {
             String sql = "UPDATE estudio SET id_Tipo_Estudio=" + id_Tipo_Estudio + ", metodo='" + metodo + "' WHERE id_Estudio=" + id + "";
-            
+
             try (PreparedStatement pstm = con.prepareStatement(sql);) {
                 rp = pstm.executeUpdate();
             }
@@ -617,7 +651,7 @@ public class Estudio_DAO {
         try (Connection con = Conexion.getCon();) {
             String sql = "UPDATE configuracion SET Descripcion='" + dto.getDescripcion() + "',Valor_min='" + dto.getValor_min() + "',Valor_MAX='" + dto.getValor_MAX() + "'"
                     + ",Unidades='" + dto.getUniddes() + "',sexo='" + dto.getSexo() + "' WHERE id_Configuracion=" + dto.getId_Configuración() + "";
-            
+
             try (PreparedStatement pstm = con.prepareStatement(sql);) {
                 rp = pstm.executeUpdate();
             }
@@ -708,7 +742,6 @@ public class Estudio_DAO {
 //            });
 //        });
 //    }
-
     public void copy(Estudio_DTO estudio, int id_Unidad) {
         Precio_DAO P = new Precio_DAO();
         Configuracion_DAO CN = new Configuracion_DAO();

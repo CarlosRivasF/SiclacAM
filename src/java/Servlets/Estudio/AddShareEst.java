@@ -28,25 +28,37 @@ public class AddShareEst extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        PrintWriter out = response.getWriter();
+        System.out.println("Peticion a AddShareEst");
         response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
-        int id_unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
+        int id_unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());        
+        PrintWriter out = response.getWriter();
         Estudio_DAO E = new Estudio_DAO();
-        List<Estudio_DTO> eu = E.getEstudiosByUnidad(id_unidad);
-        List<Estudio_DTO> enu = E.getEstudiosNotRegUnidad(id_unidad);
-
-        try {
-            for (int i = 0; i < eu.size(); i++) {
-                for (int j = 0; j < enu.size(); j++) {
-                    if (eu.get(i).getId_Estudio() == enu.get(j).getId_Estudio()) {
-                        enu.remove(enu.get(j));
-                    }
-                }
-            }
-        } catch (Exception e) {
-            out.println("<br>'AddShareEst'<br><h1 style='color: white'>" + e.getMessage() + "...<br>Por favor capture una imagen del error y comuniquelo de inmediato a ZionSystems</h1>");
-        }
+        List<Estudio_DTO> enu;
+        enu = E.GetEstudiosNoRegisterInUnidad(id_unidad);
+        
+//        List<Estudio_DTO> eu = E.getEstudiosByUnidad(id_unidad);
+//        enu = E.getEstudiosNotRegUnidad(id_unidad);
+//
+//        try {
+//            for (int i = 0; i < eu.size(); i++) {
+//                for (int j = 0; j < enu.size(); j++) {
+//                    if (eu.get(i).getId_Estudio() == enu.get(j).getId_Estudio()) {
+//                        enu.remove(enu.get(j));
+//                    }
+//                }
+//            }
+//            eu = enu;
+//            for (int i = 0; i < eu.size(); i++) {
+//                for (int j = 0; j < enu.size(); j++) {
+//                    if (eu.get(i).getId_Estudio() == enu.get(j).getId_Estudio()) {
+//                        enu.remove(enu.get(j));
+//                    }
+//                }
+//            }
+//        } catch (Exception e) {
+//            out.println("<br>'ShareEst'<br><h1 style='color: white'>" + e.getMessage() + "...<br>Por favor capture una imagen del error y comuniquelo de inmediato a ZionSystems</h1>");
+//        }
 
         Estudio_DAO EO = new Estudio_DAO();
         int index = Integer.parseInt(request.getParameter("index").trim());
