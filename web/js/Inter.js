@@ -1920,7 +1920,8 @@ function InsNom(x) {
     xhr.send(p);
 }
 
-function ShareEst(x) {
+function ShareEst(x,btn) {
+    btn.disabled = true;
     buscarComentario();
     xhr.open("POST", "AddShareEst", true);
     xhr.onreadystatechange = function () {
