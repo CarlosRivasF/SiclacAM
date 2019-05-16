@@ -37,6 +37,7 @@ public class DelEst extends HttpServlet {
         f.setHora(fac);
         if (request.getParameter("modulo") != null) {
             String Modulo = request.getParameter("modulo").trim();
+            System.out.println("");
             switch (Modulo) {
                 case "Ord":
                     Orden_DTO Orden = (Orden_DTO) sesion.getAttribute("Orden");
