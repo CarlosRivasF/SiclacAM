@@ -56,7 +56,7 @@ public class PrintRes extends HttpServlet {
         HttpSession sesion = request.getSession();
         int id_Orden;
         if (request.getParameter("LxOrdSald") != null) {
-            id_Orden = Integer.parseInt(Util.Desencriptar(request.getParameter("LxOrdSald").trim()));
+            id_Orden = Integer.parseInt(request.getParameter("LxOrdSald").trim());
             System.out.println("LxOrdSald");
         } else if (request.getParameter("OrdFol") != null) {
             id_Orden = Integer.parseInt(request.getParameter("OrdFol").trim());

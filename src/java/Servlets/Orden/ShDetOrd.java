@@ -32,47 +32,47 @@ public class ShDetOrd extends HttpServlet {
             List<Orden_DTO> ords;
             String part = request.getParameter("part").trim();
             switch (part) {
-            case "ord":
-                if (sesion.getAttribute("OrdsPend") != null) {
-                    ords = (List<Orden_DTO>) sesion.getAttribute("OrdsPend");
-                } else {
-                    ords = O.getOrdenesPendientes(id_unidad);
-                    sesion.setAttribute("OrdsPend", ords);
-                }
-                break;
-            case "sald":
-                if (sesion.getAttribute("OrdsSald") != null) {
-                    ords = (List<Orden_DTO>) sesion.getAttribute("OrdsSald");
-                } else {
-                    ords = O.getOrdenesSaldo(id_unidad);
-                    sesion.setAttribute("OrdsSald", ords);
-                }
-                break;
-            case "results":
-                if (sesion.getAttribute("OrdsRess") != null) {
-                    ords = (List<Orden_DTO>) sesion.getAttribute("OrdsRess");
-                } else {
-                    ords = O.getOrdenesTerminadas(id_unidad);
-                    sesion.setAttribute("OrdsRess", ords);
-                }
-                break;
-            case "uplRs":
-                if (sesion.getAttribute("OrdsPend") != null) {
-                    ords = (List<Orden_DTO>) sesion.getAttribute("OrdsPend");
-                } else {
-                    ords = O.getOrdenesPendientes(id_unidad);
-                    sesion.setAttribute("OrdsPend", ords);
-                }
-                break;
-            default:
-                if (sesion.getAttribute("OrdsAll") != null) {
-                    ords = (List<Orden_DTO>) sesion.getAttribute("OrdsAll");
-                } else {
-                    ords = O.getOrdenes(id_unidad);
-                    sesion.setAttribute("OrdsAll", ords);
-                }
-                break;
-        }
+                case "ord":
+                    if (sesion.getAttribute("OrdsPend") != null) {
+                        ords = (List<Orden_DTO>) sesion.getAttribute("OrdsPend");
+                    } else {
+                        ords = O.getOrdenesPendientes(id_unidad);
+                        sesion.setAttribute("OrdsPend", ords);
+                    }
+                    break;
+                case "sald":
+                    if (sesion.getAttribute("OrdsSald") != null) {
+                        ords = (List<Orden_DTO>) sesion.getAttribute("OrdsSald");
+                    } else {
+                        ords = O.getOrdenesSaldo(id_unidad);
+                        sesion.setAttribute("OrdsSald", ords);
+                    }
+                    break;
+                case "results":
+                    if (sesion.getAttribute("OrdsRess") != null) {
+                        ords = (List<Orden_DTO>) sesion.getAttribute("OrdsRess");
+                    } else {
+                        ords = O.getOrdenesTerminadas(id_unidad);
+                        sesion.setAttribute("OrdsRess", ords);
+                    }
+                    break;
+                case "uplRs":
+                    if (sesion.getAttribute("OrdsPend") != null) {
+                        ords = (List<Orden_DTO>) sesion.getAttribute("OrdsPend");
+                    } else {
+                        ords = O.getOrdenesPendientes(id_unidad);
+                        sesion.setAttribute("OrdsPend", ords);
+                    }
+                    break;
+                default:
+                    if (sesion.getAttribute("OrdsAll") != null) {
+                        ords = (List<Orden_DTO>) sesion.getAttribute("OrdsAll");
+                    } else {
+                        ords = O.getOrdenes(id_unidad);
+                        sesion.setAttribute("OrdsAll", ords);
+                    }
+                    break;
+            }
 
             int index = Integer.parseInt(request.getParameter("index").trim());
             dto = ords.get(index);
@@ -159,7 +159,7 @@ public class ShDetOrd extends HttpServlet {
         out.println("</table>");
         out.println("</div>");
         out.println("</div>"
-                + "<a class='btn btn-primary btn-lg btn-block' href='FinalOrd?LsIxOrd=" + Util.Encriptar(String.valueOf(dto.getId_Orden())) + "' >Imprimir Orden</a><br>");
+                + "<a class='btn btn-primary btn-lg btn-block' href='FinalOrd?LsIxOrd=" + dto.getId_Orden() + "' >Imprimir Orden</a><br>");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

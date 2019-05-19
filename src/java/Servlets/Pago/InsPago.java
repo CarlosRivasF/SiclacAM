@@ -42,15 +42,23 @@ public class InsPago extends HttpServlet {
         Pago_DTO pago = new Pago_DTO();
 
         pago.setT_Pago(request.getParameter("Tipo_Pago").trim());
-        pago.setMonto(Float.parseFloat(request.getParameter("monto").trim()));
+        Float Monto = Float.parseFloat(request.getParameter("monto").trim());
+        Float Cambio = Float.parseFloat("0");
+
+        if (Monto < Orden.getMontoRestante()) {
+            pago.setMonto(Monto);
+            Float MontoPagado = Util.redondearDecimales(Orden.getMontoPagado());
+            Float MontoRestante = Util.redondearDecimales(Orden.getMontoRestante());
+            Orden.setMontoPagado(Util.redondearDecimales(MontoPagado + pago.getMonto()));
+            Orden.setMontoRestante(Util.redondearDecimales(MontoRestante - pago.getMonto()));
+        } else {
+            Cambio = Monto - Orden.getMontoRestante();
+            pago.setMonto(Orden.getMontoRestante());
+            Orden.setMontoPagado(Orden.getMontoRestante());
+            Orden.setMontoRestante(Float.parseFloat("0"));
+        }
         pago.setFecha(f.getFechaActual());
         pago.setHora(f.getHoraMas(Util.getHrBD()));
-
-        Float MontoPagado = Util.redondearDecimales(Orden.getMontoPagado());
-        Float MontoRestante = Util.redondearDecimales(Orden.getMontoRestante());
-
-        Orden.setMontoPagado(Util.redondearDecimales(MontoPagado + pago.getMonto()));
-        Orden.setMontoRestante(Util.redondearDecimales(MontoRestante - pago.getMonto()));
         Pagos.add(pago);
         Orden.setPagos(Pagos);
         try (PrintWriter out = response.getWriter()) {
@@ -70,25 +78,36 @@ public class InsPago extends HttpServlet {
             });
             out.println("</table></div>");
 
+            float montoTotal = Util.redondearDecimales(Orden.getMontoRestante() + Orden.getMontoPagado());
+            float montoPagado = Util.redondearDecimales(Orden.getMontoPagado());
+            float montoRestante = Util.redondearDecimales(Orden.getMontoRestante());
+
             out.print("<div class='offset-7 col'>"
                     + "<table>"
                     + "<tr>"
                     + "<td>Total : </td>"
-                    + "<td>" + Util.redondearDecimales(Orden.getMontoRestante() + Orden.getMontoPagado()) + "</td>"
+                    + "<td>" + montoTotal + "</td>"
                     + "</tr>"
                     + "<tr>"
                     + "<td>A/C : </td>"
-                    + "<td>" + Util.redondearDecimales(Orden.getMontoPagado()) + "</td>"
+                    + "<td>" + montoPagado + "</td>"
                     + "</tr>"
                     + "<tr>"
                     + "<td>Por Pagar : </td>"
-                    + "<td>" + Util.redondearDecimales(Orden.getMontoRestante()) + "</td>"
+                    + "<td>" + montoRestante + "</td>"
                     + "</tr>"
                     + "</table>"
                     + "</div>");
-            out.print("<div id='pago'>"
-                    + "<button class='btn btn-success btn-lg btn-block' id='ConPay' onclick=FormPago('ord'); name='ConPay'>Realizar Pago<span><img src='images/pay.png'></span></button>"
-                    + "</div><br>");
+            if (Cambio > 0) {
+                out.print("<div class='alert alert-success alert-dismissible fade show' role='alert'>"
+                        + "<center><strong>Debe devolver de cambio: </strong>"+ Cambio +" Pesos</center>"
+                        + "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>"
+                        + "<span aria-hidden='true'>&times;</span>"
+                        + "</button>"
+                        + "</div>");
+            } else {
+                out.print("<div id='pago'><button class='btn btn-success btn-lg btn-block' id='ConPay' onclick=FormPago('ord'); name='ConPay'>Realizar Pago<span><img src='images/pay.png'></span></button></div><br>");
+            }
         }
     }
 

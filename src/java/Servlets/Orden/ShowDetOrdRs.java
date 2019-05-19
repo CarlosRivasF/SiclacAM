@@ -45,8 +45,8 @@ public class ShowDetOrdRs extends HttpServlet {
             dto = (Orden_DTO) sesion.getAttribute("OrdFol");
             sesion.removeAttribute("OrdFol");
         }
-        sesion.setAttribute("OrdenSh", dto);
-        String CodeCot = dto.getPaciente().getCodPac().substring(0, 4) + "-" + dto.getId_Orden();
+        sesion.setAttribute("OrdenSh", dto);        
+         Util f = new Util();
         out.print("<div class='nav-scroller bg-white box-shadow'>"
                 + " <nav class='nav nav-underline'>"
                 + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=ord'); >Órdenes Pendientes</a>"
@@ -56,9 +56,9 @@ public class ShowDetOrdRs extends HttpServlet {
                 + " </nav>"
                 + "</div>"
                 + "<div><hr class='mb-1'>"
-                + "<pre> <h6 style='color: white'>Paciente: " + dto.getPaciente().getNombre() + " " + dto.getPaciente().getAp_Paterno() + " " + dto.getPaciente().getAp_Materno() + ""
-                + " Fecha de Órden: " + dto.getFecha() + " Hora: " + dto.getHora() + "</h6></pre><br>"
-                + "<pre><h6 style='color: white'>Realizó: " + dto.getEmpleado().getNombre() + " " + dto.getEmpleado().getAp_Paterno() + " " + dto.getEmpleado().getAp_Materno() + "&nbsp;&nbsp;&nbsp;&nbsp;"
+                + "<pre><center><h6 style='color: white'>Paciente: " + dto.getPaciente().getNombre() + " " + dto.getPaciente().getAp_Paterno() + " " + dto.getPaciente().getAp_Materno() + "  Sexo: " + dto.getPaciente().getSexo() + "      Edad: " + f.getEdad(dto.getPaciente().getFecha_Nac().trim()).getYears() + " años</h6></pre><center>"                
+                + "<hr class='mb-1'>"
+                + "<pre><h6 style='color: white'>Realizó: " + dto.getEmpleado().getNombre() + " " + dto.getEmpleado().getAp_Paterno() + " " + dto.getEmpleado().getAp_Materno() + " Fecha: " + dto.getFecha() + " Hora: " + dto.getHora()+""
                 + "</h6></pre>"
                 + "<hr class='mb-1'>");
         out.println("<div style='color: white' class='table-responsive'>");
@@ -123,46 +123,26 @@ public class ShowDetOrdRs extends HttpServlet {
             }
         }
         out.print("<h5 style='text-align: center; color: white'>EIQUETAS DE MATERIAL</h5>");
+        out.println("<div id='precio'>"
+                + "<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
+                + "<tr class='table-warning' style='color: black'>"
+                + "<th >Estudio</th>"
+                + "<th >Material</th>"
+                + "<th >Etiqueta</th>"
+                + "</tr>");
+        dto.getDet_Orden().forEach((detor) -> {
+            detor.getEstudio().getMts().forEach((mt) -> {
+                out.println("<tr>"
+                        + "<td >" + detor.getEstudio().getNombre_Estudio() + "</td>"
+                        + "<td >" + mt.getClave() + "</td>"
+                        + "<td ><a class='btn btn-outline-light btm-sm' href=# onclick=OpenRep('PrintL2?LxOrdSald=" + dto.getId_Orden() + "&IxDtOrd=" + dto.getDet_Orden().indexOf(detor) + "&IxDtOrdMt=" + detor.getEstudio().getMts().indexOf(mt) + "') >Imprimir Etiqueta</a></td>"
+                        + "</tr>");
+            });
+        });
+        out.println("</table></div>");
         if (pr) {
-            out.println("<div id='precio'>"
-                    + "<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
-                    + "<tr class='table-warning' style='color: black'>"
-                    + "<th >Estudio</th>"
-                    + "<th >Material</th>"
-                    + "<th >Etiqueta</th>"
-                    + "</tr>");
-            dto.getDet_Orden().forEach((detor) -> {
-                detor.getEstudio().getMts().forEach((mt) -> {
-                    out.println("<tr>"
-                            + "<td >" + detor.getEstudio().getNombre_Estudio() + "</td>"
-                            + "<td >" + mt.getClave() + "</td>"
-                            + "<td ><a class='btn btn-outline-light btm-sm' href=# onclick=OpenRep('PrintL2?LxOrdSald=" + Util.Encriptar(String.valueOf(dto.getId_Orden())) + "&IxDtOrd="+dto.getDet_Orden().indexOf(detor)+"&IxDtOrdMt="+detor.getEstudio().getMts().indexOf(mt)+"') >Imprimir Etiqueta</a></td>"
-                            + "</tr>");
-                });
-            });
-            out.println("</table></div>");
 
-            out.print("<a class='btn btn-success btn-lg btn-block' href=# onclick=OpenRep('PrintRes?LxOrdSald=" + Util.Encriptar(String.valueOf(dto.getId_Orden())) + "') >Imprimir Resultados</a><br>");
-        } else {
-            out.println("<div id='precio'>"
-                    + "<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
-                    + "<tr class='table-warning' style='color: black'>"
-                    + "<th >Estudio</th>"
-                    + "<th >Material</th>"
-                    + "<th >Etiqueta</th>"
-                    + "</tr>");
-            dto.getDet_Orden().forEach((detor) -> {
-                detor.getEstudio().getMts().forEach((mt) -> {
-                    out.println("<tr>"
-                            + "<td >" + detor.getEstudio().getNombre_Estudio() + "</td>"
-                            + "<td >" + mt.getClave() + " Pesos</td>"
-                            + "<td ><a class='btn btn-outline-light btm-sm' href=# onclick=OpenRep('PrintL2?LxOrdSald=" + Util.Encriptar(String.valueOf(dto.getId_Orden())) + "&IxDtOrd="+dto.getDet_Orden().indexOf(detor)+"&IxDtOrdMt="+detor.getEstudio().getMts().indexOf(mt)+"') >Imprimir Etiqueta</a></td>"
-                            + "</tr>");
-                });
-            });
-            out.println("</table></div>");
-
-            out.print("<a class='btn btn-success btn-lg btn-block' href=# onclick=OpenRep('PrintRes?LxOrdSald=" + Util.Encriptar(String.valueOf(dto.getId_Orden())) + "') >Imprimir Resultados</a><br>");
+            out.print("<a class='btn btn-success btn-lg btn-block' href=# onclick=OpenRep('PrintRes?LxOrdSald=" + dto.getId_Orden() + "') >Imprimir Resultados</a><br>");
         }
         out.println("</div>");
         out.println("</div>");

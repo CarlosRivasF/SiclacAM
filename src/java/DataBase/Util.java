@@ -28,7 +28,7 @@ public class Util {
     }
 
     public String getFechaActual() {
-        Date hora =new Date();
+        Date hora = new Date();
         SimpleDateFormat formateador = new SimpleDateFormat("YYYY-MM-dd");
         return formateador.format(hora);
     }
@@ -58,7 +58,7 @@ public class Util {
         Calendar cal = Calendar.getInstance();
         cal.setTime(hora);
         cal.add(Calendar.HOUR, h);
-      
+
         nuevaFecha = cal.getTime();
         return nuevaFecha;
     }
@@ -137,8 +137,7 @@ public class Util {
 
     public static String Encriptar(String texto) {
         String secretKey = "Zi0n5yst3ms.Key"; //llave para encriptar datos
-        String base64EncryptedString = "";
-
+        String base64EncryptedString = "";        
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             byte[] digestOfPassword = md.digest(secretKey.getBytes("utf-8"));
@@ -155,13 +154,13 @@ public class Util {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        System.out.println("**Encriptar:" + texto+" - - - "+base64EncryptedString);
         return base64EncryptedString;
     }
 
     public static String Desencriptar(String textoEncriptado) {
         String secretKey = "Zi0n5yst3ms.Key"; //llave para encriptar datos
-        String base64EncryptedString = "";
-
+        String base64EncryptedString = "";        
         try {
             byte[] message = Base64.decodeBase64(textoEncriptado.getBytes("utf-8"));
             MessageDigest md = MessageDigest.getInstance("MD5");
@@ -178,6 +177,7 @@ public class Util {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        System.out.println("**Desencriptar:" + textoEncriptado+" - - - "+base64EncryptedString);
         return base64EncryptedString;
     }
 
@@ -198,7 +198,7 @@ public class Util {
 
         return Float.parseFloat(String.valueOf(resultado));
     }
-    
+
     public static int getHrBD() {
         Date fac = new Date();
         Util f = new Util();
@@ -210,8 +210,12 @@ public class Util {
                 id_hr = rs.getInt("horas");
             }
         } catch (SQLException ex) {
-            System.out.println("***GET HORAS A SUMAR EN SITIO: "+ex.getMessage());
+            System.out.println("***GET HORAS A SUMAR EN SITIO: " + ex.getMessage());
         }
         return id_hr;
+    }
+
+    public static void main(String[] args) {
+        Util.Desencriptar(Util.Encriptar(String.valueOf(117)));
     }
 }

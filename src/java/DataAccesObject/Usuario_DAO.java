@@ -15,6 +15,8 @@ import java.util.logging.Logger;
  */
 public class Usuario_DAO {
 
+    public static int nSesion = 0;
+
     public int RegistrarUsuario(Usuario_DTO dto) {
         int id_Usuario = 0;
         String sql = "INSERT INTO usuario VALUES(NULL,'" + dto.getId_Unidad() + "','" + dto.getId_Persona() + "','" + dto.getNombre_Usuario() + "','" + dto.getContraseña() + "','" + dto.getRol() + "','" + dto.getEstado() + "')";
@@ -42,7 +44,7 @@ public class Usuario_DAO {
         try (Connection con = Conexion.getCon(); PreparedStatement pstm = con.prepareStatement(sql);) {
             pstm.setString(1, Usuario);
             pstm.setString(2, Contraseña);
-            System.out.println("Usuario:" + Usuario + ", Password:" + Contraseña);
+
             try (ResultSet rs = pstm.executeQuery()) {
                 while (rs.next()) {
                     usuario.setId_Usuario(rs.getInt("id_Usuario"));
@@ -61,6 +63,9 @@ public class Usuario_DAO {
         if (usuario.getNombre_Usuario() != null & usuario.getContraseña() != null) {
             if (usuario.getNombre_Usuario().trim().equals(Usuario.trim()) & usuario.getContraseña().trim().equals(Contraseña.trim())) {
                 if (usuario.getId_Unidad() != 0 & usuario.getRol() != null & usuario.getEstado() != null) {
+                    nSesion++;
+                    System.out.println("*-*-*-*-* SESION: " + nSesion + " de Usuario:" + Usuario + ", Password:" + Contraseña);
+
                     return usuario;
                 } else {
                     return null;

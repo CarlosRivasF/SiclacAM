@@ -22,9 +22,10 @@
     </head>
     <body style="background: lightcyan; text-align: center"><!--lightcyan-->
         <div class="container-fluid">
-            <div class="form-row col-12">     
-                <form class="form-signin" name="fors" method="POST" action="acces">     
-                    <br>                    
+            <div class="form-row col-12 mb-3">    
+                <br> 
+                <form class="form-signin mb-3" name="fors" method="POST" action="acces">     
+                    <br>         <br>           <br>                                       
                     <img src="images/Am_Labs.png"  alt="" width="650" class="img-fluid">
                     <br><h1 onclick="fullScreen();" style="text-align: center;" class="h3 mb-3 font-weight-normal"><strong>Acceso al sistema</strong></h1>
                     <p style="text-align: center; color: red"><strong><%=Error%></strong></p>
@@ -35,7 +36,8 @@
                     <input type="password" name="pass" id="pass" class="form-control" placeholder="Contraseña" required><br>
                     <button class="btn btn-lg btn-primary btn-block" type="submit">Aceptar</button>        
                     <img src="images/adn0.gif"  alt="" width="650" height="100" class="img-fluid">     
-                    <p class="text-muted font-italic"><font size="1"><u>ACTUALIZADO</u> Versión 12.05.19 - 2.4.00</font></p>
+                    <p class="text-muted font-italic"><font size="1"><u><strong>ACTUALIZADO</strong></u> Versión 18.05.19 - 2.8.00</font></p>
+                    </div>
                 </form> 
             </div>
         </div>   

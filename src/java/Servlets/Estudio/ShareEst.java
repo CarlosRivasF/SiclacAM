@@ -23,38 +23,15 @@ import javax.servlet.http.HttpSession;
 public class ShareEst extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        System.out.println("Peticion a ShareEst");
+            throws ServletException, IOException {        
         response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
-        int id_unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());        
+        int id_unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
         PrintWriter out = response.getWriter();
         Estudio_DAO E = new Estudio_DAO();
         List<Estudio_DTO> enu;
         enu = E.GetEstudiosNoRegisterInUnidad(id_unidad);
-        
-//        List<Estudio_DTO> eu = E.getEstudiosByUnidad(id_unidad);
-//        enu = E.getEstudiosNotRegUnidad(id_unidad);
-//
-//        try {
-//            for (int i = 0; i < eu.size(); i++) {
-//                for (int j = 0; j < enu.size(); j++) {
-//                    if (eu.get(i).getId_Estudio() == enu.get(j).getId_Estudio()) {
-//                        enu.remove(enu.get(j));
-//                    }
-//                }
-//            }
-//            eu = enu;
-//            for (int i = 0; i < eu.size(); i++) {
-//                for (int j = 0; j < enu.size(); j++) {
-//                    if (eu.get(i).getId_Estudio() == enu.get(j).getId_Estudio()) {
-//                        enu.remove(enu.get(j));
-//                    }
-//                }
-//            }
-//        } catch (Exception e) {
-//            out.println("<br>'ShareEst'<br><h1 style='color: white'>" + e.getMessage() + "...<br>Por favor capture una imagen del error y comuniquelo de inmediato a ZionSystems</h1>");
-//        }
+
         if (request.getParameter("busq") != null) {
 
         } else {
@@ -67,14 +44,16 @@ public class ShareEst extends HttpServlet {
                     + "</nav>"
                     + "</div>"
                     + "<div><br>");
-            out.println("<div style='color: white' class='table-responsive'>"
-                    + "<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
-                    + "<tr class='bg-primary' style='color: black'>"
-                    + "<th >Clave</th>"
-                    + "<th >Nombre de Estudio</th>"
-                    + "<th >Añadir</th>"
-                    + "</tr>");
-            enu.forEach((dto) -> {//est_uni;
+            if (enu.size() > 0) {
+                out.println("<div style='color: white' class='table-responsive'>"
+                        + "<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
+                        + "<tr class='bg-primary' style='color: black'>"
+                        + "<th >Clave</th>"
+                        + "<th >Nombre de Estudio</th>"
+                        + "<th >Añadir</th>"
+                        + "</tr>");
+
+                enu.forEach((dto) -> {//est_uni;
 
 //                for (Est_Mat_DTO m : dto.getMts()) {
 //                    System.out.println("delete from mat_est where id_Est_Uni=" + dto.getId_Est_Uni() + ";");
@@ -88,14 +67,17 @@ public class ShareEst extends HttpServlet {
 //
 //                System.out.println("Delete FROM est_uni WHERE id_Est_Uni=" + dto.getId_Est_Uni() + ";");
 //                System.out.println("Delete FROM estudio WHERE id_Estudio=" + dto.getId_Estudio() + ";");
-                out.println("<tr>"
-                        + "<td >" + dto.getClave_Estudio() + "</td>"
-                        + "<td >" + dto.getNombre_Estudio() + "</td>"
-                        + "<td><button href=# class='btn btn-default btn-sm' onclick=ShareEst(" + enu.indexOf(dto) + ",this) ><span><img src='images/mas.png'></span></button></td>"
-                        + "</tr>");
-            });
-            out.println("</table>");
-            out.println("</div>");
+                    out.println("<tr>"
+                            + "<td >" + dto.getClave_Estudio() + "</td>"
+                            + "<td >" + dto.getNombre_Estudio() + "</td>"
+                            + "<td><button href=# class='btn btn-default btn-sm' onclick=ShareEst(" + enu.indexOf(dto) + ",this) ><span><img src='images/mas.png'></span></button></td>"
+                            + "</tr>");
+                });
+                out.println("</table>");
+                out.println("</div>");
+            } else {
+                out.println("<center><h1 style='color: white'><br>No hay más estudios...</h1></center>");
+            }
             out.println("</div>");
         }
     }

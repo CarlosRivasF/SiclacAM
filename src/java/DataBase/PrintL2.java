@@ -44,7 +44,7 @@ public class PrintL2 extends HttpServlet {
 
             int id_Orden;
             if (sesion.getAttribute("OrdenSh") == null) {
-                id_Orden = Integer.parseInt(Util.Desencriptar(request.getParameter("LxOrdSald")));
+                id_Orden = Integer.parseInt(request.getParameter("LxOrdSald").trim());
             } else {
                 id_Orden = 0;
             }

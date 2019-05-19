@@ -40,15 +40,29 @@
         </div>
     </div>    
     <hr>               
-    <h6 style="text-align: center"><strong>Datos de Medico</strong></h6>
-    <div class="form-row">
-        <div class="col-8 col-sm-5 col-md-4">
-            <label><strong>Nombre: </strong><%=med.getNombre() + " " + med.getAp_Paterno() + " " + med.getAp_Materno()%></label>
-        </div>
-        <div class="col-6 col-sm-2 col-md-2">
-            <label><strong>Teléfono: </strong><%=med.getTelefono1()%></label>
-        </div>
-    </div>        
+    <div  id="DtsMed">
+        <h6 style="text-align: center">Elegir Medico</h6><br> 
+        <div class="form-row">     
+            <%if (Orden.getMedico() == null || Orden.getMedico().getNombre() == null || Orden.getMedico().getNombre().trim() == "") {%>
+            <div class="col col-sm-4 col-md-3 mb-3">
+                <input style="text-align: center" type="text" onkeyup="SrchMed(this, 'est');" class="form-control" name="BMed" id="BMed" placeholder="Medico" required>
+                <br><button class="btn btn-danger btn-block" onclick="AddMed('form');" id="sendForm"  name="sendForm"><strong>Médico No Registrado</strong></button>
+            </div><br>                        
+            <div id="srchMed" class="col-sm-8 col-md-9 mb-3">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong><center>Debe de asignar un médico para esta orden.!</center></strong>
+                </div>
+            </div>
+            <%} else {%>
+            <div class="col-8 col-sm-5 col-md-4">
+                <label><strong>Nombre: </strong><%=Orden.getMedico().getNombre() + " " + Orden.getMedico().getAp_Paterno() + " " + Orden.getMedico().getAp_Materno()%></label>
+            </div>            
+            <div class="col-6 col-sm-2 col-md-2">
+                <label><strong>Teléfono: </strong><%=Orden.getMedico().getTelefono1()%></label>
+            </div>
+            <%}%>
+        </div>    
+    </div>
     <hr>        
     <h6 style="text-align: center"><strong>Estudios</strong></h6>
     <div id="estsOrd">
@@ -88,7 +102,7 @@
             <button class='btn btn-success btn-lg btn-block' id='ConPay' onclick="FormPago('ord');" name='ConPay'>Realizar Pago<span><img src='images/pay.png'></span></button>
         </div><br>
     </div>
-    <a class='btn btn-success btn-lg btn-block' href='FinalOrd' >Generar Órden</a>
+    <a class='btn btn-info btn-lg btn-block' href='FinalOrd' >Generar Órden</a>
 </div>   
 <hr>
 <%} else {

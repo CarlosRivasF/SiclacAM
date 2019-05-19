@@ -149,12 +149,15 @@ public class AddEst extends HttpServlet {
                 detor.setSobrecargo(sobrecargo);
                 p = Float.parseFloat("0");
                 detor.setT_Entrega(tpr);
-                if (detor.getT_Entrega().equals("Normal")) {
-                    detor.setFecha_Entrega(f.SumarDias(detor.getEstudio().getPrecio().getT_Entrega_N()));
-                    p = estudio.getPrecio().getPrecio_N();
-                } else if (detor.getT_Entrega().equals("Urgente")) {
-                    detor.setFecha_Entrega(f.SumarDias(detor.getEstudio().getPrecio().getT_Entrega_U()));
-                    p = estudio.getPrecio().getPrecio_U();
+                switch (detor.getT_Entrega()) {
+                    case "Normal":
+                        detor.setFecha_Entrega(f.SumarDias(detor.getEstudio().getPrecio().getT_Entrega_N()));
+                        p = estudio.getPrecio().getPrecio_N();
+                        break;
+                    case "Urgente":
+                        detor.setFecha_Entrega(f.SumarDias(detor.getEstudio().getPrecio().getT_Entrega_U()));
+                        p = estudio.getPrecio().getPrecio_U();
+                        break;
                 }
                 pd = ((detor.getDescuento() * p) / 100);
                 ps = ((detor.getSobrecargo() * p) / 100);
@@ -208,8 +211,16 @@ public class AddEst extends HttpServlet {
         out.println("</table>");
         out.println("</div>");
         out.println("<p class='offset-8 col-3 col-sm-3 col-md-3'><strong>Pagar " + Util.redondearDecimales(Orden.getMontoRestante())
-                + " pesos</strong></p>"
-                + "<button class='btn btn-success btn-lg btn-block' id='ConPay' onclick=contOr('ord'); name='ConPay'>Continuar</button>");
+                + " pesos</strong></p>");
+        if (Orden.getMedico() == null) {
+            out.print("<div class='alert alert-danger alert-dismissible fade show' role='alert'>"
+                    + "            <center><strong>Alerta.!</strong> Aún no elige médico para esta orden.</center>"
+                    + "            <button type='button' class='close' data-dismiss='alert' aria-label='Close'>"
+                    + "                <span aria-hidden='true'>&times;</span>"
+                    + "            </button>"
+                    + "        </div>");
+        }
+        out.println("<button class='btn btn-success btn-lg btn-block' id='ConPay' onclick=contOr('ord'); name='ConPay'>Continuar</button>");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

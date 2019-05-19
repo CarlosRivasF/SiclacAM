@@ -13,7 +13,13 @@
         <a class="nav-link" href="#" onclick='mostrarForm("${pageContext.request.contextPath}/ShowSaldos");'>Saldos</a>                         
     </nav>
 </div>
-<div class="container-fluid" style="color: white"><br>
+<div class="container-fluid mb-3" style="color: white"><br>
+    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+        <center>Usted iniciará una Orden Nueva... <br>  <strong>Debe elegir un paciente o escanear el codigo de una cotización realizada!</strong></center>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
     <div id="step1">
         <h6 style="text-align: center">Nueva Órden</h6>                 
         <hr class="mb-4">
@@ -33,7 +39,7 @@
             </div>            
         </div>
     </div>
-    <div id="srchPac">      
+    <div id="srchPac">
     </div>
     <div id="step13" style="display: none">
         <form class="needs-validation" name="fors" novalidate method="POST" action="InsPac">

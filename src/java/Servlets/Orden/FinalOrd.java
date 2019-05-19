@@ -18,6 +18,7 @@ import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -37,12 +38,14 @@ public class FinalOrd extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        System.out.println("FinalOrd");
         HttpSession sesion = request.getSession();
+        request.setCharacterEncoding("utf-8");
+        
         Orden_DAO O = new Orden_DAO();
         Boolean r = true;
-        if (request.getParameter("LsIxOrd") != null) {
-            int Id_Orden = Integer.parseInt(Util.Desencriptar(request.getParameter("LsIxOrd").trim()));
+        if (request.getParameter("LsIxOrd") != null) {            
+            int Id_Orden = Integer.parseInt(request.getParameter("LsIxOrd").trim());
             sesion.setAttribute("Orden", O.getOrden(Id_Orden));
             r = false;
         }
@@ -55,26 +58,26 @@ public class FinalOrd extends HttpServlet {
             Orden.setHora(f.getHoraMas(Util.getHrBD()));
             Orden.setEstado("Pendiente");
             Orden.setFolio_Unidad(O.getNoOrdenByUnidad(Orden.getUnidad().getId_Unidad()) + 1);
-            Orden.setId_Orden(O.registrarOrden(Orden));   
-            Participacion_DTO participacion=new Participacion_DTO();
+            Orden.setId_Orden(O.registrarOrden(Orden));
+            Participacion_DTO participacion = new Participacion_DTO();
             participacion.setId_Orden(Orden.getId_Orden());
             participacion.setId_Unidad(Orden.getUnidad().getId_Unidad());
             participacion.setId_Medico(Orden.getMedico().getId_Medico());
             participacion.setConvenio(Orden.getConvenio());
-            Float p=Orden.getMontoPagado()+Orden.getMontoRestante();
-            Float mp = ((Orden.getMedico().getParticipacion()* p) / 100);
+            Float p = Orden.getMontoPagado() + Orden.getMontoRestante();
+            Float mp = ((Orden.getMedico().getParticipacion() * p) / 100);
             participacion.setMonto(mp);
-            Participacion_DAO P=new Participacion_DAO();
+            Participacion_DAO P = new Participacion_DAO();
             P.registrarParticipacion(participacion);
         }
         sesion.removeAttribute("Orden");
         try {
-            String CodeOrd = Orden.getId_Orden()+"";
+            String CodeOrd = Orden.getId_Orden() + "";
             System.out.println("Órden: " + CodeOrd);
             response.setContentType("application/pdf");
             response.setHeader("Content-disposition", "inline; filename=\"Órd_" + CodeOrd + ".pdf\"");
-            String relativePath = getServletContext().getRealPath("/")+"/";//ruta real del proyecto
-            
+            String relativePath = getServletContext().getRealPath("/") + "/";//ruta real del proyecto
+
             String Source = relativePath + "M/MembrOrden.pdf";
             Image barras1;
             JBarcodeBean barcode = new JBarcodeBean();
@@ -212,7 +215,7 @@ public class FinalOrd extends HttpServlet {
             cb.beginText();
             cb.setFontAndSize(bf, 12);
             cb.setTextMatrix(500, 539);
-            cb.showText(Util.redondearDecimales(Orden.getMontoPagado()+ Orden.getMontoRestante()) + "");
+            cb.showText(Util.redondearDecimales(Orden.getMontoPagado() + Orden.getMontoRestante()) + "");
             cb.endText();
 
             ColumnText column = new ColumnText(stamper.getOverContent(1));

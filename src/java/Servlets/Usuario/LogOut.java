@@ -1,5 +1,6 @@
 package Servlets.Usuario;
 
+import DataAccesObject.Usuario_DAO;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,6 +24,8 @@ public class LogOut extends HttpServlet {
         sesion.removeAttribute("persona");
         sesion.removeAttribute("unidad");
         sesion.invalidate();
+        Usuario_DAO.nSesion--;
+//        System.out.println("*-*-*-*-* SESION: " + Usuario_DAO.nSesion + " de Usuario:" + Usuario + ", Password:" + Contraseña);
         response.sendRedirect("" + request.getContextPath() + "");
     }
 }

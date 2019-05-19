@@ -47,11 +47,15 @@
         <h6 style="text-align: center">Elegir Medico</h6><br> 
         <div class="form-row">     
             <%if (Orden.getMedico() == null || Orden.getMedico().getNombre() == null || Orden.getMedico().getNombre().trim() == "") {%>
-            <div class="col col-sm-4 col-md-3">
+            <div class="col col-sm-4 col-md-3 mb-3">
                 <input style="text-align: center" type="text" onkeyup="SrchMed(this, 'est');" class="form-control" name="BMed" id="BMed" placeholder="Medico" required>
                 <br><button class="btn btn-danger btn-block" onclick="AddMed('form');" id="sendForm"  name="sendForm"><strong>Médico No Registrado</strong></button>
             </div><br>                        
-            <div id="srchMed" class="col-sm-8 col-md-9"></div>
+            <div id="srchMed" class="col-sm-8 col-md-9 mb-3">
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <center>Debe de asignar un médico para esta orden.</center>
+                </div>
+            </div>
             <%} else {%>
             <div class="col-8 col-sm-5 col-md-4">
                 <label><strong>Nombre: </strong><%=Orden.getMedico().getNombre() + " " + Orden.getMedico().getAp_Paterno() + " " + Orden.getMedico().getAp_Materno()%></label>
@@ -153,7 +157,7 @@
                                 e = dto.getEstudio().getPrecio().getT_Entrega_U();
                             }
                             Float pd = ((dto.getDescuento() * p) / 100);
-                            Float ps = ((dto.getSobrecargo()* p) / 100);
+                            Float ps = ((dto.getSobrecargo() * p) / 100);
                     %>
                     <tr>
                         <td><%=dto.getEstudio().getNombre_Estudio()%></td>
@@ -173,8 +177,26 @@
                 </tbody>
             </table>
         </div>
+        <script>
+
+            function validaOdernMed() {
+            <%
+                if (Orden.getMedico().getNombre() == null) {
+            %>
+                alert("Debe de asignar un médico para esta Orden");
+            <%
+            } else {
+            %>
+                contOr('ord');
+            <%
+                }
+            %>
+            }
+
+        </script>
+
         <p class="offset-8 col-3 col-sm-3 col-md-3"><strong>Pagar <%=Util.redondearDecimales(Orden.getMontoRestante())%> pesos</strong></p>
-        <button class="btn btn-success btn-lg btn-block" id="ConPay" onclick="contOr('ord');" name="ConPay">Continuar</button>                
+        <button class="btn btn-success btn-lg btn-block" id="ConPay" onclick="validaOdernMed();" name="ConPay">Continuar</button>                
         <%}%>                
         <%}%>
     </div>                

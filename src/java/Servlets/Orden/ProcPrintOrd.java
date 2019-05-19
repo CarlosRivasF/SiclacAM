@@ -33,7 +33,7 @@ public class ProcPrintOrd extends HttpServlet {
         }
         HttpSession sesion = request.getSession();
         Orden_DAO O = new Orden_DAO();
-        int Id_Orden = Integer.parseInt(Util.Desencriptar(request.getParameter("LsIxOrd").trim()));
+        int Id_Orden = Integer.parseInt(request.getParameter("LsIxOrd").trim());
         Orden_DTO Orden = O.getOrden(Id_Orden);
         sesion.setAttribute("Orden", Orden);
         request.getRequestDispatcher("FinalOrd");
