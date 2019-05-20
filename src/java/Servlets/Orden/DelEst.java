@@ -154,7 +154,7 @@ public class DelEst extends HttpServlet {
                             out.println("</tr>");
                             total = total + dto.getSubtotal();
                             Cot.setTotal(total);
-                            sesion.setAttribute("Cot", Cot);
+                            sesion.setAttribute("Cotizacion", Cot);
                         }
                         out.println("</table>");
                         out.println("</div>");

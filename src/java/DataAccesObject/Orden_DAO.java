@@ -88,6 +88,38 @@ public class Orden_DAO {
         return NoOrds;
     }
 
+    public Orden_DTO getfolio_unidad(int id_Orden) {
+        Orden_DTO ord = new Orden_DTO();
+        Estudio_DAO E = new Estudio_DAO();
+        Unidad_DAO U = new Unidad_DAO();
+        Paciente_DAO P = new Paciente_DAO();
+        Medico_DAO M = new Medico_DAO();
+        Empleado_DAO Pr = new Empleado_DAO();
+        try (Connection con = Conexion.getCon()) {
+            String sql = "SELECT * FROM orden  WHERE id_Orden=" + id_Orden + "";
+            
+            try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery();) {
+                while (rs.next()) {
+                     ord.setId_Orden(rs.getInt("id_Orden"));
+                    ord.setUnidad(U.getUnidadAll(rs.getInt("id_Unidad")));
+                    ord.setPaciente(P.getPaciente(rs.getInt("id_Paciente")));
+                    ord.setMedico(M.getMedico(rs.getInt("id_Medico")));
+                    ord.setEmpleado(Pr.getOnlyEmpleado(rs.getInt("id_Persona")));
+                    ord.setFecha(rs.getString("Fecha_Orden"));
+                    ord.setHora(rs.getString("Hora_Orden"));
+                    ord.setMontoPagado(rs.getFloat("Precio_Total"));
+                    ord.setMontoRestante(rs.getFloat("montoRes"));
+                    ord.setEstado(rs.getString("Estado"));
+                    ord.setConvenio(rs.getString("convenio"));
+                    ord.setFolio_Unidad(rs.getInt("folio_unidad"));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return ord;
+    }
+    
     public Orden_DTO getOrden(int id_Orden) {
         Orden_DTO ord = new Orden_DTO();
         Estudio_DAO E = new Estudio_DAO();
@@ -169,6 +201,7 @@ public class Orden_DAO {
         return ord;
     }
 
+    
     public Orden_DTO getOrdenByFolio(int folio_unidad, int id_Unidad) {
         Orden_DTO ord = new Orden_DTO();
         Estudio_DAO E = new Estudio_DAO();

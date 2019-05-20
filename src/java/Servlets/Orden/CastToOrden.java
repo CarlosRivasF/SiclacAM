@@ -6,6 +6,7 @@ import DataAccesObject.Paciente_DAO;
 import DataAccesObject.Persona_DAO;
 import DataBase.Util;
 import DataTransferObject.Cotizacion_DTO;
+import DataTransferObject.Det_Cot_DTO;
 import DataTransferObject.Det_Orden_DTO;
 import DataTransferObject.Empleado_DTO;
 import DataTransferObject.Orden_DTO;
@@ -38,14 +39,15 @@ public class CastToOrden extends HttpServlet {
         Util f = new Util();
         f.setHora(fac);
         String codeBar = request.getParameter("Id_Cot").trim();
+        System.out.println(codeBar);
         String[] bar = codeBar.split("-");
 
         int id_Cotizacion = Integer.parseInt(bar[0]);
         Cotizacion_DAO C = new Cotizacion_DAO();
         Cotizacion_DTO cot = C.getCotizacion(id_Cotizacion);
-
+        System.out.println(cot.getPaciente().getNombre());
         if (f.IsValid(cot.getFecha_Exp().trim())) {
-
+            System.out.println("Cotizacion valida.!");
             Orden_DTO Orden = new Orden_DTO();
 
             Orden.setUnidad(cot.getUnidad());
@@ -61,20 +63,32 @@ public class CastToOrden extends HttpServlet {
             Orden.setEstado("Pendiente");
             Orden.setConvenio(cot.getConvenio());
             List<Det_Orden_DTO> Det_Orden = new ArrayList<>();
-            cot.getDet_Cot().stream().map((dtc) -> {
+            cot.getDet_Cot().stream().map((Det_Cot_DTO dtc) -> {
                 Det_Orden_DTO detor = new Det_Orden_DTO();
                 detor.setEstudio(dtc.getEstudio());
                 detor.setDescuento(dtc.getDescuento());
+                detor.setSobrecargo(dtc.getSobrecargo());
                 Float p = Float.parseFloat("0");
+                Float pd;
+                Float ps;
                 detor.setT_Entrega(dtc.getT_Entrega());
-                if (detor.getT_Entrega().equals("Normal")) {
-                    detor.setFecha_Entrega(f.SumarDias(detor.getEstudio().getPrecio().getT_Entrega_N()));
-                    p = detor.getEstudio().getPrecio().getPrecio_N();
-                } else if (detor.getT_Entrega().equals("Urgente")) {
-                    detor.setFecha_Entrega(f.SumarDias(detor.getEstudio().getPrecio().getT_Entrega_U()));
-                    p = detor.getEstudio().getPrecio().getPrecio_U();
+                switch (detor.getT_Entrega()) {
+                    case "Normal":
+                        detor.setFecha_Entrega(f.SumarDias(detor.getEstudio().getPrecio().getT_Entrega_N()));
+                        p = detor.getEstudio().getPrecio().getPrecio_N();
+                        break;
+                    case "Urgente":
+                        detor.setFecha_Entrega(f.SumarDias(detor.getEstudio().getPrecio().getT_Entrega_U()));
+                        p = detor.getEstudio().getPrecio().getPrecio_U();
+                        break;
                 }
-                detor.setSubtotal(p - ((detor.getDescuento() * p) / 100));
+                pd = ((detor.getDescuento() * p) / 100);
+                ps = ((detor.getSobrecargo() * p) / 100);
+
+                detor.setSubtotal(p - pd);
+                p = detor.getSubtotal();
+
+                detor.setSubtotal(p + ps);
                 return detor;
             }).forEachOrdered((detor) -> {
                 Det_Orden.add(detor);
@@ -84,6 +98,7 @@ public class CastToOrden extends HttpServlet {
             try {
                 request.getRequestDispatcher("Menu/Orden/AddEsts.jsp").forward(request, response);
             } catch (ServletException | IOException ex) {
+                System.out.println("getRequestDispatcher('Menu/Orden/AddEsts.jsp')"+ex.getMessage());
                 //si existe una excepcion es porque faltan datos del  paciente.
                 Paciente_DAO Pa = new Paciente_DAO();
                 List<Paciente_DTO> pacs = Pa.getPacientes();

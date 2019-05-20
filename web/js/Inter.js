@@ -1945,7 +1945,7 @@ function AddEstProm(x, mode) {
     } else {
         var s = false;
         var ds = document.getElementById("desc" + x).value;
-        var sc = document.getElementById("scaE").value;
+        var sc = document.getElementById("sca" + x).value;
         var Sco = " &Sco=" + sc;
         var Desc = " &Desc=" + ds;
         var Tprec;

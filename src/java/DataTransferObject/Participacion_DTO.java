@@ -15,8 +15,8 @@ public class Participacion_DTO {
 
     private int id_participacion;
     private int id_Unidad;
-    private int id_Orden;
-    private int id_Medico;
+    private Orden_DTO Orden;
+    private Medico_DTO Medico;
     private String FechaPart;
     private String Hora;
     private Float Monto;
@@ -38,20 +38,20 @@ public class Participacion_DTO {
         this.id_Unidad = id_Unidad;
     }
 
-    public int getId_Orden() {
-        return id_Orden;
+    public Orden_DTO getOrden() {
+        return Orden;
     }
 
-    public void setId_Orden(int id_Orden) {
-        this.id_Orden = id_Orden;
+    public void setOrden(Orden_DTO Orden) {
+        this.Orden = Orden;
     }
 
-    public int getId_Medico() {
-        return id_Medico;
+    public Medico_DTO getMedico() {
+        return Medico;
     }
 
-    public void setId_Medico(int id_Medico) {
-        this.id_Medico = id_Medico;
+    public void setMedico(Medico_DTO Medico) {
+        this.Medico = Medico;
     }
 
     public String getFecha() {

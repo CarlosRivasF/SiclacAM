@@ -45,7 +45,7 @@ public class ShDetPac extends HttpServlet {
         out.println("<div id='nameP'>"
                 + "<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
                 + "<tr class='table-info' style='color: black'>"
-                + "<th colspan='3' >Datos de Empleado</th>"
+                + "<th colspan='3' >Datos de Paciente</th>"
                 + "<th>Modificar</th></tr><tr>"
                 + "<td >" + pac.getNombre() + "</td>"
                 + "<td >" + pac.getAp_Paterno() + "</td>"

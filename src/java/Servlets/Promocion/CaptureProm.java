@@ -5,6 +5,7 @@ import DataBase.Util;
 import DataTransferObject.Cotizacion_DTO;
 import DataTransferObject.Det_Cot_DTO;
 import DataTransferObject.Det_Orden_DTO;
+import DataTransferObject.Det_Prom_DTO;
 import DataTransferObject.Orden_DTO;
 import DataTransferObject.Promocion_DTO;
 import java.io.IOException;
@@ -42,32 +43,43 @@ public class CaptureProm extends HttpServlet {
         Util f = new Util();
         f.setHora(fac);
         Float total = Float.parseFloat("0");
+        Float p;
+        Float pd;
+        Float ps;
         switch (mode) {
             case "Orden":
                 Orden_DTO Orden;
                 List<Det_Orden_DTO> Det_Orden;
-                Orden = (Orden_DTO) sesion.getAttribute("Orden");                
+                Orden = (Orden_DTO) sesion.getAttribute("Orden");
                 if (Orden.getDet_Orden() == null || Orden.getDet_Orden().isEmpty()) {
                     Det_Orden = new ArrayList<>();
                 } else {
                     Det_Orden = Orden.getDet_Orden();
                 }
-                prom.getDet_Prom().forEach((dtp) -> {
-                    Det_Orden_DTO detor = new Det_Orden_DTO();                    
+                //prom.getDet_Prom().forEach((dtp) -> {
+                for (Det_Prom_DTO dtp : prom.getDet_Prom()) {
+                    Det_Orden_DTO detor = new Det_Orden_DTO();
                     detor.setEstudio(dtp.getEstudio());
                     detor.setDescuento(dtp.getDescuento());
-                    Float p = Float.parseFloat("0");
+                    detor.setSobrecargo(dtp.getSobrecargo());
+                    p = Float.parseFloat("0");
                     detor.setT_Entrega(dtp.getT_Entrega());
-                    if (detor.getT_Entrega().equals("Normal")) {                        
+                    if (detor.getT_Entrega().equals("Normal")) {
                         detor.setFecha_Entrega(f.SumarDias(detor.getEstudio().getPrecio().getT_Entrega_N()));
                         p = detor.getEstudio().getPrecio().getPrecio_N();
-                    } else if (detor.getT_Entrega().equals("Urgente")) {                        
+                    } else if (detor.getT_Entrega().equals("Urgente")) {
                         detor.setFecha_Entrega(f.SumarDias(detor.getEstudio().getPrecio().getT_Entrega_U()));
                         p = detor.getEstudio().getPrecio().getPrecio_U();
-                    }                    
-                    detor.setSubtotal(p - ((detor.getDescuento() * p) / 100));
+                    }
+                    pd = ((detor.getDescuento() * p) / 100);
+                    ps = ((detor.getSobrecargo() * p) / 100);
+
+                    detor.setSubtotal(p - pd);
+                    p = detor.getSubtotal();
+
+                    detor.setSubtotal(p + ps);
                     Det_Orden.add(detor);
-                });
+                }
                 Orden.setDet_Orden(Det_Orden);
                 out.println("<div id='BEst'></div>"
                         + "<div style='color: white' class='table-responsive'>"
@@ -76,13 +88,14 @@ public class CaptureProm extends HttpServlet {
                         + "<th >Nombre de Estudio</th>"
                         + "<th >Entrega</th>"
                         + "<th >Precio</th>"
-                        + "<th >Descuento</th>"
+                        + "<th >Desc.</th>"
+                        + "<th >Cargo</th>"
                         + "<th >Espera</th>"
                         + "<th >Quitar</th>"
                         + "</tr>");
 
                 for (Det_Orden_DTO dto : Det_Orden) {
-                    Float p = Float.parseFloat("0");
+                    p = Float.parseFloat("0");
                     int e = 0;
                     if (dto.getT_Entrega().equals("Normal")) {
                         p = dto.getEstudio().getPrecio().getPrecio_N();
@@ -91,12 +104,14 @@ public class CaptureProm extends HttpServlet {
                         p = dto.getEstudio().getPrecio().getPrecio_U();
                         e = dto.getEstudio().getPrecio().getT_Entrega_U();
                     }
-                    Float pd = ((dto.getDescuento() * p) / 100);
+                    pd = ((dto.getDescuento() * p) / 100);
+                    ps = ((dto.getSobrecargo() * p) / 100);
                     out.println("<tr>"
                             + "<td >" + dto.getEstudio().getNombre_Estudio() + "</td>"
                             + "<td >" + dto.getT_Entrega() + "</td>"
                             + "<td >" + p + "</td>"
                             + "<td >$" + pd + "</td>"
+                            + "<td >$" + ps + "</td>"
                             + "<td >" + e + " días</td>"
                             + "<td><div id='mat-" + Det_Orden.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEst(" + Det_Orden.indexOf(dto) + ",'Ord') ><span><img src='images/trash.png'></span></button></div></td>"
                             + "</tr>");
@@ -106,32 +121,47 @@ public class CaptureProm extends HttpServlet {
                 sesion.setAttribute("Orden", Orden);
                 out.println("</table>");
                 out.println("</div>");
-                out.println("<p class='offset-8 col-3 col-sm-3 col-md-3'><strong>Pagar " + Util.redondearDecimales(Orden.getMontoRestante()) + " pesos</strong></p>"
-                        + "<button class='btn btn-success btn-lg btn-block' id='ConPay' onclick=contOr('ord'); name='ConPay'>Continuar</button>");
+                out.println("<p class='offset-8 col-3 col-sm-3 col-md-3'><strong>Pagar " + Util.redondearDecimales(Orden.getMontoRestante()) + " pesos</strong></p>");
+                if (Orden.getMedico() == null) {
+                    out.print("<div class='alert alert-danger alert-dismissible fade show' role='alert'>"
+                            + "            <center><strong>Alerta.!</strong> Aún no elige médico para esta orden.</center>"
+                            + "            <button type='button' class='close' data-dismiss='alert' aria-label='Close'>"
+                            + "                <span aria-hidden='true'>&times;</span>"
+                            + "            </button>"
+                            + "        </div>");
+                }
+                out.println("<button class='btn btn-success btn-lg btn-block' id='ConPay' onclick=contOr('ord'); name='ConPay'>Continuar</button>");
                 break;
-            case "Cotizacion":                
+            case "Cotizacion":
                 Cotizacion_DTO Cot;
                 List<Det_Cot_DTO> Det_Cot;
-                Cot = (Cotizacion_DTO) sesion.getAttribute("Cotizacion");                
+                Cot = (Cotizacion_DTO) sesion.getAttribute("Cotizacion");
                 if (Cot.getDet_Cot() == null || Cot.getDet_Cot().isEmpty()) {
                     Det_Cot = new ArrayList<>();
                 } else {
                     Det_Cot = Cot.getDet_Cot();
                 }
-                prom.getDet_Prom().forEach((dtp) -> {
-                    Det_Cot_DTO detcot = new Det_Cot_DTO();                    
+                for (Det_Prom_DTO dtp : prom.getDet_Prom()) {
+                    Det_Cot_DTO detcot = new Det_Cot_DTO();
                     detcot.setEstudio(dtp.getEstudio());
                     detcot.setDescuento(dtp.getDescuento());
-                    Float p = Float.parseFloat("0");
+                    detcot.setSobrecargo(dtp.getSobrecargo());
+                    p = Float.parseFloat("0");
                     detcot.setT_Entrega(dtp.getT_Entrega());
-                    if (detcot.getT_Entrega().equals("Normal")) {                        
+                    if (detcot.getT_Entrega().equals("Normal")) {
                         p = detcot.getEstudio().getPrecio().getPrecio_N();
-                    } else if (detcot.getT_Entrega().equals("Urgente")) {                       
+                    } else if (detcot.getT_Entrega().equals("Urgente")) {
                         p = detcot.getEstudio().getPrecio().getPrecio_U();
-                    }                    
-                    detcot.setSubtotal(p - ((detcot.getDescuento() * p) / 100));
+                    }
+                    pd = ((detcot.getDescuento() * p) / 100);
+                    ps = ((detcot.getSobrecargo() * p) / 100);
+
+                    detcot.setSubtotal(p - pd);
+                    p = detcot.getSubtotal();
+
+                    detcot.setSubtotal(p + ps);
                     Det_Cot.add(detcot);
-                });
+                }
                 Cot.setDet_Cot(Det_Cot);
                 out.println("<div id='BEst'></div>"
                         + "<div style='color: white' class='table-responsive'>"
@@ -140,12 +170,13 @@ public class CaptureProm extends HttpServlet {
                         + "<th >Nombre de Estudio</th>"
                         + "<th >Entrega</th>"
                         + "<th >Precio</th>"
-                        + "<th >Descuento</th>"
+                        + "<th >Desc.</th>"
+                        + "<th >Cargo</th>"
                         + "<th >Espera</th>"
                         + "<th >Quitar</th>"
                         + "</tr>");
                 for (Det_Cot_DTO dto : Det_Cot) {
-                    Float p = Float.parseFloat("0");
+                    p = Float.parseFloat("0");
                     int e = 0;
                     if (dto.getT_Entrega().equals("Normal")) {
                         p = dto.getEstudio().getPrecio().getPrecio_N();
@@ -154,23 +185,33 @@ public class CaptureProm extends HttpServlet {
                         p = dto.getEstudio().getPrecio().getPrecio_U();
                         e = dto.getEstudio().getPrecio().getT_Entrega_U();
                     }
-                    Float pd = ((dto.getDescuento() * p) / 100);
+                    pd = ((dto.getDescuento() * p) / 100);
+                    ps = ((dto.getSobrecargo() * p) / 100);
                     out.println("<tr>"
                             + "<td >" + dto.getEstudio().getNombre_Estudio() + "</td>"
                             + "<td >" + dto.getT_Entrega() + "</td>"
                             + "<td >" + p + "</td>"
                             + "<td >$" + pd + "</td>"
+                            + "<td >$" + ps + "</td>"
                             + "<td >" + e + " días</td>"
                             + "<td><div id='mat-" + Det_Cot.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEst(" + Det_Cot.indexOf(dto) + ",'Ord') ><span><img src='images/trash.png'></span></button></div></td>"
                             + "</tr>");
                     total = total + dto.getSubtotal();
                 }
                 Cot.setTotal(total);
-                sesion.setAttribute("Cot", Cot);
+                sesion.setAttribute("Cotizacion", Cot);
                 out.println("</table>");
                 out.println("</div>");
-                out.println("<p class='offset-8 col-3 col-sm-3 col-md-3'><strong>Pagar " + total + " pesos</strong></p>"
-                        + "<a class='btn btn-success btn-lg btn-block' href=# onclick=OpenRep('PrintCot') >Imprimir Cotización</a>");
+                out.println("<p class='offset-8 col-3 col-sm-3 col-md-3'><strong>Pagar " + Util.redondearDecimales(total) + " pesos</strong></p>");
+                if (Cot.getMedico() == null) {
+            out.print("<div class='alert alert-danger alert-dismissible fade show' role='alert'>"
+                    + "            <center><strong>Alerta.!</strong> Aún no elige médico para esta cotización.</center>"
+                    + "            <button type='button' class='close' data-dismiss='alert' aria-label='Close'>"
+                    + "                <span aria-hidden='true'>&times;</span>"
+                    + "            </button>"
+                    + "        </div>");
+        }
+                out.println("<a class='btn btn-success btn-lg btn-block' href=# onclick=OpenRep('PrintCot') >Imprimir Cotización</a>");
                 break;
         }
     }

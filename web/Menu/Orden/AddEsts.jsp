@@ -177,26 +177,8 @@
                 </tbody>
             </table>
         </div>
-        <script>
-
-            function validaOdernMed() {
-            <%
-                if (Orden.getMedico().getNombre() == null) {
-            %>
-                alert("Debe de asignar un médico para esta Orden");
-            <%
-            } else {
-            %>
-                contOr('ord');
-            <%
-                }
-            %>
-            }
-
-        </script>
-
         <p class="offset-8 col-3 col-sm-3 col-md-3"><strong>Pagar <%=Util.redondearDecimales(Orden.getMontoRestante())%> pesos</strong></p>
-        <button class="btn btn-success btn-lg btn-block" id="ConPay" onclick="validaOdernMed();" name="ConPay">Continuar</button>                
+        <button class="btn btn-success btn-lg btn-block" id="ConPay" onclick="contOr('ord');" name="ConPay">Continuar</button>                
         <%}%>                
         <%}%>
     </div>                

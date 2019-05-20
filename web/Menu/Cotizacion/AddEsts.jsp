@@ -39,7 +39,11 @@
                 <input style="text-align: center" type="text" onkeyup="SrchMed(this, 'cot');" class="form-control" name="BMed" id="BMed" placeholder="Medico" required><br>
                 <button class="btn btn-danger btn-block" onclick="NewMedord('form');" type="button" id="sendForm"  name="sendForm"><strong>Médico No Encontrado</strong></button>
             </div><br>
-            <div id="srchMed" class="col-sm-8 col-md-9"></div>
+            <div id="srchMed" class="col-sm-8 col-md-9">
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <center>Debe de asignar un médico para esta Cotización.</center>
+                </div>
+            </div>
         </div>    
     </div>
     <hr>        

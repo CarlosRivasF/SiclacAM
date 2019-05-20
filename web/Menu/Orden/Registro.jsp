@@ -15,7 +15,7 @@
 </div>
 <div class="container-fluid mb-3" style="color: white"><br>
     <div class="alert alert-primary alert-dismissible fade show" role="alert">
-        <center>Usted iniciará una Orden Nueva... <br>  <strong>Debe elegir un paciente o escanear el codigo de una cotización realizada!</strong></center>
+        <center>Usted iniciará una Orden Nueva... <br>  <strong>Debe elegir o registrar un paciente o escanear el codigo de una cotización realizada!</strong></center>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>

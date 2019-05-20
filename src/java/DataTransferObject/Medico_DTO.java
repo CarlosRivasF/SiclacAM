@@ -1,5 +1,7 @@
 package DataTransferObject;
 
+import java.util.List;
+
 /**
  *
  * @author Carlos Rivas
@@ -14,12 +16,13 @@ public class Medico_DTO extends Persona_DTO {
         this.CodMed = CodMed;
     }
 
-    protected int id_Medico;
-    protected int id_Unidad;
-    protected String Empresa;
-    protected Float participacion;
-    protected Float Descuento;
-    protected String CodMed;
+    private int id_Medico;
+    private int id_Unidad;
+    private String Empresa;
+    private Float participacion;
+    private Float Descuento;
+    private String CodMed;
+    private List<Participacion_DTO> Participaciones;
 
     public int getId_Medico() {
         return id_Medico;
@@ -60,4 +63,12 @@ public class Medico_DTO extends Persona_DTO {
     public void setDescuento(Float Descuento) {
         this.Descuento = Descuento;
     }
-}
+
+    public List<Participacion_DTO> getParticipaciones() {
+        return Participaciones;
+    }
+
+    public void setParticipaciones(List<Participacion_DTO> Participaciones) {
+        this.Participaciones = Participaciones;
+    }
+    }

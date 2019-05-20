@@ -48,7 +48,9 @@ public class AddEstProm extends HttpServlet {
             Det_Prom = Prom.getDet_Prom();
         }
         String mode = request.getParameter("mode").trim();
-
+        Float p;
+        Float pd;
+        Float ps;
         Det_Prom_DAO Det = new Det_Prom_DAO();
         Promocion_DAO P = new Promocion_DAO();
         switch (mode) {
@@ -56,6 +58,7 @@ public class AddEstProm extends HttpServlet {
                 int index = Integer.parseInt(request.getParameter("estudio").trim());
                 Estudio_DTO estudio = ests.get(index);
                 Float descuento;
+                Float sobrecargo;
                 if (request.getParameter("Desc").trim().equals("") || request.getParameter("Desc").trim().equals("0")
                         || Float.parseFloat(request.getParameter("Desc").trim()) < 0) {
                     descuento = Float.parseFloat("0");
@@ -64,18 +67,33 @@ public class AddEstProm extends HttpServlet {
                 } else {
                     descuento = Float.parseFloat(request.getParameter("Desc").trim());
                 }
+                if (request.getParameter("Sco").trim().equals("") || request.getParameter("Sco").trim().equals("0")
+                        || Float.parseFloat(request.getParameter("Sco").trim()) < 0) {
+                    sobrecargo = Float.parseFloat("0");
+                } else if (Float.parseFloat(request.getParameter("Sco").trim()) > 100) {
+                    sobrecargo = Float.parseFloat("100");
+                } else {
+                    sobrecargo = Float.parseFloat(request.getParameter("Sco").trim());
+                }
                 String tpr = request.getParameter("Tprec").trim();
                 Det_Prom_DTO detprom = new Det_Prom_DTO();
                 detprom.setEstudio(estudio);
                 detprom.setDescuento(descuento);
-                Float p = Float.parseFloat("0");
+                detprom.setSobrecargo(sobrecargo);
+                p = Float.parseFloat("0");
                 detprom.setT_Entrega(tpr);
                 if (detprom.getT_Entrega().equals("Normal")) {
                     p = estudio.getPrecio().getPrecio_N();
                 } else if (detprom.getT_Entrega().equals("Urgente")) {
                     p = estudio.getPrecio().getPrecio_U();
                 }
-                detprom.setSubtotal(p - ((detprom.getDescuento() * p) / 100));
+                pd = ((detprom.getDescuento() * p) / 100);
+                ps = ((detprom.getSobrecargo() * p) / 100);
+
+                detprom.setSubtotal(p - pd);
+                p = detprom.getSubtotal();
+
+                detprom.setSubtotal(p + ps);
 
                 Det_Prom.add(detprom);
 
@@ -96,12 +114,13 @@ public class AddEstProm extends HttpServlet {
                 + "<th >Nombre de Estudio</th>"
                 + "<th >Entrega</th>"
                 + "<th >Precio</th>"
-                + "<th >Descuento</th>"
+                 + "<th >Desc.</th>"
+                + "<th >Cargo</th>"
                 + "<th >Quitar</th>"
                 + "</tr>");
         Float total = Float.parseFloat("0");
         for (Det_Prom_DTO dto : Det_Prom) {
-            Float p = Float.parseFloat("0");
+            p = Float.parseFloat("0");
             int e = 0;
             if (dto.getT_Entrega().equals("Normal")) {
                 p = dto.getEstudio().getPrecio().getPrecio_N();
@@ -110,12 +129,14 @@ public class AddEstProm extends HttpServlet {
                 p = dto.getEstudio().getPrecio().getPrecio_U();
                 e = dto.getEstudio().getPrecio().getT_Entrega_U();
             }
-            Float pd = ((dto.getDescuento() * p) / 100);
+            pd = ((dto.getDescuento() * p) / 100);
+            ps = ((dto.getSobrecargo() * p) / 100);
             out.println("<tr>"
                     + "<td >" + dto.getEstudio().getNombre_Estudio() + "</td>"
                     + "<td >" + dto.getT_Entrega() + "</td>"
                     + "<td >" + p + "</td>"
-                    + "<td >$" + pd + "</td>");
+                    + "<td >$" + pd + "</td>"
+                    + "<td >$" + ps + "</td>");
             if (request.getParameter("shdet") == null) {
                 out.println("<td><div id='mat-" + Det_Prom.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEst(" + Det_Prom.indexOf(dto) + ",'Prom') ><span><img src='images/trash.png'></span></button></div></td>");
             } else {

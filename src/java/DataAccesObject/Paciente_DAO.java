@@ -250,6 +250,45 @@ public class Paciente_DAO {
         }
     }
 
+    public Paciente_DTO getBasicPaciente(int id_Paciente) {
+        try {
+            Paciente_DTO dto = new Paciente_DTO();
+            try (Connection con = Conexion.getCon()) {
+                String sql = "SELECT * FROM paciente WHERE id_Paciente=" + id_Paciente + "";
+                PreparedStatement pstm = con.prepareStatement(sql);
+                ResultSet rs = pstm.executeQuery();
+                while (rs.next()) {
+                    dto.setId_Paciente(rs.getInt("id_Paciente"));
+                    dto.setId_Unidad(rs.getInt("id_Unidad"));
+                    dto.setId_Persona(rs.getInt("id_Persona"));
+                    dto.setCodPac(rs.getString("CodPac").toUpperCase());
+                    dto.setSenMail(Boolean.valueOf(rs.getString("SendMail")));
+                }
+                rs.close();
+                pstm.close();
+                sql = "SELECT * FROM persona WHERE id_Persona=" + dto.getId_Persona() + "";
+                pstm = con.prepareStatement(sql);
+                rs = pstm.executeQuery();
+                while (rs.next()) {
+                    dto.setNombre(rs.getString("Nombre"));
+                    dto.setAp_Paterno(rs.getString("Ap_Paterno"));
+                    dto.setAp_Materno(rs.getString("Ap_Materno"));
+                    dto.setFecha_Nac(rs.getString("Fecha_Nac"));
+                    dto.setSexo(rs.getString("Sexo"));
+                    dto.setMail(rs.getString("Mail"));
+                    dto.setTelefono1(rs.getString("Telefono1"));
+                    dto.setTelefono2(rs.getString("Telefono2"));
+                    dto.setId_Direccion(rs.getInt("id_Direccion"));
+                }
+                rs.close();
+                pstm.close();               
+            }
+            return dto;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
     public Paciente_DTO getPaciente(int id_Paciente) {
         try {
             Paciente_DTO dto = new Paciente_DTO();

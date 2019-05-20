@@ -63,24 +63,38 @@ public class AddEstCot extends HttpServlet {
 
         Estudio_DTO estudio = null;
         Float descuento;
+        Float sobrecargo;
         String tpr;
         Det_Cot_DTO detcot;
         Float p;
+        Float pd;
+        Float ps;
         switch (mode) {
             case "lst":
                 estudio = ests.get(index);
                 if (request.getParameter("Desc").trim().equals("") || request.getParameter("Desc").trim().equals("0")
                         || Float.parseFloat(request.getParameter("Desc").trim()) < 0) {
-                    descuento =Float.parseFloat("0");
+                    descuento = Float.parseFloat("0");
                 } else if (Float.parseFloat(request.getParameter("Desc").trim()) > 100) {
                     descuento = Float.parseFloat("100");
                 } else {
                     descuento = Float.parseFloat(request.getParameter("Desc").trim());
                 }
+
+                if (request.getParameter("Sco").trim().equals("") || request.getParameter("Sco").trim().equals("0")
+                        || Float.parseFloat(request.getParameter("Sco").trim()) < 0) {
+                    sobrecargo = Float.parseFloat("0");
+                } else if (Float.parseFloat(request.getParameter("Sco").trim()) > 100) {
+                    sobrecargo = Float.parseFloat("100");
+                } else {
+                    sobrecargo = Float.parseFloat(request.getParameter("Sco").trim());
+                }
+
                 tpr = request.getParameter("Tprec").trim();
                 detcot = new Det_Cot_DTO();
                 detcot.setEstudio(estudio);
                 detcot.setDescuento(descuento);
+                detcot.setSobrecargo(sobrecargo);
                 p = Float.parseFloat("0");
                 detcot.setT_Entrega(tpr);
                 if (detcot.getT_Entrega().equals("Normal")) {
@@ -88,8 +102,15 @@ public class AddEstCot extends HttpServlet {
                 } else if (detcot.getT_Entrega().equals("Urgente")) {
                     p = estudio.getPrecio().getPrecio_U();
                 }
-                detcot.setSubtotal(p - ((detcot.getDescuento() * p) / 100));
-                
+
+                pd = ((detcot.getDescuento() * p) / 100);
+                ps = ((detcot.getSobrecargo() * p) / 100);
+
+                detcot.setSubtotal(p - pd);
+                p = detcot.getSubtotal();
+
+                detcot.setSubtotal(p + ps);
+
                 Det_Cot.add(detcot);
                 Cot.setDet_Cot(Det_Cot);
                 break;
@@ -110,10 +131,21 @@ public class AddEstCot extends HttpServlet {
                 } else {
                     descuento = Float.parseFloat(request.getParameter("Desc").trim());
                 }
+
+                if (request.getParameter("Sco").trim().equals("") || request.getParameter("Sco").trim().equals("0")
+                        || Float.parseFloat(request.getParameter("Sco").trim()) < 0) {
+                    sobrecargo = Float.parseFloat("0");
+                } else if (Float.parseFloat(request.getParameter("Sco").trim()) > 100) {
+                    sobrecargo = Float.parseFloat("100");
+                } else {
+                    sobrecargo = Float.parseFloat(request.getParameter("Sco").trim());
+                }
+
                 tpr = request.getParameter("Tprec").trim();
                 detcot = new Det_Cot_DTO();
                 detcot.setEstudio(estudio);
                 detcot.setDescuento(descuento);
+                detcot.setSobrecargo(sobrecargo);
                 p = Float.parseFloat("0");
                 detcot.setT_Entrega(tpr);
                 if (detcot.getT_Entrega().equals("Normal")) {
@@ -121,7 +153,13 @@ public class AddEstCot extends HttpServlet {
                 } else if (detcot.getT_Entrega().equals("Urgente")) {
                     p = estudio.getPrecio().getPrecio_U();
                 }
-                detcot.setSubtotal(p - ((detcot.getDescuento() * p) / 100));
+                pd = ((detcot.getDescuento() * p) / 100);
+                ps = ((detcot.getSobrecargo() * p) / 100);
+                System.out.println("");
+                detcot.setSubtotal(p - pd);
+                p = detcot.getSubtotal();
+
+                detcot.setSubtotal(p + ps);
                 Det_Cot.add(detcot);
                 Cot.setDet_Cot(Det_Cot);
                 break;
@@ -133,7 +171,8 @@ public class AddEstCot extends HttpServlet {
                 + "<th >Nombre de Estudio</th>"
                 + "<th >Entrega</th>"
                 + "<th >Precio</th>"
-                + "<th >Descuento</th>"
+                + "<th >Desc.</th>"
+                + "<th >Cargo</th>"
                 + "<th >Espera</th>"
                 + "<th >Quitar</th>"
                 + "</tr>");
@@ -148,23 +187,33 @@ public class AddEstCot extends HttpServlet {
                 p = dto.getEstudio().getPrecio().getPrecio_U();
                 e = dto.getEstudio().getPrecio().getT_Entrega_U();
             }
-            Float pd = ((dto.getDescuento() * p) / 100);
+            pd = ((dto.getDescuento() * p) / 100);
+            ps = ((dto.getSobrecargo() * p) / 100);
             out.println("<tr>"
                     + "<td >" + dto.getEstudio().getNombre_Estudio() + "</td>"
                     + "<td >" + dto.getT_Entrega() + "</td>"
                     + "<td >" + p + "</td>"
                     + "<td >$" + pd + "</td>"
+                    + "<td >$" + ps + "</td>"
                     + "<td >" + e + " días</td>"
                     + "<td><div id='mat-" + Det_Cot.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEst(" + Det_Cot.indexOf(dto) + ",'Cot') ><span><img src='images/trash.png'></span></button></div></td>"
                     + "</tr>");
             total = total + dto.getSubtotal();
         }
         Cot.setTotal(total);
-        sesion.setAttribute("Cot", Cot);
+        sesion.setAttribute("Cotizacion", Cot);
         out.println("</table>");
         out.println("</div>");
-        out.println("<p class='offset-8 col-3 col-sm-3 col-md-3'><strong>Pagar " + total + " pesos</strong></p>"
-                + "<a class='btn btn-success btn-lg btn-block' href=# onclick=OpenRep('PrintCot') >Imprimir Cotización</a>");
+        out.println("<p class='offset-8 col-3 col-sm-3 col-md-3'><strong>Pagar " + Util.redondearDecimales(total) + " pesos</strong></p>");
+        if (Cot.getMedico() == null) {
+            out.print("<div class='alert alert-danger alert-dismissible fade show' role='alert'>"
+                    + "            <center><strong>Alerta.!</strong> Aún no elige médico para esta Cotización.</center>"
+                    + "            <button type='button' class='close' data-dismiss='alert' aria-label='Close'>"
+                    + "                <span aria-hidden='true'>&times;</span>"
+                    + "            </button>"
+                    + "        </div>");
+        }
+        out.println("<a class='btn btn-success btn-lg btn-block' href=# onclick=OpenRep('PrintCot') >Imprimir Cotización</a>");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

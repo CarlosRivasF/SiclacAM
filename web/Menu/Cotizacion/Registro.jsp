@@ -14,6 +14,12 @@
     </nav>
 </div>
 <div class="container-fluid" style="color: white"><br>
+    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+        <center>Usted iniciará una Orden Cotización... <br>  <strong>Debe elegir un paciente Regitrar uno Nuevo!</strong></center>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
     <div id="step1">
         <h6 style="text-align: center">Nueva Cotización</h6>                 
         <hr class="mb-4">
