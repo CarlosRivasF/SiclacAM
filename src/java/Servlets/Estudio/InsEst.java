@@ -58,7 +58,6 @@ public class InsEst extends HttpServlet {
                 estudio.setNombre_Estudio(request.getParameter("nombre_estudio"));
                 estudio.setClave_Estudio(request.getParameter("clave_estudio"));
                 estudio.setMetodo(request.getParameter("Metodo"));
-                System.out.println(estudio.getMetodo());
                 estudio.setPreparacion(request.getParameter("preparacion"));
                 estudio.setUtilidad(request.getParameter("utilidad"));
                 estudio.setId_Tipo_Estudio(Integer.parseInt(request.getParameter("Tipo_Estudio").trim()));

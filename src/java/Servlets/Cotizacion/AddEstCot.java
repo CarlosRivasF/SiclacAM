@@ -155,7 +155,6 @@ public class AddEstCot extends HttpServlet {
                 }
                 pd = ((detcot.getDescuento() * p) / 100);
                 ps = ((detcot.getSobrecargo() * p) / 100);
-                System.out.println("");
                 detcot.setSubtotal(p - pd);
                 p = detcot.getSubtotal();
 

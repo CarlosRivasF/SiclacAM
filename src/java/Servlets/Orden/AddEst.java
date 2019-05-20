@@ -161,7 +161,7 @@ public class AddEst extends HttpServlet {
                 }
                 pd = ((detor.getDescuento() * p) / 100);
                 ps = ((detor.getSobrecargo() * p) / 100);
-                System.out.println("");
+                
                 detor.setSubtotal(p - pd);
                 p = detor.getSubtotal();
 

@@ -44,7 +44,6 @@ public class PrintCatalogoPDF extends HttpServlet {
     PdfReader cover;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("Entró peticion a PrintCatalogoPDF");
         Date fac = new Date();
         Util f = new Util();
         f.setHora(fac);
@@ -77,7 +76,6 @@ public class PrintCatalogoPDF extends HttpServlet {
                 }
             }
             Catalogo.clear();
-            System.out.println("Se ordenó la lista de estudios");
             if (Tipo_Estudio != 0) {
                 List<Estudio_DTO> Catalogo3 = new ArrayList<>();
                 for (Estudio_DTO dto : Catalogo2) {
@@ -119,7 +117,6 @@ public class PrintCatalogoPDF extends HttpServlet {
             table.setWidths(new int[]{5, 10, 4, 4});
             int id_Tipo_Estudio = 0;
             int c = 0;
-            System.out.println("recorre catalogo");
             for (Estudio_DTO dto : Catalogo2) {
                 if (id_Tipo_Estudio != dto.getId_Tipo_Estudio()) {
                     id_Tipo_Estudio = dto.getId_Tipo_Estudio();

@@ -37,7 +37,6 @@ public class FinalOrd extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("FinalOrd");
         HttpSession sesion = request.getSession();
         request.setCharacterEncoding("utf-8");
 
@@ -80,7 +79,6 @@ public class FinalOrd extends HttpServlet {
             sesion.removeAttribute("Orden");
             try {
                 String CodeOrd = Orden.getId_Orden() + "";
-                System.out.println("Órden: " + CodeOrd);
                 response.setContentType("application/pdf");
                 response.setHeader("Content-disposition", "inline; filename=\"Órd_" + CodeOrd + ".pdf\"");
                 String relativePath = getServletContext().getRealPath("/") + "/";//ruta real del proyecto
@@ -88,7 +86,6 @@ public class FinalOrd extends HttpServlet {
                 String Source = relativePath + "M/MembrOrden.pdf";
                 Image barras1;
                 JBarcodeBean barcode = new JBarcodeBean();
-                System.out.println("******************JBarcodeBean*******************");
                 barcode.setCodeType(new Code39());
                 barcode.setCode(CodeOrd);
                 barcode.setCheckDigit(true);
@@ -98,7 +95,6 @@ public class FinalOrd extends HttpServlet {
                 PdfReader reader = new PdfReader(Source);
                 Rectangle pagesize = reader.getPageSize(1);
                 PdfStamper stamper = new PdfStamper(reader, response.getOutputStream());
-                System.out.println("******************PdfStamper*******************");
                 PdfContentByte cb = stamper.getOverContent(1);
 
                 BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
@@ -108,7 +104,6 @@ public class FinalOrd extends HttpServlet {
                 cb.beginText();
                 cb.setFontAndSize(bf0, 10);
                 cb.setTextMatrix(290, 760);
-                System.out.println("UNIDAD " + Orden.getUnidad().getNombre_Unidad().toUpperCase());
                 cb.showText("UNIDAD " + Orden.getUnidad().getNombre_Unidad().toUpperCase());
                 cb.endText();
                 cb.beginText();
@@ -133,7 +128,6 @@ public class FinalOrd extends HttpServlet {
                 cb.beginText();
                 cb.setFontAndSize(bf1, 10);
                 cb.setTextMatrix(187, 697);
-                System.out.println(Orden.getPaciente().getNombre() + " " + Orden.getPaciente().getAp_Paterno() + " " + Orden.getPaciente().getAp_Materno());
                 cb.showText(Orden.getPaciente().getNombre() + " " + Orden.getPaciente().getAp_Paterno() + " " + Orden.getPaciente().getAp_Materno());
                 cb.endText();
                 cb.beginText();
@@ -144,7 +138,6 @@ public class FinalOrd extends HttpServlet {
                 cb.beginText();
                 cb.setFontAndSize(bf1, 10);
                 cb.setTextMatrix(485, 697);
-                System.out.println(Orden.getFecha());
                 cb.showText(Orden.getFecha());
                 cb.endText();
                 ////////////////////////// DATOS DOCTOR
@@ -176,7 +169,6 @@ public class FinalOrd extends HttpServlet {
                 cb.showText("Dirección: " + Orden.getUnidad().getEncargado().getCalle() + " No Ext." + Orden.getUnidad().getEncargado().getNo_Ext() + ","
                         + " Col. " + Orden.getUnidad().getEncargado().getNombre_Colonia() + ", " + Orden.getUnidad().getEncargado().getNombre_Municipio() + "     Tel 1.:" + Orden.getUnidad().getEncargado().getTelefono1() + "     Mail.:" + Orden.getUnidad().getEncargado().getMail() + "");
                 cb.endText();
-                System.out.println("Direccion");
                 cb.addImage(barras1, false);
 
                 PdfPTable table = new PdfPTable(2);
@@ -190,7 +182,6 @@ public class FinalOrd extends HttpServlet {
                 }).forEachOrdered((dto) -> {
                     table.addCell(dto.getSubtotal().toString());
                 });
-                System.out.println("tabla de estudios");
 
                 cb.beginText();
                 cb.setFontAndSize(bf, 12);

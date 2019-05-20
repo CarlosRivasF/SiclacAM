@@ -31,7 +31,6 @@ public class Pago_DAO {
             try (PreparedStatement pstm = con.prepareStatement(sql);) {
                 
                 rp = pstm.executeUpdate();
-                System.out.println(rp);
             }
             if (rp == 1) {
                 sql = "SELECT id_Pago from pago WHERE id_Orden=" + pago.getId_Orden() + " "

@@ -154,7 +154,6 @@ public class Util {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        System.out.println("**Encriptar:" + texto+" - - - "+base64EncryptedString);
         return base64EncryptedString;
     }
 
@@ -177,7 +176,6 @@ public class Util {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        System.out.println("**Desencriptar:" + textoEncriptado+" - - - "+base64EncryptedString);
         return base64EncryptedString;
     }
 

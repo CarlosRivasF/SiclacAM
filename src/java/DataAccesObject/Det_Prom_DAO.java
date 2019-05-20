@@ -21,21 +21,21 @@ public class Det_Prom_DAO {
     public int registrarDetor(int id_Promocion, Det_Prom_DTO detor) {
         int id_Det_Prom = 0;
         try (Connection con = Conexion.getCon();) {
-            System.out.println("REGISTRANDO DETALLES DE PROMOCION");
+            //System.out.println("REGISTRANDO DETALLES DE PROMOCION");
             String sql = "INSERT INTO det_prom VALUES(null,"
                     + "" + id_Promocion + ","
                     + "" + detor.getEstudio().getId_Est_Uni() + ","
                     + "'" + detor.getDescuento() + "',"
                     + "'" + detor.getSobrecargo()+ "',"
                     + "'" + detor.getT_Entrega() + "')";
-            System.out.println(sql);
+            
             try (PreparedStatement pstm = con.prepareStatement(sql);) {
                 pstm.executeUpdate();
             }
             sql = "select id_Det_Prom from det_prom where id_Promocion=" + id_Promocion + " and id_Est_Uni=" + detor.getEstudio().getId_Est_Uni() + ""
                     + " and Descuento='" + detor.getDescuento() + "' and Sobrecargo='" + detor.getSobrecargo() + "'"
                     + " and Tipo_Entrega='" + detor.getT_Entrega() + "'";
-            System.out.println(sql);
+            
             try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery()) {
                 while (rs.next()) {
                     id_Det_Prom = rs.getInt("id_Det_Prom");

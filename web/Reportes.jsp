@@ -92,7 +92,7 @@
                         <a onclick="verRep('CardOrdenes');" class="nav-link" href="#/ÓRDENES">ÓRDENES </a>
                         <a onclick="verRep('CardResultados');" class="nav-link" href="#/RESULTADOS">RESULTADOS </a>
                         <a onclick="verRep('CardCortes');" class="nav-link" href="#/CORTES">CORTES </a>      
-                        <a class="nav-link" href="#/PARTICIPACIONES">PARTICIPACIONES </a>
+                        <a onclick="verRep('CardParticipaciones');" class="nav-link" href="#/PARTICIPACIONES">PARTICIPACIONES </a>
                     </nav>
                 </div>
                 <script>
@@ -185,7 +185,7 @@
                                             <input type="date" class="form-control" name="fechaI1Ord" id="fechaI1Ord" required>
                                         </div>
                                         <div class="form-group col-md-6 mb-3">
-                                            <label style="text-align: center" for="fechaF">Fecha Inicio</label>
+                                            <label style="text-align: center" for="fechaF">Fecha Final</label>
                                             <input type="date" class="form-control" name="fechaF1Ord" id="fechaF1Ord" required>
                                         </div>
                                     </div>                                    
@@ -216,7 +216,7 @@
                                             <input type="date" class="form-control" name="fechaI1Ord" id="fechaI1OrdEmp" required>
                                         </div>
                                         <div class="form-group col-md-6 mb-3">
-                                            <label style="text-align: center" for="fechaF">Fecha Inicio</label>
+                                            <label style="text-align: center" for="fechaF">Fecha Final</label>
                                             <input type="date" class="form-control" name="fechaF1Ord" id="fechaF1OrdEmp" required>
                                         </div>
                                     </div>                                    
@@ -276,7 +276,7 @@
                                             <input type="date" class="form-control" name="fechaI1OrdCrt" id="fechaI1OrdCrt" required>
                                         </div>
                                         <div class="form-group col-md-6 mb-3">
-                                            <label style="text-align: center" for="fechaF">Fecha Inicio</label>
+                                            <label style="text-align: center" for="fechaF">Fecha Final</label>
                                             <input type="date" class="form-control" name="fechaF1OrdCrt" id="fechaF1OrdCrt" required>
                                         </div>
                                     </div>                                    
@@ -297,7 +297,7 @@
                                             <input type="date" class="form-control" name="fechaI1OrdEmp" id="fechaI1OrdEmpCrt" required>
                                         </div>
                                         <div class="form-group col-md-6 mb-3">
-                                            <label style="text-align: center" for="fechaF">Fecha Inicio</label>
+                                            <label style="text-align: center" for="fechaF">Fecha Final</label>
                                             <input type="date" class="form-control" name="fechaF1OrdEmp" id="fechaF1OrdEmpCrt" required>
                                         </div>
                                     </div>                                    
@@ -310,6 +310,52 @@
                             </div>
                         </div>
                     </div> 
+                    <!--CardParticipaciones-->
+                    <div id="CardParticipaciones" class="form-row" style="display:none">
+                        <div class="form-row  col-md-12">
+                            <div class="card form-row col-md-6  mb-3" style="background: darkgrey">
+                                <h6 class="card-header">Participaciones de médicos en la Unidad</h6>
+                                <div class="card-body">
+                                    <div class="form-row col-md-12 mb-3">
+                                        <div class="form-group col-md-6 mb-3">
+                                            <label style="text-align: center" for="fechaI">Fecha Inicio</label>
+                                            <input type="date" class="form-control" name="fechaI1OrdCrt" id="fechaI1OrdCrt" required>
+                                        </div>
+                                        <div class="form-group col-md-6 mb-3">
+                                            <label style="text-align: center" for="fechaF">Fecha Final</label>
+                                            <input type="date" class="form-control" name="fechaF1OrdCrt" id="fechaF1OrdCrt" required>
+                                        </div>
+                                    </div>                                    
+                                    <div class="form-row col-md-12" >
+                                        <div class="form offset-3 col-md-6 mb-3">
+                                            <button style="text-align: center" disabled="" onclick="OpenRep('PrintReporteOrders' + fchROrdGrlCrt()+'&Crte=Ys');" class="btn btn-light btn-block">Reporte PDF  <span><img src='images/Pdf.png' class="img-fluid" alt="Responsive image"></span></button>
+                                        </div>
+                                    </div>                                    
+                                </div>
+                            </div>
+                            <div class="offset-md-1"></div>  
+                            <div class="card form-row col-md-5  mb-3" style="background: darkgrey">
+                                <h6 class="card-header">Participaciones de la Unidad  por Médico</h6>
+                                <div class="card-body">
+                                    <div class="form-row col-md-12 mb-3">
+                                        <div class="form-group col-md-6 mb-3">
+                                            <label style="text-align: center" for="fechaI">Fecha Inicio</label>
+                                            <input type="date" class="form-control" name="fechaI1OrdEmp" id="fechaI1OrdEmpCrt" required>
+                                        </div>
+                                        <div class="form-group col-md-6 mb-3">
+                                            <label style="text-align: center" for="fechaF">Fecha Final</label>
+                                            <input type="date" class="form-control" name="fechaF1OrdEmp" id="fechaF1OrdEmpCrt" required>
+                                        </div>
+                                    </div>                                    
+                                    <div class="form-row col-md-12" >
+                                        <div class="form offset-3 col-md-6 mb-3">
+                                            <button style="text-align: center" disabled="" onclick="OpenRep('PrintReporteOrders' + fchROrdGrlEmpCrt()+'&Crte=Ys &Emps=Ys');" class="btn btn-light btn-block">Reporte PDF  <span><img src='images/Pdf.png' class="img-fluid" alt="Responsive image"></span></button>
+                                        </div>
+                                    </div>                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

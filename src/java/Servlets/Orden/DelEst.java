@@ -37,7 +37,7 @@ public class DelEst extends HttpServlet {
         f.setHora(fac);
         if (request.getParameter("modulo") != null) {
             String Modulo = request.getParameter("modulo").trim();
-            System.out.println("");
+            
             switch (Modulo) {
                 case "Ord":
                     Orden_DTO Orden = (Orden_DTO) sesion.getAttribute("Orden");
@@ -104,15 +104,12 @@ public class DelEst extends HttpServlet {
                     Cotizacion_DTO Cot = (Cotizacion_DTO) sesion.getAttribute("Cotizacion");
                     List<Det_Cot_DTO> Det_Cot = null;
                     if (Cot.getDet_Cot() == null) {
-                        System.out.println("Det_Cot NULL");
                     } else if (Cot.getDet_Cot().isEmpty()) {
-                        System.out.println("Det_Cot IS EMPTY");
                     } else {
                         Det_Cot = Cot.getDet_Cot();
                     }
                     int index2 = Integer.parseInt(request.getParameter("index").trim());
                     Det_Cot.remove(index2);
-                    System.out.println("Se elimino el estudio " + index2);
                     if (!Det_Cot.isEmpty()) {
                         out.println("<div id='BEst'></div>"
                                 + "<div style='color: white' class='table-responsive'>"

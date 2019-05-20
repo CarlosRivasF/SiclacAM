@@ -52,8 +52,7 @@ public class Orden_DAO {
                     orden.setId_Orden(rs.getInt("id_Orden"));
                 }
             }
-            if (orden.getId_Orden() != 0) {
-                System.out.println("ORDEN REGISTRADA");
+            if (orden.getId_Orden() != 0) {                
                 Det_Orden_DAO DET = new Det_Orden_DAO();
                 orden.getDet_Orden().forEach((detor) -> {
                     detor.setId_det_orden(DET.registrarDetor(orden.getId_Orden(), detor));
@@ -407,7 +406,6 @@ public class Orden_DAO {
                     ord.setFolio_Unidad(rs.getInt("folio_unidad"));
                     ords.add(ord);
                 }
-                System.out.println("Recuperó Ordenes");
             }
 
             for (Orden_DTO ord : ords) {
@@ -470,7 +468,6 @@ public class Orden_DAO {
                     ord.setDet_Orden(dets);
                 }
             }
-            System.out.println("Recuperó Detalle de Ordenes");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

@@ -2637,7 +2637,7 @@ function OpenRep(url) {
     window.open(url);
 }
 function verRep(id) {
-    var IDs = ['CardEstudios', 'CardOrdenes', 'CardResultados','CardCortes'];
+    var IDs = ['CardEstudios', 'CardOrdenes', 'CardResultados','CardCortes','CardParticipaciones'];
     for (var i = 0; i < IDs.length; i++) {
         document.getElementById(IDs[i]).style.display = "none";
     }

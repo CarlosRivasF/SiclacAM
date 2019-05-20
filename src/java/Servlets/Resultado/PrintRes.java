@@ -49,7 +49,6 @@ public class PrintRes extends HttpServlet {
     PdfReader cover;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("ProcessRequest of PrintRes");
         Date fac = new Date();
         Util f = new Util();
         f.setHora(fac);
@@ -57,35 +56,27 @@ public class PrintRes extends HttpServlet {
         int id_Orden;
         if (request.getParameter("LxOrdSald") != null) {
             id_Orden = Integer.parseInt(request.getParameter("LxOrdSald").trim());
-            System.out.println("LxOrdSald");
         } else if (request.getParameter("OrdFol") != null) {
             id_Orden = Integer.parseInt(request.getParameter("OrdFol").trim());
-            System.out.println("OrdFol");
         } else if (request.getParameter("ScannBarr") != null) {
             id_Orden = Integer.parseInt(request.getParameter("ScannBarr").trim());
-            System.out.println("ScannBarr");
         } else {
             id_Orden = 1;
-            System.out.println("null");
         }
 
         try {
             Orden_DTO Orden;
             if (sesion.getAttribute("OrdenSh") != null) {
-                System.out.println("GETOrdenSh");
                 Orden = (Orden_DTO) sesion.getAttribute("OrdenSh");
                 sesion.removeAttribute("OrdenSh");
             } else if (request.getParameter("OrdFol") != null) {
-                System.out.println("GETOrdFol");
                 Orden_DAO O = new Orden_DAO();
                 int id_Unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
                 Orden = O.getOrdenByFolio(id_Orden, id_Unidad);
             } else if (request.getParameter("ScannBarr") != null) {
-                System.out.println("GETScannBarr");
                 Orden_DAO O = new Orden_DAO();
                 Orden = O.getOrden(id_Orden);
             } else {
-                System.out.println("GETElse");
                 Orden_DAO O = new Orden_DAO();
                 Orden = O.getOrden(id_Orden);
             }
@@ -97,7 +88,6 @@ public class PrintRes extends HttpServlet {
             Orden.getDet_Orden().stream().filter((d) -> (d.getEstudio().getId_Tipo_Estudio() == 2 || d.getEstudio().getId_Tipo_Estudio() == 4 || d.getEstudio().getId_Tipo_Estudio() == 5 || d.getEstudio().getId_Tipo_Estudio() == 6)).forEachOrdered((d) -> {
                 DetImage.add(d);
             });
-            System.out.println("DetImage.Size()" + DetImage.size());
             Orden.getDet_Orden().removeAll(DetImage);
 
             //aqui se agrupan las configuraciones que tengan el mismo nombre para ponerlas en una sola fila
@@ -105,7 +95,6 @@ public class PrintRes extends HttpServlet {
             //termina agrupacion de configuraciones
             String Source = relativePath + "M/MembreteRes1.pdf";
 
-            System.out.println("Source:" + Source);
             int pagecount = 1;
             cover = new PdfReader(Source);
             PdfReader reader = new PdfReader(Source);
@@ -115,7 +104,6 @@ public class PrintRes extends HttpServlet {
             PdfContentByte cb = stamper.getOverContent(1);
 
             PrintDataHead(cb, Orden, true);
-            System.out.println("Stamper");
             /////************************************************/////////////////
             BaseColor orange = new BaseColor(211, 84, 0);
             BaseColor blue = new BaseColor(52, 152, 219);
@@ -211,7 +199,6 @@ public class PrintRes extends HttpServlet {
                     break;
                 }
                 int IxImage = DetImage.indexOf(dto);
-                System.out.println("IxImage: " + IxImage);
                 c++;
                 PdfContentByte pageI;
                 if (Orden.getDet_Orden().isEmpty() && DetImage.size() == 1) {
@@ -239,7 +226,6 @@ public class PrintRes extends HttpServlet {
                     if (cnf.getRes().getValor_Obtenido() != null) {
                         cnfRs = true;
                     }
-                    System.out.println("Cnf:" + IxImage + "." + dto.getEstudio().getCnfs().indexOf(cnf) + " - " + cnfRs);
                     int idx = 75;
                     String line = cnf.getRes().getValor_Obtenido();
                     int rows = 0;

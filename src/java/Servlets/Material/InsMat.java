@@ -20,7 +20,6 @@ public class InsMat extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("************************************ENTRO AL NUEVO SERVLET********************************************");
         HttpSession sesion = request.getSession();
         int id_unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
         Material_DAO M = new Material_DAO();

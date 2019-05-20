@@ -54,7 +54,6 @@ public class Permiso_DAO {
             
             try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery()) {
                 while (rs.next()) {
-                    System.out.println(rs.getString("id_Permiso"));
                     lst.add(rs.getString("id_Permiso"));
                 }
             }

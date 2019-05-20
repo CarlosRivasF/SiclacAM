@@ -23,7 +23,7 @@ public class Det_Orden_DAO {
     public int registrarDetor(int id_Orden, Det_Orden_DTO detor) {
         int id_Det_Orden = 0;
         try (Connection con = Conexion.getCon();) {
-            System.out.println("REGISTRANDO DETALLES DE ORDEN");
+            //System.out.println("REGISTRANDO DETALLES DE ORDEN");
             String sql = "INSERT INTO det_orden VALUES(null,"
                     + "" + id_Orden + ","
                     + "" + detor.getEstudio().getId_Est_Uni() + ","

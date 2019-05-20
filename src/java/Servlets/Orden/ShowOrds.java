@@ -23,7 +23,6 @@ public class ShowOrds extends HttpServlet {
         HttpSession sesion = request.getSession();
         PrintWriter out = response.getWriter();
         String mode = request.getParameter("mode").trim();
-        System.out.println(mode);
         out.print("<div class='nav-scroller bg-white box-shadow'>"
                 + "    <nav class='nav nav-underline'>");
         switch (mode) {

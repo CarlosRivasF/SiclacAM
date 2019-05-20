@@ -39,17 +39,14 @@ public class CastToOrden extends HttpServlet {
         Util f = new Util();
         f.setHora(fac);
         String codeBar = request.getParameter("Id_Cot").trim();
-        System.out.println(codeBar);
+        
         String[] bar = codeBar.split("-");
 
         int id_Cotizacion = Integer.parseInt(bar[0]);
         Cotizacion_DAO C = new Cotizacion_DAO();
         Cotizacion_DTO cot = C.getCotizacion(id_Cotizacion);
-        System.out.println(cot.getPaciente().getNombre());
         if (f.IsValid(cot.getFecha_Exp().trim())) {
-            System.out.println("Cotizacion valida.!");
             Orden_DTO Orden = new Orden_DTO();
-
             Orden.setUnidad(cot.getUnidad());
             Orden.setPaciente(cot.getPaciente());
             Orden.setMedico(cot.getMedico());

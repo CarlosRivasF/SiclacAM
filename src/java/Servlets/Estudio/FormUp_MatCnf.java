@@ -48,10 +48,6 @@ public class FormUp_MatCnf extends HttpServlet {
             int l = 0;
             for (Configuracion_DTO cnf : est.getCnfs()) {
                 if (l == ixC) {
-                    System.out.println("Desc:" + request.getParameter("descrip"));
-                    System.out.println("Sex:" + request.getParameter("sexo"));
-                    System.out.println("ValMin:" + request.getParameter("valMin"));
-                    System.out.println("ValMax:" + request.getParameter("valMax"));
                     cnf.setDescripcion(request.getParameter("descrip"));
                     cnf.setSexo(request.getParameter("sexo"));
                     cnf.setValor_min(request.getParameter("valMin"));

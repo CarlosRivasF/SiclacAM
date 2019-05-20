@@ -28,7 +28,6 @@ public class AddShareEst extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("Peticion a AddShareEst");
         response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
         int id_unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());        
