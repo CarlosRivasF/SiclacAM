@@ -30,9 +30,6 @@ public class Participacion_DAO {
     }
 
     public int GetIDParticipacion(Participacion_DTO part) {
-        Date fac = new Date();
-        Util f = new Util();
-        f.setHora(fac);
         int id_participacion = 0;
         String sql = "SELECT id_participacion from participacion WHERE id_Unidad=" + part.getId_Unidad() + " "
                 + "                                             and id_Orden=" + part.getOrden().getId_Orden()  + " "
@@ -47,19 +44,32 @@ public class Participacion_DAO {
         }
         return id_participacion;
     }
+    
+    public Float Participacion(Participacion_DTO part) {
+        Date fac = new Date();
+        Util f = new Util();
+        f.setHora(fac);
+        Float Monto = Float.parseFloat("0");
+        String sql = "SELECT Monto from participacion WHERE id_Orden=" + part.getOrden().getId_Orden() + "";
+        try (Connection con = Conexion.getCon(); PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery();) {
+            while (rs.next()) {
+                Monto = rs.getFloat("Monto");
+            }
+        } catch (SQLException ex) {
+            System.out.println("* SELECT Participacion [MONTO] : " + ex.getMessage());
+        }
+        return Monto;
+    }
 
-    public List<Participacion_DTO> GetPartsByUnidad(int id_Unidad) {
+    public List<Participacion_DTO> GetPartsByUnidad(int id_Unidad, String fechaInicio, String fechaFinal) {
         List<Participacion_DTO> parts = new ArrayList<>();
-        Medico_DAO M = new Medico_DAO();
-        String sql = "SELECT * from participacion WHERE id_Unidad=" + id_Unidad + " order by id_Medico";
+        Orden_DAO O=new Orden_DAO();
+        String sql = "SELECT * from participacion WHERE id_Unidad=" + id_Unidad + " AND Monto>0 AND  Fecha BETWEEN '" + fechaInicio + "' AND '" + fechaFinal + "' order by id_Medico";
         try (Connection con = Conexion.getCon(); PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery();) {
             while (rs.next()) {
                 Participacion_DTO part = new Participacion_DTO();
                 part.setId_participacion(rs.getInt("id_participacion"));
-                part.setId_Unidad(rs.getInt("id_Unidad"));
-                part.setMedico(M.getNameMedico(rs.getInt("id_Medico")));
-                part.setFecha(rs.getString("Fecha"));
-                part.setHora(rs.getString("Hora"));
+                part.setOrden(O.getOrden(rs.getInt("id_Orden")));                
                 part.setMonto(rs.getFloat("Monto"));
                 part.setConvenio(rs.getString("convenio"));
                 parts.add(part);

@@ -2633,6 +2633,20 @@ function fchROrdGrlEmpCrt() {
     return fechasRep;
 }
 
+function fchRPartGrlCrt() {
+    if (document.getElementById("fechaI1PartCrt").value !== "" & document.getElementById("fechaF1PartCrt").value !== "") {
+        fechasRep = "?fchaI=" + document.getElementById("fechaI1PartCrt").value + " &fchaF=" + document.getElementById("fechaF1PartCrt").value;
+    }
+    return fechasRep;
+}
+
+function fchRPartGrlMedCrt() {
+    if (document.getElementById("fechaI1PartMedCrt").value !== "" & document.getElementById("fechaF1PartMedCrt").value !== "") {
+        fechasRep = "?fchaI=" + document.getElementById("fechaI1PartMedCrt").value + " &fchaF=" + document.getElementById("fechaF1PartMedCrt").value;
+    }
+    return fechasRep;
+}
+
 function OpenRep(url) {
     window.open(url);
 }

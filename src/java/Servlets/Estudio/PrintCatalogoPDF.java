@@ -86,7 +86,7 @@ public class PrintCatalogoPDF extends HttpServlet {
                 }
                 Catalogo2.removeAll(Catalogo3);
             }
-            String Source = relativePath + "M/MembreteRes1.pdf";
+            String Source = relativePath + "M/MembreteRes1.pdf";//MembreteHtl
 
             int pagecount = 1;
                 cover = new PdfReader(Source);//PDF extra para posterior modificacion (omitir)
@@ -239,7 +239,6 @@ public class PrintCatalogoPDF extends HttpServlet {
             while (ColumnText.hasMoreText(status)) {
                 pagecount++;
                 f.setHora(fac);
-
                 PdfContentByte pageI;
                 stamper.insertPage(pagecount, cover.getPageSizeWithRotation(1));
                 pageI = stamper.getOverContent(pagecount);

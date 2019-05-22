@@ -385,18 +385,16 @@ public class Orden_DAO {
         Paciente_DAO P = new Paciente_DAO();
         Medico_DAO M = new Medico_DAO();
         Empleado_DAO Pr = new Empleado_DAO();
-        int c = 0;
         try (Connection con = Conexion.getCon()) {//id_Unidad=" + id_Unidad + " AND
             String sql = "SELECT * FROM orden  WHERE id_Unidad=" + id_Unidad + " AND  Fecha_Orden BETWEEN '" + fechaInicio + "' AND '" + fechaFinal + "' order by id_Persona";
             try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery();) {
                 while (rs.next()) {
-                    c++;
                     Orden_DTO ord = new Orden_DTO();
                     ord.setId_Orden(rs.getInt("id_Orden"));
-                    ord.setUnidad(U.getUnidadAll(rs.getInt("id_Unidad"))); //
-                    ord.setPaciente(P.getPaciente(rs.getInt("id_Paciente")));//
-                    ord.setMedico(M.getMedico(rs.getInt("id_Medico")));//
-                    ord.setEmpleado(Pr.getOnlyEmpleado(rs.getInt("id_Persona")));//
+                    ord.setUnidad(U.getUnidadAll(rs.getInt("id_Unidad"))); 
+                    ord.setPaciente(P.getPaciente(rs.getInt("id_Paciente")));
+                    ord.setMedico(M.getMedico(rs.getInt("id_Medico")));
+                    ord.setEmpleado(Pr.getOnlyEmpleado(rs.getInt("id_Persona")));
                     ord.setFecha(rs.getString("Fecha_Orden"));
                     ord.setHora(rs.getString("Hora_Orden"));
                     ord.setMontoPagado(rs.getFloat("Precio_Total"));

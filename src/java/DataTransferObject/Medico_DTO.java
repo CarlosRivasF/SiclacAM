@@ -1,5 +1,6 @@
 package DataTransferObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,6 +8,11 @@ import java.util.List;
  * @author Carlos Rivas
  */
 public class Medico_DTO extends Persona_DTO {
+
+    public Medico_DTO() {
+        List<Participacion_DTO> Parts = new ArrayList<>();
+        this.Participaciones = Parts;
+    }
 
     public String getCodMed() {
         return CodMed;
@@ -71,4 +77,4 @@ public class Medico_DTO extends Persona_DTO {
     public void setParticipaciones(List<Participacion_DTO> Participaciones) {
         this.Participaciones = Participaciones;
     }
-    }
+}

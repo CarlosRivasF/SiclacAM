@@ -23,6 +23,7 @@ public class Orden_DTO {
     protected String estado;
     protected String convenio;
     protected int Folio_Unidad;
+    private Float montoPartselect;
 
     public int getId_Orden() {
         return id_Orden;
@@ -134,5 +135,13 @@ public class Orden_DTO {
 
     public void setFolio_Unidad(int Folio_Unidad) {
         this.Folio_Unidad = Folio_Unidad;
+    }
+
+    public Float getMontoPartselect() {
+        return montoPartselect;
+    }
+
+    public void setMontoPartselect(Float montoPartselect) {
+        this.montoPartselect = montoPartselect;
     }
 }

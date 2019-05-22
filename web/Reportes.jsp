@@ -35,8 +35,7 @@
 <html>
     <head>
         <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-        <script src='https://www.google.com/jsapi'></script>     
-        <script  src="${pageContext.request.contextPath}/Charts/js/index.js"></script>         
+        <script src='https://www.google.com/jsapi'></script>          
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"> 
         <title><%=empresa.getNombre_Empresa()%> | Reportes</title>
         <meta charset="UTF-8">
@@ -222,7 +221,7 @@
                                     </div>                                    
                                     <div class="form-row col-md-12" >
                                         <div class="form offset-3 col-md-6 mb-3">
-                                            <button style="text-align: center" onclick="OpenRep('PrintReporteOrders' + fchROrdGrlEmp()+'&Emps=Ys');" class="btn btn-light btn-block">Reporte PDF  <span><img src='images/Pdf.png' class="img-fluid" alt="Responsive image"></span></button>
+                                            <button style="text-align: center" onclick="OpenRep('PrintReporteOrders' + fchROrdGrlEmp() + '&Emps=Ys');" class="btn btn-light btn-block">Reporte PDF  <span><img src='images/Pdf.png' class="img-fluid" alt="Responsive image"></span></button>
                                         </div>
                                     </div>                                    
                                 </div>
@@ -282,7 +281,7 @@
                                     </div>                                    
                                     <div class="form-row col-md-12" >
                                         <div class="form offset-3 col-md-6 mb-3">
-                                            <button style="text-align: center" onclick="OpenRep('PrintReporteOrders' + fchROrdGrlCrt()+'&Crte=Ys');" class="btn btn-light btn-block">Reporte PDF  <span><img src='images/Pdf.png' class="img-fluid" alt="Responsive image"></span></button>
+                                            <button style="text-align: center" onclick="OpenRep('PrintReporteOrders' + fchROrdGrlCrt() + '&Crte=Ys');" class="btn btn-light btn-block">Reporte PDF  <span><img src='images/Pdf.png' class="img-fluid" alt="Responsive image"></span></button>
                                         </div>
                                     </div>                                    
                                 </div>
@@ -303,7 +302,7 @@
                                     </div>                                    
                                     <div class="form-row col-md-12" >
                                         <div class="form offset-3 col-md-6 mb-3">
-                                            <button style="text-align: center" onclick="OpenRep('PrintReporteOrders' + fchROrdGrlEmpCrt()+'&Crte=Ys &Emps=Ys');" class="btn btn-light btn-block">Reporte PDF  <span><img src='images/Pdf.png' class="img-fluid" alt="Responsive image"></span></button>
+                                            <button style="text-align: center" onclick="OpenRep('PrintReporteOrders' + fchROrdGrlEmpCrt() + '&Crte=Ys &Emps=Ys');" class="btn btn-light btn-block">Reporte PDF  <span><img src='images/Pdf.png' class="img-fluid" alt="Responsive image"></span></button>
                                         </div>
                                     </div>                                    
                                 </div>
@@ -319,16 +318,16 @@
                                     <div class="form-row col-md-12 mb-3">
                                         <div class="form-group col-md-6 mb-3">
                                             <label style="text-align: center" for="fechaI">Fecha Inicio</label>
-                                            <input type="date" class="form-control" name="fechaI1OrdCrt" id="fechaI1OrdCrt" required>
+                                            <input type="date" class="form-control" name="fechaI1PartCrt" id="fechaI1PartCrt" required>
                                         </div>
                                         <div class="form-group col-md-6 mb-3">
                                             <label style="text-align: center" for="fechaF">Fecha Final</label>
-                                            <input type="date" class="form-control" name="fechaF1OrdCrt" id="fechaF1OrdCrt" required>
+                                            <input type="date" class="form-control" name="fechaF1PartCrt" id="fechaF1PartCrt" required>
                                         </div>
                                     </div>                                    
                                     <div class="form-row col-md-12" >
                                         <div class="form offset-3 col-md-6 mb-3">
-                                            <button style="text-align: center" disabled="" onclick="OpenRep('PrintReporteOrders' + fchROrdGrlCrt()+'&Crte=Ys');" class="btn btn-light btn-block">Reporte PDF  <span><img src='images/Pdf.png' class="img-fluid" alt="Responsive image"></span></button>
+                                            <button style="text-align: center" onclick="OpenRep('ParticipacionesReport' + fchRPartGrlCrt() + '&Crte=Ys');" class="btn btn-light btn-block">Reporte PDF  <span><img src='images/Pdf.png' class="img-fluid" alt="Responsive image"></span></button>
                                         </div>
                                     </div>                                    
                                 </div>
@@ -340,16 +339,16 @@
                                     <div class="form-row col-md-12 mb-3">
                                         <div class="form-group col-md-6 mb-3">
                                             <label style="text-align: center" for="fechaI">Fecha Inicio</label>
-                                            <input type="date" class="form-control" name="fechaI1OrdEmp" id="fechaI1OrdEmpCrt" required>
+                                            <input type="date" class="form-control" name="fechaI1PartMedCrt" id="fechaI1PartMedCrt" required>
                                         </div>
                                         <div class="form-group col-md-6 mb-3">
                                             <label style="text-align: center" for="fechaF">Fecha Final</label>
-                                            <input type="date" class="form-control" name="fechaF1OrdEmp" id="fechaF1OrdEmpCrt" required>
+                                            <input type="date" class="form-control" name="fechaF1PartMedCrt" id="fechaF1PartMedCrt" required>
                                         </div>
                                     </div>                                    
                                     <div class="form-row col-md-12" >
                                         <div class="form offset-3 col-md-6 mb-3">
-                                            <button style="text-align: center" disabled="" onclick="OpenRep('PrintReporteOrders' + fchROrdGrlEmpCrt()+'&Crte=Ys &Emps=Ys');" class="btn btn-light btn-block">Reporte PDF  <span><img src='images/Pdf.png' class="img-fluid" alt="Responsive image"></span></button>
+                                            <button style="text-align: center" onclick="OpenRep('ParticipacionesReport' + fchRPartGrlMedCrt() + '&Crte=Ys &Med=Ys');" class="btn btn-light btn-block">Reporte PDF  <span><img src='images/Pdf.png' class="img-fluid" alt="Responsive image"></span></button>
                                         </div>
                                     </div>                                    
                                 </div>
