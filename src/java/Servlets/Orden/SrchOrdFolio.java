@@ -23,89 +23,106 @@ public class SrchOrdFolio extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
-        int id_unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
         PrintWriter out = response.getWriter();
-        Orden_DAO O = new Orden_DAO();
-        Orden_DTO dto;
-        int Folio = 0;
-        String codeBar = request.getParameter("Folio").trim();
-        if (codeBar.contains("-")) {
-            String[] bar = codeBar.split("-");
+        if (!"".equals(request.getParameter("Folio").trim())) {
+            int id_unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
 
-            Folio = Integer.parseInt(bar[0]);
-        } else {
-            Folio = Integer.parseInt(request.getParameter("Folio").trim());
-        }
+            Orden_DAO O = new Orden_DAO();
+            Orden_DTO dto;
+            int Folio = 0;
+            String codeBar = request.getParameter("Folio").trim();
+            if (codeBar.contains("-")) {
+                String[] bar = codeBar.split("-");
 
-        String part = request.getParameter("mode").trim();
-        switch (part) {
-            case "ord":
-                dto = O.getOrdenPendiente(Folio, id_unidad);
-                break;
-            case "sald":
-                dto = O.getOrdenSaldo(Folio, id_unidad);
-                break;
-            case "results":
-                dto = O.getOrdenTerminada(Folio, id_unidad);
-                break;
-            case "uplRs":
-                dto = O.getOrdenByFolio(Folio, id_unidad);
-                break;
-            default:
-                dto = O.getOrdenByFolio(Folio, id_unidad);
-                break;
-        }
-        out.println("<div style='color: white' class='table-responsive'>"
-                + "<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
-                + "<tr class='table-active'>"
-                + "<th >Folio de Unidad</th>"
-                + "<th >Clave</th>"
-                + "<th >Paciente</th>");
-        switch (part) {
-            case "ord":
-                out.println("<th >Detalles</th>"
-                        + "<th >Cancelar</th>");
-                break;
-            case "sald":
-                out.println("<th >Saldo</th>");
-                out.println("<th >Pagar</th>");
-                break;
-            case "results":
-                out.println("<th >Resultados</th>");
-                out.println("<th >Imprimir</th>");
-                break;
-            case "uplRs":
-                out.println("<th >LLenar</th>");
-                break;
-        }
-        if (dto.getFolio_Unidad() != 0) {
-            String CodeCot = dto.getPaciente().getCodPac().substring(0, 4) + "-" + dto.getId_Orden();
-            out.println("<tr>"
-                    + "<td >" + dto.getFolio_Unidad() + "</td>"
-                    + "<td >" + CodeCot + "</td>"
-                    + "<td >" + dto.getPaciente().getNombre() + " " + dto.getPaciente().getAp_Paterno() + " " + dto.getPaciente().getAp_Materno() + "</td>");
+                Folio = Integer.parseInt(bar[0]);
+            } else {
+                Folio = Integer.parseInt(request.getParameter("Folio").trim());
+            }
+
+            String part = request.getParameter("mode").trim();
             switch (part) {
                 case "ord":
-                    out.print("<td><button href=# class='btn btn-default' onclick=ShDetOrden(" + dto.getId_Orden() + ",'folio') ><span><img src='images/details.png'></span></button></td>");
-                    out.println("<td><div id='ord-" + dto.getId_Orden() + "'><button href=# class='btn btn-primary' onclick=CancelOrd(" + dto.getId_Orden() + ") ><span><img src='images/cancel.png'></span></button></div></td>");
+                    dto = O.getOrdenPendiente(Folio, id_unidad);
                     break;
                 case "sald":
-                    out.println("<td >" + Util.redondearDecimales(dto.getMontoRestante()) + "</td>");
-                    out.print("<td><div id='ord-" + dto.getId_Orden() + "'><button href=# class='btn btn-success' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Pago/formAddPay.jsp?id_Orden=" + dto.getId_Orden() + "');><span><img src='images/pay.png'></span></button></div></td>");
+                    dto = O.getOrdenSaldo(Folio, id_unidad);
                     break;
-                case "results"://href=# onclick=OpenRep('PrintCot')
-                    out.println("<td><div id='ord-" + dto.getId_Orden() + "'><button href=# class='btn btn-primary' onclick=ShDetOrdenRS(" + dto.getId_Orden() + ",'folio') ><span><img src='images/fill.png'></span></button></div></td>");
-                    out.println("<td><a href=# onclick=OpenRep('PrintRes?LxOrdSald=" + dto.getId_Orden() + "') class='btn btn-primary' ><span><img src='images/print.png'></span></a></td>");
+                case "results":
+                    dto = O.getOrdenTerminada(Folio, id_unidad);
                     break;
                 case "uplRs":
-                    out.println("<td><div id='ord-" + dto.getId_Orden() + "'><button href=# class='btn btn-primary' onclick=ShDetOrdenRS(" + dto.getId_Orden() + ",'folio') ><span><img src='images/fill.png'></span></button></div></td>");
+                    dto = O.getOrdenByFolio(Folio, id_unidad);
+                    break;
+                default:
+                    dto = O.getOrdenByFolio(Folio, id_unidad);
                     break;
             }
-            out.print("</tr>");
+            out.println("<div style='color: white' class='table-responsive'>"
+                    + "<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
+                    + "<tr class='table-active'>"
+                    + "<th >Folio de Unidad</th>"
+                    + "<th >Clave</th>"
+                    + "<th >Paciente</th>");
+            switch (part) {
+                case "ord":
+                    out.println("<th >Detalles</th>"
+                            + "<th >Cancelar</th>");
+                    break;
+                case "sald":
+                    out.println("<th >Saldo</th>");
+                    out.println("<th >Pagar</th>");
+                    break;
+                case "results":
+                    out.println("<th >Resultados</th>");
+                    out.println("<th >Imprimir</th>");
+                    break;
+                case "uplRs":
+                    out.println("<th >LLenar</th>");
+                    break;
+                case "modOrd":
+                    out.println("<th >Modificar</th>");
+                    break;
+            }
+            if (dto.getFolio_Unidad() != 0) {
+                if (dto.getEstado().trim().equals("Cancelado")) {
+                    out.println("<tr>"
+                        + "<td colspan='5'>Órden Cancelada... [Folio de Unidad:" + Folio + "]</td>"
+                        + "</tr>");
+                } else {
+                    String CodeCot = dto.getPaciente().getCodPac().substring(0, 4) + "-" + dto.getId_Orden();
+                    out.println("<tr>"
+                            + "<td >" + dto.getFolio_Unidad() + "</td>"
+                            + "<td >" + CodeCot + "</td>"
+                            + "<td >" + dto.getPaciente().getNombre() + " " + dto.getPaciente().getAp_Paterno() + " " + dto.getPaciente().getAp_Materno() + "</td>");
+                    switch (part) {
+                        case "ord":
+                            out.print("<td><button href=# class='btn btn-default' onclick=ShDetOrden(" + dto.getId_Orden() + ",'folio') ><span><img src='images/details.png'></span></button></td>");
+                            out.println("<td><div id='ord-" + dto.getId_Orden() + "'><button href=# class='btn btn-primary' onclick=CancelOrd(" + dto.getId_Orden() + ") ><span><img src='images/cancel.png'></span></button></div></td>");
+                            break;
+                        case "sald":
+                            out.println("<td >" + Util.redondearDecimales(dto.getMontoRestante()) + "</td>");
+                            out.print("<td><div id='ord-" + dto.getId_Orden() + "'><button href=# class='btn btn-success' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Pago/formAddPay.jsp?id_Orden=" + dto.getId_Orden() + "');><span><img src='images/pay.png'></span></button></div></td>");
+                            break;
+                        case "results"://href=# onclick=OpenRep('PrintCot')
+                            out.println("<td><div id='ord-" + dto.getId_Orden() + "'><button href=# class='btn btn-primary' onclick=ShDetOrdenRS(" + dto.getId_Orden() + ",'folio') ><span><img src='images/fill.png'></span></button></div></td>");
+                            out.println("<td><a href=# onclick=OpenRep('PrintRes?LxOrdSald=" + dto.getId_Orden() + "') class='btn btn-primary' ><span><img src='images/print.png'></span></a></td>");
+                            break;
+                        case "uplRs":
+                            out.println("<td><div id='ord-" + dto.getId_Orden() + "'><button href=# class='btn btn-primary' onclick=ShDetOrdenRS(" + dto.getId_Orden() + ",'folio') ><span><img src='images/fill.png'></span></button></div></td>");
+                            break;
+                        case "modOrd":
+                            out.println("<td><div id='ord-" + dto.getId_Orden() + "'><button href=# class='btn btn-primary' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Orden/AddEsts.jsp?id_Orden=" + dto.getId_Orden() + "'); ><span><img src='images/pencil.png'></span></button></div></td>");
+                            break;
+                    }
+                    out.print("</tr>");
+                }
+            } else {
+                out.println("<tr>"
+                        + "<td colspan='5'>Sin Resultados... [Folio de Unidad:" + Folio + "]</td>"
+                        + "</tr>");
+            }
         } else {
-            out.println("<tr>"
-                    + "<td colspan='5'>Sin Resultados... [Folio de Unidad:" + Folio + "]</td>"
-                    + "</tr>");
+            out.println("<h3 style='color: white'>Por favor ingrese un folio valido...</h3>");
         }
     }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

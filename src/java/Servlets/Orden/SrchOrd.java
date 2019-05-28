@@ -32,44 +32,33 @@ public class SrchOrd extends HttpServlet {
         String part = request.getParameter("part").trim();
         switch (part) {
             case "ord":
-                if (sesion.getAttribute("OrdsPend") != null) {
-                    ords = (List<Orden_DTO>) sesion.getAttribute("OrdsPend");
-                } else {
-                    ords = O.getOrdenesPendientes(id_unidad);
-                    sesion.setAttribute("OrdsPend", ords);
-                }
+
+                ords = O.getOrdenesPendientes(id_unidad);
+                sesion.setAttribute("OrdsPend", ords);
+
                 break;
             case "sald":
-                if (sesion.getAttribute("OrdsSald") != null) {
-                    ords = (List<Orden_DTO>) sesion.getAttribute("OrdsSald");
-                } else {
-                    ords = O.getOrdenesSaldo(id_unidad);
-                    sesion.setAttribute("OrdsSald", ords);
-                }
+
+                ords = O.getOrdenesSaldo(id_unidad);
+                sesion.setAttribute("OrdsSald", ords);
+
                 break;
             case "results":
-                if (sesion.getAttribute("OrdsRess") != null) {
-                    ords = (List<Orden_DTO>) sesion.getAttribute("OrdsRess");
-                } else {
-                    ords = O.getOrdenesTerminadas(id_unidad);
-                    sesion.setAttribute("OrdsRess", ords);
-                }
+
+                ords = O.getOrdenesTerminadas(id_unidad);
+                sesion.setAttribute("OrdsRess", ords);
                 break;
             case "uplRs":
-                if (sesion.getAttribute("OrdsPend") != null) {
-                    ords = (List<Orden_DTO>) sesion.getAttribute("OrdsPend");
-                } else {
-                    ords = O.getOrdenesPendientes(id_unidad);
-                    sesion.setAttribute("OrdsPend", ords);
-                }
+                ords = O.getOrdenesPendientes(id_unidad);
+                sesion.setAttribute("OrdsPend", ords);
+                break;
+            case "modOrd":
+                ords = O.getOrdenesForModify(id_unidad);
+                sesion.setAttribute("modOrdsLs", ords);
                 break;
             default:
-                if (sesion.getAttribute("OrdsAll") != null) {
-                    ords = (List<Orden_DTO>) sesion.getAttribute("OrdsAll");
-                } else {
-                    ords = O.getOrdenes(id_unidad);
-                    sesion.setAttribute("OrdsAll", ords);
-                }
+                ords = O.getOrdenes(id_unidad);
+                sesion.setAttribute("OrdsAll", ords);
                 break;
         }
 
@@ -99,6 +88,9 @@ public class SrchOrd extends HttpServlet {
                         case "uplRs":
                             out.println("<th >LLenar</th>");
                             break;
+                        case "modOrd":
+                            out.println("<th >Modificar</th>");
+                            break;
                     }
                     out.println("</tr>");
                     if (request.getParameter("busq") != null) {
@@ -126,7 +118,7 @@ public class SrchOrd extends HttpServlet {
                                             switch (part) {
                                                 case "ord":
                                                     out.print("<td><button href=# class='btn btn-default' onclick=ShDetOrden(" + ords.indexOf(dto) + ",'ord') ><span><img src='images/details.png'></span></button></td>");
-                                                    out.println("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=CancelOrd(" + ords.indexOf(dto) + ") ><span><img src='images/cancel.png'></span></button></div></td>");
+                                                    out.println("<td><div id='ord-" + dto.getId_Orden() + "'><button href=# class='btn btn-primary' onclick=CancelOrd(" + dto.getId_Orden() + ") ><span><img src='images/cancel.png'></span></button></div></td>");
                                                     break;
                                                 case "sald":
                                                     out.println("<td >" + Util.redondearDecimales(dto.getMontoRestante()) + "</td>");
@@ -138,6 +130,9 @@ public class SrchOrd extends HttpServlet {
                                                     break;
                                                 case "uplRs":
                                                     out.println("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=ShDetOrdenRS(" + dto.getId_Orden() + ",'folio') ><span><img src='images/fill.png'></span></button></div></td>");
+                                                    break;
+                                                case "modOrd":
+                                                    out.println("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Orden/AddEsts.jsp?id_Orden=" + dto.getId_Orden() + "'); ><span><img src='images/pencil.png'></span></button></div></td>");
                                                     break;
                                             }
                                             out.print("</tr>");
@@ -155,7 +150,7 @@ public class SrchOrd extends HttpServlet {
                                             switch (part) {
                                                 case "ord":
                                                     out.print("<td><button href=# class='btn btn-default' onclick=ShDetOrden(" + ords.indexOf(dto) + ",'ord') ><span><img src='images/details.png'></span></button></td>");
-                                                    out.println("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=CancelOrd(" + ords.indexOf(dto) + ") ><span><img src='images/cancel.png'></span></button></div></td>");
+                                                    out.println("<td><div id='ord-" + dto.getId_Orden() + "'><button href=# class='btn btn-primary' onclick=CancelOrd(" + dto.getId_Orden() + ") ><span><img src='images/cancel.png'></span></button></div></td>");
                                                     break;
                                                 case "sald":
                                                     out.println("<td >" + Util.redondearDecimales(dto.getMontoRestante()) + "</td>");
@@ -167,6 +162,9 @@ public class SrchOrd extends HttpServlet {
                                                     break;
                                                 case "uplRs":
                                                     out.println("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=ShDetOrdenRS(" + dto.getId_Orden() + ",'folio') ><span><img src='images/fill.png'></span></button></div></td>");
+                                                    break;
+                                                case "modOrd":
+                                                    out.println("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Orden/AddEsts.jsp?id_Orden=" + dto.getId_Orden() + "'); ><span><img src='images/pencil.png'></span></button></div></td>");
                                                     break;
                                             }
                                             out.print("</tr>");
@@ -184,7 +182,7 @@ public class SrchOrd extends HttpServlet {
                                             switch (part) {
                                                 case "ord":
                                                     out.print("<td><button href=# class='btn btn-default' onclick=ShDetOrden(" + ords.indexOf(dto) + ",'ord') ><span><img src='images/details.png'></span></button></td>");
-                                                    out.println("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=CancelOrd(" + ords.indexOf(dto) + ") ><span><img src='images/cancel.png'></span></button></div></td>");
+                                                    out.println("<td><div id='ord-" + dto.getId_Orden() + "'><button href=# class='btn btn-primary' onclick=CancelOrd(" + dto.getId_Orden() + ") ><span><img src='images/cancel.png'></span></button></div></td>");
                                                     break;
                                                 case "sald":
                                                     out.println("<td >" + Util.redondearDecimales(dto.getMontoRestante()) + "</td>");
@@ -196,6 +194,9 @@ public class SrchOrd extends HttpServlet {
                                                     break;
                                                 case "uplRs":
                                                     out.println("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=ShDetOrdenRS(" + dto.getId_Orden() + ",'folio') ><span><img src='images/fill.png'></span></button></div></td>");
+                                                    break;
+                                                case "modOrd":
+                                                    out.println("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Orden/AddEsts.jsp?id_Orden=" + dto.getId_Orden() + "'); ><span><img src='images/pencil.png'></span></button></div></td>");
                                                     break;
                                             }
                                             out.print("</tr>");
@@ -213,7 +214,7 @@ public class SrchOrd extends HttpServlet {
                                 switch (part) {
                                     case "ord":
                                         out.print("<td><button href=# class='btn btn-default' onclick=ShDetOrden(" + ords.indexOf(dto) + ",'ord') ><span><img src='images/details.png'></span></button></td>");
-                                        out.println("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=CancelOrd(" + ords.indexOf(dto) + ") ><span><img src='images/cancel.png'></span></button></div></td>");
+                                        out.println("<td><div id='ord-" + dto.getId_Orden() + "'><button href=# class='btn btn-primary' onclick=CancelOrd(" + dto.getId_Orden() + ") ><span><img src='images/cancel.png'></span></button></div></td>");
                                         break;
                                     case "sald":
                                         out.println("<td >" + Util.redondearDecimales(dto.getMontoRestante()) + "</td>");
@@ -225,6 +226,9 @@ public class SrchOrd extends HttpServlet {
                                         break;
                                     case "uplRs":
                                         out.println("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=ShDetOrdenRS(" + dto.getId_Orden() + ",'folio') ><span><img src='images/fill.png'></span></button></div></td>");
+                                        break;
+                                    case "modOrd":
+                                        out.println("<td><div id='ord-" + ords.indexOf(dto) + "'><button href=# class='btn btn-primary' onclick=mostrarForm('" + request.getContextPath() + "/Menu/Orden/AddEsts.jsp?id_Orden=" + dto.getId_Orden() + "'); ><span><img src='images/pencil.png'></span></button></div></td>");
                                         break;
                                 }
                                 out.print("</tr>");

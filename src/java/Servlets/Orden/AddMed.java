@@ -1,8 +1,11 @@
 package Servlets.Orden;
 
+import DataAccesObject.Det_Orden_DAO;
 import DataAccesObject.Medico_DAO;
+import DataAccesObject.Orden_DAO;
 import DataAccesObject.Persona_DAO;
 import DataAccesObject.Unidad_DAO;
+import DataTransferObject.Det_Orden_DTO;
 import DataTransferObject.Medico_DTO;
 import DataTransferObject.Orden_DTO;
 import DataTransferObject.Persona_DTO;
@@ -41,6 +44,7 @@ public class AddMed extends HttpServlet {
             meds = M.getMedicos();
             sesion.setAttribute("meds", meds);
         }
+        Boolean modify = false;
         switch (mode) {
             case "form":
                 out.print("<div class=' form-row'> "
@@ -97,6 +101,14 @@ public class AddMed extends HttpServlet {
                 meds.add(med);
                 sesion.setAttribute("meds", meds);
                 Orden.setMedico(med);
+
+                if (sesion.getAttribute("VarmodOrd") != null) {
+                    modify = (Boolean) sesion.getAttribute("VarmodOrd");
+                    if (modify) {
+                        Orden_DAO O = new Orden_DAO();
+                        O.ActualizarOrden(Orden);
+                    }
+                }
                 sesion.setAttribute("Orden", Orden);
                 out.print("<h6 style='text-align: center'>Datos de Médico</h6><br>"
                         + "<div class='form-row'>"
@@ -109,6 +121,13 @@ public class AddMed extends HttpServlet {
                 int index = Integer.parseInt(request.getParameter("mode").trim());
                 med = meds.get(index);
                 Orden.setMedico(med);
+                if (sesion.getAttribute("VarmodOrd") != null) {
+                    modify = (Boolean) sesion.getAttribute("VarmodOrd");
+                    if (modify) {
+                        Orden_DAO O = new Orden_DAO();
+                        O.ActualizarOrden(Orden);
+                    }
+                }
                 sesion.setAttribute("Orden", Orden);
                 out.print("<h6 style='text-align: center'>Datos de Médico</h6><br>"
                         + "<div class='form-row'>"

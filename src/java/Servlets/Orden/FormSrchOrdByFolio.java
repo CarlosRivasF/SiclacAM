@@ -26,22 +26,33 @@ public class FormSrchOrdByFolio extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
         HttpSession sesion = request.getSession();
-        int id_unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
-        PrintWriter out = response.getWriter();
-        Orden_DAO O = new Orden_DAO();
-        Orden_DTO dto;
-        int Folio = Integer.parseInt(request.getParameter("Folio").trim());
-
-        dto = O.getOrdenByFolio(Folio, id_unidad);
-
-        if (dto.getFolio_Unidad() != 0) {
-            sesion.setAttribute("OrdFol", dto);
-            request.getRequestDispatcher("ShowDetOrdRs").forward(request, response);
-        } else {
-            sesion.setAttribute("MSGOrdFol", "No se ha encontrado la órden solicitada...");
+        if ("".equals(request.getParameter("Folio").trim())) {
+            sesion.setAttribute("MSGOrdFol", "Por favor ingrese un folio valido...");
             request.getRequestDispatcher("ShowOrds?mode=uplRs").forward(request, response);
+        } else {
+            int Folio = Integer.parseInt(request.getParameter("Folio").trim());
+
+            int id_unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
+            PrintWriter out = response.getWriter();
+            Orden_DAO O = new Orden_DAO();
+            Orden_DTO dto;
+
+            dto = O.getOrdenByFolio(Folio, id_unidad);
+
+            if (dto.getFolio_Unidad() != 0) {
+                if (dto.getEstado().trim().equals("Cancelado")) {
+                    sesion.setAttribute("MSGOrdFol", "Órden Cancelada.!");
+                    request.getRequestDispatcher("ShowOrds?mode=uplRs").forward(request, response);
+                } else {
+                    sesion.setAttribute("OrdFol", dto);
+                    request.getRequestDispatcher("ShowDetOrdRs").forward(request, response);
+                }
+            } else {
+                sesion.setAttribute("MSGOrdFol", "No se ha encontrado la órden solicitada...");
+                request.getRequestDispatcher("ShowOrds?mode=uplRs").forward(request, response);
+            }
+
         }
     }
 

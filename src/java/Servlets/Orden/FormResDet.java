@@ -193,18 +193,16 @@ public class FormResDet extends HttpServlet {
                         out.println("<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
                                 + "<tr class='table-info' style='color: black'>"
                                 + "<th >Desc</th>"
+                                + "<th >Resultado</th>"
                                 + "<th >Val 1</th>"
                                 + "<th >Val 2</th>"
-                                + "<th >Resultado</th>"
                                 + "<th >Unidades</th>"
                                 + "<th >Modificar</th>"
                                 + "</tr>");
                         for (Configuracion_DTO cnf : det.getEstudio().getCnfs()) {
                             r = false;
                             out.println("<tr>"
-                                    + "<td >" + cnf.getDescripcion() + "</td>"
-                                    + "<td >" + cnf.getValor_min() + "</td>"
-                                    + "<td >" + cnf.getValor_MAX() + "</td>");
+                                    + "<td >" + cnf.getDescripcion() + "</td>");
                             if (cnf.getRes() != null) {
                                 out.println("<td ><div id='diValRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "'>" + cnf.getRes().getValor_Obtenido() + "</div></td>");
                             } else {
@@ -212,9 +210,11 @@ public class FormResDet extends HttpServlet {
                                 r1 = true;
                                 out.println("<td><div id='diValRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "'><input style='text-align: center' type='text' class='form-control form-control-sm' name='valRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "' id='valRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "' placeholder='Resultado' required></div></td>");
                             }
+                            out.println("<td >" + cnf.getValor_min() + "</td>"
+                                    + "<td >" + cnf.getValor_MAX() + "</td>");
                             out.println("<td >" + cnf.getUniddes() + "</td>");
                             if (!r) {
-                                out.print("<th><div id='BTdiValRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "'><button href=# class='btn btn-warning btn-sm' onclick=FormUpRes(" + index + "," + det.getEstudio().getCnfs().indexOf(cnf) + ",'form') ><span><img src='images/pencil.png'></span></button></div></th>");
+                                out.print("<th><div id='BTdiValRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "'><button href=# class='btn btn-warning btn-sm' onclick=FormUpRes(" + index + "," + det.getEstudio().getCnfs().indexOf(cnf) + ",'form',null) ><span><img src='images/pencil.png'></span></button></div></th>");
                             }
                             out.print("</tr>");
                         }
@@ -245,17 +245,17 @@ public class FormResDet extends HttpServlet {
                         out.println("<table style=' text-align: center' class='table table-bordered table-hover table-sm'>"
                                 + "<tr class='table-info' style='color: black'>"
                                 + "<th >Desc</th>"
+                                + "<th >Resultado</th>"
                                 + "<th >Val 1</th>"
                                 + "<th >Val 2</th>"
-                                + "<th >Resultado</th>"
                                 + "<th >Unidades</th>"
                                 + "</tr>");
                         det.getEstudio().getCnfs().forEach((cnf) -> {
                             out.println("<tr>"
                                     + "<td >" + cnf.getDescripcion() + "</td>"
+                                    + "<td><div id='diValRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "'><input style='text-align: center' type='text' class='form-control form-control-sm' name='valRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "' id='valRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "' placeholder='Resultado' required></div></td>"
                                     + "<td >" + cnf.getValor_min() + "</td>"
                                     + "<td >" + cnf.getValor_MAX() + "</td>"
-                                    + "<td><div id='diValRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "'><input style='text-align: center' type='text' class='form-control form-control-sm' name='valRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "' id='valRes-" + det.getEstudio().getCnfs().indexOf(cnf) + "' placeholder='Resultado' required></div></td>"
                                     + "<td >" + cnf.getUniddes() + "</td>"
                                     + "</tr>");
                         });

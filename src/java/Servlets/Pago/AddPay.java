@@ -8,6 +8,7 @@ import DataTransferObject.Pago_DTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,18 +22,19 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "AddPay", urlPatterns = {"/AddPay"})
 public class AddPay extends HttpServlet {
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         Date fac = new Date();
         Util f = new Util();
         f.setHora(fac);
-        HttpSession sesion = request.getSession();        
+        HttpSession sesion = request.getSession();
+        int id_unidad = Integer.parseInt(sesion.getAttribute("unidad").toString().trim());
         int id_Orden = Integer.parseInt(sesion.getAttribute("id_Orden").toString().trim());
         sesion.removeAttribute("id_Orden");
         Pago_DTO pago = new Pago_DTO();
-        Pago_DAO P=new Pago_DAO();
+        Pago_DAO P = new Pago_DAO();
 
         Orden_DAO O = new Orden_DAO();
         Orden_DTO Orden = O.getOrden(id_Orden);
@@ -41,14 +43,32 @@ public class AddPay extends HttpServlet {
         pago.setMonto(Float.parseFloat(request.getParameter("monto").trim()));
         pago.setFecha(f.getFechaActual());
         pago.setHora(f.getHoraMas(Util.getHrBD()));
-        P.registrarPago(pago);        
+        P.registrarPago(pago);
+
+        List<Orden_DTO> ords;
+        if (sesion.getAttribute("OrdsRess") != null) {
+            ords = (List<Orden_DTO>) sesion.getAttribute("OrdsRess");
+        } else {
+            ords = O.getOrdenesTerminadas(id_unidad);
+            sesion.setAttribute("OrdsRess", ords);
+        }
+
+        int index = 0;
+        for (Orden_DTO dto : ords) {
+            if (dto.getId_Orden() == id_Orden) {
+                index = ords.indexOf(dto);
+            }
+        }
 
         Float MontoPagado = Orden.getMontoPagado();
         Float MontoRestante = Orden.getMontoRestante();
 
         O.updateSaldo(MontoPagado, MontoRestante, pago);
-        
-        request.getRequestDispatcher("ShowSaldos").forward(request, response);
+
+        ords.set(index, Orden);
+        sesion.setAttribute("OrdsRess", ords);
+
+        request.getRequestDispatcher("/ShowOrds?mode=sald").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

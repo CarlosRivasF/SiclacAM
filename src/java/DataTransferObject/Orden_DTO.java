@@ -24,6 +24,7 @@ public class Orden_DTO {
     protected String convenio;
     protected int Folio_Unidad;
     private Float montoPartselect;
+    
 
     public int getId_Orden() {
         return id_Orden;

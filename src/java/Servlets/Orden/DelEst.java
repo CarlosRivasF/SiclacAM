@@ -1,6 +1,8 @@
 package Servlets.Orden;
 
+import DataAccesObject.Det_Orden_DAO;
 import DataAccesObject.Det_Prom_DAO;
+import DataAccesObject.Orden_DAO;
 import DataAccesObject.Promocion_DAO;
 import DataBase.Util;
 import DataTransferObject.Cotizacion_DTO;
@@ -37,12 +39,24 @@ public class DelEst extends HttpServlet {
         f.setHora(fac);
         if (request.getParameter("modulo") != null) {
             String Modulo = request.getParameter("modulo").trim();
-            
+
             switch (Modulo) {
                 case "Ord":
                     Orden_DTO Orden = (Orden_DTO) sesion.getAttribute("Orden");
                     List<Det_Orden_DTO> Det_Orden = Orden.getDet_Orden();
                     int index = Integer.parseInt(request.getParameter("index").trim());
+                    Boolean modify = false;
+                    if (sesion.getAttribute("VarmodOrd") != null) {
+                        modify = (Boolean) sesion.getAttribute("VarmodOrd");
+                        if (modify) {
+                            Det_Orden_DTO det = Det_Orden.get(index);
+                            Det_Orden_DAO DT = new Det_Orden_DAO();
+                            DT.DelteDet_Orden(det.getId_det_orden());
+                            Orden_DAO O = new Orden_DAO();
+                            O.ActualizarOrden(Orden);
+                        }
+                    }
+
                     Det_Orden.remove(index);
                     if (!Det_Orden.isEmpty()) {
                         out.println("<div id='BEst'></div>"
@@ -79,10 +93,18 @@ public class DelEst extends HttpServlet {
                                     + "<td >$" + ps + "</td>"
                                     + "<td >" + e + " días</td>"
                                     + "<td >" + f.SumarDias(e) + "</td>");
-                            if (request.getParameter("shdet") == null) {
-                                out.println("<td><div id='mat-" + Det_Orden.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEst(" + Det_Orden.indexOf(dto) + ",'Ord') ><span><img src='images/trash.png'></span></button></div></td>");
+                            if (dto.getEstudio().getAddRes()) {
+                                if (request.getParameter("shdet") == null) {
+                                    out.println("<td><div id='mat-" + Det_Orden.indexOf(dto) + "'><button href=# class='btn btn-danger' disabled='' ><span><img src='images/trash.png'></span></button></div></td>");
+                                } else {
+                                    out.println("<td><div id='mat-" + Det_Orden.indexOf(dto) + "'><button href=# class='btn btn-danger' disabled='' ><span><img src='images/trash.png'></span></button></div></td>");
+                                }
                             } else {
-                                out.println("<td><div id='mat-" + Det_Orden.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEstSecc(" + Det_Orden.indexOf(dto) + ",'Ord') ><span><img src='images/trash.png'></span></button></div></td>");
+                                if (request.getParameter("shdet") == null) {
+                                    out.println("<td><div id='mat-" + Det_Orden.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEst(" + Det_Orden.indexOf(dto) + ",'Ord') ><span><img src='images/trash.png'></span></button></div></td>");
+                                } else {
+                                    out.println("<td><div id='mat-" + Det_Orden.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEstSecc(" + Det_Orden.indexOf(dto) + ",'Ord') ><span><img src='images/trash.png'></span></button></div></td>");
+                                }
                             }
                             out.println("</tr>");
                             total = total + dto.getSubtotal();
@@ -92,9 +114,12 @@ public class DelEst extends HttpServlet {
                         out.println("</table>");
                         out.println("</div>");
                         out.println("<p class='offset-8 col-3 col-sm-3 col-md-3'><strong>Pagar" + Util.redondearDecimales(Orden.getMontoRestante()) + " pesos</strong></p>");
-
-                        if (request.getParameter("shdet") == null) {
-                            out.println("<button class='btn btn-success btn-lg btn-block' id='ConPay' onclick='contOr(ord);' name='ConPay'>Continuar</button>");
+                        if (modify) {
+                            out.print("<a class='btn btn-info btn-lg btn-block' href='FinalOrd' >Reimprimir Órden</a>");
+                        } else {
+                            if (request.getParameter("shdet") == null) {
+                                out.println("<button class='btn btn-success btn-lg btn-block' id='ConPay' onclick='contOr(ord);' name='ConPay'>Continuar</button>");
+                            }
                         }
                     } else {
                         out.println("<div id='BEst'></div>");
@@ -198,7 +223,7 @@ public class DelEst extends HttpServlet {
                                 e = dto.getEstudio().getPrecio().getT_Entrega_U();
                             }
                             Float pd = ((dto.getDescuento() * p) / 100);
-                            Float ps = ((dto.getSobrecargo()* p) / 100);
+                            Float ps = ((dto.getSobrecargo() * p) / 100);
                             out.println("<tr>"
                                     + "<td >" + dto.getEstudio().getNombre_Estudio() + "</td>"
                                     + "<td >" + dto.getT_Entrega() + "</td>"

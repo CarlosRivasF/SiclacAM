@@ -1920,7 +1920,7 @@ function InsNom(x) {
     xhr.send(p);
 }
 
-function ShareEst(x,btn) {
+function ShareEst(x, btn) {
     btn.disabled = true;
     buscarComentario();
     xhr.open("POST", "AddShareEst", true);
@@ -2153,7 +2153,7 @@ function FormUpRes(index, ixconf, acc, Id_Tpo_Est) {
                 BTdiV.innerHTML = "<button href='#' class='btn btn-warning btn-sm btn-block' onclick=FormUpRes(" + index + "," + ixconf + ",'form'," + Id_Tpo_Est + ")>Modificar valoración de médico</button>";
             }
         } else {
-            BTdiV.innerHTML = "<button href='#' class='btn btn-warning btn-sm' onclick=FormUpRes(" + index + "," + ixconf + ",'form')><span><img src=images/pencil.png></span></button>";
+            BTdiV.innerHTML = "<button href='#' class='btn btn-warning btn-sm' onclick=FormUpRes(" + index + "," + ixconf + ",'form',null)><span><img src=images/pencil.png></span></button>";
         }
     } else {
         if (Id_Tpo_Est !== null) {
@@ -2161,7 +2161,7 @@ function FormUpRes(index, ixconf, acc, Id_Tpo_Est) {
                 BTdiV.innerHTML = "<button href='#' class='btn btn-success btn-sm btn-block' onclick=FormUpRes(" + index + "," + ixconf + ",'upd'," + Id_Tpo_Est + ")>Guardar valoración de médico</button>";
             }
         } else {
-            BTdiV.innerHTML = "<button href='#' class='btn btn-success btn-sm' onclick=FormUpRes(" + index + "," + ixconf + ",'upd')><span><img src=images/save.png></span></button>";
+            BTdiV.innerHTML = "<button href='#' class='btn btn-success btn-sm' onclick=FormUpRes(" + index + "," + ixconf + ",'upd',null)><span><img src=images/save.png></span></button>";
         }
     }
     Ajax.onreadystatechange = function () {
@@ -2651,10 +2651,23 @@ function OpenRep(url) {
     window.open(url);
 }
 function verRep(id) {
-    var IDs = ['CardEstudios', 'CardOrdenes', 'CardResultados','CardCortes','CardParticipaciones'];
+    var IDs = ['CardEstudios', 'CardOrdenes', 'CardResultados', 'CardCortes', 'CardParticipaciones'];
     for (var i = 0; i < IDs.length; i++) {
         document.getElementById(IDs[i]).style.display = "none";
     }
     document.getElementById(id).style.display = "block";
 }
-//CancelOrd(id)
+
+
+function CancelOrd(id_CancelOrd) {
+    Ajax = buscarComentario();
+    Ajax.open('POST', "CancelOrd", true);
+    Ajax.onreadystatechange = function () {
+        if (Ajax.readyState === 4) {
+            document.getElementById("SerchOrd").innerHTML = Ajax.responseText;//Interaccion
+        }
+    };
+    Ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    var p = "id_CancelOrd=" + id_CancelOrd;
+    Ajax.send(p);
+}

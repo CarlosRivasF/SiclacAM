@@ -1,6 +1,8 @@
 package Servlets.Orden;
 
+import DataAccesObject.Det_Orden_DAO;
 import DataAccesObject.Estudio_DAO;
+import DataAccesObject.Orden_DAO;
 import DataBase.Util;
 import DataTransferObject.Det_Orden_DTO;
 import DataTransferObject.Estudio_DTO;
@@ -37,6 +39,10 @@ public class AddEst extends HttpServlet {
         } else {
             ests = E.getEstudiosByUnidad(id_unidad);
             sesion.setAttribute("ests", ests);
+        }
+        Boolean modify = false;
+        if (sesion.getAttribute("VarmodOrd") != null) {
+            modify = (Boolean) sesion.getAttribute("VarmodOrd");
         }
 
         Orden_DTO Orden;
@@ -114,6 +120,16 @@ public class AddEst extends HttpServlet {
 
                 detor.setSubtotal(p + ps);
 
+                if (sesion.getAttribute("VarmodOrd") != null) {
+                    modify = (Boolean) sesion.getAttribute("VarmodOrd");
+                    if (modify) {
+                        Det_Orden_DAO DT = new Det_Orden_DAO();
+                        DT.registrarDetor(Orden.getId_Orden(), detor);
+                        Orden_DAO O = new Orden_DAO();
+                        O.ActualizarOrden(Orden);
+                    }
+                }
+
                 Det_Orden.add(detor);
                 Orden.setDet_Orden(Det_Orden);
                 break;
@@ -161,7 +177,7 @@ public class AddEst extends HttpServlet {
                 }
                 pd = ((detor.getDescuento() * p) / 100);
                 ps = ((detor.getSobrecargo() * p) / 100);
-                
+
                 detor.setSubtotal(p - pd);
                 p = detor.getSubtotal();
 
@@ -201,9 +217,13 @@ public class AddEst extends HttpServlet {
                     + "<td >" + p + "</td>"
                     + "<td >$" + pd + "</td>"
                     + "<td >$" + ps + "</td>"
-                    + "<td >" + e + " días</td>"
-                    + "<td><div id='mat-" + Det_Orden.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEst(" + Det_Orden.indexOf(dto) + ",'Ord') ><span><img src='images/trash.png'></span></button></div></td>"
-                    + "</tr>");
+                    + "<td >" + e + " días</td>");
+            if (dto.getEstudio().getAddRes()) {
+                out.println("<td><div id='mat-" + Det_Orden.indexOf(dto) + "'><button href=# class='btn btn-danger' disabled=''><span><img src='images/trash.png'></span></button></div></td>");
+            } else {
+                out.println("<td><div id='mat-" + Det_Orden.indexOf(dto) + "'><button href=# class='btn btn-danger' onclick=DelEst(" + Det_Orden.indexOf(dto) + ",'Ord') ><span><img src='images/trash.png'></span></button></div></td>");
+            }
+            out.println("</tr>");
             total = total + dto.getSubtotal();
             Orden.setMontoRestante(total);
         }
@@ -220,7 +240,11 @@ public class AddEst extends HttpServlet {
                     + "            </button>"
                     + "        </div>");
         }
-        out.println("<button class='btn btn-success btn-lg btn-block' id='ConPay' onclick=contOr('ord'); name='ConPay'>Continuar</button>");
+        if (modify) {
+            out.print("<a class='btn btn-info btn-lg btn-block' href='FinalOrd' >Reimprimir Órden</a>");
+        } else {
+            out.println("<button class='btn btn-success btn-lg btn-block' id='ConPay' onclick=contOr('ord'); name='ConPay'>Continuar</button>");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

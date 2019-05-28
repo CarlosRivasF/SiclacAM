@@ -18,13 +18,13 @@
         Medico_DTO med = Orden.getMedico();
         List<Det_Orden_DTO> Det_Orden = Orden.getDet_Orden();
         Util f = new Util();
+        
 %>
 <div class="nav-scroller bg-white box-shadow">
-    <nav class="nav nav-underline">
-        <a class="nav-link" href="#"onclick="mostrarForm('Menu/Orden/Registro.jsp');">Nueva Órden</a>        
-        <a class="nav-link" href="#" onclick="mostrarForm('Menu/Cotizacion/Registro.jsp');">Nueva Cotización</a>        
-        <a class="nav-link" href="#" onclick='mostrarForm("${pageContext.request.contextPath}/ShowOrds");'>Órdenes Pendientes</a>                         
-        <a class="nav-link" href="#" onclick='mostrarForm("${pageContext.request.contextPath}/ShowSaldos");'>Saldos</a>                         
+    <nav class="nav nav-underline">        
+        <a class="nav-link" href="#" onclick="mostrarForm('Menu/Orden/Registro.jsp');">Nueva Órden</a>
+        <a class="nav-link" href="#" onclick="mostrarForm('Menu/Cotizacion/Registro.jsp');">Nueva Cotización</a>
+        <a class="nav-link" href="#" onclick='mostrarForm("${pageContext.request.contextPath}/ShowOrds?mode=ord");'>Ver Órdenes</a>                                             
     </nav>
 </div>
 <div class="container-fluid" style="color: white"> <hr>

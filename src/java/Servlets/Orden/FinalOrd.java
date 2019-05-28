@@ -47,6 +47,8 @@ public class FinalOrd extends HttpServlet {
             sesion.setAttribute("Orden", O.getOrden(Id_Orden));
             r = false;
         }
+
+        Boolean modify = false;
         Orden_DTO Orden = (Orden_DTO) sesion.getAttribute("Orden");
 
         if (Orden.getMedico() == null) {
@@ -54,28 +56,38 @@ public class FinalOrd extends HttpServlet {
             sesion.setAttribute("msg", msg);
             response.sendRedirect("Ordenes.jsp");
         } else {
-            if (r) {
-                Date fac = new Date();
-                Util f = new Util();
-                f.setHora(fac);
-                Orden.setFecha(f.getFechaActual());
-                Orden.setHora(f.getHoraMas(Util.getHrBD()));
-                Orden.setEstado("Pendiente");
-                Orden.setFolio_Unidad(O.getNoOrdenByUnidad(Orden.getUnidad().getId_Unidad()) + 1);
-                Orden.setId_Orden(O.registrarOrden(Orden));
-                Participacion_DTO participacion = new Participacion_DTO();
-                participacion.setOrden(Orden);
-                participacion.setId_Unidad(Orden.getUnidad().getId_Unidad());
-                participacion.setMedico(Orden.getMedico());
-                participacion.setFecha(Orden.getFecha());
-                participacion.setHora(Orden.getHora());
-                participacion.setConvenio(Orden.getConvenio());
-                Float p = Orden.getMontoPagado() + Orden.getMontoRestante();
-                Float mp = ((Orden.getMedico().getParticipacion() * p) / 100);
-                participacion.setMonto(mp);
-                Participacion_DAO P = new Participacion_DAO();
-                P.registrarParticipacion(participacion);
+            if (sesion.getAttribute("VarmodOrd") != null) {
+                modify = (Boolean) sesion.getAttribute("VarmodOrd");
+                if (modify) {
+                    System.out.println("VarmodOrd ACTUALIZAR ORDEN:"+Orden.getId_Orden());
+                    O.ActualizarOrden(Orden);
+                }
+            } else {
+                if (r) {
+                    System.out.println("else(r) REGISTRAR NUEVA ORDEN:");
+                    Date fac = new Date();
+                    Util f = new Util();
+                    f.setHora(fac);
+                    Orden.setFecha(f.getFechaActual());
+                    Orden.setHora(f.getHoraMas(Util.getHrBD()));
+                    Orden.setEstado("Pendiente");
+                    Orden.setFolio_Unidad(O.getNoOrdenByUnidad(Orden.getUnidad().getId_Unidad()) + 1);
+                    Orden.setId_Orden(O.registrarOrden(Orden));
+                    Participacion_DTO participacion = new Participacion_DTO();
+                    participacion.setOrden(Orden);
+                    participacion.setId_Unidad(Orden.getUnidad().getId_Unidad());
+                    participacion.setMedico(Orden.getMedico());
+                    participacion.setFecha(Orden.getFecha());
+                    participacion.setHora(Orden.getHora());
+                    participacion.setConvenio(Orden.getConvenio());
+                    Float p = Orden.getMontoPagado() + Orden.getMontoRestante();
+                    Float mp = ((Orden.getMedico().getParticipacion() * p) / 100);
+                    participacion.setMonto(mp);
+                    Participacion_DAO P = new Participacion_DAO();
+                    P.registrarParticipacion(participacion);
+                }
             }
+
             sesion.removeAttribute("Orden");
             try {
                 String CodeOrd = Orden.getId_Orden() + "";

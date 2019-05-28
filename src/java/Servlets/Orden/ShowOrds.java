@@ -1,6 +1,5 @@
 package Servlets.Orden;
 
-import DataTransferObject.Orden_DTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -27,28 +26,39 @@ public class ShowOrds extends HttpServlet {
                 + "    <nav class='nav nav-underline'>");
         switch (mode) {
             case "ord":
-                out.println("<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=ord'); style=\"color: blue\"><ins>Órdenes Pendientes</ins></a>"
+                out.println("<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=ord'); style='color: blue'><ins>Órdenes Pendientes</ins></a>"
                         + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=sald'); > Órdenes con Saldo</a>"
                         + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=results'); >Órdenes Terminadas</a>"
-                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=uplRs'); >Cargar Resultados</a>");
+                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=uplRs'); >Cargar Resultados</a>"
+                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=modOrd'); >Modificar Órden</a>");
                 break;
             case "sald":
                 out.println("<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=ord'); >Órdenes Pendientes</a>"
-                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=sald'); style=\"color: blue\"><ins> Órdenes con Saldo</ins></a>"
+                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=sald'); style='color: blue'><ins> Órdenes con Saldo</ins></a>"
                         + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=results'); >Órdenes Terminadas</a>"
-                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=uplRs'); >Cargar Resultados</a>");
+                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=uplRs'); >Cargar Resultados</a>"
+                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=modOrd'); >Modificar Órden</a>");
                 break;
             case "results":
                 out.println("<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=ord'); >Órdenes Pendientes</a>"
                         + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=sald'); > Órdenes con Saldo</a>"
-                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=results');  style=\"color: blue\"><ins>Órdenes Terminadas</ins></a>"
-                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=uplRs'); >Cargar Resultados</a>");
+                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=results');  style='color: blue'><ins>Órdenes Terminadas</ins></a>"
+                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=uplRs'); >Cargar Resultados</a>"
+                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=modOrd'); >Modificar Órden</a>");
                 break;
             case "uplRs":
                 out.println("<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=ord'); >Órdenes Pendientes</a>"
                         + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=sald'); > Órdenes con Saldo</a>"
                         + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=results'); >Órdenes Terminadas</a>"
-                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=uplRs'); style=\"color: blue\"><ins>Cargar Resultados</ins></a>");
+                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=uplRs'); style='color: blue'><ins>Cargar Resultados</ins></a>"
+                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=modOrd'); >Modificar Órden</a>");
+                break;
+            case "modOrd":
+                out.println("<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=ord'); >Órdenes Pendientes</a>"
+                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=sald'); > Órdenes con Saldo</a>"
+                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=results'); >Órdenes Terminadas</a>"
+                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=uplRs'); >Cargar Resultados</ins></a>"
+                        + "<a class='nav-link' href='#' onclick=mostrarForm('" + request.getContextPath() + "/ShowOrds?mode=modOrd'); style='color: blue'><ins>Modificar Órden</ins></a>");
                 break;
         }
         out.println("</nav>"

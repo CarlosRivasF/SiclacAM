@@ -1,3 +1,4 @@
+<%@page import="DataAccesObject.Orden_DAO"%>
 <%@page import="DataTransferObject.Det_Orden_DTO"%>
 <%@page import="java.time.Period"%>
 <%@page import="DataTransferObject.Orden_DTO"%>
@@ -8,10 +9,21 @@
 <%@page import="DataAccesObject.Tipo_Estudio_DAO"%>
 <%
     HttpSession sesion = request.getSession();
+    Orden_DTO Orden = null;
     if (sesion.getAttribute("user") != null && sesion.getAttribute("unidad") != null) {
+        Boolean modify = false;
+        if (request.getParameter("id_Orden") != null) {
+            int id_Orden = Integer.parseInt(request.getParameter("id_Orden").trim());
+            Orden_DAO O = new Orden_DAO();
+            Orden = O.getOrden(id_Orden);
+            modify = true;
+            sesion.setAttribute("VarmodOrd", modify);
+            sesion.setAttribute("Orden", Orden);
+            modify = true;
+        }
         Tipo_Estudio_DAO TE = new Tipo_Estudio_DAO();
         List<Tipo_Estudio_DTO> tipos = TE.getTipo_Estudios();
-        Orden_DTO Orden = (Orden_DTO) sesion.getAttribute("Orden");
+        Orden = (Orden_DTO) sesion.getAttribute("Orden");
         Paciente_DTO pac = Orden.getPaciente();
         Util f = new Util();
 %>
@@ -19,8 +31,7 @@
     <nav class="nav nav-underline">        
         <a class="nav-link" href="#" onclick="mostrarForm('Menu/Orden/Registro.jsp');">Nueva Órden</a>
         <a class="nav-link" href="#" onclick="mostrarForm('Menu/Cotizacion/Registro.jsp');">Nueva Cotización</a>
-        <a class="nav-link" href="#" onclick='mostrarForm("${pageContext.request.contextPath}/ShowOrds?mode=ord");'>Ver Órdenes</a>                      
-        <a class="nav-link" href="#" onclick='mostrarForm("${pageContext.request.contextPath}/ShowSaldos");'>Saldos</a>                         
+        <a class="nav-link" href="#" onclick='mostrarForm("${pageContext.request.contextPath}/ShowOrds?mode=ord");'>Ver Órdenes</a>                                             
     </nav>
 </div>
 <div class="container-fluid" style="color: white"><hr>
@@ -44,8 +55,31 @@
     </div>
     <hr>           
     <div  id="DtsMed">
-        <h6 style="text-align: center">Elegir Medico</h6><br> 
-        <div class="form-row">     
+        <h6 style="text-align: center"><strong>ACTUALIZAR Medico</strong></h6><br> 
+        <div class="form-row col-12">
+            <%if (modify) {%>
+                <div class="form-row col-12">
+                    <div class="col-8 col-sm-5 col-md-4">
+                        <label><strong>Nombre: </strong><%=Orden.getMedico().getNombre() + " " + Orden.getMedico().getAp_Paterno() + " " + Orden.getMedico().getAp_Materno()%></label>
+                    </div>            
+                    <div class="col-6 col-sm-2 col-md-2">
+                        <label><strong>Teléfono: </strong><%=Orden.getMedico().getTelefono1()%></label>
+                    </div>
+                </div>
+            <br><hr>
+            <div id="srchMed" class="col-sm-8 col-md-9 mb-3">
+                <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                    <center><p>Aquí puede actualizar el médico que tiene asignado a la Órden...</p></center>
+                    <center><p><strong>Omitir.</strong> Si no se desea actualizar el médico</p></center>
+                </div>
+            </div>
+            <br>
+            <div class="col col-sm-4 col-md-3 mb-3">
+                <input style="text-align: center" type="text" onkeyup="SrchMed(this, 'est');" class="form-control" name="BMed" id="BMed" placeholder="Medico" required>
+                <br><button class="btn btn-danger btn-block" onclick="AddMed('form');" id="sendForm"  name="sendForm"><strong>Médico No Registrado</strong></button>
+            </div>           
+
+            <%} else {%>
             <%if (Orden.getMedico() == null || Orden.getMedico().getNombre() == null || Orden.getMedico().getNombre().trim() == "") {%>
             <div class="col col-sm-4 col-md-3 mb-3">
                 <input style="text-align: center" type="text" onkeyup="SrchMed(this, 'est');" class="form-control" name="BMed" id="BMed" placeholder="Medico" required>
@@ -63,20 +97,40 @@
             <div class="col-6 col-sm-2 col-md-2">
                 <label><strong>Teléfono: </strong><%=Orden.getMedico().getTelefono1()%></label>
             </div>
-            <%}%>
+            <%}
+                }%>
         </div>    
     </div>
-    <hr>        
+    <hr>     
+    <%if (modify) {%>                
+    <div class="form-row">
+        <!--Descripcion de cambios para la actualización de la Orden-->
+        <div class="col-12 col-sm-12 col-md-12 mb-3">
+            <div class="alert alert-success" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="alert-heading">Está actualizando la orden con folio '<%=Orden.getFolio_Unidad()%>'</h4>
+                <p>Actualizar los estudios de una órden tiene algunas condiciones:</p>
+                <hr>
+                <p class="mb-1"><strong>1: Siempre Puede agregar estudios.</strong></p>
+                <p class="mb-1"><strong>2: No será posible eliminar un estudio.</strong> Si el estudio ya contiene resultados.</p>
+                <p class="mb-1"><strong>3: Puede eliminar estudios.</strong> Si la ordén no tiene ningún pago y aún no se carga ningun resultado.</p>                
+
+            </div>
+        </div>
+    </div>      
+    <%}%>
     <h6 style="text-align: center"><strong>Añadir Estudios</strong></h6><br>       
     <div id="FrmSrch">
         <!--Añadir Estudio por codigo-->
         <div class="form-row">
             <div class=" offset-3 col-6 mb-3" id="Gconvenvio">
                 <label class="sr-only" >Convenio</label>
-                <%if (Orden.getConvenio() == null || Orden.getConvenio() == "" || Orden.getConvenio().trim() == "null") {%>
+                <%if (Orden.getConvenio() == null || Orden.getConvenio().equals("") || Orden.getConvenio().trim().equals("null")) {%>
                 <input style="text-align: center" onchange="SaveConv(this.value, 'ord')" type="text" class="form-control" name="Convenio" id="Convenio" placeholder="Convenio" required>                      
                 <%} else {%>            
-                <input style="text-align: center" type="text"  value="<%=Orden.getConvenio()%>"class="form-control" name="Convenio" id="Convenio" placeholder="Convenio" required>          
+                <input style="text-align: center" type="text"  value="<%=Orden.getConvenio()%>"class="form-control" name="Convenio" id="Convenio" placeholder="Convenio" readonly="">          
                 <%}%>            
             </div>
         </div>
@@ -166,7 +220,11 @@
                         <td>$<%=pd%></td>
                         <td>$<%=ps%></td>
                         <td><%=e%> días</td>
+                        <%if (dto.getEstudio().getAddRes()) {%>
+                        <td><div id="mat-<%=Orden.getDet_Orden()%>"><button href="#" disabled="" class="btn btn-danger"><span><img src="images/trash.png"></span></button></div></td>
+                                        <%} else {%>
                         <td><div id="mat-<%=Orden.getDet_Orden()%>"><button href="#" class="btn btn-danger" onclick="DelEst(<%=Orden.getDet_Orden().indexOf(dto)%>, 'Ord')"><span><img src="images/trash.png"></span></button></div></td>
+                                        <%}%>                        
                     </tr>
                     <%
                             total = total + dto.getSubtotal();
@@ -178,7 +236,11 @@
             </table>
         </div>
         <p class="offset-8 col-3 col-sm-3 col-md-3"><strong>Pagar <%=Util.redondearDecimales(Orden.getMontoRestante())%> pesos</strong></p>
-        <button class="btn btn-success btn-lg btn-block" id="ConPay" onclick="contOr('ord');" name="ConPay">Continuar</button>                
+        <%if (modify) {%>
+        <a class='btn btn-info btn-lg btn-block' href='FinalOrd' >Reimprimir Órden</a>
+        <%} else {%>
+        <button class="btn btn-success btn-lg btn-block" id="ConPay" onclick="contOr('ord');" name="ConPay">Continuar</button>
+        <%}%>               
         <%}%>                
         <%}%>
     </div>                

@@ -134,33 +134,69 @@ public class InsEst extends HttpServlet {
             }
 
             try {
-                estudio.setId_Estudio(E.registrarEstudio(estudio));
+                try {
+                    estudio.setId_Estudio(E.registrarEstudio(estudio));
+                } catch (Exception e) {
+                    out.println("<br><h1 style='color: white'>Falló al registrar Estudio:" + e.getMessage() + "...<br>Por favor capture una imagen del error y comuniquelo de inmediato a ZionSystems</h1>");
+                }
                 if (estudio.getId_Estudio() != 0) {
-                    estudio.setId_Est_Uni(E.registrarEst_Uni(estudio.getId_Estudio(), id_unidad));
+                    try {
+                        estudio.setId_Est_Uni(E.registrarEst_Uni(estudio.getId_Estudio(), id_unidad));
+                    } catch (Exception e) {
+                        out.println("<br><h1 style='color: white'>Falló al registrar Estudio en la Unidad:" + e.getMessage() + "...<br>Por favor capture una imagen del error y comuniquelo de inmediato a ZionSystems</h1>");
+                    }
                     if (estudio.getId_Est_Uni() != 0) {
-                        precio.setId_Precio(P.registrarPrecio(estudio.getId_Est_Uni(), precio));
+                        try {
+                            precio.setId_Precio(P.registrarPrecio(estudio.getId_Est_Uni(), precio));
+                        } catch (Exception e) {
+                            out.println("<br><h1 style='color: white'>Falló al Precio de Estudio:" + e.getMessage() + "...<br>Por favor capture una imagen del error y comuniquelo de inmediato a ZionSystems</h1>");
+                        }
                         if (precio.getId_Precio() != 0) {
                             estudio.setPrecio(precio);
                             if (!cnfs.isEmpty()) {
                                 cnfs.forEach((dto) -> {
-                                    dto.setId_Configuración(CN.registrarConfiguracion(dto));
-                                    CN.registrarConf_Est(estudio.getId_Estudio(), dto.getId_Configuración());
+                                    try {
+                                        dto.setId_Configuración(CN.registrarConfiguracion(dto));
+                                    } catch (Exception e) {
+                                        out.println("<br><h1 style='color: white'>Falló al registrar Configuracion " + dto.getDescripcion() + ":" + e.getMessage() + "...<br>Por favor capture una imagen del error y comuniquelo de inmediato a ZionSystems</h1>");
+                                    }
+                                    try {
+                                        CN.registrarConf_Est(estudio.getId_Estudio(), dto.getId_Configuración());
+                                    } catch (Exception e) {
+                                        out.println("<br><h1 style='color: white'>Falló al asociar Configuracion " + dto.getDescripcion() + ":" + e.getMessage() + "...<br>Por favor capture una imagen del error y comuniquelo de inmediato a ZionSystems</h1>");
+                                    }
                                 });
                                 estudio.setCnfs(cnfs);
                             } else {
-                                conf.setId_Configuración(CN.registrarConfiguracion(conf));
-                                CN.registrarConf_Est(estudio.getId_Estudio(), conf.getId_Configuración());
+                                try {
+                                    conf.setId_Configuración(CN.registrarConfiguracion(conf));
+                                } catch (Exception e) {
+                                    out.println("<br><h1 style='color: white'>Falló al registrar Configuracion " + conf.getDescripcion() + ":" + e.getMessage() + "...<br>Por favor capture una imagen del error y comuniquelo de inmediato a ZionSystems</h1>");
+                                }
+                                try {
+                                    CN.registrarConf_Est(estudio.getId_Estudio(), conf.getId_Configuración());
+                                } catch (Exception e) {
+                                    out.println("<br><h1 style='color: white'>Falló al asociar Configuracion " + conf.getDescripcion() + ":" + e.getMessage() + "...<br>Por favor capture una imagen del error y comuniquelo de inmediato a ZionSystems</h1>");
+                                }
                                 cnfs.add(conf);
                                 estudio.setCnfs(cnfs);
                             }
                             if (cnfs.get(0).getId_Configuración() != 0) {
                                 if (!mts.isEmpty()) {
                                     mts.forEach((dto) -> {
-                                        M.registrarMat_Est(estudio.getId_Est_Uni(), dto);
+                                        try {
+                                            M.registrarMat_Est(estudio.getId_Est_Uni(), dto);
+                                        } catch (Exception e) {
+                                            out.println("<br><h1 style='color: white'>Falló al asociar Material " + dto.getNombre_Material() + ":" + e.getMessage() + "...<br>Por favor capture una imagen del error y comuniquelo de inmediato a ZionSystems</h1>");
+                                        }
                                     });
                                     estudio.setMts(mts);
                                 } else {
-                                    M.registrarMat_Est(estudio.getId_Est_Uni(), mt);
+                                    try {
+                                        M.registrarMat_Est(estudio.getId_Est_Uni(), mt);
+                                    } catch (Exception e) {
+                                        out.println("<br><h1 style='color: white'>Falló al asociar Material " + mt.getNombre_Material() + ":" + e.getMessage() + "...<br>Por favor capture una imagen del error y comuniquelo de inmediato a ZionSystems</h1>");
+                                    }
                                     mts.add(mt);
                                     estudio.setMts(mts);
                                 }
@@ -173,12 +209,13 @@ public class InsEst extends HttpServlet {
                     }
                 }
             } catch (Exception e) {
-                out.println("<br>'InsEst'<br><h1 style='color: white'>" + e.getMessage() + "...<br>Por favor capture una imagen del error y comuniquelo de inmediato a ZionSystems</h1>");
+                //out.println("<br>'InsEst'<br><h1 style='color: white'>" + e.getMessage() + "...<br>Por favor capture una imagen del error y comuniquelo de inmediato a ZionSystems</h1>");
             }
         } else {
             response.sendRedirect("" + request.getContextPath() + "");
         }
     }
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

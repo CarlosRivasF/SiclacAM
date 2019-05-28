@@ -1,7 +1,12 @@
 package DataBase;
 
+import DataAccesObject.Configuracion_DAO;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.sql.DataSource;
 import org.apache.commons.dbcp.BasicDataSource;
 
@@ -14,12 +19,11 @@ import org.apache.commons.dbcp.BasicDataSource;
  * </cookie-config>
  * </session-config>
  */
-
 public class Conexion {
 
-    private static int c=0; 
+    private static int c = 0;
     public static DataSource dataSource = null;//siclac2 SET GLOBAL max_connections = 300
-    private static final String DB = "qasiclac";//node74321-amlab.whelastic.net // localhost //node74321-amlab.whelastic.net:11065
+    private static final String DB = "lab2605";//node74321-amlab.whelastic.net // localhost //node74321-amlab.whelastic.net:11065
     private static final String URL = "jdbc:mysql://localhost/" + DB + "?useServerPrepStmts=true&autoReconnect=true&useSSL=false";
     private static final String USER = "root";
     private static final String PASS = "";//NAVngv51153
@@ -39,16 +43,16 @@ public class Conexion {
         basicDataSource.setMinEvictableIdleTimeMillis(1500);
         basicDataSource.setNumTestsPerEvictionRun(100);
         basicDataSource.setMaxWait(500);
-        dataSource = basicDataSource;                
+        dataSource = basicDataSource;
     }
 
-    public static Connection getCon() {        
+    public static Connection getCon() {
         try {
             if (Conexion.dataSource == null) {
-                Conexion co = new Conexion();                    
+                Conexion co = new Conexion();
                 c++;
                 //System.out.println("Conexiónes: "+c);
-                return Conexion.getCon();                
+                return Conexion.getCon();
             } else {
                 if (Conexion.dataSource.getConnection() == null) {
                     Conexion co = new Conexion();
@@ -63,12 +67,27 @@ public class Conexion {
             }
         } catch (SQLException ex) {
             dataSource = null;
-            c=0;
+            c = 0;
             //System.out.println("REINICIO: "+c);
             throw new RuntimeException(ex);
         }
     }
-    public static void main(String[]args){
-    System.out.println(Conexion.getCon());
+
+    public static void main(String[] args) {
+
+        String sql = "SELECT UNIX_TIMESTAMP(now())";
+        try (Connection con = Conexion.getCon();) {
+            for (int j = 0; j < 10; j++) {
+                PreparedStatement pstm = con.prepareStatement(sql);
+                ResultSet rs = pstm.executeQuery();
+
+                while (rs.next()) {
+                    System.out.println(rs.getLong(1));
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Configuracion_DAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 }
