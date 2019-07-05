@@ -1,21 +1,48 @@
 package DataTransferObject;
 
 import java.io.Serializable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  *
  * @author Carlos Rivas
  */
-public class Persona_DTO extends Direccion_DTO implements Serializable{
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(propOrder = {
+    "id_Persona",
+    "Nombre",
+    "Ap_Paterno",
+    "Ap_Materno",
+    "Fecha_Nac",
+    "Sexo",
+    "Mail",
+    "Telefono1",
+    "Telefono2"
+})
+@XmlRootElement(name = "Persona_DTO")
+public class Persona_DTO extends Direccion_DTO implements Serializable {
 
+    @XmlElement(name = "id_Persona", required = true)
     protected int id_Persona;
+    @XmlElement(name = "Nombre", required = true)
     protected String Nombre;
+    @XmlElement(name = "Ap_Paterno", required = true)
     protected String Ap_Paterno;
+    @XmlElement(name = "Ap_Materno", required = true)
     protected String Ap_Materno;
+    @XmlElement(name = "Fecha_Nac", required = true)
     protected String Fecha_Nac;
+    @XmlElement(name = "Sexo", required = true)
     protected String Sexo;
+    @XmlElement(name = "Mail", required = true)
     protected String Mail;
+    @XmlElement(name = "Telefono1", required = true)
     protected String Telefono1;
+    @XmlElement(name = "Telefono2", required = true)
     protected String Telefono2;
 
     public int getId_Persona() {

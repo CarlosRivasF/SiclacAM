@@ -59,17 +59,16 @@ public class FinalOrd extends HttpServlet {
             if (sesion.getAttribute("VarmodOrd") != null) {
                 modify = (Boolean) sesion.getAttribute("VarmodOrd");
                 if (modify) {
-                    System.out.println("VarmodOrd ACTUALIZAR ORDEN:"+Orden.getId_Orden());
+                    System.out.println("VarmodOrd ACTUALIZAR ORDEN:" + Orden.getId_Orden());
                     O.ActualizarOrden(Orden);
                 }
             } else {
                 if (r) {
-                    System.out.println("else(r) REGISTRAR NUEVA ORDEN:");
                     Date fac = new Date();
                     Util f = new Util();
                     f.setHora(fac);
                     Orden.setFecha(f.getFechaActual());
-                    Orden.setHora(f.getHoraMas(Util.getHrBD()));
+                    Orden.setHora(f.getHoraMas(Util.getHrBD()));                    
                     Orden.setEstado("Pendiente");
                     Orden.setFolio_Unidad(O.getNoOrdenByUnidad(Orden.getUnidad().getId_Unidad()) + 1);
                     Orden.setId_Orden(O.registrarOrden(Orden));
@@ -85,6 +84,7 @@ public class FinalOrd extends HttpServlet {
                     participacion.setMonto(mp);
                     Participacion_DAO P = new Participacion_DAO();
                     P.registrarParticipacion(participacion);
+                    System.out.println(Orden.getEmpleado().getNombre().toUpperCase()+" REGISTRA NUEVA ORDEN " + f.getFechaActual() + "/" + f.getHoraMas(Util.getHrBD()) + " : " + Orden.getId_Orden() + " de Unidad:" + Orden.getUnidad().getId_Unidad());
                 }
             }
 

@@ -1,14 +1,33 @@
 package DataTransferObject;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
 /**
  *
  * @author ZionSystems
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(propOrder = {
+    "id_Paciente",
+    "id_Unidad",
+    "CodPac",
+    "SendMail"
+})
+@XmlRootElement(name = "Paciente_DTO")
 public class Paciente_DTO extends Persona_DTO {
 
+    @XmlElement(name = "id_Paciente", required = true)
     protected int id_Paciente;
+    @XmlElement(name = "id_Unidad", required = true)
     protected int id_Unidad;
+    @XmlElement(name = "CodPac", required = true)
     protected String CodPac;
+    @XmlElement(name = "SendMail", required = true)
     protected boolean SendMail;
 
     public int getId_Paciente() {
@@ -26,7 +45,7 @@ public class Paciente_DTO extends Persona_DTO {
     public void setId_Unidad(int id_Unidad) {
         this.id_Unidad = id_Unidad;
     }
-    
+
     public String getCodPac() {
         return CodPac;
     }

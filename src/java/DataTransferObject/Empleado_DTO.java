@@ -1,26 +1,69 @@
 package DataTransferObject;
 
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  *
  * @author Carlos Rivas
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(propOrder = {
+    "id_Empleado",
+    "id_Unidad",
+    "curp",
+    "nss",
+    "Fecha_Ing",
+    "Salario_Bto",
+    "Dias_Trabajo",
+    "Permisos",
+    "usuario",
+    "Hora_Ent",
+    "Hora_Com",
+    "Hora_Reg",
+    "Hora_Sal",
+    "Ordenes"
+})
+@XmlRootElement(name = "Empleado_DTO")
 public class Empleado_DTO extends Persona_DTO {
 
+    @XmlElement(name = "id_Empleado", required = true)
     protected int id_Empleado;
+    @XmlElement(name = "id_Unidad", required = true)
     protected int id_Unidad;
+    @XmlElement(name = "curp", required = true)
     protected String curp;
+    @XmlElement(name = "nss", required = true)
     protected String nss;
+    @XmlElement(name = "Fecha_Ing", required = true)
     protected String Fecha_Ing;
+    @XmlElement(name = "Salario_Bto", required = true)
     protected Float Salario_Bto;
+
+    @XmlElement(name = "Dias_Trabajo", required = true)
     protected List<String> Dias_Trabajo;
+
+    @XmlElement(name = "Permisos", required = true)
     protected List<String> Permisos;
+
+    @XmlElement(name = "usuario", required = true)
     protected Usuario_DTO usuario;
+    @XmlElement(name = "Hora_Ent", required = true)
     protected String Hora_Ent;
+    @XmlElement(name = "Hora_Com", required = true)
     protected String Hora_Com;
+    @XmlElement(name = "Hora_Reg", required = true)
     protected String Hora_Reg;
+    @XmlElement(name = "Hora_Sal", required = true)
     protected String Hora_Sal;
+
+    @XmlElementWrapper(name = "Ordenes")
+    @XmlElement(name = "Orden_DTO")
     protected List<Orden_DTO> Ordenes;
 
     public int getId_Empleado() {

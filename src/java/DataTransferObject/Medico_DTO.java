@@ -2,11 +2,28 @@ package DataTransferObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  *
  * @author Carlos Rivas
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(propOrder = {
+    "id_Medico",
+    "id_Unidad",
+    "Empresa",
+    "participacion",
+    "Descuento",
+    "CodMed",
+    "Participaciones"
+})
+@XmlRootElement(name = "Medico_DTO")
 public class Medico_DTO extends Persona_DTO {
 
     public Medico_DTO() {
@@ -14,20 +31,20 @@ public class Medico_DTO extends Persona_DTO {
         this.Participaciones = Parts;
     }
 
-    public String getCodMed() {
-        return CodMed;
-    }
-
-    public void setCodMed(String CodMed) {
-        this.CodMed = CodMed;
-    }
-
+    @XmlElement(name = "id_Medico", required = true)
     private int id_Medico;
+    @XmlElement(name = "id_Unidad", required = true)
     private int id_Unidad;
+    @XmlElement(name = "Empresa", required = true)
     private String Empresa;
+    @XmlElement(name = "participacion", required = true)
     private Float participacion;
+    @XmlElement(name = "Descuento", required = true)
     private Float Descuento;
+    @XmlElement(name = "CodMed", required = true)
     private String CodMed;
+    @XmlElementWrapper(name = "Participaciones")
+    @XmlElement(name = "Participacion_DTO")
     private List<Participacion_DTO> Participaciones;
 
     public int getId_Medico() {
@@ -76,5 +93,13 @@ public class Medico_DTO extends Persona_DTO {
 
     public void setParticipaciones(List<Participacion_DTO> Participaciones) {
         this.Participaciones = Participaciones;
+    }
+
+    public String getCodMed() {
+        return CodMed;
+    }
+
+    public void setCodMed(String CodMed) {
+        this.CodMed = CodMed;
     }
 }

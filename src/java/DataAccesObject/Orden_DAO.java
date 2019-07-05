@@ -157,37 +157,30 @@ public class Orden_DAO {
                     det.setT_Entrega(rs.getString("Tipo_Entrega"));
                     det.setSubtotal(rs.getFloat("Subtotal"));
                     String sql1 = "SELECT * FROM resultado WHERE  id_Det_Orden=" + det.getId_det_orden() + "";
-                    List<Configuracion_DTO> confs = new ArrayList<>();
                     try (PreparedStatement pstm1 = con.prepareStatement(sql1); ResultSet rs1 = pstm1.executeQuery();) {
                         while (rs1.next()) {
-                            Configuracion_DTO cnf = new Configuracion_DTO();
-                            Resultado_DTO res = new Resultado_DTO();
-                            res.setId_resultado(rs1.getInt("id_resultado"));
-                            if (res.getId_resultado() != 0) {
+                            if (rs1.getInt("id_resultado") != 0) {
                                 r = true;
-                                cnf.setId_Configuración(rs1.getInt("id_Configuracion"));
+                                Resultado_DTO res = new Resultado_DTO();
+                                res.setId_resultado(rs1.getInt("id_resultado"));
                                 res.setValor_Obtenido(rs1.getString("Valor_Obtenido"));
-                                det.getEstudio().setAddRes(true);
-                                String sql2 = "SELECT * FROM configuracion WHERE id_Configuracion=" + cnf.getId_Configuración() + "";
-                                try (PreparedStatement pstm2 = con.prepareStatement(sql2); ResultSet rs2 = pstm2.executeQuery();) {
-                                    while (rs2.next()) {
-                                        cnf.setDescripcion(rs2.getString("Descripcion"));
-                                        cnf.setSexo(rs2.getString("sexo"));
-                                        cnf.setValor_min(rs2.getString("Valor_min"));
-                                        cnf.setValor_MAX(rs2.getString("Valor_MAX"));
-                                        cnf.setUniddes(rs2.getString("Unidades"));
+                                for (Configuracion_DTO conf : det.getEstudio().getCnfs()) {
+                                    if (conf.getId_Configuración() == rs1.getInt("id_Configuracion")) {
+                                        conf.setRes(res);
                                     }
-
                                 }
-                                cnf.setRes(res);
-                                confs.add(cnf);
+                                det.getEstudio().setAddRes(true);
                             }
                         }
-                        det.getEstudio().getCnfs().forEach((Configuracion_DTO confE) -> {
-                            confs.stream().filter((confR) -> (confE.getId_Configuración() == confR.getId_Configuración())).forEachOrdered((confR) -> {
-                                det.getEstudio().getCnfs().set(det.getEstudio().getCnfs().indexOf(confE), confR);
-                            });
-                        });
+                        String sql3 = "SELECT * FROM observacion WHERE  id_Det_Orden=" + det.getId_det_orden() + "";
+                        try (PreparedStatement pstm3 = con.prepareStatement(sql3); ResultSet rs3 = pstm3.executeQuery();) {
+                            while (rs3.next()) {
+                                Observacion_DTO Obs = new Observacion_DTO();
+                                Obs.setId_Observacion(rs3.getInt("id_Observacion"));
+                                Obs.setObservacion(rs3.getString("observacion"));
+                                det.getEstudio().setObservacion(Obs);
+                            }
+                        }
                         dets.add(det);
                     }
                     ord.setDet_Orden(dets);
@@ -240,37 +233,30 @@ public class Orden_DAO {
                     det.setT_Entrega(rs.getString("Tipo_Entrega"));
                     det.setSubtotal(rs.getFloat("Subtotal"));
                     String sql1 = "SELECT * FROM resultado WHERE  id_Det_Orden=" + det.getId_det_orden() + "";
-                    List<Configuracion_DTO> confs = new ArrayList<>();
                     try (PreparedStatement pstm1 = con.prepareStatement(sql1); ResultSet rs1 = pstm1.executeQuery();) {
                         while (rs1.next()) {
-                            Configuracion_DTO cnf = new Configuracion_DTO();
-                            Resultado_DTO res = new Resultado_DTO();
-                            res.setId_resultado(rs1.getInt("id_resultado"));
-                            if (res.getId_resultado() != 0) {
+                            if (rs1.getInt("id_resultado") != 0) {
                                 r = true;
-                                cnf.setId_Configuración(rs1.getInt("id_Configuracion"));
+                                Resultado_DTO res = new Resultado_DTO();
+                                res.setId_resultado(rs1.getInt("id_resultado"));
                                 res.setValor_Obtenido(rs1.getString("Valor_Obtenido"));
-                                det.getEstudio().setAddRes(true);
-                                String sql2 = "SELECT * FROM configuracion WHERE id_Configuracion=" + cnf.getId_Configuración() + "";
-                                try (PreparedStatement pstm2 = con.prepareStatement(sql2); ResultSet rs2 = pstm2.executeQuery();) {
-                                    while (rs2.next()) {
-                                        cnf.setDescripcion(rs2.getString("Descripcion"));
-                                        cnf.setSexo(rs2.getString("sexo"));
-                                        cnf.setValor_min(rs2.getString("Valor_min"));
-                                        cnf.setValor_MAX(rs2.getString("Valor_MAX"));
-                                        cnf.setUniddes(rs2.getString("Unidades"));
+                                for (Configuracion_DTO conf : det.getEstudio().getCnfs()) {
+                                    if (conf.getId_Configuración() == rs1.getInt("id_Configuracion")) {
+                                        conf.setRes(res);
                                     }
-
                                 }
-                                cnf.setRes(res);
-                                confs.add(cnf);
+                                det.getEstudio().setAddRes(true);
                             }
                         }
-                        det.getEstudio().getCnfs().forEach((Configuracion_DTO confE) -> {
-                            confs.stream().filter((confR) -> (confE.getId_Configuración() == confR.getId_Configuración())).forEachOrdered((confR) -> {
-                                det.getEstudio().getCnfs().set(det.getEstudio().getCnfs().indexOf(confE), confR);
-                            });
-                        });
+                        String sql3 = "SELECT * FROM observacion WHERE  id_Det_Orden=" + det.getId_det_orden() + "";
+                        try (PreparedStatement pstm3 = con.prepareStatement(sql3); ResultSet rs3 = pstm3.executeQuery();) {
+                            while (rs3.next()) {
+                                Observacion_DTO Obs = new Observacion_DTO();
+                                Obs.setId_Observacion(rs3.getInt("id_Observacion"));
+                                Obs.setObservacion(rs3.getString("observacion"));
+                                det.getEstudio().setObservacion(Obs);
+                            }
+                        }
                         dets.add(det);
                     }
                     ord.setDet_Orden(dets);
@@ -325,38 +311,22 @@ public class Orden_DAO {
                         det.setT_Entrega(rs.getString("Tipo_Entrega"));
                         det.setSubtotal(rs.getFloat("Subtotal"));
                         String sql1 = "SELECT * FROM resultado WHERE  id_Det_Orden=" + det.getId_det_orden() + "";
-                        List<Configuracion_DTO> confs = new ArrayList<>();
                         try (PreparedStatement pstm1 = con.prepareStatement(sql1); ResultSet rs1 = pstm1.executeQuery();) {
                             while (rs1.next()) {
-                                Configuracion_DTO cnf = new Configuracion_DTO();
-                                Resultado_DTO res = new Resultado_DTO();
-                                res.setId_resultado(rs1.getInt("id_resultado"));
-                                if (res.getId_resultado() != 0) {
+                                if (rs1.getInt("id_resultado") != 0) {
                                     r = true;
-                                    cnf.setId_Configuración(rs1.getInt("id_Configuracion"));
+                                    Resultado_DTO res = new Resultado_DTO();
+                                    res.setId_resultado(rs1.getInt("id_resultado"));
                                     res.setValor_Obtenido(rs1.getString("Valor_Obtenido"));
-                                    det.getEstudio().setAddRes(true);
-                                    String sql2 = "SELECT * FROM configuracion WHERE id_Configuracion=" + cnf.getId_Configuración() + "";
-                                    try (PreparedStatement pstm2 = con.prepareStatement(sql2); ResultSet rs2 = pstm2.executeQuery();) {
-                                        while (rs2.next()) {
-                                            cnf.setDescripcion(rs2.getString("Descripcion"));
-                                            cnf.setSexo(rs2.getString("sexo"));
-                                            cnf.setValor_min(rs2.getString("Valor_min"));
-                                            cnf.setValor_MAX(rs2.getString("Valor_MAX"));
-                                            cnf.setUniddes(rs2.getString("Unidades"));
+                                    for (Configuracion_DTO conf : det.getEstudio().getCnfs()) {
+                                        if (conf.getId_Configuración() == rs1.getInt("id_Configuracion")) {
+                                            conf.setRes(res);
                                         }
-
                                     }
-                                    cnf.setRes(res);
-                                    confs.add(cnf);
+                                    det.getEstudio().setAddRes(true);
                                 }
                             }
                         }
-                        det.getEstudio().getCnfs().forEach((Configuracion_DTO confE) -> {
-                            confs.stream().filter((confR) -> (confE.getId_Configuración() == confR.getId_Configuración())).forEachOrdered((confR) -> {
-                                det.getEstudio().getCnfs().set(det.getEstudio().getCnfs().indexOf(confE), confR);
-                            });
-                        });
                         String sql3 = "SELECT * FROM observacion WHERE  id_Det_Orden=" + det.getId_det_orden() + "";
                         try (PreparedStatement pstm3 = con.prepareStatement(sql3); ResultSet rs3 = pstm3.executeQuery();) {
                             while (rs3.next()) {
@@ -421,38 +391,22 @@ public class Orden_DAO {
                         det.setT_Entrega(rs.getString("Tipo_Entrega"));
                         det.setSubtotal(rs.getFloat("Subtotal"));
                         String sql1 = "SELECT * FROM resultado WHERE  id_Det_Orden=" + det.getId_det_orden() + "";
-                        List<Configuracion_DTO> confs = new ArrayList<>();
                         try (PreparedStatement pstm1 = con.prepareStatement(sql1); ResultSet rs1 = pstm1.executeQuery();) {
                             while (rs1.next()) {
-                                Configuracion_DTO cnf = new Configuracion_DTO();
-                                Resultado_DTO res = new Resultado_DTO();
-                                res.setId_resultado(rs1.getInt("id_resultado"));
-                                if (res.getId_resultado() != 0) {
+                                if (rs1.getInt("id_resultado") != 0) {
                                     r = true;
-                                    cnf.setId_Configuración(rs1.getInt("id_Configuracion"));
+                                    Resultado_DTO res = new Resultado_DTO();
+                                    res.setId_resultado(rs1.getInt("id_resultado"));
                                     res.setValor_Obtenido(rs1.getString("Valor_Obtenido"));
-                                    det.getEstudio().setAddRes(true);
-                                    String sql2 = "SELECT * FROM configuracion WHERE id_Configuracion=" + cnf.getId_Configuración() + "";
-                                    try (PreparedStatement pstm2 = con.prepareStatement(sql2); ResultSet rs2 = pstm2.executeQuery();) {
-                                        while (rs2.next()) {
-                                            cnf.setDescripcion(rs2.getString("Descripcion"));
-                                            cnf.setSexo(rs2.getString("sexo"));
-                                            cnf.setValor_min(rs2.getString("Valor_min"));
-                                            cnf.setValor_MAX(rs2.getString("Valor_MAX"));
-                                            cnf.setUniddes(rs2.getString("Unidades"));
+                                    for (Configuracion_DTO conf : det.getEstudio().getCnfs()) {
+                                        if (conf.getId_Configuración() == rs1.getInt("id_Configuracion")) {
+                                            conf.setRes(res);
                                         }
-
                                     }
-                                    cnf.setRes(res);
-                                    confs.add(cnf);
+                                    det.getEstudio().setAddRes(true);
                                 }
                             }
                         }
-                        det.getEstudio().getCnfs().forEach((Configuracion_DTO confE) -> {
-                            confs.stream().filter((confR) -> (confE.getId_Configuración() == confR.getId_Configuración())).forEachOrdered((confR) -> {
-                                det.getEstudio().getCnfs().set(det.getEstudio().getCnfs().indexOf(confE), confR);
-                            });
-                        });
                         String sql3 = "SELECT * FROM observacion WHERE  id_Det_Orden=" + det.getId_det_orden() + "";
                         try (PreparedStatement pstm3 = con.prepareStatement(sql3); ResultSet rs3 = pstm3.executeQuery();) {
                             while (rs3.next()) {
@@ -516,37 +470,22 @@ public class Orden_DAO {
                         det.setT_Entrega(rs.getString("Tipo_Entrega"));
                         det.setSubtotal(rs.getFloat("Subtotal"));
                         String sql1 = "SELECT * FROM resultado WHERE  id_Det_Orden=" + det.getId_det_orden() + "";
-                        List<Configuracion_DTO> confs = new ArrayList<>();
                         try (PreparedStatement pstm1 = con.prepareStatement(sql1); ResultSet rs1 = pstm1.executeQuery();) {
                             while (rs1.next()) {
-                                Configuracion_DTO cnf = new Configuracion_DTO();
-                                Resultado_DTO res = new Resultado_DTO();
-                                res.setId_resultado(rs1.getInt("id_resultado"));
-                                if (res.getId_resultado() != 0) {
+                                if (rs1.getInt("id_resultado") != 0) {
                                     r = true;
-                                    cnf.setId_Configuración(rs1.getInt("id_Configuracion"));
+                                    Resultado_DTO res = new Resultado_DTO();
+                                    res.setId_resultado(rs1.getInt("id_resultado"));
                                     res.setValor_Obtenido(rs1.getString("Valor_Obtenido"));
-                                    det.getEstudio().setAddRes(true);
-                                    String sql2 = "SELECT * FROM configuracion WHERE id_Configuracion=" + cnf.getId_Configuración() + "";
-                                    try (PreparedStatement pstm2 = con.prepareStatement(sql2); ResultSet rs2 = pstm2.executeQuery();) {
-                                        while (rs2.next()) {
-                                            cnf.setDescripcion(rs2.getString("Descripcion"));
-                                            cnf.setSexo(rs2.getString("sexo"));
-                                            cnf.setValor_min(rs2.getString("Valor_min"));
-                                            cnf.setValor_MAX(rs2.getString("Valor_MAX"));
-                                            cnf.setUniddes(rs2.getString("Unidades"));
+                                    for (Configuracion_DTO conf : det.getEstudio().getCnfs()) {
+                                        if (conf.getId_Configuración() == rs1.getInt("id_Configuracion")) {
+                                            conf.setRes(res);
                                         }
                                     }
-                                    cnf.setRes(res);
-                                    confs.add(cnf);
+                                    det.getEstudio().setAddRes(true);
                                 }
                             }
                         }
-                        det.getEstudio().getCnfs().forEach((Configuracion_DTO confE) -> {
-                            confs.stream().filter((confR) -> (confE.getId_Configuración() == confR.getId_Configuración())).forEachOrdered((confR) -> {
-                                det.getEstudio().getCnfs().set(det.getEstudio().getCnfs().indexOf(confE), confR);
-                            });
-                        });
                         String sql3 = "SELECT * FROM observacion WHERE  id_Det_Orden=" + det.getId_det_orden() + "";
                         try (PreparedStatement pstm3 = con.prepareStatement(sql3); ResultSet rs3 = pstm3.executeQuery();) {
                             while (rs3.next()) {
@@ -708,38 +647,22 @@ public class Orden_DAO {
                         det.setT_Entrega(rs.getString("Tipo_Entrega"));
                         det.setSubtotal(rs.getFloat("Subtotal"));
                         String sql1 = "SELECT * FROM resultado WHERE  id_Det_Orden=" + det.getId_det_orden() + "";
-                        List<Configuracion_DTO> confs = new ArrayList<>();
                         try (PreparedStatement pstm1 = con.prepareStatement(sql1); ResultSet rs1 = pstm1.executeQuery();) {
                             while (rs1.next()) {
-                                Configuracion_DTO cnf = new Configuracion_DTO();
-                                Resultado_DTO res = new Resultado_DTO();
-                                res.setId_resultado(rs1.getInt("id_resultado"));
-                                if (res.getId_resultado() != 0) {
+                                if (rs1.getInt("id_resultado") != 0) {
                                     r = true;
-                                    cnf.setId_Configuración(rs1.getInt("id_Configuracion"));
+                                    Resultado_DTO res = new Resultado_DTO();
+                                    res.setId_resultado(rs1.getInt("id_resultado"));
                                     res.setValor_Obtenido(rs1.getString("Valor_Obtenido"));
-                                    det.getEstudio().setAddRes(true);
-                                    String sql2 = "SELECT * FROM configuracion WHERE id_Configuracion=" + cnf.getId_Configuración() + "";
-                                    try (PreparedStatement pstm2 = con.prepareStatement(sql2); ResultSet rs2 = pstm2.executeQuery();) {
-                                        while (rs2.next()) {
-                                            cnf.setDescripcion(rs2.getString("Descripcion"));
-                                            cnf.setSexo(rs2.getString("sexo"));
-                                            cnf.setValor_min(rs2.getString("Valor_min"));
-                                            cnf.setValor_MAX(rs2.getString("Valor_MAX"));
-                                            cnf.setUniddes(rs2.getString("Unidades"));
+                                    for (Configuracion_DTO conf : det.getEstudio().getCnfs()) {
+                                        if (conf.getId_Configuración() == rs1.getInt("id_Configuracion")) {
+                                            conf.setRes(res);
                                         }
-
                                     }
-                                    cnf.setRes(res);
-                                    confs.add(cnf);
+                                    det.getEstudio().setAddRes(true);
                                 }
                             }
                         }
-                        det.getEstudio().getCnfs().forEach((Configuracion_DTO confE) -> {
-                            confs.stream().filter((confR) -> (confE.getId_Configuración() == confR.getId_Configuración())).forEachOrdered((confR) -> {
-                                det.getEstudio().getCnfs().set(det.getEstudio().getCnfs().indexOf(confE), confR);
-                            });
-                        });
                         String sql3 = "SELECT * FROM observacion WHERE  id_Det_Orden=" + det.getId_det_orden() + "";
                         try (PreparedStatement pstm3 = con.prepareStatement(sql3); ResultSet rs3 = pstm3.executeQuery();) {
                             while (rs3.next()) {
@@ -803,38 +726,22 @@ public class Orden_DAO {
                     det.setT_Entrega(rs.getString("Tipo_Entrega"));
                     det.setSubtotal(rs.getFloat("Subtotal"));
                     String sql1 = "SELECT * FROM resultado WHERE  id_Det_Orden=" + det.getId_det_orden() + "";
-                    List<Configuracion_DTO> confs = new ArrayList<>();
                     try (PreparedStatement pstm1 = con.prepareStatement(sql1); ResultSet rs1 = pstm1.executeQuery();) {
                         while (rs1.next()) {
-                            Configuracion_DTO cnf = new Configuracion_DTO();
-                            Resultado_DTO res = new Resultado_DTO();
-                            res.setId_resultado(rs1.getInt("id_resultado"));
-                            if (res.getId_resultado() != 0) {
+                            if (rs1.getInt("id_resultado") != 0) {
                                 r = true;
-                                cnf.setId_Configuración(rs1.getInt("id_Configuracion"));
+                                Resultado_DTO res = new Resultado_DTO();
+                                res.setId_resultado(rs1.getInt("id_resultado"));
                                 res.setValor_Obtenido(rs1.getString("Valor_Obtenido"));
-                                det.getEstudio().setAddRes(true);
-                                String sql2 = "SELECT * FROM configuracion WHERE id_Configuracion=" + cnf.getId_Configuración() + "";
-                                try (PreparedStatement pstm2 = con.prepareStatement(sql2); ResultSet rs2 = pstm2.executeQuery();) {
-                                    while (rs2.next()) {
-                                        cnf.setDescripcion(rs2.getString("Descripcion"));
-                                        cnf.setSexo(rs2.getString("sexo"));
-                                        cnf.setValor_min(rs2.getString("Valor_min"));
-                                        cnf.setValor_MAX(rs2.getString("Valor_MAX"));
-                                        cnf.setUniddes(rs2.getString("Unidades"));
+                                for (Configuracion_DTO conf : det.getEstudio().getCnfs()) {
+                                    if (conf.getId_Configuración() == rs1.getInt("id_Configuracion")) {
+                                        conf.setRes(res);
                                     }
-
                                 }
-                                cnf.setRes(res);
-                                confs.add(cnf);
+                                det.getEstudio().setAddRes(true);
                             }
                         }
                     }
-                    det.getEstudio().getCnfs().forEach((Configuracion_DTO confE) -> {
-                        confs.stream().filter((confR) -> (confE.getId_Configuración() == confR.getId_Configuración())).forEachOrdered((confR) -> {
-                            det.getEstudio().getCnfs().set(det.getEstudio().getCnfs().indexOf(confE), confR);
-                        });
-                    });
                     String sql3 = "SELECT * FROM observacion WHERE  id_Det_Orden=" + det.getId_det_orden() + "";
                     try (PreparedStatement pstm3 = con.prepareStatement(sql3); ResultSet rs3 = pstm3.executeQuery();) {
                         while (rs3.next()) {
@@ -900,38 +807,31 @@ public class Orden_DAO {
                         det.setT_Entrega(rs.getString("Tipo_Entrega"));
                         det.setSubtotal(rs.getFloat("Subtotal"));
                         String sql1 = "SELECT * FROM resultado WHERE  id_Det_Orden=" + det.getId_det_orden() + "";
-                        List<Configuracion_DTO> confs = new ArrayList<>();
                         try (PreparedStatement pstm1 = con.prepareStatement(sql1); ResultSet rs1 = pstm1.executeQuery();) {
                             while (rs1.next()) {
-                                Configuracion_DTO cnf = new Configuracion_DTO();
-                                Resultado_DTO res = new Resultado_DTO();
-                                res.setId_resultado(rs1.getInt("id_resultado"));
-                                if (res.getId_resultado() != 0) {
+                                if (rs1.getInt("id_resultado") != 0) {
                                     r = true;
-                                    cnf.setId_Configuración(rs1.getInt("id_Configuracion"));
+                                    Resultado_DTO res = new Resultado_DTO();
+                                    res.setId_resultado(rs1.getInt("id_resultado"));
                                     res.setValor_Obtenido(rs1.getString("Valor_Obtenido"));
-                                    det.getEstudio().setAddRes(true);
-                                    String sql2 = "SELECT * FROM configuracion WHERE id_Configuracion=" + cnf.getId_Configuración() + "";
-                                    try (PreparedStatement pstm2 = con.prepareStatement(sql2); ResultSet rs2 = pstm2.executeQuery();) {
-                                        while (rs2.next()) {
-                                            cnf.setDescripcion(rs2.getString("Descripcion"));
-                                            cnf.setSexo(rs2.getString("sexo"));
-                                            cnf.setValor_min(rs2.getString("Valor_min"));
-                                            cnf.setValor_MAX(rs2.getString("Valor_MAX"));
-                                            cnf.setUniddes(rs2.getString("Unidades"));
+                                    for (Configuracion_DTO conf : det.getEstudio().getCnfs()) {
+                                        if (conf.getId_Configuración() == rs1.getInt("id_Configuracion")) {
+                                            conf.setRes(res);
                                         }
-
                                     }
-                                    cnf.setRes(res);
-                                    confs.add(cnf);
+                                    det.getEstudio().setAddRes(true);
                                 }
                             }
                         }
-                        det.getEstudio().getCnfs().forEach((Configuracion_DTO confE) -> {
-                            confs.stream().filter((confR) -> (confE.getId_Configuración() == confR.getId_Configuración())).forEachOrdered((confR) -> {
-                                det.getEstudio().getCnfs().set(det.getEstudio().getCnfs().indexOf(confE), confR);
-                            });
-                        });
+                        String sql3 = "SELECT * FROM observacion WHERE  id_Det_Orden=" + det.getId_det_orden() + "";
+                        try (PreparedStatement pstm3 = con.prepareStatement(sql3); ResultSet rs3 = pstm3.executeQuery();) {
+                            while (rs3.next()) {
+                                Observacion_DTO Obs = new Observacion_DTO();
+                                Obs.setId_Observacion(rs3.getInt("id_Observacion"));
+                                Obs.setObservacion(rs3.getString("observacion"));
+                                det.getEstudio().setObservacion(Obs);
+                            }
+                        }
                         dets.add(det);
                     }
                     ord.setDet_Orden(dets);
@@ -984,38 +884,31 @@ public class Orden_DAO {
                     det.setT_Entrega(rs.getString("Tipo_Entrega"));
                     det.setSubtotal(rs.getFloat("Subtotal"));
                     String sql1 = "SELECT * FROM resultado WHERE  id_Det_Orden=" + det.getId_det_orden() + "";
-                    List<Configuracion_DTO> confs = new ArrayList<>();
                     try (PreparedStatement pstm1 = con.prepareStatement(sql1); ResultSet rs1 = pstm1.executeQuery();) {
                         while (rs1.next()) {
-                            Configuracion_DTO cnf = new Configuracion_DTO();
-                            Resultado_DTO res = new Resultado_DTO();
-                            res.setId_resultado(rs1.getInt("id_resultado"));
-                            if (res.getId_resultado() != 0) {
+                            if (rs1.getInt("id_resultado") != 0) {
                                 r = true;
-                                cnf.setId_Configuración(rs1.getInt("id_Configuracion"));
+                                Resultado_DTO res = new Resultado_DTO();
+                                res.setId_resultado(rs1.getInt("id_resultado"));
                                 res.setValor_Obtenido(rs1.getString("Valor_Obtenido"));
-                                det.getEstudio().setAddRes(true);
-                                String sql2 = "SELECT * FROM configuracion WHERE id_Configuracion=" + cnf.getId_Configuración() + "";
-                                try (PreparedStatement pstm2 = con.prepareStatement(sql2); ResultSet rs2 = pstm2.executeQuery();) {
-                                    while (rs2.next()) {
-                                        cnf.setDescripcion(rs2.getString("Descripcion"));
-                                        cnf.setSexo(rs2.getString("sexo"));
-                                        cnf.setValor_min(rs2.getString("Valor_min"));
-                                        cnf.setValor_MAX(rs2.getString("Valor_MAX"));
-                                        cnf.setUniddes(rs2.getString("Unidades"));
+                                for (Configuracion_DTO conf : det.getEstudio().getCnfs()) {
+                                    if (conf.getId_Configuración() == rs1.getInt("id_Configuracion")) {
+                                        conf.setRes(res);
                                     }
-
                                 }
-                                cnf.setRes(res);
-                                confs.add(cnf);
+                                det.getEstudio().setAddRes(true);
                             }
                         }
                     }
-                    det.getEstudio().getCnfs().forEach((Configuracion_DTO confE) -> {
-                        confs.stream().filter((confR) -> (confE.getId_Configuración() == confR.getId_Configuración())).forEachOrdered((confR) -> {
-                            det.getEstudio().getCnfs().set(det.getEstudio().getCnfs().indexOf(confE), confR);
-                        });
-                    });
+                    String sql3 = "SELECT * FROM observacion WHERE  id_Det_Orden=" + det.getId_det_orden() + "";
+                    try (PreparedStatement pstm3 = con.prepareStatement(sql3); ResultSet rs3 = pstm3.executeQuery();) {
+                        while (rs3.next()) {
+                            Observacion_DTO Obs = new Observacion_DTO();
+                            Obs.setId_Observacion(rs3.getInt("id_Observacion"));
+                            Obs.setObservacion(rs3.getString("observacion"));
+                            det.getEstudio().setObservacion(Obs);
+                        }
+                    }
                     dets.add(det);
                 }
                 ord.setDet_Orden(dets);
@@ -1073,38 +966,22 @@ public class Orden_DAO {
                         det.setT_Entrega(rs.getString("Tipo_Entrega"));
                         det.setSubtotal(rs.getFloat("Subtotal"));
                         String sql1 = "SELECT * FROM resultado WHERE  id_Det_Orden=" + det.getId_det_orden() + "";
-                        List<Configuracion_DTO> confs = new ArrayList<>();
                         try (PreparedStatement pstm1 = con.prepareStatement(sql1); ResultSet rs1 = pstm1.executeQuery();) {
                             while (rs1.next()) {
-                                Configuracion_DTO cnf = new Configuracion_DTO();
-                                Resultado_DTO res = new Resultado_DTO();
-                                res.setId_resultado(rs1.getInt("id_resultado"));
-                                if (res.getId_resultado() != 0) {
+                                if (rs1.getInt("id_resultado") != 0) {
                                     r = true;
-                                    cnf.setId_Configuración(rs1.getInt("id_Configuracion"));
+                                    Resultado_DTO res = new Resultado_DTO();
+                                    res.setId_resultado(rs1.getInt("id_resultado"));
                                     res.setValor_Obtenido(rs1.getString("Valor_Obtenido"));
-                                    det.getEstudio().setAddRes(true);
-                                    String sql2 = "SELECT * FROM configuracion WHERE id_Configuracion=" + cnf.getId_Configuración() + "";
-                                    try (PreparedStatement pstm2 = con.prepareStatement(sql2); ResultSet rs2 = pstm2.executeQuery();) {
-                                        while (rs2.next()) {
-                                            cnf.setDescripcion(rs2.getString("Descripcion"));
-                                            cnf.setSexo(rs2.getString("sexo"));
-                                            cnf.setValor_min(rs2.getString("Valor_min"));
-                                            cnf.setValor_MAX(rs2.getString("Valor_MAX"));
-                                            cnf.setUniddes(rs2.getString("Unidades"));
+                                    for (Configuracion_DTO conf : det.getEstudio().getCnfs()) {
+                                        if (conf.getId_Configuración() == rs1.getInt("id_Configuracion")) {
+                                            conf.setRes(res);
                                         }
-
                                     }
-                                    cnf.setRes(res);
-                                    confs.add(cnf);
+                                    det.getEstudio().setAddRes(true);
                                 }
                             }
                         }
-                        det.getEstudio().getCnfs().forEach((Configuracion_DTO confE) -> {
-                            confs.stream().filter((confR) -> (confE.getId_Configuración() == confR.getId_Configuración())).forEachOrdered((confR) -> {
-                                det.getEstudio().getCnfs().set(det.getEstudio().getCnfs().indexOf(confE), confR);
-                            });
-                        });
                         String sql3 = "SELECT * FROM observacion WHERE  id_Det_Orden=" + det.getId_det_orden() + "";
                         try (PreparedStatement pstm3 = con.prepareStatement(sql3); ResultSet rs3 = pstm3.executeQuery();) {
                             while (rs3.next()) {
@@ -1169,38 +1046,31 @@ public class Orden_DAO {
                         det.setT_Entrega(rs.getString("Tipo_Entrega"));
                         det.setSubtotal(rs.getFloat("Subtotal"));
                         String sql1 = "SELECT * FROM resultado WHERE  id_Det_Orden=" + det.getId_det_orden() + "";
-                        List<Configuracion_DTO> confs = new ArrayList<>();
                         try (PreparedStatement pstm1 = con.prepareStatement(sql1); ResultSet rs1 = pstm1.executeQuery();) {
                             while (rs1.next()) {
-                                Configuracion_DTO cnf = new Configuracion_DTO();
-                                Resultado_DTO res = new Resultado_DTO();
-                                res.setId_resultado(rs1.getInt("id_resultado"));
-                                if (res.getId_resultado() != 0) {
+                                if (rs1.getInt("id_resultado") != 0) {
                                     r = true;
-                                    cnf.setId_Configuración(rs1.getInt("id_Configuracion"));
+                                    Resultado_DTO res = new Resultado_DTO();
+                                    res.setId_resultado(rs1.getInt("id_resultado"));
                                     res.setValor_Obtenido(rs1.getString("Valor_Obtenido"));
-                                    det.getEstudio().setAddRes(true);
-                                    String sql2 = "SELECT * FROM configuracion WHERE id_Configuracion=" + cnf.getId_Configuración() + "";
-                                    try (PreparedStatement pstm2 = con.prepareStatement(sql2); ResultSet rs2 = pstm2.executeQuery();) {
-                                        while (rs2.next()) {
-                                            cnf.setDescripcion(rs2.getString("Descripcion"));
-                                            cnf.setSexo(rs2.getString("sexo"));
-                                            cnf.setValor_min(rs2.getString("Valor_min"));
-                                            cnf.setValor_MAX(rs2.getString("Valor_MAX"));
-                                            cnf.setUniddes(rs2.getString("Unidades"));
+                                    for (Configuracion_DTO conf : det.getEstudio().getCnfs()) {
+                                        if (conf.getId_Configuración() == rs1.getInt("id_Configuracion")) {
+                                            conf.setRes(res);
                                         }
-
                                     }
-                                    cnf.setRes(res);
-                                    confs.add(cnf);
+                                    det.getEstudio().setAddRes(true);
                                 }
                             }
                         }
-                        det.getEstudio().getCnfs().forEach((Configuracion_DTO confE) -> {
-                            confs.stream().filter((confR) -> (confE.getId_Configuración() == confR.getId_Configuración())).forEachOrdered((confR) -> {
-                                det.getEstudio().getCnfs().set(det.getEstudio().getCnfs().indexOf(confE), confR);
-                            });
-                        });
+                        String sql3 = "SELECT * FROM observacion WHERE  id_Det_Orden=" + det.getId_det_orden() + "";
+                        try (PreparedStatement pstm3 = con.prepareStatement(sql3); ResultSet rs3 = pstm3.executeQuery();) {
+                            while (rs3.next()) {
+                                Observacion_DTO Obs = new Observacion_DTO();
+                                Obs.setId_Observacion(rs3.getInt("id_Observacion"));
+                                Obs.setObservacion(rs3.getString("observacion"));
+                                det.getEstudio().setObservacion(Obs);
+                            }
+                        }
                         dets.add(det);
                     }
                     ord.setDet_Orden(dets);
@@ -1252,38 +1122,31 @@ public class Orden_DAO {
                     det.setT_Entrega(rs.getString("Tipo_Entrega"));
                     det.setSubtotal(rs.getFloat("Subtotal"));
                     String sql1 = "SELECT * FROM resultado WHERE  id_Det_Orden=" + det.getId_det_orden() + "";
-                    List<Configuracion_DTO> confs = new ArrayList<>();
                     try (PreparedStatement pstm1 = con.prepareStatement(sql1); ResultSet rs1 = pstm1.executeQuery();) {
                         while (rs1.next()) {
-                            Configuracion_DTO cnf = new Configuracion_DTO();
-                            Resultado_DTO res = new Resultado_DTO();
-                            res.setId_resultado(rs1.getInt("id_resultado"));
-                            if (res.getId_resultado() != 0) {
+                            if (rs1.getInt("id_resultado") != 0) {
                                 r = true;
-                                cnf.setId_Configuración(rs1.getInt("id_Configuracion"));
+                                Resultado_DTO res = new Resultado_DTO();
+                                res.setId_resultado(rs1.getInt("id_resultado"));
                                 res.setValor_Obtenido(rs1.getString("Valor_Obtenido"));
-                                det.getEstudio().setAddRes(true);
-                                String sql2 = "SELECT * FROM configuracion WHERE id_Configuracion=" + cnf.getId_Configuración() + "";
-                                try (PreparedStatement pstm2 = con.prepareStatement(sql2); ResultSet rs2 = pstm2.executeQuery();) {
-                                    while (rs2.next()) {
-                                        cnf.setDescripcion(rs2.getString("Descripcion"));
-                                        cnf.setSexo(rs2.getString("sexo"));
-                                        cnf.setValor_min(rs2.getString("Valor_min"));
-                                        cnf.setValor_MAX(rs2.getString("Valor_MAX"));
-                                        cnf.setUniddes(rs2.getString("Unidades"));
+                                for (Configuracion_DTO conf : det.getEstudio().getCnfs()) {
+                                    if (conf.getId_Configuración() == rs1.getInt("id_Configuracion")) {
+                                        conf.setRes(res);
                                     }
-
                                 }
-                                cnf.setRes(res);
-                                confs.add(cnf);
+                                det.getEstudio().setAddRes(true);
                             }
                         }
                     }
-                    det.getEstudio().getCnfs().forEach((Configuracion_DTO confE) -> {
-                        confs.stream().filter((confR) -> (confE.getId_Configuración() == confR.getId_Configuración())).forEachOrdered((confR) -> {
-                            det.getEstudio().getCnfs().set(det.getEstudio().getCnfs().indexOf(confE), confR);
-                        });
-                    });
+                    String sql3 = "SELECT * FROM observacion WHERE  id_Det_Orden=" + det.getId_det_orden() + "";
+                    try (PreparedStatement pstm3 = con.prepareStatement(sql3); ResultSet rs3 = pstm3.executeQuery();) {
+                        while (rs3.next()) {
+                            Observacion_DTO Obs = new Observacion_DTO();
+                            Obs.setId_Observacion(rs3.getInt("id_Observacion"));
+                            Obs.setObservacion(rs3.getString("observacion"));
+                            det.getEstudio().setObservacion(Obs);
+                        }
+                    }
                     dets.add(det);
                 }
                 ord.setDet_Orden(dets);
@@ -1358,18 +1221,5 @@ public class Orden_DAO {
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
-    }
-
-    public static void main(String[] args) {
-        for (int j = 0; j < 10; j++) {
-
-            for (int i = 0; i < 10000; i++) {
-                int a = 1 + 8 * 9;
-            }
-            //System.out.println();
-            Date d = new Date();
-            System.out.println(String.valueOf(d.getTime() + 13));
-        }
-
     }
 }

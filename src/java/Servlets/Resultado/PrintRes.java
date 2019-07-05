@@ -352,7 +352,7 @@ public class PrintRes extends HttpServlet {
             cb.showText(Orden.getMedico().getNombre() + " " + Orden.getMedico().getAp_Paterno() + " " + Orden.getMedico().getAp_Materno());
             cb.endText();
             ///////////////////////despedida
-            if (footer) {
+            if (true) {
                 cb.beginText();
                 cb.setFontAndSize(bf0, 12);
                 cb.setTextMatrix(280, 70);

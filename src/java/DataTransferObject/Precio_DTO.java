@@ -1,18 +1,39 @@
 package DataTransferObject;
 
 import DataBase.Util;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  *
  * @author ZionSystems
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(propOrder = {
+    "id_Precio",
+    "id_Estudio",
+    "Precio_N",
+    "T_Entrega_N",
+    "Precio_U",
+    "T_Entrega_U"
+})
+@XmlRootElement(name = "Precio_DTO")
 public class Precio_DTO {
 
+    @XmlElement(name = "id_Precio", required = true)
     protected int id_Precio;
+    @XmlElement(name = "id_Estudio", required = true)
     protected int id_Estudio;
+    @XmlElement(name = "Precio_N", required = true)
     protected Float Precio_N;
+    @XmlElement(name = "T_Entrega_N", required = true)
     protected int T_Entrega_N;
+    @XmlElement(name = "Precio_U", required = true)
     protected Float Precio_U;
+    @XmlElement(name = "T_Entrega_U", required = true)
     protected int T_Entrega_U;
 
     public int getId_Precio() {

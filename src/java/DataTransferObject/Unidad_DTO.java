@@ -1,18 +1,37 @@
 package DataTransferObject;
 
 import java.io.Serializable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  *
  * @author Carlos Rivas
  */
-public class Unidad_DTO extends Empresa_DTO implements Serializable{
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(propOrder = {
+    "id_Unidad",
+    "Nombre_Unidad",
+    "clave",
+    "encargado",
+    "usuario" 
+})
+@XmlRootElement(name = "cliente")
+public class Unidad_DTO extends Empresa_DTO implements Serializable {
 
+    @XmlElement(name = "id_Unidad", required = true)
     protected int id_Unidad;
+    @XmlElement(name = "Nombre_Unidad", required = true)
     protected String Nombre_Unidad;
+    @XmlElement(name = "clave", required = true)
     protected String clave;
+    @XmlElement(name = "encargado", required = true)
     protected Persona_DTO encargado;
-    protected Usuario_DTO usuario;    
+    @XmlElement(name = "usuario", required = true)
+    protected Usuario_DTO usuario;
 
     public int getId_Unidad() {
         return id_Unidad;

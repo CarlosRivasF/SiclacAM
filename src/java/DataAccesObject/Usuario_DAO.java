@@ -1,11 +1,13 @@
 package DataAccesObject;
 
 import DataBase.Conexion;
+import DataBase.Util;
 import DataTransferObject.Usuario_DTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -63,8 +65,12 @@ public class Usuario_DAO {
         if (usuario.getNombre_Usuario() != null & usuario.getContraseña() != null) {
             if (usuario.getNombre_Usuario().trim().equals(Usuario.trim()) & usuario.getContraseña().trim().equals(Contraseña.trim())) {
                 if (usuario.getId_Unidad() != 0 & usuario.getRol() != null & usuario.getEstado() != null) {
+                    Date fac = new Date();
+                    Util f = new Util();
+                    f.setHora(fac);
+                    String hora = f.getHoraMas(Util.getHrBD());
                     nSesion++;
-                    System.out.println("*-*-*-*-* SESION: " + nSesion + " de Usuario:" + Usuario + ", Password:" + Contraseña);
+                    System.out.println("*-*- "+ f.getFechaActual()+"" + hora + " -*-* SESION: " + nSesion + " de Usuario:" + Usuario + ", Password:" + Contraseña);
 
                     return usuario;
                 } else {

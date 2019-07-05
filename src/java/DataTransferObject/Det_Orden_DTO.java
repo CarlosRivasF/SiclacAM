@@ -1,18 +1,44 @@
 package DataTransferObject;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
 /**
  *
  * @author ZionSystems
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(propOrder = {
+    "id_det_orden",
+    "id_orden",
+    "estudio",
+    "descuento",
+    "sobrecargo",
+    "Fecha_Entrega",
+    "T_Entrega",
+    "Subtotal"
+})
+@XmlRootElement(name = "Det_Orden_DTO")
 public class Det_Orden_DTO {
 
+    @XmlElement(name = "id_det_orden", required = true)
     private int id_det_orden;
+    @XmlElement(name = "id_orden", required = true)
     private int id_orden;
+    @XmlElement(name = "estudio", required = true)
     private Estudio_DTO estudio;
+    @XmlElement(name = "descuento", required = true)
     private Float descuento;
+    @XmlElement(name = "sobrecargo", required = true)
     private Float sobrecargo;
+    @XmlElement(name = "Fecha_Entrega", required = true)
     private String Fecha_Entrega;
+    @XmlElement(name = "T_Entrega", required = true)
     private String T_Entrega;
+    @XmlElement(name = "Subtotal", required = true)
     private Float Subtotal;
 
     public int getId_det_orden() {

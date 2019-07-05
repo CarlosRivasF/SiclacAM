@@ -380,7 +380,7 @@ public class Estudio_DAO {
             }
             for (Estudio_DTO est : ests) {
                 List<Configuracion_DTO> confs = new ArrayList<>();
-                sql = "SELECT id_Configuracion FROM conf_est WHERE id_Estudio=" + est.getId_Estudio() + "";                
+                sql = "SELECT id_Configuracion FROM conf_est WHERE id_Estudio=" + est.getId_Estudio() + "";
                 try (PreparedStatement pstm = con.prepareStatement(sql); ResultSet rs = pstm.executeQuery();) {
                     while (rs.next()) {
                         Configuracion_DTO conf = new Configuracion_DTO();
@@ -391,7 +391,7 @@ public class Estudio_DAO {
                 est.setCnfs(confs);
             }
             for (Estudio_DTO est : ests) {
-                 sql = "SELECT id_Configuracion FROM conf_est WHERE id_Estudio=" + est.getId_Estudio() + "";
+                sql = "SELECT id_Configuracion FROM conf_est WHERE id_Estudio=" + est.getId_Estudio() + "";
 //                System.out.println("List<Configuracion_DTO>: " + sql + ";");
                 for (Configuracion_DTO conf : est.getCnfs()) {
                     sql = "SELECT * FROM configuracion WHERE id_Configuracion=" + conf.getId_Configuración() + "";
@@ -761,5 +761,4 @@ public class Estudio_DAO {
             }
         }
     }
-
 }

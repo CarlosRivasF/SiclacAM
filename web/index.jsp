@@ -36,7 +36,7 @@
                     <input type="password" name="pass" id="pass" class="form-control" placeholder="Contraseña" required><br>
                     <button class="btn btn-lg btn-primary btn-block" type="submit">Aceptar</button>        
                     <img src="images/adn0.gif"  alt="" width="650" height="100" class="img-fluid">     
-                    <p class="text-muted font-italic"><font size="1"><u><strong>ACTUALIZADO</strong></u> Versión 18.05.19 - 2.8.00</font></p>
+                    <p class="text-muted font-italic"><font size="1"><u><strong>ACTUALIZADO</strong></u> Versión 15.06.19 - 1.2 PROD</font></p>
                     </div>
                 </form> 
             </div>

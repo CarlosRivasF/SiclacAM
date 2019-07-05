@@ -1,17 +1,41 @@
 package DataTransferObject;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
 /**
  *
  * @author Carlos Rivas
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(propOrder = {
+    "id_Configuración",
+    "Descripcion",
+    "Valor_min",
+    "Valor_MAX",
+    "Uniddes",
+    "sexo",
+    "res"
+})
+@XmlRootElement(name = "Configuracion_DTO")
 public class Configuracion_DTO {
 
+    @XmlElement(name = "id_Configuración", required = true)
     protected int id_Configuración;
+    @XmlElement(name = "Descripcion", required = true)
     protected String Descripcion;
+    @XmlElement(name = "Valor_min", required = true)
     protected String Valor_min;
+    @XmlElement(name = "Valor_MAX", required = true)
     protected String Valor_MAX;
+    @XmlElement(name = "Uniddes", required = true)
     protected String Uniddes;
-    protected String sexo;      
+    @XmlElement(name = "sexo", required = true)
+    protected String sexo;
+    @XmlElement(name = "res", required = true)
     protected Resultado_DTO res;
 
     public int getId_Configuración() {

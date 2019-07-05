@@ -1,30 +1,73 @@
 package DataTransferObject;
 
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  *
  * @author ZionSystems
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(propOrder = {
+    "id_Estudio",
+    "id_Est_Uni",
+    "Nombre_Estudio",
+    "Clave_Estudio",
+    "Preparacion",
+    "Utilidad",
+    "Metodo",
+    "precio",
+    "Cnfs",
+    "mts",
+    "ctrl_est",
+    "PorcEst",
+    "addRes",
+    "Observacion"
+})
+@XmlRootElement(name = "Estudio_DTO")
 public class Estudio_DTO extends Tipo_Estudio_DTO {
 
     public Estudio_DTO() {
         addRes = false;
     }
 
+    @XmlElement(name = "id_Estudio", required = true)
     private int id_Estudio;
+    @XmlElement(name = "id_Est_Uni", required = true)
     private int id_Est_Uni;
+    @XmlElement(name = "Nombre_Estudio", required = true)
     private String Nombre_Estudio;
+    @XmlElement(name = "Clave_Estudio", required = true)
     private String Clave_Estudio;
+    @XmlElement(name = "Preparacion", required = true)
     private String Preparacion;
+    @XmlElement(name = "Utilidad", required = true)
     private String Utilidad;
+    @XmlElement(name = "Metodo", required = true)
     private String Metodo;
+    @XmlElement(name = "precio", required = true)
     private Precio_DTO precio;
+    
+    @XmlElementWrapper(name = "Cnfs")
+    @XmlElement(name = "Configuracion_DTO")
     private List<Configuracion_DTO> Cnfs;
+    
+    @XmlElementWrapper(name = "mts")
+    @XmlElement(name = "Est_Mat_DTO")    
     private List<Est_Mat_DTO> mts;
+    
+    @XmlElement(name = "ctrl_est", required = true)
     private String ctrl_est;
+    @XmlElement(name = "PorcEst", required = true)
     private int PorcEst;
+    @XmlElement(name = "addRes", required = true)
     private Boolean addRes;
+    @XmlElement(name = "Observacion", required = true)
     private Observacion_DTO Observacion;
 
     /**
